@@ -1,0 +1,278 @@
+.table {
+    display: table;   /* Allow the centering to work */
+    margin: 0 auto;
+}
+
+.vote > li {
+  float: right;
+}
+
+.attrName {
+  margin-top: 0;
+}
+
+.outer {
+  width: 100%;
+  text-align: center;
+}
+
+.inner {
+  display: inline-block;
+  margin-bottom: 0.5em;
+  max-width: 40em;
+  padding: 0em 1em 0em 1em;
+}
+
+.card:hover {
+    /*
+  -webkit-transform: scale(1.05,1.05);
+  */
+}
+
+.card {
+  position:relative;
+  /*margin: 1.5em;*/
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.150);
+  padding-bottom: 1.5em;
+
+  -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
+  -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
+
+/*
+  -webkit-transition-duration:0.2s;
+  -webkit-transition-timing-function:linear;
+  -webkit-transition-delay:0s; 
+*/
+}
+
+/*Card Types*/
+/*Card Component*/
+.card-title {
+  text-align: center;
+  word-wrap: break-word;
+}
+
+.contentContainer {
+  min-height: 10em;
+  min-width: 100%;
+    /*max-height: 45em;
+    overflow-y: scroll;*/
+  }
+  .card-content {
+    text-align: left;
+    min-height: 10em;
+
+
+    /*min-width: 85%;*/
+  }
+  
+  .actions {
+    position: absolute;
+    bottom: 1em;
+  }
+  .editBar {
+    position: absolute;
+    display: none;
+    top: 5em;    
+  }
+
+  .cardStack:before {
+   z-index: -1;
+   position: absolute;
+   top: -2px;
+   left: 0;
+   content: '';
+   width: 100%;
+   height: 100%;
+   background-color: #fff;
+   border: 1px solid rgba(0, 0, 0, 0.150);
+
+   -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.19);
+   -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.19);
+   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.19);
+
+   -webkit-transform: rotate(1deg);
+   -moz-transform: rotate(1deg);
+   -o-transform: rotate(1deg);
+   -ms-transform: rotate(1deg);
+   transform: rotate(1deg);
+ }
+ .cardStack:after {
+   z-index: -2;
+   position: absolute;
+   top: 1px;
+   left: -2px;
+   content: '';
+   width: 100%;
+   height: 100%;
+   background-color: #fff;
+   border: 1px solid rgba(0, 0, 0, 0.150);
+
+   -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+   -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+
+   -webkit-transform: rotate(359deg);
+   -moz-transform: rotate(359deg);
+   -o-transform: rotate(359deg);
+   -ms-transform: rotate(359deg);
+   transform: rotate(359deg);
+ }
+
+ .overlay {
+  background: black;
+  position: absolute;
+  left: 2em;
+  top: 6em;
+  height: 10em;
+  width: 10em;
+}
+
+.post {
+   clear: both;
+   position: relative;
+   background-color: #fff;
+   -webkit-box-shadow: 0 1px 3px rgba(100, 100, 100, 0.4), 0 0 40px rgba(100, 100, 100, 0.1) inset;
+   -moz-box-shadow: 0 1px 3px rgba(100, 100, 100, 0.4), 0 0 40px rgba(100, 100, 100, 0.1) inset;
+   box-shadow: 0 1px 3px rgba(100, 100, 100, 0.4), 0 0 40px rgba(100, 100, 100, 0.1) inset;
+}
+
+.post:hover .folded-corner, .Hover {
+    border-width: 0 40px 40px 0;
+}
+
+.imgBtn {
+    margin-top: 1em;
+}
+
+.imgPlaceholder {
+    display: block;
+    padding: 0.55em 0.75em 0.55em 0.75em;
+}
+
+.photo .folded-corner {
+    background: hsla(260,5%,75%,0.5);
+}
+
+.description {
+    text-align: left;
+}
+
+.closeBtn {
+    position: absolute;
+    top: -12px;
+    left: 96%;
+}
+
+.editImgBtn {
+    margin-left: 1.5em;
+}
+
+.tags {
+    margin: 0.5em;
+    border: none;
+}
+
+.profileimg {
+    width: 120%;
+}
+
+.page-curl {
+  width: 85%;
+  background: #FFFFFF;
+  background: -moz-linear-gradient(0deg, #F5F5F5 0%, #FFF 25%, #FFF 75%, #F5F5F5 100%);
+  background: -ms-linear-gradient(0deg, #F5F5F5 0%, #FFF 25%, #FFF 75%, #F5F5F5 100%);
+  background: -webkit-linear-gradient(0deg, #F5F5F5 0%, #FFF 25%, #FFF 75%, #F5F5F5 100%);
+  background: linear-gradient(0deg, #F5F5F5 0%, #FFF 25%, #FFF 75%, #F5F5F5 100%);
+
+  -moz-border-radius: 6px 6px 6px 6px;
+  -webkit-border-radius: 6px 6px 6px 6px;
+  border-radius: 6px 6px 6px 6px;
+
+  -moz-box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+
+  margin: 1em auto;
+  padding: 15px;
+  position: relative;
+}
+
+.page-curl:before, .page-curl:after {
+  background: none;
+  bottom: 12px;
+  -moz-box-shadow: 0 10px 12px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 10px 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 12px rgba(0, 0, 0, 0.5);
+  content: "";
+  height: 10px;
+  left: 12px;
+  position: absolute;
+  width: 40%;
+  z-index: -1;
+  -moz-transform: skew(-4deg) rotate(-4deg);
+  -webkit-transform: skew(-4deg) rotate(-4deg);
+  transform: skew(-4deg) rotate(-4deg);
+}
+
+.page-curl:after {
+  -moz-transform: skew(4deg) rotate(4deg);
+  -webkit-transform: skew(4deg) rotate(4deg);
+  transform: skew(4deg) rotate(4deg);
+  left: auto;
+  right: 12px;
+}
+
+.page-curl.shadow-left {
+  background: -moz-linear-gradient(0deg, #F5F5F5 0%, #FFF 50%) !important;
+  background: -ms-linear-gradient(0deg, #F5F5F5 0%, #FFF 50%) !important;
+  background: -webkit-linear-gradient(0deg, #F5F5F5 0%, #FFF 50%) !important;
+  background: linear-gradient(0deg, #F5F5F5 0%, #FFF 50%) !important;
+}
+
+.page-curl.shadow-right {
+  background: -moz-linear-gradient(0deg, #FFF 50%, #F5F5F5 100%) !important;
+  background: -ms-linear-gradient(0deg, #FFF 50%, #F5F5F5 100%) !important;
+  background: -webkit-linear-gradient(0deg, #FFF 50%, #F5F5F5 100%) !important;
+  background: linear-gradient(0deg, #FFF 50%, #F5F5F5 100%) !important;
+}
+
+.shadow-bottom:before, .shadow-bottom:after {
+  top: auto;
+  bottom: 12px;
+  -moz-box-shadow: 0 10px 12px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 10px 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 12px rgba(0, 0, 0, 0.5);
+}
+
+.shadow-left:after {
+  display: none;
+}
+
+.shadow-right:before {
+  display: none;
+}
+
+.shadow-top-bottom.shadow-left:after {
+  display: block;
+  bottom: auto;
+  top: 15px;
+  right: auto;
+  left: 12px;
+  -moz-box-shadow: 0 -10px 12px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 -10px 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 -10px 12px rgba(0, 0, 0, 0.5);
+}
+
+.shadow-top-bottom.shadow-right:before {
+  display: block;
+  bottom: auto;
+  top: 15px;
+  right: 12px;
+  left: auto;
+  -moz-box-shadow: 0 -10px 12px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 -10px 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 -10px 12px rgba(0, 0, 0, 0.5);
+}
