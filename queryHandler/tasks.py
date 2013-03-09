@@ -16,6 +16,7 @@ MAX_ACTIVITIES = 10
 @task(ignore_result=True)
 def incrementVote(userId, attrId, voteType, keyName):
     r = rredis.getRedisConnection()
+
     if attrId:
         try:
             attr = Attribute.objects.get(pk=attrId)
@@ -27,14 +28,18 @@ def incrementVote(userId, attrId, voteType, keyName):
                 attr.downVote = F('downVote') + 1
                 updatedField = "downVote"
 
-            attr.save(update_fields=[updatedField])
+            attr.voteCount = F('voteCount') + 1
+            attr.save()#update_fields=[updatedField])
             r.setex(keyName, datetime.timedelta(days=1), 0) #expires in 1 day
 
+            print keyName, voteType, "Done"
+
             #TODO: implement voteCollection
+
         except ObjectDoesNotExist:
             '''log these errors'''
             print 'exception occurred'
     else:
-        print 'Nonexistant or Already Voted'
+        print 'No AttrId provided'
 
 

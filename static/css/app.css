@@ -3,10 +3,15 @@ body {
     padding-bottom: 40px;
 }
 
+/* Header */
+.home-btn {
+  font-size: 32px;
+}
+
 /* Custom container */
 .container-narrow {
-    margin: 0 auto;
-    max-width: 1000px;
+  margin: 0 auto;
+  max-width: 1000px;
 }
 .container-narrow > hr {
     margin: 30px 0;
@@ -28,14 +33,23 @@ body {
 
 /* Supporting marketing content */
 .marketing {
-    margin: 60px 0;
+  margin: 60px 0;
 }
 .marketing p + h4 {
-    margin-top: 28px;
+  margin-top: 28px;
 }
 
 ul {
     list-style-type: none;
+}
+
+.nav-list {
+
+}
+
+.nav-list li {
+  float: left;
+  padding: 0.5em;
 }
 
 .noSelect {
@@ -53,77 +67,73 @@ ul {
 
 .break {
     visibility: hidden;
-    height: 5em;
-}
-
-.break1 {
-    visibility: hidden;
-    height: 1em;
-}
-
-.break2 {
-    visibility: hidden;
-    height: 2em;
-}
-
-.break3 {
-    visibility: hidden;
+    clear: both;
     height: 3em;
 }
-
-.innerText {
-    width: inherit;
+.break-mini {
+  height: 1em;
+}
+.break-large {
+  height: 5em;
 }
 
-.rating li {
-    float: left;
-}
-
-.voteBtn {
-    margin: 0 0.5em 0 0.5em;
-    width: 3em;
-}
-
-/*
-#powerBar {
-    position: relative;
-    top: -1.5em;
-    }
-
-#mainCanvas  {
-	margin: -4em 2em;
-    padding-bottom: 2em;
-}
-*/
 .tabpane {
-    margin:0 1em 0.5em 1em;
+  margin:0 1em 0.5em 1em;
 }
 
-.attrContent {
-/*    max-height: 30em;*/
+.toolbar {
+    position: fixed;
+    top: 50%;
+    left: 95%;
+    height: 10em;
+    border: 2px dashed gray;
+    background: whitesmoke;
+    padding: 1em;
+
+    -webkit-transition: left;
+    -webkit-transition-duration:0.2s;
+    -webkit-transition-timing-function:linear;
+    -webkit-transition-delay:0s; 
+    -moz-transition: left;
+    -moz-transition-duration:0.2s;
+    -moz-transition-timing-function:linear;
+    -moz-transition-delay:0s; 
 }
-.attrContent:hover {
+
+.toolbar:hover {
+    left: 92%;
+}
+
+.footer, .footer a {
+  padding: 15px 0 60px;
+  color: #a7a9aa;
+  text-shadow: 0 1px 0 #fff;
 }
 
 /*Scrollbar override*/
 ::-webkit-scrollbar {
-    width: 5px;
 }
  
 ::-webkit-scrollbar-track {
-/*-webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.3);*/
 }
  
 /*Handle*/
 ::-webkit-scrollbar-thumb {
-/*-webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.3);*/
 }
 ::-webkit-scrollbar-thumb {
 }
 
-.editBox {
-    max-width: 16em;
-    width: 16em;
-    height: 10em;
-    max-height: 100%;
+/*Overriding BootStrap*/
+.navbar-fixed-top .container {
+  width: 1200px;
 }
+.navbar .brand {
+  padding: 0px;
+}
+.navbar .btn {
+  margin-top: 12px;
+}
+.modal-backdrop, .modal-backdrop.fade.in {
+  opacity: 0.001;
+}
+

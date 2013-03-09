@@ -9,5 +9,7 @@ urlpatterns = patterns('',
     url(r'^entity/(?P<pk>[0-9]+)/?$', restAPI.EntityDetail.as_view()),
     url(r'^attribute/$', restAPI.AttributeDetail.as_view()),
     url(r'^attribute/(?P<pk>[0-9]+)/?$', restAPI.AttributeDetail.as_view()),
-    url(r'^attribute/(?P<pk>[0-9]+)/vote/?$', restAPI.TaskQueue.as_view())
+    url(r'^attribute/(?P<pk>[0-9]+)/vote/?$', restAPI.TaskQueue.as_view()),
+    url(r'^ad/$', restAPI.AdDetail.as_view()),
+    url(r'^ad/(?P<pk>[0-9]+)/?$', restAPI.AdDetail.as_view()),
 )

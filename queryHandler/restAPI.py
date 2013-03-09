@@ -14,9 +14,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
 from queryHandler import tasks
+from django.db.models import Q
 
+import operator, json
 import rredis
-import json
+import random
 
 #RESTful API
 class EntityDetail(APIView):
@@ -26,23 +28,36 @@ class EntityDetail(APIView):
         except Entity.DoesNotExist:
             raise Http404
             
-    def searchObject(self, query):
-        #query could be for tags, title, and description
-        #could also be attributes
-        return Entity.objects.all()
+    def searchObject(self, query, limit):
+        filterList = []
+
+        for word in query.split(' '): #need to make this more robust later
+            word = word.lower()
+            nameQ = Q(name__contains=word)
+            tagQ = Q(tags__name__in=[word])
+            filterList.append(nameQ)
+            filterList.append(tagQ)
+
+        res = Entity.objects.filter(reduce(operator.or_, filterList))
+        
+        if limit <= 0:
+            return res
+        else:
+            return res[:limit]
         
     def get(self, request, pk=None, format=None):
         entity = None
 
         if 'q' in request.GET:
-            entity = self.searchObject(request.GET['q'])
+            print 'search...'
+            entity = self.searchObject(request.GET['q'], request.GET.get('limit',-1))
+            print len(entity)
         elif pk:
             entity = self.get_object(pk)
         else:
             return Response(None, status=status.HTTP_400_BAD_REQUEST)
-
+        
         es = EntitySerializer(entity)
-
         return Response(es.data)
 
     def post(self, request, pk=None, format=None):
@@ -138,6 +153,28 @@ class AttributeDetail(APIView):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class AdDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return Ad.objects.get(pk=pk)
+        except Attribute.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk=None, format=None):
+        if pk:
+            ad = self.get_object(pk)
+            adSerializer = AdSerializer(ad)
+            return Response(adSerializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+        #if no pk, return a random ad
+        last = Ad.objects.count()-1
+        adInd = random.randint(0,last)
+        ad = Ad.objects.all()[adInd]
+        
+        adSerializer = AdSerializer(ad)
+        return Response(adSerializer.data)
+
+
 class TaskQueue(APIView):
     def post(self, request, pk=None, format=None):
         user = str(request.user)
@@ -148,9 +185,10 @@ class TaskQueue(APIView):
         r = rredis.getRedisConnection()
         voted = r.get(keyName)
 
-        if voted: #already exists
+        if False: #voted: #already exists
+            print keyName, "already voted"
             error = True
         else:
             tasks.incrementVote.delay(user, pk, request.DATA['voteType'], keyName) 
 
-        return Response(json.dumps({'error': error}), status=status.HTTP_200_OK)
+        return Response({'error': error}, status=status.HTTP_200_OK)

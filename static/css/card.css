@@ -1,6 +1,6 @@
 .table {
-    display: table;   /* Allow the centering to work */
-    margin: 0 auto;
+  display: table;   /* Allow the centering to work */
+  margin: 0 auto;
 }
 
 .vote > li {
@@ -24,27 +24,25 @@
 }
 
 .card:hover {
-    /*
-  -webkit-transform: scale(1.05,1.05);
-  */
+  border-color: gray;
 }
 
 .card {
   position:relative;
-  /*margin: 1.5em;*/
+  margin-bottom: 1.5em;
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.150);
   padding-bottom: 1.5em;
+  max-width: 22em;
 
   -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
   -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
 
-/*
+  -webkit-transition: border-color;
   -webkit-transition-duration:0.2s;
   -webkit-transition-timing-function:linear;
   -webkit-transition-delay:0s; 
-*/
 }
 
 /*Card Types*/
@@ -53,6 +51,11 @@
   text-align: center;
   word-wrap: break-word;
 }
+.card-status {
+  position: absolute;
+  left: 10px;
+  top: 7px;
+}
 
 .contentContainer {
   min-height: 10em;
@@ -60,12 +63,17 @@
     /*max-height: 45em;
     overflow-y: scroll;*/
   }
+
+  .attrContent {
+    max-height: 30em;
+  }
+
+  .attrContent:hover {
+  }
+
   .card-content {
     text-align: left;
     min-height: 10em;
-
-
-    /*min-width: 85%;*/
   }
   
   .actions {
@@ -143,10 +151,6 @@
     border-width: 0 40px 40px 0;
 }
 
-.imgBtn {
-    margin-top: 1em;
-}
-
 .imgPlaceholder {
     display: block;
     padding: 0.55em 0.75em 0.55em 0.75em;
@@ -160,18 +164,37 @@
     text-align: left;
 }
 
+.voteBtn {
+  margin: 0 0.5em 0 0.5em;
+  width: 3.5em;
+}
+
 .closeBtn {
-    position: absolute;
-    top: -12px;
-    left: 96%;
+  position: absolute;
+  top: -12px;
+  left: 96%;
+}
+.saveBtn{
+  position: absolute;
+  top: -12px;
+  left: -10px;
 }
 
 .editImgBtn {
-    margin-left: 1.5em;
+    visibility:hidden; 
+    position:absolute; 
+    margin: 1em;
+}
+
+.editBox {
+  max-width: 16em;
+  width: 16em;
+  height: 10em;
+  max-height: 100%;
 }
 
 .tags {
-    margin: 0.5em;
+    margin: 1em 0.5em 1.5em 0.5em;
     border: none;
 }
 
@@ -181,11 +204,6 @@
 
 .page-curl {
   width: 85%;
-  background: #FFFFFF;
-  background: -moz-linear-gradient(0deg, #F5F5F5 0%, #FFF 25%, #FFF 75%, #F5F5F5 100%);
-  background: -ms-linear-gradient(0deg, #F5F5F5 0%, #FFF 25%, #FFF 75%, #F5F5F5 100%);
-  background: -webkit-linear-gradient(0deg, #F5F5F5 0%, #FFF 25%, #FFF 75%, #F5F5F5 100%);
-  background: linear-gradient(0deg, #F5F5F5 0%, #FFF 25%, #FFF 75%, #F5F5F5 100%);
 
   -moz-border-radius: 6px 6px 6px 6px;
   -webkit-border-radius: 6px 6px 6px 6px;
@@ -197,7 +215,6 @@
 
   margin: 1em auto;
   padding: 15px;
-  position: relative;
 }
 
 .page-curl:before, .page-curl:after {
@@ -275,4 +292,11 @@
   -moz-box-shadow: 0 -10px 12px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 0 -10px 12px rgba(0, 0, 0, 0.5);
   box-shadow: 0 -10px 12px rgba(0, 0, 0, 0.5);
+}
+
+.editHighlight {
+    border: 2px dashed pink;
+}
+.editHighlight:hover {
+    border-color: pink;
 }

@@ -1,11 +1,6 @@
 ul.tagit {
-    margin: inherit;
-    /*
-    overflow: auto;
-    margin-left: inherit; 
-    margin-right: inherit;
-    */
 }
+
 ul.tagit li {
     display: block;
     float: left;

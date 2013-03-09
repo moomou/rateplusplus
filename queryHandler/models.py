@@ -6,7 +6,19 @@ class Customer(models.Model):
     '''
     user with augmented fields
     '''
+    CONSUMER = 0
+    ADVERTISER = 1 #has access to consumer
+    DEVELOPER = 2  #has access to advertiser and consumer
+
+    ACC_TYPE_CHOICES = (
+        (CONSUMER, 'consumer'),
+        (ADVERTISER, 'advertiser'),
+        (DEVELOPER, 'developer'),
+    )
+     
     user = models.OneToOneField(User)
+    accountType = models.IntegerField(choices=ACC_TYPE_CHOICES,
+                                        default=CONSUMER)
 
 class CreatedCollection(models.Model):
     '''
@@ -35,7 +47,7 @@ class Entity(models.Model):
     version = models.IntegerField(default=0)
     private = models.BooleanField(default=False)
     author = models.ManyToManyField(Customer)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateField(auto_now_add=True)
     lastUpdated = models.DateField(auto_now=True)
 
     #Model
@@ -52,12 +64,12 @@ class Entity(models.Model):
     tags = TaggableManager()
      
     def __unicode__(self):
-        return unicode(self.id)
+        return unicode(self.id) + u':entity'
 
     #overriding save to auto increment version
-    def save(self):
+    def save(self, **kwargs):
         self.version += 1
-        super(Entity, self).save()
+        super(Entity, self).save(kwargs)
 
 class Attribute(models.Model):
     NOUN = 'non'
@@ -79,7 +91,7 @@ class Attribute(models.Model):
     #Admin
     version = models.IntegerField(default=0)
     private = models.BooleanField(default=False)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateField(auto_now_add=True)
     lastUpdated = models.DateField(auto_now=True)
 
     #Model
@@ -94,13 +106,20 @@ class Attribute(models.Model):
     voteCount = models.IntegerField()
 
     def __unicode__(self):
-        return unicode(self.id)
+        return unicode(self.id) + u':attr'
 
-    def save(self):
+    def save(self, **kwargs):
         self.version += 1
-        super(Attribute, self).save()
+        super(Attribute, self).save(kwargs)
 
+class VoteAggregate(models.Model):
+    attribute = models.ForeignKey(Attribute)
     
+    #represents the number of votes this day
+    date = models.DateField(auto_now_add=True)
+    downVote = models.IntegerField()
+    upVote = models.IntegerField()
+
 class Comment(models.Model):
     entity = models.ForeignKey(Entity)
     
@@ -108,3 +127,19 @@ class Comment(models.Model):
     content = models.TextField()
 
     modifiedDate = models.DateField(auto_now=True)
+
+class Ad(models.Model):
+    #Admin
+    private = models.BooleanField(default=False)
+    created = models.DateField(auto_now_add=True)
+    lastUpdated = models.DateField(auto_now=True)
+
+    #Model
+    name = models.CharField(max_length=200)
+    imageURL = models.URLField(max_length=1000)
+    redirectURL = models.URLField(max_length=1000)
+
+    def __unicode__(self):
+        return unicode(self.id)+u':ad'
+
+

@@ -1,11 +1,18 @@
 'use strict';
 
 $(function() {
-    console.log('init......');
-    var test = new App.SummaryCardCollectionView({});
+    var query = $('#searchInput').val(),
+        collection = new App.SummaryCardCollectionView({query:query});
+
+    $('#searchBtn').click(function(e) {
+        $('#searchForm').submit()
+    });
 
     $('#addNewEntity').click(function(e) {
         var newCard = new App.SummaryCardView({model: new App.SummaryCardModel({})}); 
-        App.NextCol().append(newCard.render().el);
+        var $newCard = newCard.render().$el;
+        App.NextCol().prepend($newCard);
+        console.log($newCard);
+        $newCard.find('.card').addClass('editHighlight');
     });
 });

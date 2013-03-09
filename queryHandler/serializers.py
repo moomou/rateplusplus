@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from queryHandler.models import Entity, Attribute
+from queryHandler.models import Entity, Attribute, Ad
 
 from taggit.managers import TaggableManager
 
@@ -16,6 +16,7 @@ class AttributeSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = ('id',
                   'entity',
+                  'version',
                   'name',
                   'upVote',
                   'downVote',
@@ -33,6 +34,7 @@ class EntitySerializer(serializers.ModelSerializer):
                   'name', 
                   'imageURL',
                   'description',
+                  'version',
                   'tags',
                   'attributes')
 
@@ -60,3 +62,11 @@ class EntitySerializer(serializers.ModelSerializer):
             return instance
 
         return Entity(**attrs)
+
+class AdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ad
+        fields = ('id',
+                  'name',
+                  'imageURL',
+                  'redirectURL')

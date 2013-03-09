@@ -10,8 +10,8 @@ urlpatterns = staticfiles_urlpatterns()
 urlpatterns += patterns('',
     #url(r'^static/(?P<path>.*)$', 'django.views.static.serve'),
     url(r'^api/v0/', include('queryHandler.urls')),
-    #url(r'^query/', include('queryHandler.urls')),
-    url(r'^$', include('default.urls')),
+
+    url(r'^', include('default.urls')),
 
     #url(r'^queryHandler/', include('queryHandler.urls')),
 
