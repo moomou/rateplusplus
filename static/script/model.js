@@ -12,6 +12,8 @@ App.API_VERSION = 'api/v0/';
 App.AdModel = Backbone.Model.extend({
 	urlRoot: App.API_VERSION + 'ad/',
     defaults: {
+        redirectURL: '',
+        imageURL: '',
     },
     parse: function(response) {
         console.log('Get Ad');
@@ -23,8 +25,15 @@ App.AdView = Backbone.View.extend({
     tagName: 'div',
     className: 'card',
     template: _.template(Template.sponsoredTemplate),
+    initialize: function() {
+       var that = this;
+       this.model.on('sync', function(e) {
+           that.render(); 
+       });
+    },
     render: function() {
         this.$el.html(this.template(this.model.toJSON()));
+        App.Cols[2].prepend(this.el);
         return this;
     },
 });
@@ -59,8 +68,8 @@ App.EntityView = Backbone.View.extend({
     template: _.template(Template.entityTemplate),
     render: function() {
         console.log('EntityView render');
-        debugger;
         this.$el.html(this.template(this.model.toJSON()));
+        this.delegateEvents(); //shouldn't have to call this explicitly but some weird coupling between summaryview and this
         return this;
     },
     initialize: function() {
@@ -87,7 +96,6 @@ App.EntityView = Backbone.View.extend({
                                              'fontSize',
                                              'bold',
                                              'italic',
-                                             'underline',
                                              'image',
                                              'left',
                                              'center',
@@ -118,6 +126,7 @@ App.EntityView = Backbone.View.extend({
 
             $e.text('Edit');
             this.$('.cancelBtn').hide();
+            this.model.save();
         }
         else { //Cancel
             var editor = nicEditors.findEditor(editBoxId);
@@ -136,7 +145,6 @@ App.EntityView = Backbone.View.extend({
 
 App.AttributeModel = Backbone.Model.extend({
     urlRoot: App.API_VERSION + 'attribute/',
-
     defaults: {
     	id: undefined,
         entity: undefined,
@@ -145,10 +153,12 @@ App.AttributeModel = Backbone.Model.extend({
         downVote: 0,
         voteCount: 0,
         editable: false, 
+        voted: false,
     },
     //Builtin Function
     initialize: function() {
         var rating = this.getRating();  
+        var that = this;
 
         this.set('rating', rating);
         this.set('upVotePer100', rating);
@@ -159,29 +169,23 @@ App.AttributeModel = Backbone.Model.extend({
         else {
             this.set('downVotePer100', 100 - rating);
         }
-
-        /*
-        //set events
-        this.on('change:name', function() {
-            //save to server
-            this.save();
-        });
-        */
     },
     parse: function(response) {
         return response;
     },
-
     //Custom Func
     getRating: function() {
         var rating = this.get('upVote')/(this.get('voteCount') || 1);
-        rating = this.get('voteCount') ? (rating*100).toFixed(2).toString() : 0; //'N/A';
+        rating = this.get('voteCount') ? (rating*100).toFixed(2).toString() : 0; 
         return rating;
     },
     enqueuVote: function(voteType, view) {
         var that = this;
 
+        this.set('voted', true);
+
         if (this.isNew()) {
+            this.set('editable', false);
             this.save({}, {
                 success: function(model, response) {
                     that.updateVoteCount(voteType, view);
@@ -204,6 +208,8 @@ App.AttributeModel = Backbone.Model.extend({
         });
     },
     updateVoteCount: function(voteType, view) {
+        this.set('voteCount', this.get('voteCount')+1); 
+
         if (voteType=="+") {
             this.set('upVote', this.get('upVote')+1);
         }
@@ -211,10 +217,7 @@ App.AttributeModel = Backbone.Model.extend({
             this.set('downVote', this.get('downVote')+1);
         }
 
-        this.set('voteCount', this.get('voteCount')+1); 
-
         var rating = this.getRating();
-
         this.set('rating', rating);
         this.set('upVotePer100', Math.round(rating));
         this.set('downVotePer100', Math.round(100 - rating));
@@ -230,17 +233,25 @@ App.AttributeView = Backbone.View.extend({
     events: {
         'click .voteBtn': 'attrVote',
         'click .attrName': 'editName',
-        'click .close': 'removeAttr',
+        'click .attrSaveBtn': 'saveAttr',
+        'click .attrCloseBtn': 'removeAttr',
     },
     initialize: function() {
+        var that = this;
+        this.model.on('sync', function(e) {
+            that.model.set('editable', false);
+            that.render();
+        });
     },
     render: function() {
         console.log('AttributeView Render');
-        console.log(this.model.toJSON());
         this.$el.html(this.template(this.model.toJSON()));
 
         if (!this.model.isNew()) {
             this.$el.removeClass('editHighlight');
+        }
+        if (this.model.get('voted')) {
+            this.$('.voteBtns').slideToggle();
         }
 
         return this;
@@ -251,14 +262,10 @@ App.AttributeView = Backbone.View.extend({
         console.log('attrVote called:');
 
         if ($(e.target).hasClass('upVote')) {
-            //this.model.set('upVote', this.model.get('upVote')+1);
             this.model.enqueuVote('+', this);
-            //this.$('.voteBtns').toggle();
         }
         else {
-            //this.model.set('downVote', this.model.get('downVote')+1);
             this.model.enqueuVote('-', this);
-            //this.$('.voteBtns').toggle();
         }
     },
     editName: function(e) {
@@ -275,6 +282,9 @@ App.AttributeView = Backbone.View.extend({
                 console.log(domRef.text());
             });
         }
+    },
+    saveAttr: function(e) {
+        this.model.save();
     },
     removeAttr: function(e) {
         this.model.destroy();
@@ -306,8 +316,6 @@ App.SummaryCardModel = Backbone.Model.extend({
         }
 
         this.on('entityModelUpdated', this.updateSummaryCard);
-        //render the entityView
-        this.get('entityView').render();
     },
 	validate: function(attribs) {
 	},
@@ -369,11 +377,6 @@ App.SummaryCardModel = Backbone.Model.extend({
             'totalAttribute': attrLength,
         };
     },
-
-    //Event Handler
-    test: function() {
-        console.log('...');
-    }
 });
 
 App.SummaryCardView = Backbone.View.extend({
@@ -387,7 +390,6 @@ App.SummaryCardView = Backbone.View.extend({
         'click .addAttrBtn': 'addAttr',
         'click .editImgBtn': 'changeImg',
         'keypress .search-query': 'attrSearch',
-        'focus .search-query': 'attrSearchFocus',
         'mouseover .photo': 'toggleEditImgBtn',
         'mouseout .photo': 'toggleEditImgBtn',
 	},
@@ -407,18 +409,18 @@ App.SummaryCardView = Backbone.View.extend({
         
         //Hide details that require model to be saved first
         if (this.model.get('entityView').model.isNew()) {
+            this.$('.card').addClass('editHighlight');
             this.$('.entityDetail').hide();
         }
 
         //render sub views
-        this.$('.profileContent').html(this.model.get('entityView').el);
+        this.$('.profileContent').empty().append(this.model.get('entityView').render().el);
 
         _.each(this.model.get('attributeViews').render(), function(el) {
             this.$('.attrContent').append(el);
         }, this);
         
         var that = this;
-
         this.$('#tags-'+domId).tagit({
             beforeTagAdded: function(event, ui) {
             },
@@ -471,6 +473,7 @@ App.SummaryCardView = Backbone.View.extend({
                 that.model.set('editable', false);
                 that.render();
 
+                /*
                 if (!model.attributes.length) {
                     that.$('.addAttrBtn').click();
                 }
@@ -478,6 +481,7 @@ App.SummaryCardView = Backbone.View.extend({
                 }
 
                 that.$('.entityDetail').slideDown('slow');
+                */
             },
         });
     },
@@ -551,12 +555,6 @@ App.SummaryCardView = Backbone.View.extend({
             that.$('#img-'+that.model.get('domId')).attr('src', $('#imageURLInput').val());
         });
     },
-    attrSearchFocus: function(e) {
-        e.preventDefault();
-    },
-    attrSearchCancel: function(e) {
-        e.preventDefault();
-    },
     searchIconClick: function(e) {
         var $e = $(e.target); 
         console.log($e);
@@ -575,8 +573,8 @@ App.SummaryCardView = Backbone.View.extend({
     },
     //this function needs updating
     attrSearch: function(e) {
-        var query = (this.$el.find('.search-query').val());
         console.log('Query Event: ' + query);
+        var query = (this.$el.find('.search-query').val());
         if (query !== '') {
             this.$el.find('.searchState')
                 .removeClass('icon-search')
@@ -589,8 +587,6 @@ App.SummaryCardView = Backbone.View.extend({
         }
 
         var results = App.Utility.filterCollection(this.model.get('attributeViews').collection, query);
-
-        console.log(results);
         this.$el.find('.attrContent').html('');
 
         _.each(results, function(m) {
@@ -641,14 +637,12 @@ App.AttributeCollectionView = Backbone.View.extend({
         _.each(this.collection.models, function(item) {
             els.push(that.renderAttribute(item));
         }, this);
-
         return els;
     },
     renderAttribute: function(item) {
         var attrView = new App.AttributeView({
             model: item
         });
-
         return attrView.render().el;
     }
 });
@@ -670,7 +664,6 @@ App.SummaryCardCollectionView = Backbone.View.extend({
         else {
     	    this.collection = new App.SummaryCardCollection();
             this.collection.fetch({data: $.param({q: ''})});
-            //this.collection = new App.SummaryCardCollection(data);
         }
 
         this.collection.on("reset", this.render, this);
@@ -678,10 +671,19 @@ App.SummaryCardCollectionView = Backbone.View.extend({
     render: function() {
         var that = this;
         console.log('In summaryCardCollectionView');
+
         _.each(this.collection.models, function(item) {
             that.renderSummaryCard(item);
         }, this);
 
+        if (!this.collection.models.length) {
+        }
+        else if (this.collection.models.length > 3) {
+            //show 1 sponsored ad
+            var adModel = new App.AdModel({});
+            var adView = new App.AdView({model:adModel});
+            adModel.fetch();
+        }
     },
     renderSummaryCard: function(item) {
         var cardView = new App.SummaryCardView({
@@ -739,7 +741,6 @@ App.Utility = (function() {
 
 App.Cols = [$('#col1'), $('#col2'), $('#col3')];
 App.CurrentColIndex = 0; //index to current col
-
 App.NextCol = function() {
 	var nextCol = App.Cols[App.CurrentColIndex];
 	App.CurrentColIndex = (App.CurrentColIndex+1)%App.Cols.length;

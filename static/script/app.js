@@ -12,7 +12,5 @@ $(function() {
         var newCard = new App.SummaryCardView({model: new App.SummaryCardModel({})}); 
         var $newCard = newCard.render().$el;
         App.NextCol().prepend($newCard);
-        console.log($newCard);
-        $newCard.find('.card').addClass('editHighlight');
     });
 });

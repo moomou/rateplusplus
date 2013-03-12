@@ -33,7 +33,7 @@ class EntityDetail(APIView):
 
         for word in query.split(' '): #need to make this more robust later
             word = word.lower()
-            nameQ = Q(name__contains=word)
+            nameQ = Q(name__icontains=word)
             tagQ = Q(tags__name__in=[word])
             filterList.append(nameQ)
             filterList.append(tagQ)
@@ -168,12 +168,25 @@ class AdDetail(APIView):
 
         #if no pk, return a random ad
         last = Ad.objects.count()-1
+
         adInd = random.randint(0,last)
         ad = Ad.objects.all()[adInd]
         
         adSerializer = AdSerializer(ad)
         return Response(adSerializer.data)
 
+    def post(self, request, pk=None, format=None):
+        if pk:
+            return Response(None, status=status.HTTP_400_BAD_REQUEST)
+        
+        newAd = Ad()
+        adSerializer = AdSerializer(newAd, data=request.DATA)   
+
+        if adSerializer.is_valid():
+            newAd.save()
+            return Response(adSerializer.data)
+
+        return Response(adSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class TaskQueue(APIView):
     def post(self, request, pk=None, format=None):

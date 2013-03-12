@@ -7,8 +7,10 @@ var Template = (function() {
           "<li><%=summary.totalAttribute%> Attributes</li>" + 
         "</ul>",
         attributeTemplate = "" + 
-        "<div <% if (!editable) {%> style='display:none;margin:-0.5em -0.3em 0 0;'<% }%> class='close'>&times;</div>" + 
+        //"<div <% if (!editable) {%> style='display:none;margin:-0.5em -0.3em 0 0;'<% }%> class='close'>&times;</div>" + 
         "<div>" + 
+          "<div <% if (!editable) {%> style='display:none;'<% }%> data-toggle='tooltip' title='Save' class='close attrSaveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
+          "<div <% if (!editable) {%> style='display:none;'<% }%> data-toggle='tooltip' title='Close' class='close attrCloseBtn'><i class='icon-remove-sign icon-large'></i></div>" +
           "<h3 class='attrName' contenteditable='<%=editable%>' ><%=name%></h3>" + 
           //"<h4 class='attrVoteCount'><%=upVote+downVote%> Votes</h4>" + 
         "</div>" + 
@@ -83,8 +85,8 @@ var Template = (function() {
           "<div class='contentContainer outer'>" + 
             "<div class='inner' style='display:block;'>" + 
               "<div class='photo post img-polaroid'>" +
-                "<a href='<%=redirectURL%>'" + 
-                  "<img class='profileimg' id='img-<%=domId%>' src='<%=imageURL ? imageURL : 'static/img/blank.png'%>'></img>" + 
+                "<a href='<%=redirectURL%>'>" + 
+                  "<img class='profileimg' src='<%=imageURL ? imageURL : 'static/img/blank.png'%>'></img>" + 
                 "</a>" + 
               "</div>" + 
             "</div>" + 

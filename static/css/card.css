@@ -10,6 +10,10 @@
 .attrName {
   margin-top: 0;
 }
+.attrName:focus {
+  border: 1px dashed pink;
+  outline: none;
+}
 
 .outer {
   width: 100%;
@@ -51,6 +55,11 @@
   text-align: center;
   word-wrap: break-word;
 }
+.card-title:focus {
+  border: 1px dashed pink;
+  outline: none;  
+}
+
 .card-status {
   position: absolute;
   left: 10px;
@@ -178,6 +187,13 @@
   position: absolute;
   top: -12px;
   left: -10px;
+}
+.attrSaveBtn {
+  float: left;
+  margin: -1.2em;
+}
+.attrCloseBtn {
+  margin: -1.2em;
 }
 
 .editImgBtn {
