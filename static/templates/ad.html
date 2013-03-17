@@ -2,119 +2,69 @@
 <!-- saved from url=(0066)http://twitter.github.com/bootstrap/examples/marketing-narrow.html -->
 <html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta charset="utf-8">
-  <title>Template · Bootstrap</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <!-- Le styles -->
-  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-responsive.min.css"/>
-  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css"/>
-  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/font-awesome.min.css"/>
-
-  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery.tagit.css"/>
-  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/card.css"/>
-  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/ad.css"/>
-  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/app.css"/>
-  <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
-
-  <style>
-   * {font-family: 'Lato', sans-serif;}
-  </style>
-
-  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-  <!--[if lt IE 9]>
-  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
+  {% include "stdHead.partial" %}
+  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/ad.css">
 </head>
-    <body>
-      <div class="navbar navbar-fixed-top outer">
-        <div class="navbar-inner">
-          <div class="container">
-            <a href="http://54.235.216.25" class="home-btn pull-left"><span style="left: 145px;" class="logo"></span>Cloverite </a>
-            <form method="GET" id="searchForm" style="margin-top:1em;" class="navbar-search" action="http://54.235.216.25/">
-              <div class="input-append">
-                <input class="span4" name='q' id="searchInput" type="text" placeholder="Search" value="{{QUERY}}">
-                <button id="searchBtn" class="btn btn-success" type="button" style="background:black;"><i class="icon-search"></i></button>
-              </div>
-            </form>
-            <div class="stats">
-            </div>
-            <a class="btn btn-primary pull-right" href="#signin"> Feedback</a>
+<body>
+  {% include "header.partial" %}
+  <div class="break break-large"></div>
+  <div class="container-narrow">
+    <h3 style="text-align:center">Submit a New Sponsored Story</h3>
+      <div class="adForm">
+        <form id="adForm" enctype="multipart/form-data" class="form-horizontal" method="post" action="/api/v0/ad/">{% csrf_token %}
+          <div class="pull-left">
+            <img id="profileimg" src="{{STATIC_URL}}img/blank.png" alt="" style="width:270px;height:157px" class="img-polaroid">
+            <br><br>
+            <h3 style="text-align:center;">Image Preview</h3>
+            <!--<input name="profileimg" id="profileimgInput" style="max-width: 15em;" type="file" />-->
           </div>
-        </div>
-      </div>
-      <div class="break break-large"></div>
-      <div class="container-narrow">
-        <h3 style="text-align:center">Submit a New Sponsored Story</h3>
-          <div class="adForm">
-            <form id="adForm" enctype="multipart/form-data" class="form-horizontal" method="post" action="/api/v0/ad/">{% csrf_token %}
-              <div class="pull-left">
-                <img id="profileimg" src="{{STATIC_URL}}img/blank.png" alt="" style="width:270px;height:157px" class="img-polaroid">
-                <br><br>
-                <h3 style="text-align:center;">Image Preview</h3>
-                <!--<input name="profileimg" id="profileimgInput" style="max-width: 15em;" type="file" />-->
-              </div>
-              <div class="pull-right">
-                <div class="control-group">
-                  <label>Project Name</label>
-                  <input type="text" name="name" placeholder="Ex. Cloverite">
-                </div>
-                <div class="control-group">
-                  <label>Project Home URL</label>
-                  <input name="redirectURL" class="span3" id="redirectURLInput" type="text" placeholder="http://">
-                </div>
-                <div class="control-group">
-                  <label>Image URL</label>
-                  <input name="imageURL" class="span3" id="imageURLInput" type="text" placeholder="http://">
-                </div>
-              </div>
-            </form>
-          <br>
-        </div>
-        <div class="break"></div>
-        <button id="submitAd" class="center btn btn-primary">Submit</button>    
-      </div>
-      
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+          <div class="pull-right">
+            <div class="control-group">
+              <label>Project Name</label>
+              <input type="text" name="name" placeholder="Ex. Cloverite">
+            </div>
+            <div class="control-group">
+              <label>Project Home URL</label>
+              <input name="redirectURL" class="span3" id="redirectURLInput" type="text" placeholder="http://">
+            </div>
+            <div class="control-group">
+              <label>Image URL</label>
+              <input name="imageURL" class="span3" id="imageURLInput" type="text" placeholder="http://">
+            </div>
+          </div>
+        </form>
+      <br>
+    </div>
+    <div class="break"></div>
+    <button id="submitAd" class="center btn btn-primary">Submit</button>    
+  </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min.js"></script>
+  {% if FEEDBACK_ENABLED %} 
+    {% include "feedbackForm.partial" %}
+  {% endif %}
 
-    <script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script>
+  {% include "stdScript.partial" %}
+  <script>
+    $('#submitAd').click(function(e) {
+      $('#adForm').submit();
+    });
+    $('#imageURLInput').focusout(function(e) {
+        console.log($('#imageURLInput').val());
+        $('#profileimg').attr('src', $('#imageURLInput').val());
+    });
+    $("#profileimgInput").change(function(e) {
+        for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+            var file = e.originalEvent.srcElement.files[i];
+            console.log(file)
+            var reader = new FileReader();
 
-    <script src="{{STATIC_URL}}js/bootstrap.min.js"></script>
-    <script src="{{STATIC_URL}}js/tag-it.min.js"></script>
-
-    <script src="{{STATIC_URL}}script/template.js"></script>
-    <script src="{{STATIC_URL}}script/model.js"></script> 
-
-    <script>
-      $('#submitAd').click(function(e) {
-        $('#adForm').submit();
-      });
-      $('#imageURLInput').focusout(function(e) {
-          console.log($('#imageURLInput').val());
-          $('#profileimg').attr('src', $('#imageURLInput').val());
-      });
-      $("#profileimgInput").change(function(e) {
-          for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
-              var file = e.originalEvent.srcElement.files[i];
-              console.log(file)
-              var reader = new FileReader();
-
-              reader.onloadend = function() {
-                  $('#profileimg')[0].src = reader.result;
-              }
-              reader.readAsDataURL(file);
-          }
-      });
-    </script>
-  </body>
+            reader.onloadend = function() {
+                $('#profileimg')[0].src = reader.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+  </script>
+  <script src="{{STATIC_URL}}script/app.js"></script> 
+</body>
 </html>

@@ -677,6 +677,8 @@ App.SummaryCardCollectionView = Backbone.View.extend({
         }, this);
 
         if (!this.collection.models.length) {
+            App.MessageBox.fadeToggle();
+            App.LinkBox.html(App.ShowTrendyLink());
         }
         else if (this.collection.models.length > 3) {
             //show 1 sponsored ad
@@ -748,4 +750,10 @@ App.NextCol = function() {
 }
 App.LastCol = function() {
     return App.Cols[App.Cols.length-1];
+}
+
+App.LinkBox = $('#linkBox');
+App.MessageBox = $('.message-box');
+App.ShowTrendyLink = function() {
+    return "<a href='?q='Test''>Test</a>";
 }
