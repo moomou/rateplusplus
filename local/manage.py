@@ -1,1 +1,0 @@
-/home/ubuntu/sites/rateplusplus/manage.py
