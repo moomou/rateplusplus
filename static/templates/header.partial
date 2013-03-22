@@ -1,4 +1,4 @@
-  <div class="navbar navbar-fixed-top outer">
+  <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
         <a href="{% url 'default.views.PageHandler' %}" class="muted home-btn pull-left"><span style="left: 145px;" class="logo"></span>Cloverite </a>
@@ -17,7 +17,7 @@
         </div>
         {% endif %}
         {% if FEEDBACK_ENABLED %}
-        <a class="btn btn-primary pull-right" data-toggle="modal" role="button" id="feedbackBtn" href="#feedbackModal"> Feedback</a>
+        <a class="btn btn-success pull-right" data-toggle="modal" role="button" id="feedbackBtn" href="#feedbackModal"> Feedback</a>
         {% endif %}
       </div>
     </div>

@@ -16,15 +16,13 @@ function keyShortcut() {
 }
 
 function visitBtn() {
-
 }
 
 function shareBtn() {
-
 }
 
 function addBtn() {
-var target = App.NextCol().add({'editable': true});
+    var target = App.NextCol().add({'editable': true});
 }
 
 function downloadBtn() {

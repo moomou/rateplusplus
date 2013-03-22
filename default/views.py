@@ -70,7 +70,7 @@ def SearchPage(request, query):
 def DefaultPage(request):
     ipaddr = request.META['HTTP_X_REAL_IP']
     geoInfo = gi.record_by_addr(ipaddr)
-    defaultQuery = " ".join([geoInfo['city'],geoInfo['country_name']])
+    defaultQuery = " ".join([geoInfo['city']]) #,geoInfo['country_name']])
 
     renderCxt = {'DEFAULT_QUERY':defaultQuery}
     renderCxt = dict(FEATURE_FLAG.items() + renderCxt.items())

@@ -21,6 +21,12 @@ import rredis
 import random
 
 #RESTful API
+class TagsDetail(APIView):
+    def post(self, request, pk=None, format=None):
+        tags = [tag.name for tag in Entity.tags.most_common()]
+        tags = tags[:5]
+        return Response(tags)
+
 class EntityDetail(APIView):
     def get_object(self, pk):
         try:
@@ -32,9 +38,13 @@ class EntityDetail(APIView):
         filterList = []
 
         for word in query.split(' '): #need to make this more robust later
+
             word = word.lower()
+            tag = word if word.find('#') != -1 else "#"+word
+            print tag
+
             nameQ = Q(name__icontains=word)
-            tagQ = Q(tags__name__in=[word])
+            tagQ = Q(tags__name__in=[tag])
             filterList.append(nameQ)
             filterList.append(tagQ)
 

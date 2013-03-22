@@ -5,8 +5,8 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-responsive.min.css"/>
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-responsive.min.css"/>
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/font-awesome.min.css"/>
 
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery.tagit.css"/>

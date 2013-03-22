@@ -41,7 +41,7 @@ var Template = (function() {
             "<div <% if (!editable) {%> style='display:none;'<% }%> data-toggle='tooltip' title='Save' class='close saveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
           "</div>" + 
           "<div class='contentContainer outer'>" + 
-            "<div class='inner' style='display:block;'>" + 
+            "<div class='inner' style=''>" + 
               "<div class='summary'>" + 
                 summaryTemplate + 
               "</div>" + 
@@ -57,9 +57,9 @@ var Template = (function() {
             "</div>" + 
             "<div class='break break-mini'></div>" + 
             "<div class='entityDetail' style='clear:both;margin-top:1em;'>" + 
-              "<ul class='nav nav-tabs inner'>" + 
-                "<li class='active'><a href='#attributes-<%=domId%>' data-toggle='tab'>Attributes</a></li>" + 
-                "<li class=''><a href='#profile-<%=domId%>' data-toggle='tab'>Profile</a></li>" + 
+              "<ul class='nav nav-tabs'>" + 
+                "<li style='width:50%;' class='active'><a href='#attributes-<%=domId%>' data-toggle='tab'>Attributes</a></li>" + 
+                "<li style='width:50%;' class=''><a href='#profile-<%=domId%>' data-toggle='tab'>Profile</a></li>" + 
               "</ul>" + 
               "<div class='tab-content'>" + 
                 "<div class='tab-pane tabpane' id='profile-<%=domId%>'>" + 

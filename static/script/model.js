@@ -186,9 +186,10 @@ App.AttributeModel = Backbone.Model.extend({
 
         if (this.isNew()) {
             this.set('editable', false);
+            that.updateVoteCount(voteType, view);
+
             this.save({}, {
                 success: function(model, response) {
-                    that.updateVoteCount(voteType, view);
                 },
             });
             return;
@@ -426,10 +427,10 @@ App.SummaryCardView = Backbone.View.extend({
             },
             afterTagAdded: function(event, ui) {
                 var tags = that.model.get('entityView').model.get('tags');
+
                 if (tags.indexOf(ui.tagLabel) < 0) {
                     tags.push(ui.tagLabel);
                     console.log(tags);
-                    that.model.get('entityView').model.trigger('tagChange');
                 }
             },
             beforeTagRemoved: function(event, ui) {
@@ -439,7 +440,6 @@ App.SummaryCardView = Backbone.View.extend({
                 var ind = tags.indexOf(ui.tag);
                 tags.splice(ind, 1);
                 console.log(tags);
-                that.model.get('entityView').model.trigger('tagChange');
             },
             readOnly: !editable,
             onTagClicked: function(event, ui) {
@@ -657,6 +657,7 @@ App.SummaryCardCollection = Backbone.Collection.extend({
 
 App.SummaryCardCollectionView = Backbone.View.extend({
     initialize: function(setting) {
+
         if (setting.query) {
             this.collection = new App.SummaryCardCollection();
             this.collection.fetch({data: $.param({q: setting.query})});
@@ -677,8 +678,7 @@ App.SummaryCardCollectionView = Backbone.View.extend({
         }, this);
 
         if (!this.collection.models.length) {
-            App.MessageBox.fadeToggle();
-            App.LinkBox.html(App.ShowTrendyLink());
+            App.ShowTrendyLink();
         }
         else if (this.collection.models.length > 3) {
             //show 1 sponsored ad
@@ -754,6 +754,18 @@ App.LastCol = function() {
 
 App.LinkBox = $('#linkBox');
 App.MessageBox = $('.message-box');
+
 App.ShowTrendyLink = function() {
-    return "<a href='?q='Test''>Test</a>";
+    $.ajax({
+        'url': App.API_VERSION+'tags/',
+        'type': 'POST'
+    })
+    .done(function(tags) {
+        var aTags = "";
+        for (var ind in tags) {
+            aTags += "<a href='/?q="+encodeURIComponent(tags[ind])+"'>"+tags[ind]+"</a> ";
+        }
+        App.MessageBox.fadeToggle();
+        App.LinkBox.html(aTags);
+    });
 }

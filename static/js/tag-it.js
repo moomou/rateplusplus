@@ -416,7 +416,7 @@
                 return false;
             }
 
-            var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
+            var label = $(this.options.onTagClicked ? '<a class="btn btn-mini btn-info tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
 
             // Create tag.
             var tag = $('<li></li>')

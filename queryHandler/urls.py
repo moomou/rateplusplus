@@ -12,4 +12,5 @@ urlpatterns = patterns('',
     url(r'^attribute/(?P<pk>[0-9]+)/vote/?$', restAPI.TaskQueue.as_view()),
     url(r'^ad/$', restAPI.AdDetail.as_view()),
     url(r'^ad/(?P<pk>[0-9]+)/?$', restAPI.AdDetail.as_view()),
+    url(r'^tags/$', restAPI.TagsDetail.as_view()),
 )

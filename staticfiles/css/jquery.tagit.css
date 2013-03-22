@@ -1,11 +1,6 @@
 ul.tagit {
-    margin: inherit;
-    /*
-    overflow: auto;
-    margin-left: inherit; 
-    margin-right: inherit;
-    */
 }
+
 ul.tagit li {
     display: block;
     float: left;
@@ -17,7 +12,7 @@ ul.tagit li.tagit-choice {
 }
 
 ul.tagit li.tagit-choice-read-only { 
-    padding: .2em .5em .2em .5em; 
+/*    padding: .2em .5em .2em .5em; */
 } 
 
 ul.tagit li.tagit-choice-editable { 
@@ -67,4 +62,7 @@ ul.tagit input[type="text"] {
     width: inherit;
     background-color: inherit;
     outline: none;
+} 
+.ui-helper-hidden-accessible {
+    display:none;
 }

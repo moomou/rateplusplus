@@ -146,7 +146,6 @@ ul {
 
 /*Overriding BootStrap*/
 .navbar-fixed-top .container {
-  width: 1200px;
 }
 .navbar .brand {
   padding: 0px;

@@ -10,6 +10,10 @@
 .attrName {
   margin-top: 0;
 }
+.attrName:focus {
+  border: 1px dashed pink;
+  outline: none;
+}
 
 .outer {
   width: 100%;
@@ -23,48 +27,48 @@
   padding: 0em 1em 0em 1em;
 }
 
-.card:first-child {
-  /*margin: 2.5em 0 0 0;*/
+.card:hover {
+  border-color: gray;
 }
+
 .card {
   position:relative;
-  margin: 1.5em;
+  margin: 1.5em auto;
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.150);
   padding-bottom: 1.5em;
+  max-width: 35em;
 
   -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
   -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
+
+  -webkit-transition: border-color;
+  -webkit-transition-duration:0.2s;
+  -webkit-transition-timing-function:linear;
+  -webkit-transition-delay:0s; 
+
+  -moz-transition: border-color;
+  -moz-transition-duration:0.2s;
+  -moz-transition-timing-function:linear;
+  -moz-transition-delay:0s; 
 }
 
 /*Card Types*/
-.card-media {
-  min-height: 21.5em;
-}
-.card-media .card-header {
-  display: none;
-}
-.card-media .contentContainer {
-  overflow: hidden;
-}
-.card-media .actions {
-  display: none;
-}
-.card-media .inner {
-  padding: 0em;
-}
-
-.card-lyric {
-  min-height: 21.5em;
-}
-.card-person {
-  min-height: 45em;
-}
-
 /*Card Component*/
 .card-title {
   text-align: center;
+  word-wrap: break-word;
+}
+.card-title:focus {
+  border: 1px dashed pink;
+  outline: none;  
+}
+
+.card-status {
+  position: absolute;
+  left: 10px;
+  top: 7px;
 }
 
 .contentContainer {
@@ -73,12 +77,17 @@
     /*max-height: 45em;
     overflow-y: scroll;*/
   }
+
+  .attrContent {
+    max-height: 30em;
+  }
+
+  .attrContent:hover {
+  }
+
   .card-content {
     text-align: left;
     min-height: 10em;
-
-
-    /*min-width: 85%;*/
   }
   
   .actions {
@@ -145,59 +154,77 @@
 
 .post {
    clear: both;
-   padding: 15px;
    position: relative;
    background-color: #fff;
    -webkit-box-shadow: 0 1px 3px rgba(100, 100, 100, 0.4), 0 0 40px rgba(100, 100, 100, 0.1) inset;
    -moz-box-shadow: 0 1px 3px rgba(100, 100, 100, 0.4), 0 0 40px rgba(100, 100, 100, 0.1) inset;
    box-shadow: 0 1px 3px rgba(100, 100, 100, 0.4), 0 0 40px rgba(100, 100, 100, 0.1) inset;
-
 }
 
-.photo {padding: 0px!important;}
+.post:hover .folded-corner, .Hover {
+    border-width: 0 40px 40px 0;
+}
 
 .imgPlaceholder {
     display: block;
-    padding: 0.75em 0.75em 0.55em 0.75em;
+    padding: 0.55em 0.75em 0.55em 0.75em;
 }
 
-.folded-corner {
- width: 0px;
- height: 0px;
- position: absolute;
- top: -1px;
- right: -1px;
- border-width: 0;
- border-style: solid;
- background: hsla(260,5%,60%,0.2);
- -webkit-box-shadow: 2px -2px 0px #fff, 0 1px 1px rgba(0,0,0,0.1), -1px 1px 1px rgba(0,0,0,0.1);
- -moz-box-shadow: 2px -2px 0px #fff, 0 1px 1px rgba(0,0,0,0.1), -1px 1px 1px rgba(0,0,0,0.1);
- box-shadow: 2px -2px 0px #fff, 0 1px 1px rgba(0,0,0,0.1), -1px 1px 1px rgba(0,0,0,0.1);
- -webkit-border-bottom-left-radius: 15px;
- -moz-border-radius: 0 0 0 15px;
- border-radius: 0 0 0 15px;
- border-color: #fff #fff transparent transparent;
- -webkit-transition: border-width 0.2s ease-out;
- -moz-transition: border-width 0.2s ease-out;
- -ms-transition: border-width 0.2s ease-out;
- -o-transition: border-width 0.2s ease-out;
- transition: border-width 0.2s ease-out;
+.photo .folded-corner {
+    background: hsla(260,5%,75%,0.5);
 }
-
-.post:hover .folded-corner, .Hover {border-width: 0 40px 40px 0;}
-.photo .folded-corner {background: hsla(260,5%,75%,0.5);}
 
 .description {
-  text-align: left;
+    text-align: left;
+}
+
+.voteBtn {
+  margin: 0 0.5em 0 0.5em;
+  width: 3.5em;
+}
+
+.closeBtn {
+  position: absolute;
+  top: -12px;
+  left: 96%;
+}
+.saveBtn{
+  position: absolute;
+  top: -12px;
+  left: -10px;
+}
+.attrSaveBtn {
+  float: left;
+  margin: -1.2em;
+}
+.attrCloseBtn {
+  margin: -1.2em;
+}
+
+.editImgBtn {
+    visibility:hidden; 
+    position:absolute; 
+    margin: 1em;
+}
+
+.editBox {
+  max-width: 16em;
+  width: 16em;
+  height: 10em;
+  max-height: 100%;
+}
+
+.tags {
+    margin: 1em 0.5em 1.5em 0.5em;
+    border: none;
+}
+
+.profileimg {
+    width: 120%;
 }
 
 .page-curl {
   width: 85%;
-  background: #FFFFFF;
-  background: -moz-linear-gradient(0deg, #F5F5F5 0%, #FFF 25%, #FFF 75%, #F5F5F5 100%);
-  background: -ms-linear-gradient(0deg, #F5F5F5 0%, #FFF 25%, #FFF 75%, #F5F5F5 100%);
-  background: -webkit-linear-gradient(0deg, #F5F5F5 0%, #FFF 25%, #FFF 75%, #F5F5F5 100%);
-  background: linear-gradient(0deg, #F5F5F5 0%, #FFF 25%, #FFF 75%, #F5F5F5 100%);
 
   -moz-border-radius: 6px 6px 6px 6px;
   -webkit-border-radius: 6px 6px 6px 6px;
@@ -209,7 +236,6 @@
 
   margin: 1em auto;
   padding: 15px;
-  position: relative;
 }
 
 .page-curl:before, .page-curl:after {
@@ -289,11 +315,9 @@
   box-shadow: 0 -10px 12px rgba(0, 0, 0, 0.5);
 }
 
-.editImgBtn {
-  margin-left: 1.5em;
+.editHighlight {
+    border: 2px dashed pink;
 }
-
-.tags {
-  margin: 0.5em;
-  border: none;
+.editHighlight:hover {
+    border-color: pink;
 }

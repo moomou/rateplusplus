@@ -25,7 +25,6 @@ class AttributeSerializer(serializers.ModelSerializer):
 class EntitySerializer(serializers.ModelSerializer):
 #    tags = serializers.SerializerMethodField('getAllTags')
     tags = serializers.ManyRelatedField(source='tags', read_only=True)
-    #tags = TagSerializer(source="tags")
     attributes = AttributeSerializer(source='attribute_set')
 
     class Meta:

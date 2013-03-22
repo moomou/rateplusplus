@@ -39,6 +39,8 @@
     <button id="submitAd" class="center btn btn-primary">Submit</button>    
   </div>
 
+  {% csrf_token %}
+
   {% if FEEDBACK_ENABLED %} 
     {% include "feedbackForm.partial" %}
   {% endif %}
@@ -46,7 +48,20 @@
   {% include "stdScript.partial" %}
   <script>
     $('#submitAd').click(function(e) {
-      $('#adForm').submit();
+        var $form = $('#adForm');
+        $form.submit(function(e) {
+            e.preventDefault();
+
+            var data = $(this).serialize();
+            data += "&csrfmiddlewaretoken=" + $('input[name=csrfmiddlewaretoken]').val();
+            
+            $form.find('.field').attr('disabled', 'true');
+            $.post($(this).attr('action'), data, 
+                function(resp) {
+                }, 'json')
+            return false;
+        });
+        $form.submit();
     });
     $('#imageURLInput').focusout(function(e) {
         console.log($('#imageURLInput').val());
