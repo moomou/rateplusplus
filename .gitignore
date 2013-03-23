@@ -7,5 +7,6 @@ db/
 include/
 lib/
 local/
+staticfiles/
 local_settings.py
 settings.py
