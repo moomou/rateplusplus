@@ -12,6 +12,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 class AttributeSerializer(serializers.ModelSerializer):
     entity = serializers.RelatedField()
+
     class Meta:
         model = Attribute
         fields = ('id',
@@ -19,6 +20,7 @@ class AttributeSerializer(serializers.ModelSerializer):
                   'version',
                   'name',
                   'upVote',
+                  'tone',
                   'downVote',
                   'voteCount')
 
@@ -30,11 +32,13 @@ class EntitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Entity
         fields = ('id',
+                  'private',
                   'name', 
                   'imageURL',
                   'description',
                   'version',
                   'tags',
+                  'entityType',
                   'attributes')
 
     #overriding to handle Tags and Attribute???

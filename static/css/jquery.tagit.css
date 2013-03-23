@@ -38,7 +38,7 @@ ul.tagit li.tagit-choice .tagit-close {
 
 /* used for some custom themes that don't need image icons */
 ul.tagit li.tagit-choice .tagit-close .text-icon {
-    display: none;
+/*    display: none;*/
 }
 
 ul.tagit li.tagit-choice input {

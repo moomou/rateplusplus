@@ -55,7 +55,6 @@ class Entity(models.Model):
                                   choices=ENTITY_TYPE_CHOICES,
                                   default=UNSPECIFIED)
 
-
     name = models.CharField(max_length=200, 
                             default="Add a Title")
 
@@ -97,6 +96,7 @@ class Attribute(models.Model):
     #Model
     tone = models.IntegerField(choices=ATTR_TYPE_CHOICES,
                                default=NEUTRAL)
+
     entity = models.ForeignKey(Entity)
     name = models.CharField(max_length=200, 
                             default="Attribute Name")

@@ -65,10 +65,19 @@
   outline: none;  
 }
 
-.card-status {
+.card-header-btn, .ad-header-btn {
+  cursor: pointer;
   position: absolute;
-  left: 10px;
   top: 7px;
+}
+.card-header-left {
+  left: 10px;
+}
+.card-header-right {
+  left: 80%;
+}
+.ad-header-right {
+  left: 90%;
 }
 
 .contentContainer {
@@ -80,6 +89,7 @@
 
   .attrContent {
     max-height: 30em;
+    overflow: hidden;
   }
 
   .attrContent:hover {
@@ -320,4 +330,8 @@
 }
 .editHighlight:hover {
     border-color: pink;
+}
+
+.red-heart {
+  color: red;
 }

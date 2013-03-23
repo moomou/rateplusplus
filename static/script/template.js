@@ -7,14 +7,17 @@ var Template = (function() {
           "<li><%=summary.totalAttribute%> Attributes</li>" + 
         "</ul>",
         attributeTemplate = "" + 
-        //"<div <% if (!editable) {%> style='display:none;margin:-0.5em -0.3em 0 0;'<% }%> class='close'>&times;</div>" + 
         "<div>" + 
-          "<div <% if (!editable) {%> style='display:none;'<% }%> data-toggle='tooltip' title='Save' class='close attrSaveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
-          "<div <% if (!editable) {%> style='display:none;'<% }%> data-toggle='tooltip' title='Close' class='close attrCloseBtn'><i class='icon-remove-sign icon-large'></i></div>" +
+          "<div data-toggle='tooltip' title='Save' class='close attrSaveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
+          "<div data-toggle='tooltip' title='Close' class='close attrCloseBtn'><i class='icon-remove-sign icon-large'></i></div>" +
+          "<div class='pull-left tone'><i data-toggle='tooltip' title='<%=TONE%>' class='icon-heart <%=TONE_ICON%>'></i></div>" + 
+          "<div class='pull-right menu'>"+
+            "<i class='cursor-pointer subtle icon-minus-sign' data-toggle='tooltip' title='Report as Inappropriate'></i>" + 
+          "</div>" + 
           "<h3 class='attrName' contenteditable='<%=editable%>' ><%=name%></h3>" + 
           //"<h4 class='attrVoteCount'><%=upVote+downVote%> Votes</h4>" + 
         "</div>" + 
-        "<div class='progress'>" + 
+        "<div class='hide progress'>" + 
           "<div class='bar bar-success' style='width:<%=upVotePer100%>%;'><%=upVotePer100%>%</div>" + 
           "<div class='bar bar-danger' style='width:<%=downVotePer100%>%;'><%=downVotePer100%>%</div>" + 
         "</div>" + 
@@ -35,10 +38,25 @@ var Template = (function() {
         "<div class='card'>" + 
           "<div class='card-header'>" + 
             "<legend contenteditable='<%=editable%>' class='card-title'><%=name%></legend>" + 
-            "<div class='card-status'>" + 
+            "<div class='card-header-btn card-header-left'>" + 
+              "<div class='card-status'>" + 
+                "<i title='Privacy' class='icon-large icon-<%= private ? 'lock' : 'globe'%> '></i>" + 
+              "</div>" + 
             "</div>" + 
-            "<div <% if (!editable) {%> style='display:none;'<% }%> data-toggle='tooltip' title='Close' class='close closeBtn'><i class='icon-remove-sign icon-large'></i></div>" +
-            "<div <% if (!editable) {%> style='display:none;'<% }%> data-toggle='tooltip' title='Save' class='close saveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
+            "<div class='card-header-btn card-header-right'>" +
+              "<div class='btn-group'>" + 
+                "<a class='plain-btn btn btn-small share'><i class='icon-share'></i></a>" + 
+                "<button data-toggle='dropdown' class='plain-btn btn btn-small dropdown-toggle'>" +
+                  "<span class='caret'></span>" + 
+                "</button>" + 
+                "<ul class='dropdown-menu'>" +
+                  "<li><a class='edit'><i class='icon-edit'></i> Edit</a></li>" + 
+                  "<li><a class='report' title='Report as Inappropriate'><i class='icon-minus-sign'></i> Report</a></li>" + 
+                "</ul>" + 
+              "</div>" + 
+            "</div>" + 
+            "<div data-toggle='tooltip' title='Close' class='close closeBtn'><i class='icon-remove-sign icon-large'></i></div>" +
+            "<div data-toggle='tooltip' title='Save' class='close saveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
           "</div>" + 
           "<div class='contentContainer outer'>" + 
             "<div class='inner' style=''>" + 
@@ -72,7 +90,9 @@ var Template = (function() {
                     "<i class='searchState icon-search' style='margin-left:-2em;'></i>" + 
                     "<button style='float:right;' title='Create New Attribute' class='addAttrBtn btn btn-small'><i class='icon-plus'></i> New</button>" + 
                   "</form>" + 
+                    "<div class='outer'><i class='scroll up icon-chevron-up'></i></div>" + 
                     "<div class='attrContent'></div>" +
+                    "<div class='outer'><i class='scroll down icon-chevron-down'></i></div>" + 
                 "</div>" + 
               "</div>" + 
             "</div>" + 
@@ -81,6 +101,9 @@ var Template = (function() {
         sponsoredTemplate = "" +
           "<div class='card-header'>" + 
             "<legend class='card-title'>Sponsored</legend>" + 
+            "<div class='ad-header-btn ad-header-right'>" +
+              "<i class='cursor-pointer subtle icon-minus-sign' data-toggle='tooltip' title='Report as Inappropriate'></i>" + 
+            "</div>" + 
           "</div>" + 
           "<div class='contentContainer outer'>" + 
             "<div class='inner' style='display:block;'>" + 

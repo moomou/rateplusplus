@@ -1,6 +1,6 @@
 body {
   padding-top: 20px;
-  background: url(http://54.235.216.25/static/img/cream_dust_@2X.png);
+  background: url(http://cloverite.com/static/img/cream_dust_@2X.png);
   /*From SubtlePatterns.com*/
 }
 
@@ -14,6 +14,13 @@ body {
   width: 7px;
   left: 15%;
   top: -10px;
+}
+
+.subtle {
+  opacity: 0.25;
+}
+.subtle:hover {
+  opacity: 0.75;
 }
 
 /*Searchform*/
@@ -147,15 +154,19 @@ ul {
 /*Overriding BootStrap*/
 .navbar-fixed-top .container {
 }
+
 .navbar .brand {
   padding: 0px;
 }
+
 .navbar .btn {
   margin-top: 12px;
 }
+
 .modal-backdrop, .modal-backdrop.fade.in {
   opacity: 0.001;
 }
+
 .navbar-inner {
   background-color:white;
   min-height: 40px;
@@ -163,3 +174,14 @@ ul {
   border: none;
 }
 
+.plain-btn {
+  background: none;
+}
+.cursor-pointer {
+  cursor:pointer;
+}
+
+/*Fix for Chrome slow scroll*/
+.navbar-fixed-top {
+  -webkit-transform: translateZ(0); 
+}

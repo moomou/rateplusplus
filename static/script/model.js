@@ -44,6 +44,7 @@ App.EntityModel = Backbone.Model.extend({
         domId: undefined,
     	id: undefined,
         name: 'New Entity',
+        private: false,
         imageURL: '',
         description: 'Add Short Description',
         tags: [],
@@ -149,6 +150,7 @@ App.AttributeModel = Backbone.Model.extend({
     	id: undefined,
         entity: undefined,
         name: 'New Attribute',
+        tone: 1, //defaults to +,
         upVote: 0,
         downVote: 0,
         voteCount: 0,
@@ -169,6 +171,24 @@ App.AttributeModel = Backbone.Model.extend({
         else {
             this.set('downVotePer100', 100 - rating);
         }
+
+        if (this.get('tone') < 0) {
+            this.set('TONE_ICON', 'black-heart');
+            this.set('TONE', 'Negative');
+        }
+        else {
+            this.set('TONE_ICON', 'red-heart');
+            this.set('TONE', 'Positive');
+        }
+
+        this.on('change:tone', function(e) {
+            if (this.get('tone') < 0 ) {
+                this.set('TONE_ICON', 'black-heart');
+            }
+            else {
+                this.set('TONE_ICON', 'red-heart');
+            }
+        });
     },
     parse: function(response) {
         return response;
@@ -176,7 +196,7 @@ App.AttributeModel = Backbone.Model.extend({
     //Custom Func
     getRating: function() {
         var rating = this.get('upVote')/(this.get('voteCount') || 1);
-        rating = this.get('voteCount') ? (rating*100).toFixed(2).toString() : 0; 
+        rating = this.get('voteCount') ? (rating*100).toFixed(0) : 0; 
         return rating;
     },
     enqueuVote: function(voteType, view) {
@@ -219,9 +239,10 @@ App.AttributeModel = Backbone.Model.extend({
         }
 
         var rating = this.getRating();
+
         this.set('rating', rating);
-        this.set('upVotePer100', Math.round(rating));
-        this.set('downVotePer100', Math.round(100 - rating));
+        this.set('upVotePer100', rating);
+        this.set('downVotePer100', 100-rating);
 
         view.render();
     },
@@ -231,7 +252,10 @@ App.AttributeView = Backbone.View.extend({
     template: _.template(Template.attributeTemplate),
     tagName: 'div',
     className: 'page-curl editHighlight',
+
     events: {
+        'click .menu': 'menuHandler',
+        'click .tone': 'toneChange',
         'click .voteBtn': 'attrVote',
         'click .attrName': 'editName',
         'click .attrSaveBtn': 'saveAttr',
@@ -250,7 +274,12 @@ App.AttributeView = Backbone.View.extend({
 
         if (!this.model.isNew()) {
             this.$el.removeClass('editHighlight');
+            this.$el.find('.close').hide();//hide save and del btn
         }
+        else {
+            this.$el.find('.menu').hide(); //hide report btn
+        }
+
         if (this.model.get('voted')) {
             this.$('.voteBtns').slideToggle();
         }
@@ -258,6 +287,29 @@ App.AttributeView = Backbone.View.extend({
         return this;
     },
      //Event Handler
+    menuHandler: function(e) {
+    },
+    toneChange: function(e) {
+        if (!this.model.get('editable')) {
+            return;
+        }
+
+        var $i = this.$('.tone').find('i');
+
+        if ($i.hasClass('black-heart')) {
+            $i.removeClass('black-heart');
+            $i.addClass('red-heart');
+            this.model.set('tone', 1);
+        }
+        else {
+            $i.removeClass('red-heart');
+            $i.addClass('black-heart');
+            this.model.set('tone', -1);
+        }
+
+        this.model.set('editable', true);
+        this.render();
+    },
     attrVote: function(e) {
         e.preventDefault();
         console.log('attrVote called:');
@@ -366,7 +418,7 @@ App.SummaryCardModel = Backbone.Model.extend({
         if (totalVote !== 0) {
             _.each(attrs, function(attr) {
                 var attrScore = attr['upVote']/(attr['voteCount'] || 1);  //divide by totalCount unless 0
-                avgScore += attrScore * (attr['voteCount']/(totalVote || 1));
+                avgScore += attrScore * (attr['voteCount']/(totalVote || 1)) * (attr['tone'] < 0 ? -1 : 1) ;
             });
         }
 
@@ -384,12 +436,14 @@ App.SummaryCardView = Backbone.View.extend({
 	template: _.template(Template.summaryCardTemplate),
     summaryTemplate: _.template(Template.summaryTemplate),
 	events: {
+        'click .card-header-btn': 'cardHeaderBtn',
         'click .closeBtn': 'cancelCreation',
         'click .saveBtn': 'saveCreation',
         'click .card-title': 'updateName', //title
         'click .searchState': 'searchIconClick',
         'click .addAttrBtn': 'addAttr',
         'click .editImgBtn': 'changeImg',
+        'click .card-status': 'changePrivacy',
         'keypress .search-query': 'attrSearch',
         'mouseover .photo': 'toggleEditImgBtn',
         'mouseout .photo': 'toggleEditImgBtn',
@@ -405,15 +459,11 @@ App.SummaryCardView = Backbone.View.extend({
         var editable = this.model.get('editable');
         var domId = this.model.get('domId');
         var entityModel = this.model.toJSON(); 
+        var isNew = this.model.get('entityView').model.isNew();
+        var private = this.model.get('entityView').model.get('private');
 
 		this.$el.html(this.template(entityModel));
         
-        //Hide details that require model to be saved first
-        if (this.model.get('entityView').model.isNew()) {
-            this.$('.card').addClass('editHighlight');
-            this.$('.entityDetail').hide();
-        }
-
         //render sub views
         this.$('.profileContent').empty().append(this.model.get('entityView').render().el);
 
@@ -449,17 +499,61 @@ App.SummaryCardView = Backbone.View.extend({
         });
 
         if (!editable) {
-            this.$('#tags-'+domId).find('input').css('display','none');
+            this.$('#tags-'+domId).find('input').hide();
+            this.$('.close').hide(); //save and close btn
+            this.$('.card-status').hide();
         }
         else {
+            this.$('.card').addClass('editHighlight');
+            this.$('.entityDetail').hide();
+            
+            //Hide details that require model to be saved first
+            this.$('.card-header-btn').hide();
             this.$('#tags-'+domId).find('input').css('display', '');
             this.$('#tags-'+domId).find('input').attr('placeholder', 'Add New Tag');
+
+            if (!isNew) {
+                this.$('.closeBtn').hide();
+            }
+        }
+
+        if (isNew || private) {
+            this.$('.card-status').parent().show();
         }
 
 		return this;
 	},
-
     //Event Handler
+    changePrivacy: function(e) {
+        var entityModel = this.model.get('entityView').model;
+
+        if (!entityModel.isNew()) {
+            return;
+        }
+
+        if (entityModel.get('private')) {
+            entityModel.set('private', false);
+            this.$('.card-status').find('i').attr('class', 'icon-globe icon-large');
+        }
+        else {
+            entityModel.set('private', true);
+            this.$('.card-status').find('i').attr('class', 'icon-lock icon-large');
+        }
+    },
+    cardHeaderBtn: function(e) {
+        console.log(e.target);
+        var $icon = $(e.target);
+
+        if ($icon.hasClass('share')) {
+            //share
+        }
+        else if ($icon.hasClass('edit')) {
+            this.model.set('editable',true);
+            this.render();
+        }
+        else if ($icon.hasClass('report')) {
+        }
+    },
     saveCreation: function(e) {
         var that = this;
         this.$('.card-status').html('<i class="icon-spinner icon-spin icon-2x pull-left"></i>');
