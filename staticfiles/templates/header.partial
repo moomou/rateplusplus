@@ -1,0 +1,24 @@
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a href="{% url 'default.views.PageHandler' %}" class="muted home-btn pull-left"><span style="left: 145px;" class="logo"></span>Cloverite </a>
+        {% if SEARCH_ENABLED %}
+        <form method="GET" id="searchForm" class="navbar-search" action="{% url 'default.views.PageHandler' %}">
+          <div class="input-append">
+            <input class="span4" name='q' id="searchInput" type="text" placeholder="Search" value="{{QUERY}}">
+            <button id="searchBtn" class="btn btn-success" type="button"><i class="icon-search"></i></button>
+          </div>
+        </form>
+        {% else %}
+        <div class="break break-mini"></div>
+        {% endif %}
+        {% if STATS_ENABLED %}
+        <div class="stats">
+        </div>
+        {% endif %}
+        {% if FEEDBACK_ENABLED %}
+        <a class="btn btn-success pull-right" data-toggle="modal" role="button" id="feedbackBtn" href="#feedbackModal"> Feedback</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>

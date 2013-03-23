@@ -1,0 +1,12 @@
+
+    <div class="message-box hide">
+      Did not find what you were looking for? Explore these searches instead.
+      <br>
+      <span id="linkBox">
+      </span>
+      <br>
+      <br>
+      Or create a new entity by using the button on the right
+    </div>
+
+

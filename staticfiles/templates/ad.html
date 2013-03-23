@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!-- saved from url=(0066)http://twitter.github.com/bootstrap/examples/marketing-narrow.html -->
+<html lang="en">
+<head>
+  {% include "stdHead.partial" %}
+  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/ad.css">
+</head>
+<body>
+  {% include "header.partial" %}
+  <div class="break break-large"></div>
+  <div class="container-narrow">
+    <h3 style="text-align:center">Submit a New Sponsored Story</h3>
+      <div class="adForm">
+        <form id="adForm" enctype="multipart/form-data" class="form-horizontal" method="post" action="/api/v0/ad/">{% csrf_token %}
+          <div class="pull-left">
+            <img id="profileimg" src="{{STATIC_URL}}img/blank.png" alt="" style="width:270px;height:157px" class="img-polaroid">
+            <br><br>
+            <h3 style="text-align:center;">Image Preview</h3>
+            <!--<input name="profileimg" id="profileimgInput" style="max-width: 15em;" type="file" />-->
+          </div>
+          <div class="pull-right">
+            <div class="control-group">
+              <label>Project Name</label>
+              <input type="text" name="name" placeholder="Ex. Cloverite">
+            </div>
+            <div class="control-group">
+              <label>Project Home URL</label>
+              <input name="redirectURL" class="span3" id="redirectURLInput" type="text" placeholder="http://">
+            </div>
+            <div class="control-group">
+              <label>Image URL</label>
+              <input name="imageURL" class="span3" id="imageURLInput" type="text" placeholder="http://">
+            </div>
+          </div>
+        </form>
+      <br>
+    </div>
+    <div class="break"></div>
+    <button id="submitAd" class="center btn btn-primary">Submit</button>    
+  </div>
+
+  {% csrf_token %}
+
+  {% if FEEDBACK_ENABLED %} 
+    {% include "feedbackForm.partial" %}
+  {% endif %}
+
+  {% include "stdScript.partial" %}
+  <script>
+    $('#submitAd').click(function(e) {
+        var $form = $('#adForm');
+        $form.submit(function(e) {
+            e.preventDefault();
+
+            var data = $(this).serialize();
+            data += "&csrfmiddlewaretoken=" + $('input[name=csrfmiddlewaretoken]').val();
+            
+            $form.find('.field').attr('disabled', 'true');
+            $.post($(this).attr('action'), data, 
+                function(resp) {
+                }, 'json')
+            return false;
+        });
+        $form.submit();
+    });
+    $('#imageURLInput').focusout(function(e) {
+        console.log($('#imageURLInput').val());
+        $('#profileimg').attr('src', $('#imageURLInput').val());
+    });
+    $("#profileimgInput").change(function(e) {
+        for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+            var file = e.originalEvent.srcElement.files[i];
+            console.log(file)
+            var reader = new FileReader();
+
+            reader.onloadend = function() {
+                $('#profileimg')[0].src = reader.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+  </script>
+  <script src="{{STATIC_URL}}script/app.js"></script> 
+</body>
+</html>

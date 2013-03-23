@@ -1,0 +1,13 @@
+<footer class="footer">
+  <div class="pull-right copyright"> MooMou Inc 2013</div>
+  <!--
+  <nav class="navbar">
+    <ul class="nav">
+      <li class="divider-vertical"><a href="{% url 'default.views.AdHandler' %}">Advertise</a></li>
+      <li class="divider-vertical"><a href="{% url 'default.views.PrivacyHandler' %}">Privacy</a></li>
+    </ul>
+  </nav>
+  -->
+</footer>
+
+
