@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
 
+'''
+Primary Models
+'''
 class Customer(models.Model):
     '''
     user with augmented fields
@@ -20,17 +23,8 @@ class Customer(models.Model):
     accountType = models.IntegerField(choices=ACC_TYPE_CHOICES,
                                         default=CONSUMER)
 
-class CreatedCollection(models.Model):
-    '''
-    a membership set that contains created entity with user
-    '''
-    pass
-
-class VoteCollection(models.Model):
-    '''
-    a membership set describing vote the user has casted
-    '''
-    pass
+    def __unicode__(self):
+        return unicode(self.user.email) + u':' + unicode(self.id)
 
 class Entity(models.Model):
     PERSON = 'person'
@@ -46,7 +40,6 @@ class Entity(models.Model):
     #Admin
     version = models.IntegerField(default=0)
     private = models.BooleanField(default=False)
-    author = models.ManyToManyField(Customer)
     created = models.DateField(auto_now_add=True)
     lastUpdated = models.DateField(auto_now=True)
 
@@ -63,7 +56,7 @@ class Entity(models.Model):
     tags = TaggableManager()
      
     def __unicode__(self):
-        return unicode(self.id) + u':entity'
+        return unicode(self.name) + u':' + unicode(self.id) + u':entity'
 
     #overriding save to auto increment version
     def save(self, **kwargs):
@@ -81,6 +74,7 @@ class Attribute(models.Model):
     NEUTRAL = 0
     NEGATIVE = -1
     POSITIVE = 1
+
     ATTR_TONE_CHOICES = (
         (NEUTRAL, 'neutral'),
         (NEGATIVE, 'negative'),
@@ -94,7 +88,7 @@ class Attribute(models.Model):
     lastUpdated = models.DateField(auto_now=True)
 
     #Model
-    tone = models.IntegerField(choices=ATTR_TYPE_CHOICES,
+    tone = models.IntegerField(choices=ATTR_TONE_CHOICES,
                                default=NEUTRAL)
 
     entity = models.ForeignKey(Entity)
@@ -106,21 +100,14 @@ class Attribute(models.Model):
     voteCount = models.IntegerField()
 
     def __unicode__(self):
-        return unicode(self.id) + u':attr'
+        return unicode(self.name) + u':' + unicode(self.id)
 
     def save(self, **kwargs):
         self.version += 1
         super(Attribute, self).save(kwargs)
 
-class VoteAggregate(models.Model):
-    attribute = models.ForeignKey(Attribute)
-    
-    #represents the number of votes this day
-    date = models.DateField(auto_now_add=True)
-    downVote = models.IntegerField()
-    upVote = models.IntegerField()
-
 class Comment(models.Model):
+    '''Not currently used'''
     entity = models.ForeignKey(Entity)
     
     attribute = Attribute()
@@ -130,6 +117,7 @@ class Comment(models.Model):
 
 class Ad(models.Model):
     #Admin
+    user = models.ForeignKey(User)
     private = models.BooleanField(default=False)
     created = models.DateField(auto_now_add=True)
     lastUpdated = models.DateField(auto_now=True)
@@ -140,6 +128,35 @@ class Ad(models.Model):
     redirectURL = models.URLField(max_length=1000)
 
     def __unicode__(self):
-        return unicode(self.id)+u':ad'
+        return unicode(self.name) + u':' + unicode(self.id)
 
+'''
+Secondary Models
+'''
+class EntityOwnerMembership(models.Model):
+    entity = models.ForeignKey(Entity)
+    user = models.ForeignKey(User)
 
+class UserVotes(models.Model):
+    UPVOTE = -1
+    DOWNVOTE = 1
+
+    VOTE_TYPE = (
+        (UPVOTE, 'downVote'),
+        (DOWNVOTE, 'upVote'),
+    )
+
+    attribute = models.ForeignKey(Attribute)
+    user = models.ForeignKey(User)
+    voteType = models.IntegerField(choices=VOTE_TYPE)
+
+'''
+To be created by Celery task at the end of the day
+'''
+class VoteAggregate(models.Model):
+    attribute = models.ForeignKey(Attribute)
+    
+    #represents the number of votes this day
+    date = models.DateField(auto_now_add=True)
+    downVote = models.PositiveIntegerField()
+    upVote = models.PositiveIntegerField()

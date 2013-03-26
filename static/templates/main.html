@@ -8,11 +8,12 @@
 
  <div class="container-narrow">
   <hr>
+    <!--
     <div class="toolbar">
       <div class="btn-group btn-group-vertical">
         <button id="addNewEntity" class="btn"><i class="icon-plus"></i> New Entity</button>
       </div>
-    </div>
+    </div>-->
 
     {% include "messageBox.partial" %}
      
@@ -26,6 +27,7 @@
   {% csrf_token %}
 
   {% include "imageChangeModal.partial" %}
+
   {% if FEEDBACK_ENABLED %} 
     {% include "feedbackForm.partial" %}
   {% endif %}

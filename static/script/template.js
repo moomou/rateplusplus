@@ -69,9 +69,17 @@ var Template = (function() {
                 "</a>" +
                 "<img class='profileimg' id='img-<%=domId%>' src='<%=imageURL ? imageURL : 'static/img/blank.png'%>'></img>" + 
               "</div>" + 
-              "<ul class='tags' id='tags-<%=domId%>'>" +
-                "<%=tagDOM%>" +
-              "</ul>" + 
+              "<div class='hashTag'>" +
+                "<ul class='tags' id='hashtags-<%=domId%>'>" +
+                  "<%=tagDOM%>" +
+                "</ul>" + 
+              "</div>" +  
+              "<div class='break break-mini'></div>" + 
+              "<div class='catTag'>" +
+                "<ul class='tags' id='cattags-<%=domId%>'>" +
+                  "<%=tagDOM%>" +
+                "</ul>" + 
+              "</div>" +  
             "</div>" + 
             "<div class='break break-mini'></div>" + 
             "<div class='entityDetail' style='clear:both;margin-top:1em;'>" + 
@@ -80,19 +88,19 @@ var Template = (function() {
                 "<li style='width:50%;' class=''><a href='#profile-<%=domId%>' data-toggle='tab'>Profile</a></li>" + 
               "</ul>" + 
               "<div class='tab-content'>" + 
-                "<div class='tab-pane tabpane' id='profile-<%=domId%>'>" + 
+                "<div class='tab-pane fade tabpane' id='profile-<%=domId%>'>" + 
                   "<div class='profileContent outer'>" + 
                   "</div>" +
                 "</div>" + 
-                "<div class='tab-pane tabpane active'  id='attributes-<%=domId%>'>" + 
+                "<div class='tab-pane fade tabpane active'  id='attributes-<%=domId%>'>" + 
                   "<form class='form-search' style='text-align:left;'>" + 
                     "<input type='text' class='input-medium search-query'>" + 
                     "<i class='searchState icon-search' style='margin-left:-2em;'></i>" + 
                     "<button style='float:right;' title='Create New Attribute' class='addAttrBtn btn btn-small'><i class='icon-plus'></i> New</button>" + 
                   "</form>" + 
-                    "<div class='outer'><i class='scroll up icon-chevron-up'></i></div>" + 
+                    "<div class='outer'><i class='scroll up cursor-pointer icon-chevron-up'></i></div>" + 
                     "<div class='attrContent'></div>" +
-                    "<div class='outer'><i class='scroll down icon-chevron-down'></i></div>" + 
+                    "<div class='outer'><i class='scroll down cursor-pointer icon-chevron-down'></i></div>" + 
                 "</div>" + 
               "</div>" + 
             "</div>" + 

@@ -436,6 +436,7 @@ App.SummaryCardView = Backbone.View.extend({
 	template: _.template(Template.summaryCardTemplate),
     summaryTemplate: _.template(Template.summaryTemplate),
 	events: {
+        'click .scroll': 'scrollHandler',
         'click .card-header-btn': 'cardHeaderBtn',
         'click .closeBtn': 'cancelCreation',
         'click .saveBtn': 'saveCreation',
@@ -451,8 +452,10 @@ App.SummaryCardView = Backbone.View.extend({
     //Builtin Func
     initialize: function() {
 		console.log("App.SummaryCardView initialize");
+
         this.listenTo(this.model.get('attributeViews').collection, 'change', this.attrChange);
-	},
+        
+    },
 	render: function(event) {
 		console.log("App.SummaryCardView Render");
 
@@ -471,8 +474,11 @@ App.SummaryCardView = Backbone.View.extend({
             this.$('.attrContent').append(el);
         }, this);
         
-        var that = this;
-        this.$('#tags-'+domId).tagit({
+        var that = this,
+            hashTagsUL = this.$('#hashtags-'+domId),
+            catTagsUL = this.$('#cattags-'+domId); 
+
+        hashTagsUL.tagit({
             beforeTagAdded: function(event, ui) {
             },
             afterTagAdded: function(event, ui) {
@@ -498,8 +504,37 @@ App.SummaryCardView = Backbone.View.extend({
             },
         });
 
+        catTagsUL.tagit({
+            beforeTagAdded: function(event, ui) {
+            },
+            afterTagAdded: function(event, ui) {
+                var tags = that.model.get('entityView').model.get('tags');
+
+                if (tags.indexOf(ui.tagLabel) < 0) {
+                    tags.push(ui.tagLabel);
+                    console.log(tags);
+                }
+            },
+            beforeTagRemoved: function(event, ui) {
+            },
+            afterTagRemoved: function(event, ui) {
+                var tags = that.model.get('entityView').model.get('tags');
+                var ind = tags.indexOf(ui.tag);
+                tags.splice(ind, 1);
+                console.log(tags);
+            },
+            readOnly: !editable,
+            onTagClicked: function(event, ui) {
+                $('#searchInput').val(ui.tagLabel);
+                $('#searchForm').submit();
+            },
+        });
+
+
         if (!editable) {
-            this.$('#tags-'+domId).find('input').hide();
+            hashTagsUL.find('input').hide();
+            catTagsUL.find('input').hide();
+
             this.$('.close').hide(); //save and close btn
             this.$('.card-status').hide();
         }
@@ -509,9 +544,10 @@ App.SummaryCardView = Backbone.View.extend({
             
             //Hide details that require model to be saved first
             this.$('.card-header-btn').hide();
-            this.$('#tags-'+domId).find('input').css('display', '');
-            this.$('#tags-'+domId).find('input').attr('placeholder', 'Add New Tag');
-
+            hashTagsUL.find('input').css('display', '')
+                                    .attr('placeholder', 'Add New Hash Tag');
+            catTagsUL.find('input').css('display', '')
+                                    .attr('placeholder', 'Add New Category Tag');
             if (!isNew) {
                 this.$('.closeBtn').hide();
             }
@@ -521,9 +557,28 @@ App.SummaryCardView = Backbone.View.extend({
             this.$('.card-status').parent().show();
         }
 
-		return this;
+        return this;
 	},
     //Event Handler
+    scrollHandler: function(e) {
+        console.log(e);
+        var $attrContent = this.$('.attrContent');
+        var attrHeight = 250;
+        var $tar = $(e.target);
+
+        if ($tar.hasClass('down')) {
+            $attrContent.animate({
+                scrollTop: $attrContent.scrollTop()+attrHeight
+            }, 800);
+        }
+        else {
+            $attrContent.animate({
+                scrollTop: $attrContent.scrollTop()-attrHeight
+            }, 800);
+
+            //$attrContent.scrollTop($attrContent.scrollTop()-attrHeight);
+        }
+    },
     changePrivacy: function(e) {
         var entityModel = this.model.get('entityView').model;
 

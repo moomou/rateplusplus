@@ -12,6 +12,10 @@ class TagSerializer(serializers.ModelSerializer):
 
 class AttributeSerializer(serializers.ModelSerializer):
     entity = serializers.RelatedField()
+    tone = serializers.ChoiceField(choices=Attribute.ATTR_TONE_CHOICES)
+    
+    def validate(self, attrs):
+        return attrs
 
     class Meta:
         model = Attribute
