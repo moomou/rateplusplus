@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include "stdHead.partial" %}
+</head>
+<body>
+  {% include "header.partial" %}
+
+  <div class="container-narrow">
+    <hr> <div class="break"></div>
+    <div class="custom-form">
+      <h3>Create a new Cloverite Account</h3>
+      <hr>
+      <form id="adForm" enctype="multipart/form-data" class="form-horizontal" method="post" action="signup/">{% csrf_token %}
+        <div class="pull-left">
+          <div>Collect ratings, Create Private Entities </div>
+        </div>
+        <div class="pull-right well">
+          <div class="control-group">
+            <label>Enter Your Email </label>
+            <input type="text" class="span3" name="name" placeholder="example@abc.com">
+          </div>
+          <div class="control-group">
+            <label>Choose a Password </label>
+            <input name="pwd" class="span3" id="pwd" type="password">
+          </div>
+          <div class="control-group">
+            <label>Confirm Your Password</label>
+            <input name="pwd2" class="span3" id="pwdConfirm" type="password">
+          </div>
+          <hr>
+          <button id="submitAd" class="pull-right btn btn-success">Sign Up</button>    
+        </div>
+      </form>
+    </div>
+  </div>
+
+ {% include "stdScript.partial" %}
+
+</body>
+</html>
