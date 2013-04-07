@@ -10,7 +10,7 @@ var Template = (function() {
         "<div>" + 
           "<div data-toggle='tooltip' title='Save' class='close attrSaveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
           "<div data-toggle='tooltip' title='Close' class='close attrCloseBtn'><i class='icon-remove-sign icon-large'></i></div>" +
-          "<div class='pull-left tone'><i data-toggle='tooltip' title='<%=TONE%>' class='icon-heart <%=TONE_ICON%>'></i></div>" + 
+          "<div class='pull-left tone cursor-pointer'><i data-toggle='tooltip' title='<%=TONE%>' class='icon-heart <%=TONE_ICON%>'></i></div>" + 
           "<div class='pull-right menu'>"+
             "<i class='cursor-pointer subtle icon-minus-sign' data-toggle='tooltip' title='Report as Inappropriate'></i>" + 
           "</div>" + 
@@ -74,7 +74,6 @@ var Template = (function() {
                   "<%=tagDOM%>" +
                 "</ul>" + 
               "</div>" +  
-              "<div class='break break-mini'></div>" + 
               "<div class='catTag'>" +
                 "<ul class='tags' id='cattags-<%=domId%>'>" +
                   "<%=tagDOM%>" +
@@ -88,11 +87,11 @@ var Template = (function() {
                 "<li style='width:50%;' class=''><a href='#profile-<%=domId%>' data-toggle='tab'>Profile</a></li>" + 
               "</ul>" + 
               "<div class='tab-content'>" + 
-                "<div class='tab-pane fade tabpane' id='profile-<%=domId%>'>" + 
+                "<div class='tab-pane tabpane' id='profile-<%=domId%>'>" + 
                   "<div class='profileContent outer'>" + 
                   "</div>" +
                 "</div>" + 
-                "<div class='tab-pane fade tabpane active'  id='attributes-<%=domId%>'>" + 
+                "<div class='tab-pane tabpane active'  id='attributes-<%=domId%>'>" + 
                   "<form class='form-search' style='text-align:left;'>" + 
                     "<input type='text' class='input-medium search-query'>" + 
                     "<i class='searchState icon-search' style='margin-left:-2em;'></i>" + 

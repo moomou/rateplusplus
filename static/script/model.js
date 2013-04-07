@@ -281,7 +281,8 @@ App.AttributeView = Backbone.View.extend({
         }
 
         if (this.model.get('voted')) {
-            this.$('.voteBtns').slideToggle();
+            this.$('.voteBtns').hide();
+            this.$('.progress').fadeToggle();
         }
 
         return this;
@@ -448,6 +449,8 @@ App.SummaryCardView = Backbone.View.extend({
         'keypress .search-query': 'attrSearch',
         'mouseover .photo': 'toggleEditImgBtn',
         'mouseout .photo': 'toggleEditImgBtn',
+        'mouseover .card': 'toggleCardHeaderBtn',
+        'mouseout .card': 'toggleCardHeaderBtn',
 	},
     //Builtin Func
     initialize: function() {
@@ -689,6 +692,8 @@ App.SummaryCardView = Backbone.View.extend({
             $btn.css('visibility', 'hidden');
         }
     },
+    toggleCardHeaderBtn: function(e) {
+    },
     changeImg: function(e) {
         e.preventDefault();
 
@@ -753,6 +758,24 @@ App.SummaryCardView = Backbone.View.extend({
 
         this.model.updateEntityStats(tmp); 
         this.$el.find('.summary').html(this.summaryTemplate(this.model.toJSON()));
+    },
+    //Misc. Func
+    toggleVisibility: function(e, selector) {
+        var eventType = e.type;
+
+        if (!this.model.get('editable')) {
+            return;
+        }
+
+        var $btn = this.$(selector), 
+            state = $btn.css('visibility');
+
+        if (eventType === "mouseover" && state === "hidden") {
+            $btn.css('visibility', 'visible');
+        }
+        else if (eventType === "mouseout") {
+            $btn.css('visibility', 'hidden');
+        }
     },
 });
 

@@ -6,6 +6,8 @@ from default import views
 urlpatterns = patterns('',
     url(r'^feedback$', views.FeedbackHandler),
     url(r'^advertise$', views.AdHandler),
+    url(r'^signup$', views.SignupHandler),
+    url(r'^signin$', views.SigninHandler),
     url(r'^privacy$', views.PrivacyHandler),
     url(r'^$', views.PageHandler)
 )

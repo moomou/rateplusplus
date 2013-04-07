@@ -76,6 +76,7 @@
 }
 .card-header-right {
   left: 80%;
+  visibility:hidden;
 }
 .ad-header-right {
   left: 90%;

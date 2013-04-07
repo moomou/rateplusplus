@@ -5,37 +5,58 @@
   {% include "stdHead.partial" %}
 </head>
 <body>
+
   <div class="container-narrow">
     <div class="masthead">
-      <a href="{% url 'default.views.PageHandler'%}" style="padding:0;" class="home-btn muted"><span class="logo"></span>Cloverite</a>
+      <a class="home-btn muted" style="padding:0;" href="/"><span class="logo"></span>Cloverite</a>
     </div>
     <hr>
 
+    <!--Marketing #1-->
     <div class="jumbotron">
       <h1>Rate on Anything</h1>
       <p class="lead">Rate on anything with any attribute. Express and share opinions. </p>
       <form method="GET" id="searchForm" action="{% url 'default.views.PageHandler' %}">
         <div class="input-append">
-          <input id="searchInput" name="q" class="span5" type="text" style="height:41px;font-size:25px;" placeholder="Eg. {{DEFAULT_QUERY}}">
-          <button id="searchBtn" class="btn btn-large btn-success" type="button" ><i class="icon-search"></i></button>
+          <input id="searchInput" name="q" class="span5" type="text" placeholder="Eg. {{DEFAULT_QUERY}}">
+          <button id="searchBtn" class="btn btn-success" type="button" ><i class="icon-search"></i></button>
         </div>
       </form>
+
       <span id="linkBox">
       </span>
+
+      <div class="container-narrow">
+        <div class="row-fluid">
+          <div id="col1" class="span4"></div>
+          <div id="col2" class="span4"></div>
+          <div id="col3" class="span4"></div>
+        </div>
+      </div>
+
     </div>
-    <hr>
-
-    <div class="row-fluid">
-      <div id="col1" class="span4"></div>
-      <div id="col2" class="span4"></div>
-      <div id="col3" class="span4"></div>
+    
+    <!--
+    <div class="jumbotron">
+      <h1>Rankings That Make Sense</h1>
+      <p class="lead">You decide how ranking works.</p>
     </div>
 
-    <hr>
+    <div class="jumbotron">
+      <h1>Connect and Share</h1>
+      <p class="lead">Connect and share experience with people Who have similar opinions (or opposite). Share ratings on Facebook and Twitter.</p>
+    </div>
 
-    {%include "footer.partial"%}
-
+    <div class="jumbotron">
+      <h1>Available Anywhere</h1>
+      <p class="lead">Install the browser plugin to instantly find ratings on anything.</p>
+    </div>
+    -->
   </div> <!-- /container -->
+
+  <div class="container-footer">
+    {%include "footer.partial"%}
+  </div>
 
   <script>
     DEFAULT_QUERY = "{{DEFAULT_QUERY}}";

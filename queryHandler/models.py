@@ -117,7 +117,8 @@ class Comment(models.Model):
 
 class Ad(models.Model):
     #Admin
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, null=True)
+
     private = models.BooleanField(default=False)
     created = models.DateField(auto_now_add=True)
     lastUpdated = models.DateField(auto_now=True)

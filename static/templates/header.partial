@@ -10,24 +10,31 @@
             <button id="searchBtn" class="btn btn-success" type="button"><i class="icon-search"></i></button>
           </div>
         </form>
-        {% else %}
-        <div class="break break-mini"></div>
         {% endif %}
+
         {% if STATS_ENABLED %}
         <div class="stats">
         </div>
-        
         {% endif %}
+
         {% if FEEDBACK_ENABLED %}
         <a class="btn btn-success pull-right" data-toggle="modal" role="button" id="feedbackBtn" href="#feedbackModal"> Feedback</a>
         {% endif %}
 
+        {% if NAV_ENABLED %}
         <ul class="nav pull-right" style="margin-top:10px;">
           <li><a id="addNewEntity" href="#"><i class="icon-plus icon-large"></i></a></li>
           <li class="divider-vertical"></li>
-          <li><a href="#"><i class="icon-user icon-large"></i></a></li>
+
+          {% if SIGNED_IN %}
+          <li><a href="#signinModal"><i class="icon-user icon-large"></i></a></li>
+          {% else %}
+          <li><a href="signin"><i class="icon-user icon-large"></i></a></li>
+          {% endif %}
+
           <li class="divider-vertical"></li>
         </ul>
+        {% endif %}
 
       </div>
     </div>

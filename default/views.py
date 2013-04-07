@@ -27,6 +27,7 @@ FEATURE_FLAG = {
     'SEARCH_ENABLED': True,
     'STATS_ENABLED': True,
     'FEEDBACK_ENABLED': True,
+    'NAV_ENABLED': True,
 }
 
 #Privacy Handler
@@ -45,6 +46,43 @@ def FeedbackHandler(request):
             send_mail('Thank you for testing Cloverite!', EMAIL_MSG, "noreply@cloverite.com", [userEmail], fail_silently=True)
 
         return HttpResponse(json.dumps("Submited"), mimetype="application/json")
+
+#Sign up Handler
+def SigninHandler(request):
+    if request.method == "POST":
+        renderCxt = {}
+        renderCxt = dict(FEATURE_FLAG.items() + renderCxt.items())
+        renderCxt['SEARCH_ENABLED'] = False
+
+        t = loader.get_template('signup.html')
+        c = RequestContext(request, renderCxt) 
+
+        return HttpResponse(t.render(c))
+    elif request.method == "GET":
+        renderCxt = {}
+        renderCxt = dict(FEATURE_FLAG.items() + renderCxt.items())
+        renderCxt['SEARCH_ENABLED'] = False
+
+        t = loader.get_template('signin.html')
+        c = RequestContext(request, renderCxt) 
+
+        return HttpResponse(t.render(c))
+
+
+#Sign up Handler
+def SignupHandler(request):
+    if request.method == "GET":
+        renderCxt = {}
+        renderCxt = dict(FEATURE_FLAG.items() + renderCxt.items())
+        renderCxt['SEARCH_ENABLED'] = False
+
+        t = loader.get_template('signup.html')
+        c = RequestContext(request, renderCxt) 
+
+        return HttpResponse(t.render(c))
+
+    elif request.method == "POST":
+        pass 
 
 #Ad handler
 def AdHandler(request):
@@ -74,6 +112,8 @@ def DefaultPage(request):
 
     renderCxt = {'DEFAULT_QUERY':defaultQuery}
     renderCxt = dict(FEATURE_FLAG.items() + renderCxt.items())
+    renderCxt['SEARCH_ENABLED'] = False
+    renderCxt['FEEDBACK_ENABLED'] = False
     
     t = loader.get_template('landing.html')
     c = RequestContext(request, renderCxt)

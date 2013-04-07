@@ -3,14 +3,13 @@
 <html lang="en">
 <head>
   {% include "stdHead.partial" %}
-  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/ad.css">
 </head>
 <body>
   {% include "header.partial" %}
   <div class="break break-large"></div>
   <div class="container-narrow">
     <h3 style="text-align:center">Submit a New Sponsored Story</h3>
-      <div class="adForm">
+      <div class="custom-form">
         <form id="adForm" enctype="multipart/form-data" class="form-horizontal" method="post" action="/api/v0/ad/">{% csrf_token %}
           <div class="pull-left">
             <img id="profileimg" src="{{STATIC_URL}}img/blank.png" alt="" style="width:270px;height:157px" class="img-polaroid">
@@ -38,8 +37,6 @@
     <div class="break"></div>
     <button id="submitAd" class="center btn btn-primary">Submit</button>    
   </div>
-
-  {% csrf_token %}
 
   {% if FEEDBACK_ENABLED %} 
     {% include "feedbackForm.partial" %}

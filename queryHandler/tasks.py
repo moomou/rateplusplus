@@ -1,5 +1,5 @@
 from celery.task import task
-from .models import Entity, Attribute, CreatedCollection, VoteCollection
+from .models import Entity, Attribute
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
