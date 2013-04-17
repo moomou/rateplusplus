@@ -71,12 +71,12 @@ var Template = (function() {
               "</div>" + 
               "<div class='hashTag'>" +
                 "<ul class='tags' id='hashtags-<%=domId%>'>" +
-                  "<%=tagDOM%>" +
+                  "<%=hashTags%>" +
                 "</ul>" + 
               "</div>" +  
               "<div class='catTag'>" +
                 "<ul class='tags' id='cattags-<%=domId%>'>" +
-                  "<%=tagDOM%>" +
+                  "<%=catTags%>" +
                 "</ul>" + 
               "</div>" +  
             "</div>" + 

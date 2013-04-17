@@ -13,4 +13,8 @@ urlpatterns = patterns('',
     url(r'^ad/$', restAPI.AdDetail.as_view()),
     url(r'^ad/(?P<pk>[0-9]+)/?$', restAPI.AdDetail.as_view()),
     url(r'^tags/$', restAPI.TagsDetail.as_view()),
+    url(r'^ae/tag$', restAPI.Autocomplete.as_view()),
+    url(r'^ae/cat$', restAPI.Autocomplete.as_view()),
+    url(r'^comment/$', restAPI.CommentDetail.as_view()),
+    url(r'^commentlist/$', restAPI.CommentList().as_view()),
 )

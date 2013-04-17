@@ -16,4 +16,3 @@
     <button class="btn btn-success" data-loading-text="Sending..." id="submitFeedbackForm">Send</button>
   </div>
 </div>
-

@@ -4,22 +4,34 @@ $(function() {
     var query = $('#searchInput').val(),
         collection = new App.SummaryCardCollectionView({query:query});
 
-    $('#submitFeedbackForm').click(function(e) {
-        var $form = $('#feedbackForm');
-        $form.submit(function(e) {
-            e.preventDefault();
-
-            var data = $(this).serialize();
-            data += "&csrfmiddlewaretoken=" + $('input[name=csrfmiddlewaretoken]').val();
-            
-            $form.find('.field').attr('disabled', 'true');
-            $.post($(this).attr('action'), data, 
-                function(resp) {
+    $('#feedbackForm').submit(function() {
+        $(this).ajaxSubmit({
+            dataType:'json',
+            beforeSubmit: function(formData, jqFOrm, options) {
+                formData.push({
+                    name: 'csrfmiddlewaretoken',
+                    value: $('input[name=csrfmiddlewaretoken]').val(),
+                    type: 'text',
+                    required: true
+                });
+                formData.push({
+                    name: 'pageurl',
+                    value: document.URL,
+                    type: 'text',
+                    required: true
+                });
+            },
+            success: function(res) {
+                if (res == "pass") {
                     $('#feedbackModal').modal('hide');
-                }, 'json')
-            return false;
+                }
+            },
         });
-        $form.submit();
+        return false;
+    });
+
+    $('#submitFeedbackForm').click(function(e) {
+        $('#feedbackForm').submit();
     });
 
     $('#feedbackBtn').click(function(e) {

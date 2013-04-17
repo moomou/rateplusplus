@@ -8,36 +8,24 @@
 
   <div class="container-narrow">
     <hr><div class="break"></div>
-    <!--
-    <div class="custom-form signin-form ">
-      <h3> Sign In </h3>
-      <form id="signinForm" method="POST" action="{% url 'default.views.SigninHandler' %}">
-        <div class="well">
-          <div class="control-group">
-            <input type="text" name="userEmail" class="field" placeholder="Email">
-          </div>
-          <div class="control-group">
-            <input type="password" name="password" class="field" placeholder="Password">
-          </div>
-        </div>
-      </form>
-    </div>-->
+    <form id="signinForm" class="form-signin" method="post" action="{% url 'default.views.SigninHandler' %}">
+      {% csrf_token %}
 
-    <form class="form-signin">
       <h2 class="form-signin-heading">Sign In</h2>
       <div class="break break-mini"></div>
 
-      <input type="text" placeholder="Email address" class="input-block-level" id="idField">
-      <input type="password" placeholder="Password" class="input-block-level" id="pwdField">
+      <input name="username" type="text" placeholder="Email address" class="input-block-level" id="email">
+      <input name="password" type="password" placeholder="Password" class="input-block-level" id="pwd">
 
       <hr>
       <a href="signup" class="pull-left">Create an Account</a>
-      <button type="submit" class="pull-right btn btn-success">Sign in</button>
+      <input value="Sign In" type="submit" class="pull-right btn btn-success">
       <div class="break break-mini"></div>
     </form>
   </div>
 
  {% include "stdScript.partial" %}
+ <script src="{{STATIC_URL}}script/userForm.js"></script> 
 
 </body>
 </html>

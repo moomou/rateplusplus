@@ -4,6 +4,7 @@ from django.http import Http404
 #RestFramework
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import generics
 from rest_framework import status
 
 #App Stuff
@@ -21,8 +22,31 @@ import rredis
 import random
 
 #RESTful API
+class Autocomplete(APIView):
+    def get(self, request, format=None):
+        reqType = request.path_info
+
+        if 'term' in request.GET:
+            word = request.GET['term']
+            aeType = None
+        else:
+            return Response([])
+
+        if word[0].isalnum():
+            if reqType.find( "cat") >= 0:
+                aeType = "$"
+            else:
+                aeType = "#"
+        else:
+            aeType = word[0]
+            word = word[1:]
+
+        tags = [tag.name[1:] for tag in Entity.tags.filter(name__startswith=aeType).filter(name__contains=word)]
+
+        return Response(tags)
+
 class TagsDetail(APIView):
-    def post(self, request, pk=None, format=None):
+    def post(self, request, format=None):
         tags = [tag.name for tag in Entity.tags.most_common()]
         tags = tags[:5]
         return Response(tags)
@@ -33,7 +57,7 @@ class EntityDetail(APIView):
             return Entity.objects.get(pk=pk)
         except Entity.DoesNotExist:
             raise Http404
-            
+    
     def searchObject(self, query, limit):
         filterList = []
 
@@ -163,18 +187,38 @@ class AttributeDetail(APIView):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class CommentDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return Comment.objects.get(pk=pk)
+        except Comment.DoesNotExist:
+            raise Http404
+
+    def post(self, request):
+        if pk:
+            return Response(None, status=status.HTTP_400_BAD_REQUEST)
+        
+        newCmt = Comment()
+        cmtSerializer = CommentSerializer(newCmt, data=request.DATA)   
+
+        if cmtSerializer.is_valid():
+            newCmt.save()
+            return Response(cmtSerializer.data)
+
+        return Response(cmtSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class AdDetail(APIView):
     def get_object(self, pk):
         try:
             return Ad.objects.get(pk=pk)
-        except Attribute.DoesNotExist:
+        except Ad.DoesNotExist:
             raise Http404
 
     def get(self, request, pk=None, format=None):
         if pk:
             ad = self.get_object(pk)
             adSerializer = AdSerializer(ad)
-            return Response(adSerializer.data, status=status.HTTP_400_BAD_REQUEST)
+            return Response(adSerializer.data)
 
         #if no pk, return a random ad
         last = Ad.objects.count()-1
@@ -198,6 +242,17 @@ class AdDetail(APIView):
 
         return Response(adSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class CommentList(generics.ListAPIView):
+    model = Comment
+    serializer_class = CommentSerializer 
+    paginate_by = 100
+
+    def get_queryset(self):
+        entityId = self.request.GET['entityId']
+        comments = Comment.objects.filter(entityId__exact=entityId)
+        return comments
+        
+#Celery
 class TaskQueue(APIView):
     def post(self, request, pk=None, format=None):
         user = str(request.user)

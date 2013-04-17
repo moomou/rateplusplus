@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from queryHandler.models import Entity, Attribute, Ad
+from queryHandler.models import Entity, Attribute, Comment, Ad
 
 from taggit.managers import TaggableManager
 
@@ -29,7 +29,6 @@ class AttributeSerializer(serializers.ModelSerializer):
                   'voteCount')
 
 class EntitySerializer(serializers.ModelSerializer):
-#    tags = serializers.SerializerMethodField('getAllTags')
     tags = serializers.ManyRelatedField(source='tags', read_only=True)
     attributes = AttributeSerializer(source='attribute_set')
 
@@ -77,3 +76,13 @@ class AdSerializer(serializers.ModelSerializer):
                   'name',
                   'imageURL',
                   'redirectURL')
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment 
+        fields = ('id',
+                  'user',
+                  'entityId',
+                  'content', 
+                  'votes',
+                  'modifiedDate')

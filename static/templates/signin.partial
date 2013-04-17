@@ -21,7 +21,7 @@
 
   <div class="modal-footer">
     <a href="signup" class="pull-left">Create an Account</a>
-    <button class="btn btn-success" id="signin">Sign In</button>
+    <button class="submitBtn btn btn-success">Sign In</button>
   </div>
 </div>
 

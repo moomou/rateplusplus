@@ -56,7 +56,7 @@ class Entity(models.Model):
     tags = TaggableManager()
      
     def __unicode__(self):
-        return unicode(self.name) + u':' + unicode(self.id) + u':entity'
+        return unicode(self.name) + u':' + unicode(self.id)
 
     #overriding save to auto increment version
     def save(self, **kwargs):
@@ -92,6 +92,7 @@ class Attribute(models.Model):
                                default=NEUTRAL)
 
     entity = models.ForeignKey(Entity)
+
     name = models.CharField(max_length=200, 
                             default="Attribute Name")
 
@@ -106,24 +107,41 @@ class Attribute(models.Model):
         self.version += 1
         super(Attribute, self).save(kwargs)
 
-class Comment(models.Model):
-    '''Not currently used'''
-    entity = models.ForeignKey(Entity)
-    
-    attribute = Attribute()
-    content = models.TextField()
+class Citation(models.Model):
+    attribute = models.ForeignKey(Attribute)
 
+    description = models.CharField(max_length=140)
+    sourceURL = models.URLField(max_length=1000)
     modifiedDate = models.DateField(auto_now=True)
+      
+    def __unicode__(self):
+        return u'Citation:' + self.attribute + unicode(self.id)
 
-class Ad(models.Model):
+class Comment(models.Model):
+    entityId = models.CharField(max_length=1000)
+    user = models.CharField(max_length=200, default="Anonymous")
+
     #Admin
-    user = models.ForeignKey(User, null=True)
-
     private = models.BooleanField(default=False)
     created = models.DateField(auto_now_add=True)
     lastUpdated = models.DateField(auto_now=True)
 
     #Model
+    content = models.CharField(max_length=250)
+    modifiedDate = models.DateField(auto_now=True)
+    votes = models.IntegerField(default=0)
+
+    def __unicode__(self):
+        return u'Comment:' + unicode(self.id)
+
+class Ad(models.Model):
+    #Admin
+    private = models.BooleanField(default=False)
+    created = models.DateField(auto_now_add=True)
+    lastUpdated = models.DateField(auto_now=True)
+
+    #Model
+    user = models.ForeignKey(User, null=True)
     name = models.CharField(max_length=200)
     imageURL = models.URLField(max_length=1000)
     redirectURL = models.URLField(max_length=1000)

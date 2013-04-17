@@ -1,27 +1,17 @@
 #Django Stuff
 from django.http import HttpResponse
-from django.http import Http404
 from django.template import RequestContext, loader
 from django.conf import settings
 from django.core.mail import send_mail
+from django.core.urlresolvers import reverse
+from django.contrib.auth import authenticate
+
+from forms import SignupForm, FeedbackForm, EMAIL_MSG 
 
 import json
 import pygeoip 
 
 gi = pygeoip.GeoIP(settings.PROJECT_ROOT+'/../db/GeoLiteCity.dat', pygeoip.MEMORY_CACHE)
-
-EMAIL_MSG = '''
-    Hi there,
-
-    Thank you for testing and sending feedbacks about Cloverite.
-    
-    Our goal is to provide the best user experience possible and your comments will help us get there!
-
-    If you provided us your email, we will be sure to give you a reply.
-    
-    Thanks,
-    Cloverite
-'''
 
 FEATURE_FLAG = {
     'SEARCH_ENABLED': True,
@@ -30,35 +20,30 @@ FEATURE_FLAG = {
     'NAV_ENABLED': True,
 }
 
-#Privacy Handler
 def PrivacyHandler(request):
     pass
     
-#Feedback Handler
 def FeedbackHandler(request):
     if request.method == "POST":
-        userEmail = request.POST.get('userEmail', 'Not supplied')
-        userMessage = request.POST.get('feedback', 'Empty')
+        form = FeedbackForm(request.POST)
 
-        send_mail('Feedback for Cloverite', userMessage, userEmail, ['ppymou@gmail.com'], fail_silently=True)
+        if form.is_valid():
+            cd = form.cleaned_data
 
-        if userEmail != "Not supplied":
-            send_mail('Thank you for testing Cloverite!', EMAIL_MSG, "noreply@cloverite.com", [userEmail], fail_silently=True)
+            #send email to me 
+            send_mail('Feedback for Cloverite', cd['feedback'], cd['userEmail'], ['ppymou@gmail.com'], fail_silently=True)
 
-        return HttpResponse(json.dumps("Submited"), mimetype="application/json")
+            #send email to user
+            if cd['userEmail']:
+                send_mail('Thank you for testing Cloverite!', EMAIL_MSG, "feedback@cloverite.com", [cd['userEmail']], fail_silently=True)
 
-#Sign up Handler
+            return HttpResponse(json.dumps("pass"), mimetype="application/json")
+
+        else:
+            return HttpResponse(json.dumps(form.errors), mimetype="application/json")
+
 def SigninHandler(request):
-    if request.method == "POST":
-        renderCxt = {}
-        renderCxt = dict(FEATURE_FLAG.items() + renderCxt.items())
-        renderCxt['SEARCH_ENABLED'] = False
-
-        t = loader.get_template('signup.html')
-        c = RequestContext(request, renderCxt) 
-
-        return HttpResponse(t.render(c))
-    elif request.method == "GET":
+    if request.method == "GET":
         renderCxt = {}
         renderCxt = dict(FEATURE_FLAG.items() + renderCxt.items())
         renderCxt['SEARCH_ENABLED'] = False
@@ -68,8 +53,18 @@ def SigninHandler(request):
 
         return HttpResponse(t.render(c))
 
+    elif request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
 
-#Sign up Handler
+        print username, password
+        user = authenticate(username=username, password=password)
+
+        if user:
+            return HttpResponse(json.dumps(reverse('default.views.PageHandler')), mimetype="application/json")
+
+        return HttpResponse(json.dumps('error'), mimetype="application/json")
+
 def SignupHandler(request):
     if request.method == "GET":
         renderCxt = {}
@@ -82,9 +77,16 @@ def SignupHandler(request):
         return HttpResponse(t.render(c))
 
     elif request.method == "POST":
-        pass 
+        form = SignupForm(request.POST)
 
-#Ad handler
+        if form.is_valid():
+            user = form.save() 
+            user = authenticate(username=user.username, password=user.password)
+
+            return HttpResponse(json.dumps(reverse('default.views.PageHandler')), mimetype="application/json")
+        else:
+            return HttpResponse(json.dumps(form.errors), mimetype="application/json")
+
 def AdHandler(request):
     renderCxt = {}
     renderCxt = dict(FEATURE_FLAG.items() + renderCxt.items())
@@ -94,7 +96,9 @@ def AdHandler(request):
 
     return HttpResponse(t.render(c))
 
-#SearchHandler
+def ModelHandler(request):
+    pass
+
 def SearchPage(request, query):
     renderCxt = {'QUERY':query}
     renderCxt = dict(FEATURE_FLAG.items() + renderCxt.items())
@@ -104,7 +108,7 @@ def SearchPage(request, query):
 
     return HttpResponse(t.render(c))
  
-#Landing
+#Landing Page
 def DefaultPage(request):
     ipaddr = request.META['HTTP_X_REAL_IP']
     geoInfo = gi.record_by_addr(ipaddr)

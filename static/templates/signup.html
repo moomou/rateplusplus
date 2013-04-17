@@ -11,31 +11,34 @@
     <div class="custom-form">
       <h3>Create a new Cloverite Account</h3>
       <hr>
-      <form id="adForm" enctype="multipart/form-data" class="form-horizontal" method="post" action="signup/">{% csrf_token %}
+      <form id="signupForm" enctype="multipart/form-data" class="form-horizontal" method="post" action="{% url 'default.views.SignupHandler' %}">
+        {% csrf_token %}
+
         <div class="pull-left">
           <div>Collect ratings, Create Private Entities </div>
         </div>
         <div class="pull-right well">
           <div class="control-group">
             <label>Enter Your Email </label>
-            <input type="text" class="span3" name="name" placeholder="example@abc.com">
+            <input type="text" class="span3" name="email" placeholder="example@abc.com">
           </div>
           <div class="control-group">
             <label>Choose a Password </label>
-            <input name="pwd" class="span3" id="pwd" type="password">
+            <input name="pwd" class="span3" type="password">
           </div>
           <div class="control-group">
             <label>Confirm Your Password</label>
-            <input name="pwd2" class="span3" id="pwdConfirm" type="password">
+            <input name="pwdAgain" class="span3" type="password">
           </div>
           <hr>
-          <button id="submitAd" class="pull-right btn btn-success">Sign Up</button>    
+          <button class="submitBtn pull-right btn btn-success">Sign Up</button>    
         </div>
       </form>
     </div>
   </div>
 
  {% include "stdScript.partial" %}
+ <script src="{{STATIC_URL}}script/userForm.js"></script> 
 
 </body>
 </html>

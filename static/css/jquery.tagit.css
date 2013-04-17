@@ -3,6 +3,7 @@
   min-height: 2em;
   padding-left: 0.2em;
   border-radius: 5px;
+  clear: both;
 }
 
 .catTag {
@@ -10,6 +11,7 @@
   min-height: 2em;
   padding-left: 0.2em;
   border-radius: 5px;
+  clear: both;
 }
 
 ul.tagit {
@@ -30,7 +32,7 @@ ul.tagit li.tagit-choice-read-only {
 } 
 
 ul.tagit li.tagit-choice-editable { 
-    padding: .2em 18px .2em .5em; 
+    padding: 0 18px .2em .5em; 
 } 
 
 ul.tagit li.tagit-new {
@@ -46,7 +48,7 @@ ul.tagit li.tagit-choice .tagit-close {
     position: absolute;
     right: .1em;
     top: 50%;
-    margin-top: -8px;
+    margin-top: -12px;
     line-height: 17px;
 }
 
@@ -71,7 +73,7 @@ ul.tagit input[type="text"] {
     box-shadow: none;
 
     border: none;
-    margin: 0;
+    margin-top: -0.1em;
     padding: 0;
     width: inherit;
     background-color: inherit;

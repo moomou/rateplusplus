@@ -8,6 +8,12 @@ function guidGenerator() {
 var App = App || {};
 
 App.API_VERSION = 'api/v0/';
+App.AE_H_URL = App.API_VERSION + 'ae/tag';
+App.AE_C_URL = App.API_VERSION + 'ae/cat';
+
+/*
+    Individual Component
+*/
 
 App.AdModel = Backbone.Model.extend({
 	urlRoot: App.API_VERSION + 'ad/',
@@ -346,6 +352,53 @@ App.AttributeView = Backbone.View.extend({
     },
 });
 
+App.CommentModel = Backbone.Model.extend{
+    urlRoot: App.API_VERSION + 'comment/',
+    defaults: {
+    	id: undefined,
+        entity: undefined,
+        name: 'New Attribute',
+        tone: 1, //defaults to +,
+        editable: false, 
+    },
+    //Builtin Function
+    initialize: function() {
+        var rating = this.getRating();  
+        var that = this;
+
+        this.set('rating', rating);
+        this.set('upVotePer100', rating);
+
+        if (!rating) {
+            this.set('downVotePer100', 0);
+        }
+        else {
+            this.set('downVotePer100', 100 - rating);
+        }
+
+        if (this.get('tone') < 0) {
+            this.set('TONE_ICON', 'black-heart');
+            this.set('TONE', 'Negative');
+        }
+        else {
+            this.set('TONE_ICON', 'red-heart');
+            this.set('TONE', 'Positive');
+        }
+
+        this.on('change:tone', function(e) {
+            if (this.get('tone') < 0 ) {
+                this.set('TONE_ICON', 'black-heart');
+            }
+            else {
+                this.set('TONE_ICON', 'red-heart');
+            }
+        });
+    },
+    parse: function(response) {
+        return response;
+    },
+)};
+
 /*
     Summary Model: EntityModel + Summary Stats + Attr; there is no SummaryModel in the server
 */
@@ -364,6 +417,8 @@ App.SummaryCardModel = Backbone.Model.extend({
             var newEntity = new App.EntityModel({editable: this.get('editable')});
             $.extend(this.attributes, newEntity.toJSON());
 
+            this.set('hashTags', '');
+            this.set('catTags', '');
             this.set('summary', this.getEntityStats(this.get('attributes')));
             this.set('entityView', this.getEntityView(newEntity)); 
             this.set('attributeViews', this.getAttributesView({}));
@@ -375,7 +430,11 @@ App.SummaryCardModel = Backbone.Model.extend({
 	},
     parse: function(response) {
         console.log("SummaryCardModel Parse");
-        response['tagDOM'] = this.getTags(response['tags']); 
+        var tags = this.getTags(response['tags']); 
+
+        response['hashTags'] = tags['hashTags'];
+        response['catTags'] = tags['catTags'];
+
         response['summary'] = this.getEntityStats(response['attributes']); 
         response['entityView'] = this.getEntityView(new App.EntityModel(response)); 
         response['attributeViews'] = this.getAttributesView(response['attributes']);
@@ -386,16 +445,29 @@ App.SummaryCardModel = Backbone.Model.extend({
     updateSummaryCard: function() {
         console.log('Calling SummaryModel update');
         var entityModel = this.get('entityView').model;
-        this.set('tagDOM', this.getTags(entityModel.get('tags')));
+        var tags = this.getTags(entityModel.get('tags'));
+
+        this.set('hashTags', tags['hashTags']);
+        this.set('catTags', tags['catTags']);
         this.set('summary', this.getEntityStats(entityModel.get('attributes')));
     },
     //Custom Functions
     getTags: function(tags) {
-        var tagEmblems = '';
+        var hashTags = '';
+        var catTags = '';
         _.each(tags, function(tag) {
-            tagEmblems += '<li>'+tag+'</li>';
+            if (tag[0] == "#") {
+                hashTags += '<li>'+tag.substr(1)+'</li>';
+            }
+            else {
+                catTags += '<li>'+tag.substr(1)+'</li>';
+            }
         });
-        return tagEmblems;
+
+        return {
+            'hashTags': hashTags,
+            'catTags': catTags,
+        };
     },
     getEntityView: function(entityModel) {
         return new App.EntityView({model: entityModel}); 
@@ -455,9 +527,7 @@ App.SummaryCardView = Backbone.View.extend({
     //Builtin Func
     initialize: function() {
 		console.log("App.SummaryCardView initialize");
-
         this.listenTo(this.model.get('attributeViews').collection, 'change', this.attrChange);
-        
     },
 	render: function(event) {
 		console.log("App.SummaryCardView Render");
@@ -481,58 +551,8 @@ App.SummaryCardView = Backbone.View.extend({
             hashTagsUL = this.$('#hashtags-'+domId),
             catTagsUL = this.$('#cattags-'+domId); 
 
-        hashTagsUL.tagit({
-            beforeTagAdded: function(event, ui) {
-            },
-            afterTagAdded: function(event, ui) {
-                var tags = that.model.get('entityView').model.get('tags');
-
-                if (tags.indexOf(ui.tagLabel) < 0) {
-                    tags.push(ui.tagLabel);
-                    console.log(tags);
-                }
-            },
-            beforeTagRemoved: function(event, ui) {
-            },
-            afterTagRemoved: function(event, ui) {
-                var tags = that.model.get('entityView').model.get('tags');
-                var ind = tags.indexOf(ui.tag);
-                tags.splice(ind, 1);
-                console.log(tags);
-            },
-            readOnly: !editable,
-            onTagClicked: function(event, ui) {
-                $('#searchInput').val(ui.tagLabel);
-                $('#searchForm').submit();
-            },
-        });
-
-        catTagsUL.tagit({
-            beforeTagAdded: function(event, ui) {
-            },
-            afterTagAdded: function(event, ui) {
-                var tags = that.model.get('entityView').model.get('tags');
-
-                if (tags.indexOf(ui.tagLabel) < 0) {
-                    tags.push(ui.tagLabel);
-                    console.log(tags);
-                }
-            },
-            beforeTagRemoved: function(event, ui) {
-            },
-            afterTagRemoved: function(event, ui) {
-                var tags = that.model.get('entityView').model.get('tags');
-                var ind = tags.indexOf(ui.tag);
-                tags.splice(ind, 1);
-                console.log(tags);
-            },
-            readOnly: !editable,
-            onTagClicked: function(event, ui) {
-                $('#searchInput').val(ui.tagLabel);
-                $('#searchForm').submit();
-            },
-        });
-
+        hashTagsUL.tagit(App.ConfigureTagit('hash', that, editable));
+        catTagsUL.tagit(App.ConfigureTagit('cat', that, editable));
 
         if (!editable) {
             hashTagsUL.find('input').hide();
@@ -624,16 +644,6 @@ App.SummaryCardView = Backbone.View.extend({
                 //UI update
                 that.model.set('editable', false);
                 that.render();
-
-                /*
-                if (!model.attributes.length) {
-                    that.$('.addAttrBtn').click();
-                }
-                else {
-                }
-
-                that.$('.entityDetail').slideDown('slow');
-                */
             },
         });
     },
@@ -693,6 +703,17 @@ App.SummaryCardView = Backbone.View.extend({
         }
     },
     toggleCardHeaderBtn: function(e) {
+        var eventType = e.type;
+
+        var $btn = this.$('.card-header-right'),
+            state = $btn.css('visibility');
+
+        if (eventType === "mouseover" && state === "hidden") {
+            $btn.css('visibility', 'visible');
+        }
+        else if (eventType === "mouseout") {
+            $btn.css('visibility', 'hidden');
+        }
     },
     changeImg: function(e) {
         e.preventDefault();
@@ -868,10 +889,6 @@ App.SummaryCardCollectionView = Backbone.View.extend({
 });
 
 /*
-    Add Ad
-*/
-
-/*
     Utility Functions
 */
 App.Utility = (function() {
@@ -913,20 +930,56 @@ App.Utility = (function() {
     };
 })();
 
+App.ConfigureTagit = function(option, that, editable) {
+    var sourceURL = App.AE_C_URL,
+        prefix = "$";
+
+        
+    if (option == "hash") {
+        sourceURL = App.AE_H_URL;
+        prefix = "#";
+    }
+
+    return {
+        autocomplete: {delay: 0, minLength: 2, source: sourceURL}, 
+        afterTagAdded: function(event, ui) {
+            var tags = that.model.get('entityView').model.get('tags');
+            if (tags.indexOf(prefix+ui.tagLabel) < 0) {
+                var label = ui.tagLabel[0] == prefix ? ui.tagLabel : prefix + ui.tagLabel;
+                tags.push(label);
+                console.log(tags);
+            }
+        },
+        afterTagRemoved: function(event, ui) {
+            var tags = that.model.get('entityView').model.get('tags');
+            var label = ui.tagLabel[0] == prefix ? ui.tagLabel : prefix + ui.tagLabel;
+            var ind = tags.indexOf(label);
+            tags.splice(ind, 1);
+            console.log(tags);
+        },
+        readOnly: !editable,
+        onTagClicked: function(event, ui) {
+            $('#searchInput').val(ui.tagLabel);
+            $('#searchForm').submit();
+        },
+    }
+};
+
 App.Cols = [$('#col1'), $('#col2'), $('#col3')];
 App.CurrentColIndex = 0; //index to current col
+
 App.NextCol = function() {
 	var nextCol = App.Cols[App.CurrentColIndex];
 	App.CurrentColIndex = (App.CurrentColIndex+1)%App.Cols.length;
 	return nextCol;
-}
+};
+
 App.LastCol = function() {
     return App.Cols[App.Cols.length-1];
-}
+};
 
 App.LinkBox = $('#linkBox');
 App.MessageBox = $('.message-box');
-
 App.ShowTrendyLink = function() {
     $.ajax({
         'url': App.API_VERSION+'tags/',
@@ -940,4 +993,4 @@ App.ShowTrendyLink = function() {
         App.MessageBox.fadeToggle();
         App.LinkBox.html(aTags);
     });
-}
+};
