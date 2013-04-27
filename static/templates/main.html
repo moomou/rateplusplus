@@ -8,13 +8,6 @@
 
  <div class="container-narrow">
   <hr>
-    <!--
-    <div class="toolbar">
-      <div class="btn-group btn-group-vertical">
-        <button id="addNewEntity" class="btn"><i class="icon-plus"></i> New Entity</button>
-      </div>
-    </div>-->
-
     {% include "messageBox.partial" %}
      
     <div class="row-fluid">
@@ -23,6 +16,11 @@
       <div class="span4" id="col3"></div>
     </div>
   </div>
+  <hr>
+
+  {% if specific_entity %}
+    {% include "comment.partial" %}
+  {% endif %}
     
   {% csrf_token %}
 

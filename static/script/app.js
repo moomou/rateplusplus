@@ -2,18 +2,23 @@
 
 $(function() {
     var query = $('#searchInput').val(),
-        collection = new App.SummaryCardCollectionView({query:query});
+        searchView = undefined,
+        cmtCollectionView = undefined, 
+        pathname = window.location.pathname.split('/'),
+        id = pathname[pathname.length-1];
+
+    if (window.location.search) {
+        searchView = new App.SearchResultView({query:query});
+    }
+    else {
+        searchView = new App.SearchResultView({id:parseInt(id)}); //search for particular id
+        cmtCollectionView = new App.CommentCollectionView({entityId:id});
+    }
 
     $('#feedbackForm').submit(function() {
         $(this).ajaxSubmit({
             dataType:'json',
             beforeSubmit: function(formData, jqFOrm, options) {
-                formData.push({
-                    name: 'csrfmiddlewaretoken',
-                    value: $('input[name=csrfmiddlewaretoken]').val(),
-                    type: 'text',
-                    required: true
-                });
                 formData.push({
                     name: 'pageurl',
                     value: document.URL,
@@ -25,9 +30,40 @@ $(function() {
                 if (res == "pass") {
                     $('#feedbackModal').modal('hide');
                 }
+                else {
+                    //TODO - Update User
+                }
             },
         });
         return false;
+    });
+
+    $('#submitComment').click(function(e) {
+        var cmtForm = $('#commentForm'),
+            content = cmtForm.find('input[name=content]'),
+            btn = $(this);
+
+        if (!content.val()) {
+            return;
+        }
+
+        btn.button('loading');
+
+        var newComment = new App.CommentModel({});
+    
+        newComment.set('content', content.val());
+        newComment.set('private', cmtForm.find('input[name=private]').is(':checked'));
+        newComment.set('entityId', id);
+
+        newComment.save({}, {
+            success: function(response) {
+                content.val('');
+                btn.button('reset');
+                cmtCollectionView.update(response);
+            },
+            error: function(response) {
+            },
+        });
     });
 
     $('#submitFeedbackForm').click(function(e) {
@@ -50,7 +86,7 @@ $(function() {
         $('.message-box').slideUp();
 
         var newCard = new App.SummaryCardView({model: new App.SummaryCardModel({})}); 
-        var $newCard = newCard.render().$el;
-        App.NextCol().prepend($newCard);
+        var $newCard = newCard.render(true).$el;
+        App.ColManager.nextCol('card').prepend($newCard);
     });
 });

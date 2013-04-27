@@ -4,8 +4,9 @@ from django.template import RequestContext, loader
 from django.conf import settings
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 
+#App Stuff
 from forms import SignupForm, FeedbackForm, EMAIL_MSG 
 
 import json
@@ -19,6 +20,16 @@ FEATURE_FLAG = {
     'FEEDBACK_ENABLED': True,
     'NAV_ENABLED': True,
 }
+
+def ContextSetup(request):
+    authenticated = request.user.is_authenticated()
+
+    renderCxt = {
+        'authenticated': authenticated,
+    }
+    renderCxt = dict(FEATURE_FLAG.items() + renderCxt.items())
+
+    return renderCxt
 
 def PrivacyHandler(request):
     pass
@@ -44,8 +55,7 @@ def FeedbackHandler(request):
 
 def SigninHandler(request):
     if request.method == "GET":
-        renderCxt = {}
-        renderCxt = dict(FEATURE_FLAG.items() + renderCxt.items())
+        renderCxt = ContextSetup(request)
         renderCxt['SEARCH_ENABLED'] = False
 
         t = loader.get_template('signin.html')
@@ -57,18 +67,22 @@ def SigninHandler(request):
         username = request.POST['username']
         password = request.POST['password']
 
-        print username, password
         user = authenticate(username=username, password=password)
 
         if user:
-            return HttpResponse(json.dumps(reverse('default.views.PageHandler')), mimetype="application/json")
+            if user.is_active:
+                login(request, user)
+                return HttpResponse(json.dumps(reverse('default.views.PageHandler')), mimetype="application/json")
 
         return HttpResponse(json.dumps('error'), mimetype="application/json")
 
+def SignoutHandler(request):
+    if request.method == "GET":
+        logout(request)
+
 def SignupHandler(request):
     if request.method == "GET":
-        renderCxt = {}
-        renderCxt = dict(FEATURE_FLAG.items() + renderCxt.items())
+        renderCxt = ContextSetup(request)
         renderCxt['SEARCH_ENABLED'] = False
 
         t = loader.get_template('signup.html')
@@ -88,20 +102,25 @@ def SignupHandler(request):
             return HttpResponse(json.dumps(form.errors), mimetype="application/json")
 
 def AdHandler(request):
-    renderCxt = {}
-    renderCxt = dict(FEATURE_FLAG.items() + renderCxt.items())
+    renderCxt = ContextSetup(request)
     
     t = loader.get_template('ad.html')
     c = RequestContext(request, renderCxt) 
 
     return HttpResponse(t.render(c))
 
-def ModelHandler(request):
-    pass
+#Serve a specific page
+def EntityHandler(request, pk):
+    renderCxt = ContextSetup(request)
+    renderCxt['specific_entity'] = True
+    t = loader.get_template('main.html')
+    c = RequestContext(request, renderCxt)
 
+    return HttpResponse(t.render(c))
+ 
 def SearchPage(request, query):
-    renderCxt = {'QUERY':query}
-    renderCxt = dict(FEATURE_FLAG.items() + renderCxt.items())
+    renderCxt = ContextSetup(request)
+    renderCxt['QUERY'] = query
     
     t = loader.get_template('main.html')
     c = RequestContext(request, renderCxt)
@@ -114,8 +133,8 @@ def DefaultPage(request):
     geoInfo = gi.record_by_addr(ipaddr)
     defaultQuery = " ".join([geoInfo['city']]) #,geoInfo['country_name']])
 
-    renderCxt = {'DEFAULT_QUERY':defaultQuery}
-    renderCxt = dict(FEATURE_FLAG.items() + renderCxt.items())
+    renderCxt = ContextSetup(request)
+    renderCxt['DEFAULT_QUERY'] = defaultQuery
     renderCxt['SEARCH_ENABLED'] = False
     renderCxt['FEEDBACK_ENABLED'] = False
     
@@ -127,6 +146,7 @@ def DefaultPage(request):
 def PageHandler(request):
     if request.method == "GET":
         query = request.GET.get('q','')
+
         if query:
             return SearchPage(request, query)
         else:

@@ -237,19 +237,18 @@
 
 .page-curl {
   width: 83%;
-
   -moz-border-radius: 6px 6px 6px 6px;
   -webkit-border-radius: 6px 6px 6px 6px;
   border-radius: 6px 6px 6px 6px;
-
   -moz-box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
-
   margin: 1em auto;
   padding: 15px;
+  background: white;
 }
 
+/*
 .page-curl:before, .page-curl:after {
   background: none;
   bottom: 12px;
@@ -296,7 +295,6 @@
   -webkit-box-shadow: 0 10px 12px rgba(0, 0, 0, 0.5);
   box-shadow: 0 10px 12px rgba(0, 0, 0, 0.5);
 }
-
 .shadow-left:after {
   display: none;
 }
@@ -326,6 +324,7 @@
   -webkit-box-shadow: 0 -10px 12px rgba(0, 0, 0, 0.5);
   box-shadow: 0 -10px 12px rgba(0, 0, 0, 0.5);
 }
+*/
 
 .editHighlight {
     border: 2px dashed pink;

@@ -1,0 +1,18 @@
+<div class="outer">
+  <div id="commentForm" class="inner">
+    <div class="input-append">
+      <input name="content" class="span5" placeholder="Enter Comment" type="text">
+      <div class="btn-group">
+        <button id="submitComment" class="btn" data-loading-text="Sending...">Submit</button>
+      </div>
+    </div>
+    <label class="pull-right checkbox"> 
+      <input name="private" type="checkbox" />Anonymous
+    </label>
+  </div>
+  <div class="row-fluid">
+    <div class="span4" id="cmt1"></div>
+    <div class="span4" id="cmt2"></div>
+    <div class="span4" id="cmt3"></div>
+  </div>
+</div>

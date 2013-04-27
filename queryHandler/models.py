@@ -92,7 +92,6 @@ class Attribute(models.Model):
                                default=NEUTRAL)
 
     entity = models.ForeignKey(Entity)
-
     name = models.CharField(max_length=200, 
                             default="Attribute Name")
 
@@ -118,17 +117,14 @@ class Citation(models.Model):
         return u'Citation:' + self.attribute + unicode(self.id)
 
 class Comment(models.Model):
-    entityId = models.CharField(max_length=1000)
-    user = models.CharField(max_length=200, default="Anonymous")
-
-    #Admin
     private = models.BooleanField(default=False)
     created = models.DateField(auto_now_add=True)
     lastUpdated = models.DateField(auto_now=True)
 
-    #Model
-    content = models.CharField(max_length=250)
-    modifiedDate = models.DateField(auto_now=True)
+    user = models.CharField(max_length=200, default="Anonymous")
+    entityId = models.CharField(max_length=1000)
+    content = models.CharField(max_length=2500)
+    modifiedDate = models.DateField(auto_now=True) #delete this
     votes = models.IntegerField(default=0)
 
     def __unicode__(self):
@@ -142,6 +138,7 @@ class Ad(models.Model):
 
     #Model
     user = models.ForeignKey(User, null=True)
+
     name = models.CharField(max_length=200)
     imageURL = models.URLField(max_length=1000)
     redirectURL = models.URLField(max_length=1000)
@@ -153,7 +150,7 @@ class Ad(models.Model):
 Secondary Models
 '''
 class EntityOwnerMembership(models.Model):
-    entity = models.ForeignKey(Entity)
+    entity = models.OneToOneField(Entity, primary_key=True)
     user = models.ForeignKey(User)
 
 class UserVotes(models.Model):

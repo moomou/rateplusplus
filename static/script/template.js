@@ -1,11 +1,13 @@
 //'<!--Start of Build In Javascript Template-->'
 var Template = (function() {
     var summaryTemplate = "" + 
-        "<h3 class='pull-left' style='margin-top:0;'>Rating <%=summary.avgScore%>% </h3>" + 
+        "<h3 class='pull-left' style='margin-top:0;'>Rating <%=obj.summary.avgScore%>% </h3>" + 
         "<ul class='pull-right'>" + 
-          "<li><%=summary.totalVote%> Votes</li>" + 
-          "<li><%=summary.totalAttribute%> Attributes</li>" + 
+          "<li><%=obj.summary.totalVote%> Votes</li>" + 
+          "<li><%=obj.summary.totalAttribute%> Attributes</li>" + 
         "</ul>",
+        commentTemplate = "" + 
+        "<p><%=content%></p>",
         attributeTemplate = "" + 
         "<div>" + 
           "<div data-toggle='tooltip' title='Save' class='close attrSaveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
@@ -37,10 +39,12 @@ var Template = (function() {
         summaryCardTemplate = "" +
         "<div class='card'>" + 
           "<div class='card-header'>" + 
-            "<legend contenteditable='<%=editable%>' class='card-title'><%=name%></legend>" + 
+            "<a href='/entity/<%=obj.id%>'>" + 
+              "<legend contenteditable='<%=obj.editable%>' class='card-title'><%=obj.name%></legend>" + 
+            "</a>" + 
             "<div class='card-header-btn card-header-left'>" + 
               "<div class='card-status'>" + 
-                "<i title='Privacy' class='icon-large icon-<%= private ? 'lock' : 'globe'%> '></i>" + 
+                "<i title='<%= obj.private ? 'Private' : 'Public'%>' class='icon-large icon-<%= obj.private ? 'lock' : 'globe'%> '></i>" + 
               "</div>" + 
             "</div>" + 
             "<div class='card-header-btn card-header-right'>" +
@@ -64,34 +68,40 @@ var Template = (function() {
                 summaryTemplate + 
               "</div>" + 
               "<div class='photo post img-polaroid'>" +
-                "<a data-toggle='modal' data-target='#imageChangeModal' id='editImgBtn-<%=domId%>' class='editImgBtn btn btn-small' href='#'>" +
+                "<a data-toggle='modal' data-target='#imageChangeModal' id='editImgBtn-<%=obj.domId%>' class='editImgBtn btn btn-small' href='#'>" +
                     "Change Image" +
                 "</a>" +
-                "<img class='profileimg' id='img-<%=domId%>' src='<%=imageURL ? imageURL : 'static/img/blank.png'%>'></img>" + 
+                "<% if (obj.id) { %>" +
+                    "<a href='/entity/<%=obj.id%>'>" + 
+                "<% } %>" + 
+                  "<img class='profileimg' id='img-<%=obj.domId%>' src='<%=obj.imageURL ? imageURL : '/static/img/blank.png'%>'></img>" + 
+                "<% if (obj.id) { %>" + 
+                    "</a>" + 
+                "<% } %>" + 
               "</div>" + 
               "<div class='hashTag'>" +
-                "<ul class='tags' id='hashtags-<%=domId%>'>" +
-                  "<%=hashTags%>" +
+                "<ul class='tags' id='hashtags-<%=obj.domId%>'>" +
+                  "<%=obj.hashTags%>" +
                 "</ul>" + 
               "</div>" +  
               "<div class='catTag'>" +
-                "<ul class='tags' id='cattags-<%=domId%>'>" +
-                  "<%=catTags%>" +
+                "<ul class='tags' id='cattags-<%=obj.domId%>'>" +
+                  "<%=obj.catTags%>" +
                 "</ul>" + 
               "</div>" +  
             "</div>" + 
             "<div class='break break-mini'></div>" + 
             "<div class='entityDetail' style='clear:both;margin-top:1em;'>" + 
               "<ul class='nav nav-tabs'>" + 
-                "<li style='width:50%;' class='active'><a href='#attributes-<%=domId%>' data-toggle='tab'>Attributes</a></li>" + 
-                "<li style='width:50%;' class=''><a href='#profile-<%=domId%>' data-toggle='tab'>Profile</a></li>" + 
+                "<li style='width:50%;' class='<%=!obj.searchView ? 'hide' : 'active'%>'><a href='#attributes-<%=obj.domId%>' data-toggle='tab'>Attributes</a></li>" + 
+                "<li style='width:50%;' class='<%=!obj.searchView ? 'active' : ''%>'><a href='#profile-<%=obj.domId%>' data-toggle='tab'>Profile</a></li>" + 
               "</ul>" + 
               "<div class='tab-content'>" + 
-                "<div class='tab-pane tabpane' id='profile-<%=domId%>'>" + 
+                "<div class='tab-pane tabpane <%=!obj.searchView ? 'active' : ''%>' id='profile-<%=obj.domId%>'>" + 
                   "<div class='profileContent outer'>" + 
                   "</div>" +
                 "</div>" + 
-                "<div class='tab-pane tabpane active'  id='attributes-<%=domId%>'>" + 
+                "<div class='tab-pane tabpane <%=!obj.searchView ? '' : 'active'%>'  id='attributes-<%=obj.domId%>'>" + 
                   "<form class='form-search' style='text-align:left;'>" + 
                     "<input type='text' class='input-medium search-query'>" + 
                     "<i class='searchState icon-search' style='margin-left:-2em;'></i>" + 
@@ -123,6 +133,7 @@ var Template = (function() {
           "</div>";
 
   return {
+    commentTemplate: commentTemplate,
     attributeTemplate: attributeTemplate,
     entityTemplate: entityTemplate,
     summaryCardTemplate: summaryCardTemplate,

@@ -1,6 +1,3 @@
-#Django
-from django.http import Http404
-
 #RestFramework
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,12 +8,19 @@ from rest_framework import status
 from queryHandler.models import *
 from queryHandler.serializers import *
 
+#Django
+from django.http import Http404
+
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import permission_required 
+from django.utils.decorators import method_decorator
 
 from queryHandler import tasks
 from django.db.models import Q
 
+#Python
+import itertools
 import operator, json
 import rredis
 import random
@@ -46,34 +50,42 @@ class Autocomplete(APIView):
         return Response(tags)
 
 class TagsDetail(APIView):
-    def post(self, request, format=None):
+    def get(self, request, format=None):
         tags = [tag.name for tag in Entity.tags.most_common()]
         tags = tags[:5]
         return Response(tags)
 
 class EntityDetail(APIView):
-    def get_object(self, pk):
+    @staticmethod
+    def get_object(pk):
         try:
             return Entity.objects.get(pk=pk)
         except Entity.DoesNotExist:
             raise Http404
     
-    def searchObject(self, query, limit):
+    def searchObject(self, request):
+        query, limit = request.GET['q'], request.GET.get('limit',-1)
         filterList = []
 
         for word in query.split(' '): #need to make this more robust later
 
             word = word.lower()
             tag = word if word.find('#') != -1 else "#"+word
-            print tag
 
             nameQ = Q(name__icontains=word)
             tagQ = Q(tags__name__in=[tag])
+
             filterList.append(nameQ)
             filterList.append(tagQ)
 
-        res = Entity.objects.filter(reduce(operator.or_, filterList))
-        
+        res = Entity.objects.filter(private=False).filter(reduce(operator.or_, filterList))
+
+        #TODO: Test
+        if request.user.is_authenticated():
+            print 'searching private'
+            privateEntities = Entity.objects.filter(entityownermembership__user=request.user).filter(reduce(operator.or_, filterList))
+            res = itertools.chain(res, privateEntities)
+            
         if limit <= 0:
             return res
         else:
@@ -83,9 +95,8 @@ class EntityDetail(APIView):
         entity = None
 
         if 'q' in request.GET:
-            print 'search...'
-            entity = self.searchObject(request.GET['q'], request.GET.get('limit',-1))
-            print len(entity)
+            entity = self.searchObject(request)
+            print "search=", request.GET['q'], ':', 
         elif pk:
             entity = self.get_object(pk)
         else:
@@ -95,6 +106,9 @@ class EntityDetail(APIView):
         return Response(es.data)
 
     def post(self, request, pk=None, format=None):
+        if not request.user.is_authenticated():
+            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+
         #need to support batch post
         if pk:
             return Response(None, status=status.HTTP_400_BAD_REQUEST)
@@ -104,12 +118,17 @@ class EntityDetail(APIView):
         entitySerializer = EntitySerializer(newEntity, data=request.DATA)   
 
         if entitySerializer.is_valid():
-           entitySerializer.save()
-           return Response(entitySerializer.data)
+            entitySerializer.save()
+            EntityOwnerMembership(entity=newEntity,user=request.user).save()
+
+            return Response(entitySerializer.data)
 
         return Response(EntitySerializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk=None, format=None):
+        if not request.user.is_authenticated():
+            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+
         #need to support batch put!!!
         if not pk:
             return Response(None, status=status.HTTP_400_BAD_REQUEST)
@@ -129,9 +148,14 @@ class EntityDetail(APIView):
         return Response(es.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk=None, format=None):
+        if not request.user.is_authenticated():
+            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+       
         entity = self.get_object(pk)
-        entity.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        if entity.EntityOwnerMembership.user == request.user:
+            entity.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(None, status=status.HTTP_401_UNAUTHORIZED)
 
 class AttributeDetail(APIView):
     def get_object(self, pk):
@@ -194,10 +218,16 @@ class CommentDetail(APIView):
         except Comment.DoesNotExist:
             raise Http404
 
-    def post(self, request):
+    def post(self, request, pk=None):
         if pk:
             return Response(None, status=status.HTTP_400_BAD_REQUEST)
         
+        if request.user.is_authenticated():
+            request.DATA['user'] = request.user.first_name
+        else:
+            request.DATA['user'] = request.user
+        print request.DATA
+
         newCmt = Comment()
         cmtSerializer = CommentSerializer(newCmt, data=request.DATA)   
 
@@ -206,6 +236,15 @@ class CommentDetail(APIView):
             return Response(cmtSerializer.data)
 
         return Response(cmtSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request, pk=None, format=None):
+        if not pk:
+            return Response(None, status=status.HTTP_400_BAD_REQUEST)
+
+        cmt = self.get_object(pk)
+        cmtSerializer = CommentSerializer(cmt)
+
+        return Response(cmtSerializer.data)
 
 class AdDetail(APIView):
     def get_object(self, pk):
@@ -223,24 +262,73 @@ class AdDetail(APIView):
         #if no pk, return a random ad
         last = Ad.objects.count()-1
 
+        if last < 0:
+            return Response()
+
         adInd = random.randint(0,last)
         ad = Ad.objects.all()[adInd]
         
         adSerializer = AdSerializer(ad)
+
         return Response(adSerializer.data)
 
-    def post(self, request, pk=None, format=None):
-        if pk:
-            return Response(None, status=status.HTTP_400_BAD_REQUEST)
-        
+    def post(self, request, format=None):
+        if not request.user.is_authenticated():
+            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+
         newAd = Ad()
         adSerializer = AdSerializer(newAd, data=request.DATA)   
 
         if adSerializer.is_valid():
+            newAd.user = request.user
             newAd.save()
             return Response(adSerializer.data)
 
         return Response(adSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class EntityList(generics.ListAPIView):
+    model = Entity
+    serializer_class = EntitySerializer
+    paginate_by = 100
+
+    def get_queryset(self):
+        if "id" in self.request.GET:
+            entityId = self.request.GET['id']
+            return Entity.objects.filter(id=entityId)
+
+        query = self.request.GET['q']
+        filterList = []
+
+        for word in query.split(' '): #need to make this more robust later
+            word = word.lower()
+            tag = word if word.find('#') != -1 else "#"+word
+
+            nameQ = Q(name__icontains=word)
+            tagQ = Q(tags__name__in=[tag])
+
+            filterList.append(nameQ)
+            filterList.append(tagQ)
+
+        if self.request.user.is_authenticated():
+            print 'searching private'
+            publicQ = Q(private=False)
+            privateQ = Q(entityownermembership__user=self.request.user)
+            authList = [publicQ, privateQ]
+            res = Entity.objects.filter(reduce(operator.or_,authList)).filter(reduce(operator.or_, filterList))
+        else:
+            res = Entity.objects.filter(private=False).filter(reduce(operator.or_, filterList))
+
+        return res 
+
+class AttributeList(generics.ListAPIView):
+    model = Attribute
+    serializer_class = AttributeSerializer
+    paginate_by = 100
+
+    def get_queryset(self):
+        entityId = self.request.GET['entityId']
+        attributes = Attribute.objects.filter(entity__id=entityId)
+        return attributes
 
 class CommentList(generics.ListAPIView):
     model = Comment

@@ -219,6 +219,13 @@ ul {
   height: 2px;
 }
 
+.focusOnHover {
+  opacity: 0.5;
+}
+.focusOnHover:hover {
+  opacity: 1;
+}
+
 /*Fix for Chrome slow scroll*/
 .navbar-fixed-top {
   -webkit-transform: translateZ(0); 

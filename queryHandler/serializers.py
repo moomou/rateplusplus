@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from queryHandler.models import Entity, Attribute, Comment, Ad
-
 from taggit.managers import TaggableManager
 
 class APIInfo ():
@@ -44,22 +43,17 @@ class EntitySerializer(serializers.ModelSerializer):
                   'entityType',
                   'attributes')
 
-    #overriding to handle Tags and Attribute???
-    '''
-    def restore_fields(self,data,files):
-        super.restore_fields(data,files)
-    '''
-
     def from_native(self, data, files):
         '''very hackish refer to https://github.com/tomchristie/django-rest-framework/blob/master/rest_framework/serializers.py'''
         return self.restore_object(data, instance=getattr(self, 'object', None))
 
     def restore_object(self, attrs, instance=None):
         if instance is not None:
+            instance.private = attrs['private']
             instance.name= attrs['name']
             instance.imageURL = attrs['imageURL']
             instance.description = attrs['description']
-            
+
             instance.tags.clear()
 
             for tag in attrs['tags']:
@@ -85,4 +79,13 @@ class CommentSerializer(serializers.ModelSerializer):
                   'entityId',
                   'content', 
                   'votes',
+                  'private',
                   'modifiedDate')
+
+    def validate_user(self, attrs, source):
+        return attrs
+
+    def validate(self, attrs):
+        if attrs['private']:
+            attrs['user'] = "Anonymous"
+        return attrs
