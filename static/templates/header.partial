@@ -1,12 +1,12 @@
   <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
-        <a href="{% url 'default.views.PageHandler' %}" class="muted home-btn pull-left"><span style="left: 145px;" class="logo"></span>Cloverite </a>
+        <a href="{% url 'default.views.PageHandler' %}" class="noSelect muted home-btn pull-left"><span style="left: 145px;" class="logo"></span>Cloverite </a>
 
         {% if SEARCH_ENABLED %}
         <form method="GET" id="searchForm" class="navbar-search" action="{% url 'default.views.PageHandler' %}">
           <div class="input-append">
-            <input class="span4" name='q' id="searchInput" type="text" placeholder="Search" value="{{QUERY}}">
+            <input class="span3" name='q' id="searchInput" type="text" placeholder="Search" value="{{QUERY}}">
             <button id="searchBtn" class="btn btn-success" type="button"><i class="icon-search"></i></button>
           </div>
         </form>
@@ -25,19 +25,23 @@
         <ul class="nav pull-right" style="margin-top:10px;">
 
           {% if authenticated %}
-          <li><a id="addNewEntity" href="#"><i class="icon-plus icon-large"></i></a></li>
+          <li><a id="addNewEntity" title="Create New Entry" href="#"><i class="icon-plus"></i></a></li>
+          <li><a id="" href="#" title="Explore Random Topic"><i class="icon-random"></i></a></li>
+          <li><a id="" href="#" title="Filter Search"><i class="icon-filter"></i></a></li>
+          <li><a id="" href="#" title="Download Current Search" ><i class="icon-cloud-download"></i></a></li>
+          <li><a id="" href="#" title="Formula" ><i class="icon-tasks"></i></a></li>
           <li class="divider-vertical"></li>
           <li class="dropdown">
-            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="icon-user icon-large"></i><b class="caret"></b></a>
+            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="icon-user"></i><b class="caret"></b></a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
               <li role="presentation"><a href="" role="menuitem">Profile</a></li>
               <li role="presentation"><a href="" role="menuitem">Setting</a></li>
               <li role="presentation" class="divider"></li>
-              <li role="presentation"><a href="{% url 'django.contrib.auth.views.logout' %}" role="menuitem"><i class="icon-signout"></i> Sign Out</a></li>
+              <li role="presentation"><a href="{% url 'django.contrib.auth.views.logout' %}" role="menuitem"><i class="icon-signout"></i> Sign out</a></li>
             </ul>
           </li>
           {% else %}
-          <li><a href="{% url 'default.views.SigninHandler'%}?next={{request.path|urlencode}}"><i class="icon-signin icon-large"></i> Sign In</a></li>
+          <li><a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}"><i class="icon-signin"></i> Sign in</a></li>
           {% endif %}
 
           <li class="divider-vertical"></li>

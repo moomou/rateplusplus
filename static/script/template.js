@@ -14,7 +14,7 @@ var Template = (function() {
           "<div data-toggle='tooltip' title='Close' class='close attrCloseBtn'><i class='icon-remove-sign icon-large'></i></div>" +
           "<div class='pull-left tone cursor-pointer'><i data-toggle='tooltip' title='<%=TONE%>' class='icon-heart <%=TONE_ICON%>'></i></div>" + 
           "<div class='pull-right menu'>"+
-            "<i class='cursor-pointer subtle icon-minus-sign' data-toggle='tooltip' title='Report as Inappropriate'></i>" + 
+            "<i class='cursor-pointer subtle icon-star' title='Highlight'></i>" + 
           "</div>" + 
           "<h3 class='attrName' contenteditable='<%=editable%>' ><%=name%></h3>" + 
           //"<h4 class='attrVoteCount'><%=upVote+downVote%> Votes</h4>" + 
@@ -107,9 +107,9 @@ var Template = (function() {
                     "<i class='searchState icon-search' style='margin-left:-2em;'></i>" + 
                     "<button style='float:right;' title='Create New Attribute' class='addAttrBtn btn btn-small'><i class='icon-plus'></i> New</button>" + 
                   "</form>" + 
-                    "<div class='outer'><i class='scroll up cursor-pointer icon-chevron-up'></i></div>" + 
+                    "<div class='outer' style='min-height:20px;'><i class='hide scroll up cursor-pointer icon-chevron-up'></i></div>" + 
                     "<div class='attrContent'></div>" +
-                    "<div class='outer'><i class='scroll down cursor-pointer icon-chevron-down'></i></div>" + 
+                    "<div class='outer' style='min-height:20px;'><i class='scroll down cursor-pointer icon-chevron-down'></i></div>" + 
                 "</div>" + 
               "</div>" + 
             "</div>" + 

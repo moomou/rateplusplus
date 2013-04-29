@@ -32,6 +32,7 @@ App.AdView = Backbone.View.extend({
     template: _.template(Template.sponsoredTemplate),
     initialize: function() {
        var that = this;
+
        this.model.on('sync', function(e) {
            that.render(); 
        });
@@ -214,8 +215,7 @@ App.AttributeModel = Backbone.Model.extend({
 
         if (this.isNew()) {
             this.set('editable', false);
-            that.updateVoteCount(voteType, view);
-
+            this.updateVoteCount(voteType, view);
             this.save({}, {
                 success: function(model, response) {
                 },
@@ -231,6 +231,7 @@ App.AttributeModel = Backbone.Model.extend({
         .done(function(res) {
             if (!res.error) {
                 that.updateVoteCount(voteType, view);
+                that.fetch();
             }
         })
         .fail(function(msg) {
@@ -521,6 +522,7 @@ App.SummaryCardView = Backbone.View.extend({
             Editable and Editing confusing
         */
 		console.log("App.SummaryCardView Render");
+
         var editable = this.model.get('editable'),
             domId = this.model.get('domId'),
             entityModel = this.model.toJSON(), 
@@ -542,21 +544,26 @@ App.SummaryCardView = Backbone.View.extend({
             if (!this.searchView) { //clear other columns
                 App.ColManager.resetCol('card',[1,2]);
                 _.each(this.model.get('attributeViews').render(), function(attr) {
-                    App.ColManager.addAttribute(attr.el, attr.model.get('tone'));
-                }, this);
+                        App.ColManager.addAttribute(attr.el, attr.model.get('tone'));
+                        }, this);
 
                 this.addNewAttribute();
-           }
+            }
             else {
-                _.each(this.model.get('attributeViews').render(), function(attr) {
-                    this.$('.attrContent').append(attr.el);
-                }, this);
+                var attrViewRender = this.model.get('attributeViews').render();
+                if (attrViewRender.length) {
+                    _.each(attrViewRender, function(attr) {
+                        this.$('.attrContent').append(attr.el);
+                    }, this);
+                }
+                else {
+                    this.renderChevrons();
+                }
             }
         }
-        else { //editing, always show tag config
-            hashTagsUL.tagit(App.ConfigureTagit('hash', that, editable));
-            catTagsUL.tagit(App.ConfigureTagit('cat', that, editable));
-        }
+
+        hashTagsUL.tagit(App.ConfigureTagit('hash', that, editable));
+        catTagsUL.tagit(App.ConfigureTagit('cat', that, editable));
 
         if (!editable) {
             if (!this.model.get('hashTags')) {
@@ -596,23 +603,19 @@ App.SummaryCardView = Backbone.View.extend({
 	},
     //Event Handler
     scrollHandler: function(e) {
-        console.log(e);
-        var $attrContent = this.$('.attrContent');
-        var attrHeight = 250;
-        var $tar = $(e.target);
+        var $attrContent = this.$('.attrContent'),
+            $tar = $(e.target),
+            attrHeight = 320,
+            that = this;
 
-        if ($tar.hasClass('down')) {
-            $attrContent.animate({
-                scrollTop: $attrContent.scrollTop()+attrHeight
-            }, 800);
+        if ($tar.hasClass('up')) {
+            attrHeight *= -1;
         }
-        else {
-            $attrContent.animate({
-                scrollTop: $attrContent.scrollTop()-attrHeight
-            }, 800);
 
-            //$attrContent.scrollTop($attrContent.scrollTop()-attrHeight);
-        }
+        $attrContent.stop().animate({scrollTop: $attrContent.scrollTop()+attrHeight
+            }, 800, function() {
+                that.renderChevrons();
+        });
     },
     changePrivacy: function(e) {
         var entityModel = this.model.get('entityView').model;
@@ -665,7 +668,7 @@ App.SummaryCardView = Backbone.View.extend({
     cancelCreation: function(e) {
         if(confirm("Are you sure you want to delete this entry? It will be gone forever!")) {
             this.remove();
-            this.model.destroy();
+            this.model.get('entityView').model.destroy();
         }
     },
     updateName: function(e) {
@@ -706,6 +709,7 @@ App.SummaryCardView = Backbone.View.extend({
             var $attrContent = this.$('.attrContent');
             var attrView = new App.AttributeView({model:this.getNewAttrModel()}); 
             $attrContent.prepend(attrView.render().el);
+            this.renderChevrons();
         }
     },
     toggleEditImgBtn: function(e) {
@@ -803,12 +807,30 @@ App.SummaryCardView = Backbone.View.extend({
         this.model.updateEntityStats(tmp); 
         this.$el.find('.summary').html(this.summaryTemplate(this.model.toJSON()));
 
-        if (!this.searchView) {
-            debugger;
+        if (!this.searchView && e.changed.entity) {
             this.addNewAttribute(null, e.get('tone'));
         }
     },
     //Misc. Func
+    renderChevrons: function() {
+        var chevronup = this.$('.up'),
+            chevrondown = this.$('.down');
+            attrContent= this.$('.attrContent'),
+            attrContentHeight = attrContent.children().length*135;
+
+        if (attrContentHeight == 0 || attrContent.scrollTop() == 0) {
+            chevronup.hide();
+        }
+        else {
+            chevronup.show();
+        }
+        if (attrContentHeight == 0 || attrContent.scrollTop() >= attrContentHeight) {
+            chevrondown.hide();
+        }
+        else {
+            chevrondown.show();
+        }
+    },
     getNewAttrModel: function(tone) {
         var entityId = this.model.get('entityView').model.get('id');
         tone = tone ? tone : 1; //default to pos

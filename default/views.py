@@ -26,6 +26,7 @@ def ContextSetup(request):
 
     renderCxt = {
         'authenticated': authenticated,
+        'currentPath': request.get_full_path(),
     }
     renderCxt = dict(FEATURE_FLAG.items() + renderCxt.items())
 
@@ -61,10 +62,13 @@ def SigninHandler(request):
         t = loader.get_template('signin.html')
         c = RequestContext(request, renderCxt) 
 
+        if "next" in request.GET:
+            request.session['next'] = request.GET['next']
+
         return HttpResponse(t.render(c))
 
     elif request.method == "POST":
-        username = request.POST['username']
+        username = request.POST['email']
         password = request.POST['password']
 
         user = authenticate(username=username, password=password)
@@ -72,9 +76,10 @@ def SigninHandler(request):
         if user:
             if user.is_active:
                 login(request, user)
-                return HttpResponse(json.dumps(reverse('default.views.PageHandler')), mimetype="application/json")
+                res = {'redirect': request.session.get('next', '/')}
+                return HttpResponse(json.dumps(res), mimetype="application/json")
 
-        return HttpResponse(json.dumps('error'), mimetype="application/json")
+        return HttpResponse(json.dumps({'error':'x'}), mimetype="application/json")
 
 def SignoutHandler(request):
     if request.method == "GET":
@@ -94,12 +99,10 @@ def SignupHandler(request):
         form = SignupForm(request.POST)
 
         if form.is_valid():
-            user = form.save() 
-            user = authenticate(username=user.username, password=user.password)
+            form.save() 
+            return SigninHandler(request)
 
-            return HttpResponse(json.dumps(reverse('default.views.PageHandler')), mimetype="application/json")
-        else:
-            return HttpResponse(json.dumps(form.errors), mimetype="application/json")
+        return HttpResponse(json.dumps(form.errors), mimetype="application/json")
 
 def AdHandler(request):
     renderCxt = ContextSetup(request)

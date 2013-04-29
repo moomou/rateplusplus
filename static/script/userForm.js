@@ -7,7 +7,12 @@ $(function() {
             },
             success: function(res) {
                 console.log(res); 
-            
+                if (res.redirect) {
+                    window.location.href = res.redirect;
+                }
+                else {
+                    //error, update HTML
+                }
             },
         });
         return false;
@@ -20,6 +25,12 @@ $(function() {
             },
             success: function(res) {
                 console.log(res); 
+                if (res.redirect) {
+                    window.location.href = res.redirect;
+                }
+                else {
+                    //error, update HTML
+                }
             },
         });
         return false;

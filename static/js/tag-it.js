@@ -170,7 +170,7 @@
 
             this.tagList
                 .addClass('tagit')
-                .addClass('ui-widget ui-widget-content ui-corner-all')
+                //.addClass('ui-widget ui-widget-content ui-corner-all')
                 // Create the input field.
                 .append($('<li class="tagit-new"></li>').append(this.tagInput))
                 .click(function(e) {
@@ -416,11 +416,11 @@
                 return false;
             }
 
-            var label = $(this.options.onTagClicked ? '<a class="btn btn-mini btn-info tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
+            var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
 
             // Create tag.
             var tag = $('<li></li>')
-                .addClass('tagit-choice ui-widget-content ui-state-default ui-corner-all')
+                .addClass('tagit-choice')
                 .addClass(additionalClass)
                 .append(label);
 

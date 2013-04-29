@@ -26,24 +26,25 @@ class FeedbackForm(forms.Form):
         return message
 
 class SignupForm(forms.Form):
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+
     email = forms.EmailField()
-    pwd = forms.CharField()
-    pwdAgain = forms.CharField()
+    password = forms.CharField()
 
     def clean_email(self):
-        """
-            Validate that the username is alphanumeric and is not already in use.
-        """
         try:
-            user = User.objects.get(email__iexact=self.cleaned_data['email'])
+            User.objects.get(email__iexact=self.cleaned_data['email'])
         except User.DoesNotExist:
             return self.cleaned_data['email']
 
         raise forms.ValidationError(u'Email already registered. Please choose another.')
-
     def save(self):
         newUser = User.objects.create_user(self.cleaned_data['email'],
                         self.cleaned_data['email'],
-                        self.cleaned_data['pwd'])
+                        self.cleaned_data['password'])
+        newUser.first_name = self.cleaned_data['first_name']
+        newUser.last_name =  self.cleaned_data['last_name']
         newUser.save()
+
         return newUser

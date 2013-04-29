@@ -1,13 +1,12 @@
 .hashTag {
-  border-left: 5px solid rgb(182, 239, 250);
+  /*border-left: 5px solid rgb(182, 239, 250);*/
   min-height: 2em;
-  padding-left: 0.2em;
+  padding: 1em 0 0 0.2em;
   border-radius: 5px;
   clear: both;
 }
-
 .catTag {
-  border-left: 5px solid rgb(163, 255, 0);
+  /*border-left: 5px solid rgb(163, 255, 0);*/
   min-height: 2em;
   padding-left: 0.2em;
   border-radius: 5px;
@@ -15,41 +14,95 @@
 }
 
 ul.tagit {
+  margin:0;
+  padding:0;
+  right:24px;
+  bottom:-12px;
+  list-style:none;
+}
+
+.tagit li, .tagit a{
+  float:left;
+  height:24px;
+  line-height:24px;
+  position:relative;
+  font-size:11px;
 }
 
 ul.tagit li {
-    display: block;
-    float: left;
-    margin: 2px 5px 2px 0;
+  display: block;
+  float: left;
+  margin: 2px 5px 2px 0;
 }
 ul.tagit li.tagit-choice {    
-    position: relative;
-    line-height: inherit;
+  position: relative;
+  line-height: inherit;
+}
+.tagit-label {
+  margin-left:20px;
+  padding:0 10px 0 12px;
+  background:#0089e0;
+  color:#fff;
+  text-decoration:none;
+  -moz-border-radius-bottomright:4px;
+  -webkit-border-bottom-right-radius:4px;4pxborder-bottom-right-radius:4px;
+  -moz-border-radius-topright:4px;
+  -webkit-border-top-right-radius:4px;4pxborder-top-right-radius:4px;4px
+} 
+.tagit-label:before{
+  content:"";
+  float:left;
+  position:absolute;
+  top:0;
+  left:-12px;
+  width:0;
+  height:0;
+  border-color:transparent #0089e0 transparent transparent;
+  border-style:solid;
+  border-width:12px 12px 12px 0;width
+}
+.tagit-label:after{
+  content:"";
+  position:absolute;
+  top:10px;
+  left:0;
+  float:left;
+  width:4px;
+  height:4px;
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  border-radius:2px;
+  background:#fff;
+  -moz-box-shadow:-1px -1px 2px #004977;
+  -webkit-box-shadow:-1px -1px 2px #004977;
+  box-shadow:-1px -1px 2px #004977;
 }
 
+.tagit a:hover{background:#555;color:white;}
+.tagit a:hover:before{border-color:transparent #555 transparent transparent;}
+
 ul.tagit li.tagit-choice-read-only { 
-/*    padding: .2em .5em .2em .5em; */
 } 
 
 ul.tagit li.tagit-choice-editable { 
-    padding: 0 18px .2em .5em; 
+  padding: 0 18px .2em .5em; 
 } 
 
 ul.tagit li.tagit-new {
-    padding: .25em 4px .25em 0;
+  padding: .25em 4px .25em 0;
 }
 
 ul.tagit li.tagit-choice a.tagit-label {
-    cursor: pointer;
-    text-decoration: none;
+  cursor: pointer;
+  text-decoration: none;
 }
 ul.tagit li.tagit-choice .tagit-close {
-    cursor: pointer;
-    position: absolute;
-    right: .1em;
-    top: 50%;
-    margin-top: -12px;
-    line-height: 17px;
+  cursor: pointer;
+  position: absolute;
+  right: .1em;
+  top: 50%;
+  margin-top: -12px;
+  line-height: 17px;
 }
 
 /* used for some custom themes that don't need image icons */
