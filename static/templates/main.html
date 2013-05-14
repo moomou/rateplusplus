@@ -4,23 +4,28 @@
   {% include "stdHead.partial" %}
 </head>
 <body>
+
   {% include "header.partial" %}
+  {% include "sideMenu.partial" %}
 
- <div class="container-narrow">
-  <hr>
+  <div class="container-narrow">
+    <hr>
     {% include "messageBox.partial" %}
-     
     <div class="row-fluid">
-      <div class="span4" id="col1"></div>
-      <div class="span4" id="col2"></div>
-      <div class="span4" id="col3"></div>
+      <div class="span3" id="col1"></div>
+      <div class="span3" id="col2"></div>
+      <div class="span3" id="col3"></div>
+      <div class="span3" id="col4"></div>
     </div>
-  </div>
-  <hr>
 
-  {% if specific_entity %}
-    {% include "comment.partial" %}
-  {% endif %}
+    {% if specific_entity %}
+      <hr>
+      {% include "comment.partial" %}
+    {% endif %}
+
+    <div id="mediaQuery" class="hidden-desktop" style="position:absolute;left:-1200px;"></div>
+
+  </div>
     
   {% csrf_token %}
 

@@ -13,6 +13,6 @@
 
     <div class="modal-footer">
       <a id="imageURLCancelBtn" href="#" aria-hidden="true" data-dismiss="modal" class="btn">Close</a>
-      <a id="imageURLSaveBtn" data-dismiss="modal" aria-hidden="true" href="#" class="btn btn-primary">Save changes</a>
+      <a id="imageURLSaveBtn" data-dismiss="modal" aria-hidden="true" href="#" class="btn btn-success">Save changes</a>
     </div>
   </div>

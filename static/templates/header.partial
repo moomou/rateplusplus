@@ -1,7 +1,7 @@
   <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
-        <a href="{% url 'default.views.PageHandler' %}" class="noSelect muted home-btn pull-left"><span style="left: 145px;" class="logo"></span>Cloverite </a>
+        <a id="sideMenu" class="noSelect muted home-btn pull-left"><span style="left: 145px;" class="logo"></span>Cloverite </a>
 
         {% if SEARCH_ENABLED %}
         <form method="GET" id="searchForm" class="navbar-search" action="{% url 'default.views.PageHandler' %}">
@@ -23,14 +23,36 @@
 
         {% if NAV_ENABLED %}
         <ul class="nav pull-right" style="margin-top:10px;">
-
           {% if authenticated %}
           <li><a id="addNewEntity" title="Create New Entry" href="#"><i class="icon-plus"></i></a></li>
           <li><a id="" href="#" title="Explore Random Topic"><i class="icon-random"></i></a></li>
-          <li><a id="" href="#" title="Filter Search"><i class="icon-filter"></i></a></li>
-          <li><a id="" href="#" title="Download Current Search" ><i class="icon-cloud-download"></i></a></li>
-          <li><a id="" href="#" title="Formula" ><i class="icon-tasks"></i></a></li>
+          <li class="dropdown">
+            <a id="" href="#" title="Filter Search" class="dropdown-toggle" data-hover="dropdown" role="button"><i class="icon-reorder"></i></a>
+            <ul id="sortBtn" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+              <li role="presentation" style="text-align:center;">Sort By</li>
+              <li role="presentation" class="divider"></li>
+              <li role="presentation"><a data-sortBy="avgScore" role="menuitem">Rating</a></li>
+              <li role="presentation"><a data-sortBy="totalAttribute" role="menuitem">Total Attributes</a></li>
+              <li role="presentation"><a data-sortBy="totalVote" role="menuitem">Total Votes</a></li>
+              <li role="presentation"><a data-sortBy="totalUpVote" role="menuitem">Total +Votes</a></li>
+              <li role="presentation"><a data-sortBy="totalDownVote" role="menuitem">Total -Votes</a></li>
+              <li role="presentation"><a data-sortBy="totalPosAttribute" role="menuitem">Total +Attribute </a></li>
+              <li role="presentation"><a data-sortBy="totalNegAttribute" role="menuitem">Total -Attribute</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a id="" href="#" title="Filter Search" class="dropdown-toggle" data-hover="dropdown" role="button"><i class="icon-filter"></i></a>
+            <ul id="filterBtn" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+              <li role="presentation" style="text-align:center;"> Filter By</li>
+              <li role="presentation" class="divider"></li>
+              <li role="presentation"><a data-filterBy="votesAt10" role="menuitem">Greater than 10 votes</a></li>
+              <li role="presentation"><a data-filterBy="votesAt25" role="menuitem">Greater than 25 votes</a></li>
+            </ul>
+          </li>
+          <!--<li><a id="" href="#" title="Formula" ><i class="icon-tasks"></i></a></li>-->
+
           <li class="divider-vertical"></li>
+
           <li class="dropdown">
             <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="icon-user"></i><b class="caret"></b></a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">

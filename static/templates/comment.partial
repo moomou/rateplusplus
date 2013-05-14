@@ -3,7 +3,7 @@
     <div class="input-append">
       <input name="content" class="span5" placeholder="Enter Comment" type="text">
       <div class="btn-group">
-        <button id="submitComment" class="btn" data-loading-text="Sending...">Submit</button>
+        <button id="submitComment" class="btn btn-success" data-loading-text="Sending...">Submit</button>
       </div>
     </div>
     <label class="pull-right checkbox"> 
