@@ -1,12 +1,12 @@
   <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
-        <a id="sideMenu" class="noSelect muted home-btn pull-left"><span style="left: 145px;" class="logo"></span>Cloverite </a>
+        <a id="sideMenu" href="#" class="noSelect muted home-btn pull-left"><span style="left: 145px;" class="logo"></span>Cloverite </a>
 
         {% if SEARCH_ENABLED %}
         <form method="GET" id="searchForm" class="navbar-search" action="{% url 'default.views.PageHandler' %}">
           <div class="input-append">
-            <input class="span3" name='q' id="searchInput" type="text" placeholder="Search" value="{{QUERY}}">
+            <input type="search" class="span3" name='q' id="searchInput" type="text" placeholder="Search" value="{{QUERY}}">
             <button id="searchBtn" class="btn btn-success" type="button"><i class="icon-search"></i></button>
           </div>
         </form>

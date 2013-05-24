@@ -1,52 +1,35 @@
 from django.db import models
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
 
-'''
-Primary Models
-'''
-class Customer(models.Model):
-    '''
-    user with augmented fields
-    '''
-    CONSUMER = 0
-    ADVERTISER = 1 #has access to consumer
-    DEVELOPER = 2  #has access to advertiser and consumer
-
-    ACC_TYPE_CHOICES = (
-        (CONSUMER, 'consumer'),
-        (ADVERTISER, 'advertiser'),
-        (DEVELOPER, 'developer'),
-    )
-     
-    user = models.OneToOneField(User)
-    accountType = models.IntegerField(choices=ACC_TYPE_CHOICES,
-                                        default=CONSUMER)
-
-    def __unicode__(self):
-        return unicode(self.user.email) + u':' + unicode(self.id)
-
-class Entity(models.Model):
-    PERSON = 'person'
-    LOCATION = 'location'
-    UNSPECIFIED = 'unspecified'
-
-    ENTITY_TYPE_CHOICES = (
-        (PERSON, 'person'),
-        (LOCATION, 'location'),
-        (UNSPECIFIED, 'unspecified'),
-    )
-
-    #Admin
+class BaseModel(models.Model):
     version = models.IntegerField(default=0)
     private = models.BooleanField(default=False)
     created = models.DateField(auto_now_add=True)
     lastUpdated = models.DateField(auto_now=True)
 
-    #Model
-    entityType = models.CharField(max_length=200,
-                                  choices=ENTITY_TYPE_CHOICES,
-                                  default=UNSPECIFIED)
+class Customer(models.Model):
+    '''
+    user with augmented fields
+    '''
+    MALE = 0
+    FEMALE = 0
+    GENDER_CHOICES = (
+        (MALE, 'male'),
+        (FEMALE, 'female'))
+     
+    user = models.OneToOneField(User, primary_key=True)
+    dateOfBirth = models.DateField()
+    gender = models.IntegerField(choices=GENDER_CHOICES)
+    reputation = models.IntegerField(default=50)
+
+    def __unicode__(self):
+        return unicode(self.user.email) + u':' + unicode(self.id)
+
+class Entity(BaseModel):
+    entityType = models.CharField(max_length=100)
 
     name = models.CharField(max_length=200, 
                             default="Add a Title")
@@ -54,6 +37,8 @@ class Entity(models.Model):
     imageURL = models.URLField(max_length=1000)
     description = models.TextField()
     tags = TaggableManager()
+
+    extURL = models.URLField(max_length=1000, blank=True)
      
     def __unicode__(self):
         return unicode(self.name) + u':' + unicode(self.id)
@@ -63,14 +48,7 @@ class Entity(models.Model):
         self.version += 1
         super(Entity, self).save(kwargs)
 
-class Attribute(models.Model):
-    NOUN = 'non'
-    ADJ = 'adj'
-    ATTR_TYPE_CHOICES = (
-        (NOUN, 'Noun'),
-        (ADJ, 'Adjective'),
-    )
-
+class Attribute(BaseModel):
     NEUTRAL = 0
     NEGATIVE = -1
     POSITIVE = 1
@@ -81,13 +59,7 @@ class Attribute(models.Model):
         (POSITIVE, 'positive'),
     )
     
-    #Admin
-    version = models.IntegerField(default=0)
-    private = models.BooleanField(default=False)
-    created = models.DateField(auto_now_add=True)
-    lastUpdated = models.DateField(auto_now=True)
-
-    #Model
+    attrType = models.CharField(max_length=100)
     tone = models.IntegerField(choices=ATTR_TONE_CHOICES,
                                default=NEUTRAL)
 
@@ -106,7 +78,7 @@ class Attribute(models.Model):
         self.version += 1
         super(Attribute, self).save(kwargs)
 
-class Citation(models.Model):
+class Citation(BaseModel):
     attribute = models.ForeignKey(Attribute)
 
     description = models.CharField(max_length=140)
@@ -116,29 +88,20 @@ class Citation(models.Model):
     def __unicode__(self):
         return u'Citation:' + self.attribute + unicode(self.id)
 
-class Comment(models.Model):
-    private = models.BooleanField(default=False)
-    created = models.DateField(auto_now_add=True)
-    lastUpdated = models.DateField(auto_now=True)
-
+class Comment(BaseModel):
     user = models.CharField(max_length=200, default="Anonymous")
     entityId = models.CharField(max_length=1000)
     content = models.CharField(max_length=2500)
-    modifiedDate = models.DateField(auto_now=True) #delete this
-    votes = models.IntegerField(default=0)
+
+    upVote = models.IntegerField(default=0)
+    downVote = models.IntegerField(default=0)
+    voteCount = models.IntegerField(default=0)
 
     def __unicode__(self):
         return u'Comment:' + unicode(self.id)
 
-class Ad(models.Model):
-    #Admin
-    private = models.BooleanField(default=False)
-    created = models.DateField(auto_now_add=True)
-    lastUpdated = models.DateField(auto_now=True)
-
-    #Model
-    user = models.ForeignKey(User, null=True)
-
+class Ad(BaseModel):
+    user = models.ForeignKey(User)
     name = models.CharField(max_length=200)
     imageURL = models.URLField(max_length=1000)
     redirectURL = models.URLField(max_length=1000)
@@ -146,33 +109,32 @@ class Ad(models.Model):
     def __unicode__(self):
         return unicode(self.name) + u':' + unicode(self.id)
 
-'''
-Secondary Models
-'''
+class Vote(models.Model):
+    userId = models.CharField(max_length=200)
+
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = generic.GenericForeignKey()
+
+    #Actual Info
+    voteType = models.CharField(max_length=1) # +, -
+    agent = models.CharField(max_length=1000)
+    language = models.CharField(max_length=100)
+    created = models.DateField(auto_now_add=True)
+    ip = models.CharField(max_length=20)
+
+    def __unicode__(self):
+        return ":".join([unicode(self.userId),
+                        unicode(self.content_object)])
+
 class EntityOwnerMembership(models.Model):
     entity = models.OneToOneField(Entity, primary_key=True)
     user = models.ForeignKey(User)
 
-class UserVotes(models.Model):
-    UPVOTE = -1
-    DOWNVOTE = 1
-
-    VOTE_TYPE = (
-        (UPVOTE, 'downVote'),
-        (DOWNVOTE, 'upVote'),
-    )
-
-    attribute = models.ForeignKey(Attribute)
-    user = models.ForeignKey(User)
-    voteType = models.IntegerField(choices=VOTE_TYPE)
-
-'''
-To be created by Celery task at the end of the day
-'''
+''' Stats '''
 class VoteAggregate(models.Model):
     attribute = models.ForeignKey(Attribute)
     
-    #represents the number of votes this day
     date = models.DateField(auto_now_add=True)
     downVote = models.PositiveIntegerField()
     upVote = models.PositiveIntegerField()

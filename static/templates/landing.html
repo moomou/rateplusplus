@@ -18,7 +18,7 @@
       <p class="lead">Rate on anything with any attribute. Express and share opinions. </p>
       <form method="GET" id="searchForm" action="{% url 'default.views.PageHandler' %}">
         <div class="input-append">
-          <input id="searchInput" name="q" class="span5" type="text" placeholder="Eg. {{DEFAULT_QUERY}}">
+          <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="Eg. {{DEFAULT_QUERY}}">
           <button id="searchBtn" class="btn btn-success" type="button" ><i class="icon-search"></i></button>
         </div>
       </form>

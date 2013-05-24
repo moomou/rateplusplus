@@ -1,10 +1,3 @@
-function guidGenerator() {
-    var S4 = function() {
-       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-    };
-    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
-}
-
 var App = App || {};
 
 App.API_VERSION = '/api/v0/';
@@ -354,6 +347,9 @@ App.CommentModel = Backbone.Model.extend({
         user: 'Anonymous',
         private: false,
         editable: false, 
+        upVote: 0,
+        downVote: 0,
+        totalVote: 0
     },
     //Builtin Function
     initialize: function() {
@@ -367,11 +363,65 @@ App.CommentView = Backbone.View.extend({
     template: _.template(Template.commentTemplate),
     tagName: 'div',
     className: 'page-curl outer',
-
+    initialize: function() {
+        this.voted = false;
+    },
+    events: {
+        'mouseover': 'toggleCommentVoteMenu',
+        'mouseout': 'toggleCommentVoteMenu',
+        'click .btn': 'commentVote'
+    },
     render: function() {
         console.log('Comentview Render');
         this.$el.html(this.template(this.model.toJSON()));
         return this;
+    },
+    //Event Handler
+    toggleCommentVoteMenu: function(e) {
+        var eventType = e.type,
+            $btns = this.$('.btn');
+            state = $btns.css('display');
+
+        if (this.voted) {
+            $btns.hide();
+            return;
+        }
+
+        if (eventType === "mouseover" && state === "none") {
+            $btns.show();
+        }
+        else if (eventType === "mouseout") {
+            $btns.hide();
+        }
+    },
+    commentVote: function(e) {
+        var btn = $(e.target),
+            voteType = "+",
+            that = this;
+
+        if (this.voted) {
+            return;
+        }
+
+        this.voted = true;
+        
+        if (btn.hasClass('cmtDownVote')) {
+            voteType = "-";
+        }
+
+        $.ajax({
+            type: "POST",
+            url: this.model.url() + "/vote/",
+            data: {voteType: voteType},
+        })
+        .done(function(res) {
+            if (!res.error) {
+                that.$('.btn').fadeOut('fast');
+            }
+        })
+        .fail(function(msg) {
+            this.voted = false;
+        });
     },
 });
 
@@ -566,6 +616,7 @@ App.SummaryCardView = Backbone.View.extend({
         }
         else {
             this.$('.attrContainer').hide();
+            this.$('.summary').hide();
             this.model.get('entityView').editProfile('edit');
         }
 
@@ -651,7 +702,7 @@ App.SummaryCardView = Backbone.View.extend({
         if ($icon.hasClass('share')) {
             //share
         }
-        else if ($icon.hasClass('edit')) {
+        else if ($icon.hasClass('icon-edit')) {
             this.model.set('editable',true);
             this.render(true);
         }
@@ -967,12 +1018,10 @@ App.CommentCollection = Backbone.Collection.extend({
         return response.results;
     },
     comparator: function(m) {
-        return -m.get('vote');
+        return -m.get('upVote');
     },
 
 });
-
-//App Level Component
 App.CommentCollectionView = Backbone.View.extend({
     initialize: function(data) {
         this.collection = new App.CommentCollection();
@@ -1002,8 +1051,9 @@ App.CommentCollectionView = Backbone.View.extend({
         });
         return cmtView.render();
     }
-
 });
+
+//App Level Component
 App.PageView = Backbone.View.extend({
     initialize: function(q) {
         this.collection = new App.SummaryCardCollection();
@@ -1011,14 +1061,17 @@ App.PageView = Backbone.View.extend({
             return true;
         };
 
-        if (q.id) {
+        if (q.id) {//specific entity
             this.collection.fetch({data: $.param({id: q.id})});
+            this.pageType = {'type': 'id', 'value': q.id};
         }
-        else if (q.query) {
+        else if (q.query) {//a search
             this.collection.fetch({data: $.param({q: q.query})});
+            this.pageType = {'type': "search", 'value': q.query};
         }
-        else {
+        else {//empty
             this.collection.fetch({data: $.param({q: ''})});
+            this.pageType = "empty";
         }
 
         this.collection.on('reset', this.render, this);
@@ -1046,7 +1099,11 @@ App.PageView = Backbone.View.extend({
         if (!this.collection.models.length) {
             App.ShowTrendyLink();
         }
-        else if (this.collection.models.length > 3) {
+        else if (this.pageType['type'] === 'id') {
+            App.CommentContainer.show();
+        }
+
+        if (this.collection.models.length > 3) {
             //show 1 sponsored ad
             var adModel = new App.AdModel({});
             var adView = new App.AdView({model:adModel});
@@ -1064,41 +1121,6 @@ App.PageView = Backbone.View.extend({
 /*
     Utility Functions
 */
-
-App.ConfigureTagit = function(option, that, editable) {
-    var sourceURL = App.AE_C_URL,
-        prefix = "$";
-
-        
-    if (option == "hash") {
-        sourceURL = App.AE_H_URL;
-        prefix = "#";
-    }
-
-    return {
-        autocomplete: {delay: 0, minLength: 2, source: sourceURL}, 
-        afterTagAdded: function(event, ui) {
-            var tags = that.model.get('entityView').model.get('tags');
-            if (tags.indexOf(prefix+ui.tagLabel) < 0) {
-                var label = ui.tagLabel[0] == prefix ? ui.tagLabel : prefix + ui.tagLabel;
-                tags.push(label);
-                console.log(tags);
-            }
-        },
-        afterTagRemoved: function(event, ui) {
-            var tags = that.model.get('entityView').model.get('tags');
-            var label = ui.tagLabel[0] == prefix ? ui.tagLabel : prefix + ui.tagLabel;
-            var ind = tags.indexOf(label);
-            tags.splice(ind, 1);
-            console.log(tags);
-        },
-        readOnly: !editable,
-        onTagClicked: function(event, ui) {
-            $('#searchInput').val(ui.tagLabel);
-            $('#searchForm').submit();
-        },
-    }
-};
 
 App.Utility = (function() {
     //private
@@ -1193,9 +1215,6 @@ App.ColManager = (function() {
         addAttribute: addAttr,
     };
 })();
-
-App.LinkBox = $('#linkBox');
-App.MessageBox = $('.message-box');
 App.ShowTrendyLink = function() {
     $.ajax({
         'url': App.API_VERSION+'tags/',
@@ -1210,6 +1229,57 @@ App.ShowTrendyLink = function() {
         App.LinkBox.html(aTags);
     });
 };
+App.ConfigureTagit = function(option, that, editable) {
+    var sourceURL = App.AE_C_URL,
+        prefix = "$";
+
+        
+    if (option == "hash") {
+        sourceURL = App.AE_H_URL;
+        prefix = "#";
+    }
+
+    return {
+        autocomplete: {delay: 0, minLength: 2, source: sourceURL}, 
+        afterTagAdded: function(event, ui) {
+            var tags = that.model.get('entityView').model.get('tags');
+            if (tags.indexOf(prefix+ui.tagLabel) < 0) {
+                var label = ui.tagLabel[0] == prefix ? ui.tagLabel : prefix + ui.tagLabel;
+                tags.push(label);
+                console.log(tags);
+            }
+        },
+        afterTagRemoved: function(event, ui) {
+            var tags = that.model.get('entityView').model.get('tags');
+            var label = ui.tagLabel[0] == prefix ? ui.tagLabel : prefix + ui.tagLabel;
+            var ind = tags.indexOf(label);
+            tags.splice(ind, 1);
+            console.log(tags);
+        },
+        readOnly: !editable,
+        onTagClicked: function(event, ui) {
+            $('#searchInput').val(ui.tagLabel);
+            $('#searchForm').submit();
+        },
+    }
+};
+
+/*
+    Global Objects
+*/
+App.CommentContainer = $('#commentContainer');
+App.LinkBox = $('#linkBox');
+App.MessageBox = $('.message-box');
+
+/*
+    Support Functions
+*/
+function guidGenerator() {
+    var S4 = function() {
+       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    };
+    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
 
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection

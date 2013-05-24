@@ -6,9 +6,9 @@
 
   <div class="modal-body">
     <form id="feedbackForm" method="POST" action="{% url 'default.views.FeedbackHandler' %}">
-      <input type="text" name="userEmail" class="field" placeholder="Email"><span style="margin-top:-1em;" class="help-inline">Optional </span>
+      <input type="email" name="userEmail" class="field" placeholder="Email"><span style="margin-top:-1em;" class="help-inline">Optional </span>
       <h6>Bugs, Suggestions, Comments all welcome! Drop us a line even if you just want to say hi!</h6>
-      <textarea rows="5" name="feedback" class="field" style="max-height: 20em; width:95%;max-width:95%;"></textarea>
+      <textarea autofocus rows="5" name="feedback" class="field" style="max-height: 20em; width:95%;max-width:95%;" required></textarea>
     </form>
   </div>
 

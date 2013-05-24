@@ -7,7 +7,17 @@ var Template = (function() {
           "<li><%=obj.summary.totalAttribute%> Attributes</li>" + 
         "</ul>",
         commentTemplate = "" + 
-        "<p><%=content%></p>",
+        "<div class='comment'>" + 
+          "<i class='icon-smile icon-2x btn cmtUpVote hide' style='position:absolute;margin-left: -2em;'></i>" + 
+          "<i class='icon-frown icon-2x btn cmtDownVote hide' style='position:absolute;margin-left: 1em;'></i>" +
+          "<p class='noSelect'><%=content%></p>" + 
+          "<div class='commentInfo'>" + 
+            "<span class='pull-left date'><%=modifiedDate%></span>" + 
+            "<span class='pull-right vote'>" +
+              "<%=upVote%><i style='margin: 0 0.5em 0 0.5em;' class='icon-group'></i> agree" + 
+            "</span>" + 
+          "</div>" +
+        "</div>",
         attributeTemplate = "" + 
         "<div>" + 
           "<div data-toggle='tooltip' title='Save' class='close attrSaveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
@@ -41,8 +51,9 @@ var Template = (function() {
               "</div>" + 
             "</div>" + 
             "<div class='card-header-btn card-header-right'>" +
-              "<div class='btn-group'>" + 
-                "<a class='plain-btn btn btn-small share'><i class='icon-share'></i></a>" + 
+              "<div class='xbtn-group'>" + 
+              "<button class='btn btn-mini voteBtn btn-success'><i class='icon-edit'></i></button>" + 
+                /*"<a class='plain-btn btn btn-small share'><i class='icon-share'></i></a>" + 
                 "<button data-toggle='dropdown' class='plain-btn btn btn-small dropdown-toggle'>" +
                   "<span class='caret'></span>" + 
                 "</button>" + 
@@ -50,6 +61,7 @@ var Template = (function() {
                   "<li><a class='edit'><i class='icon-edit'></i> Edit</a></li>" + 
                   "<li><a class='report' title='Report as Inappropriate'><i class='icon-minus-sign'></i> Report</a></li>" + 
                 "</ul>" + 
+                */
               "</div>" + 
             "</div>" + 
             "<div data-toggle='tooltip' title='Close' class='close closeBtn'><i class='icon-remove-sign icon-large'></i></div>" +

@@ -1,15 +1,18 @@
-<div class="hidden-desktop" id="sidr">
+<div class="" id="sidr">
  <div class="sideMenuContainer">
   <span class="sideMenuHomeBtn">Cloverite</span>
   <span class="logo" style="font-size: 32px;top: -50px;"></span>
-  <ul class="menu-personal">
+
+  <ul class="menu">
+    {% if authenticated %}
     <li class="item-label">Personal</li>
-    <li class="item"><i style="color:black;" class="icon-home icon-large"></i> Profile</li>
-    <li class="item"><i style="color:gray;" class="icon-book icon-large"></i> Collection</li>
+    <li class="item"><a><i style="color:black;" class="icon-home icon-large"></i> Profile</a></li>
+    <li class="item"><a><i style="color:gray;" class="icon-book icon-large"></i> Collection</a></li>
+    {% endif %}
     <li class="item-label"> Categories</li>
-    <li class="item"><i style="color:red;" class="icon-fire icon-large"></i> Trending</li>
-    <li class="item"><i style="color:orange;" class="icon-food icon-large"></i> Food</li>
-    <li class="item"><i style="color:pink;" class="icon-location-arrow icon-large"></i> Location</li>
+    <li class="item"><a><i style="color:red;" class="icon-fire icon-large"></i> Trending</a></li>
+    <li class="item"><a><i style="color:orange;" class="icon-food icon-large"></i> Food</a></li>
+    <li class="item"><a><i style="color:pink;" class="icon-location-arrow icon-large"></i> Location</a></li>
   </ul>
  </div>
 </div>

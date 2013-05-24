@@ -21,8 +21,10 @@ class FeedbackForm(forms.Form):
 
     def clean_feedback(self):
         message = self.cleaned_data['feedback']
+        '''
         if len(message) < 12:
             raise forms.ValidationError('Please supply more feedback.')
+        '''
         return message
 
 class SignupForm(forms.Form):

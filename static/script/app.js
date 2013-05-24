@@ -7,21 +7,15 @@ $(function() {
         pathname = window.location.pathname.split('/'),
         id = pathname[pathname.length-1],
         searchView = window.location.search,
-        sideMenuOpen = false,
         $mediaQuery = $('#mediaQuery');
 
     //only enable side menu if on small screen
-    if ($mediaQuery.css('display') !== "none") {
+    if (true) { //$mediaQuery.css('display') !== "none") {
         $('#sidr').sidr();
         $('.sideMenuContainer').show();
+
         $('#sideMenu').click(function(e) {
-            if (!sideMenuOpen) {
-                $.sidr('open','sidr');
-            }
-            else {
-                $.sidr('close','sidr');
-            }
-            sideMenuOpen = !sideMenuOpen; 
+            $.sidr('toogle', 'sidr');
         });
     }
     

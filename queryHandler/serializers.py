@@ -5,10 +5,6 @@ from taggit.managers import TaggableManager
 class APIInfo ():
     pass
 
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TaggableManager
-
 class AttributeSerializer(serializers.ModelSerializer):
     entity = serializers.RelatedField()
     tone = serializers.ChoiceField(choices=Attribute.ATTR_TONE_CHOICES)
@@ -63,6 +59,21 @@ class EntitySerializer(serializers.ModelSerializer):
 
         return Entity(**attrs)
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaggableManager
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment 
+    def validate_user(self, attrs, source):
+        return attrs
+
+    def validate(self, attrs):
+        if attrs['private']:
+            attrs['user'] = "Anonymous"
+        return attrs
+
 class AdSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ad
@@ -71,21 +82,4 @@ class AdSerializer(serializers.ModelSerializer):
                   'imageURL',
                   'redirectURL')
 
-class CommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment 
-        fields = ('id',
-                  'user',
-                  'entityId',
-                  'content', 
-                  'votes',
-                  'private',
-                  'modifiedDate')
 
-    def validate_user(self, attrs, source):
-        return attrs
-
-    def validate(self, attrs):
-        if attrs['private']:
-            attrs['user'] = "Anonymous"
-        return attrs

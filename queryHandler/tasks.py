@@ -1,9 +1,9 @@
 from celery.task import task
-from .models import Entity, Attribute
 
-from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
+
+from models import Vote
 
 import rredis
 import datetime
@@ -14,25 +14,34 @@ MAX_ACTIVITIES = 10
 ##Tasks
 #
 @task(ignore_result=True)
-def incrementVote(userId, attrId, voteType, keyName):
+def incrementVote (user, classType, objId, voteMetaObj):
     r = rredis.getRedisConnection()
 
-    if attrId:
+    if objId:
         try:
-            attr = Attribute.objects.get(pk=attrId)
-            updatedField = "upVote"
+            obj = classType.objects.get(pk=objId)
+            #updatedField = "upVote"
              
-            if voteType == "+":
-                attr.upVote = F('upVote') + 1
+            if voteMetaObj['voteType'] == "+":
+                obj.upVote = F('upVote') + 1
             else:
-                attr.downVote = F('downVote') + 1
-                updatedField = "downVote"
+                obj.downVote = F('downVote') + 1
+                #updatedField = "downVote"
 
-            attr.voteCount = F('voteCount') + 1
-            attr.save()#update_fields=[updatedField])
-            r.setex(keyName, datetime.timedelta(days=1), 0) #expires in 1 day
+            obj.voteCount = F('voteCount') + 1
+            obj.save()#update_fields=[updatedField])
 
-            print keyName, voteType, "Done"
+            vote = Vote(content_object = obj)
+            for k,v in voteMetaObj.iteritems():
+                print k, v
+                vote.__setattr__(k, v)
+            vote.save()
+
+            print "UGO"
+
+            r.setex(unicode(voteMetaObj), 
+                    datetime.timedelta(days=1), #expires in 1 day
+                    0) 
 
             #TODO: implement voteCollection
 
@@ -40,6 +49,5 @@ def incrementVote(userId, attrId, voteType, keyName):
             '''log these errors'''
             print 'exception occurred'
     else:
-        print 'No AttrId provided'
-
+        print 'No objId provided'
 

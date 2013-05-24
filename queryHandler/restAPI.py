@@ -11,19 +11,22 @@ from queryHandler.serializers import *
 #Django
 from django.http import Http404
 
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from django.contrib.auth.decorators import permission_required 
-from django.utils.decorators import method_decorator
-
 from queryHandler import tasks
 from django.db.models import Q
 
 #Python
 import itertools
-import operator, json
+import operator
 import rredis
 import random
+
+class Result():
+    def __init__(self, success, reason):
+        self.res = {'success': success,
+                    'reason': reason}
+
+    def __unicode__(self):
+        return unicode(self.res)
 
 #RESTful API
 class Autocomplete(APIView):
@@ -80,9 +83,7 @@ class EntityDetail(APIView):
 
         res = Entity.objects.filter(private=False).filter(reduce(operator.or_, filterList))
 
-        #TODO: Test
         if request.user.is_authenticated():
-            print 'searching private'
             privateEntities = Entity.objects.filter(entityownermembership__user=request.user).filter(reduce(operator.or_, filterList))
             res = itertools.chain(res, privateEntities)
             
@@ -341,20 +342,35 @@ class CommentList(generics.ListAPIView):
         return comments
         
 #Celery
-class TaskQueue(APIView):
-    def post(self, request, pk=None, format=None):
-        user = str(request.user)
-        ipaddr = request.META['HTTP_X_REAL_IP']
-        
-        error = False
-        keyName = ":".join([user, ipaddr, pk])
+class VoteQueue(APIView):
+    def post(self, request, pk=None, queueType=None):
+        if not pk or not queueType:
+            return Response(unicode(Result(False, 'Mising param')), 
+                            status=status.HTTP_400_BAD_REQUEST)
+
         r = rredis.getRedisConnection()
-        voted = r.get(keyName)
+
+        voteMetaObj = {
+            'ip': request.META['HTTP_X_REAL_IP'],
+            'userId': unicode(request.user),
+            'agent':request.META['HTTP_USER_AGENT'],
+            'language': request.META['HTTP_ACCEPT_LANGUAGE'],
+            'voteType': request.DATA['voteType']
+             #time: will be the time when this is saved to db
+        }        
+
+        voted = r.get(unicode(voteMetaObj))
+
+        print 'voting on ' + pk
 
         if False: #voted: #already exists
             print keyName, "already voted"
-            error = True
         else:
-            tasks.incrementVote.delay(user, pk, request.DATA['voteType'], keyName) 
+            classType = Attribute if queueType != "cmt" else Comment
+            tasks.incrementVote.delay(request.user, 
+                                      classType, 
+                                      pk,
+                                      voteMetaObj) 
 
-        return Response({'error': error}, status=status.HTTP_200_OK)
+        return Response(unicode(Result(True, "")), 
+                        status=status.HTTP_200_OK)
