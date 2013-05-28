@@ -6,7 +6,6 @@ REDIS_HOST = 'localhost'
 PORT = 6379
 
 r = None
-
 def getRedisConnection():
     global r
 

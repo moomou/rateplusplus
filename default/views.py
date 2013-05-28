@@ -112,7 +112,6 @@ def AdHandler(request):
 
     return HttpResponse(t.render(c))
 
-#Serve a specific page
 def EntityHandler(request, pk):
     renderCxt = ContextSetup(request)
     renderCxt['specific_entity'] = True
@@ -129,7 +128,15 @@ def SearchPage(request, query):
     c = RequestContext(request, renderCxt)
 
     return HttpResponse(t.render(c))
- 
+
+def GraphHandler(request):
+    renderCxt = ContextSetup(request)
+    
+    t = loader.get_template('relationshipeditor.html')
+    c = RequestContext(request, renderCxt) 
+
+    return HttpResponse(t.render(c))
+
 #Landing Page
 def DefaultPage(request):
     ipaddr = request.META['HTTP_X_REAL_IP']

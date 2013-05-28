@@ -72,8 +72,6 @@ App.EntityView = Backbone.View.extend({
     render: function() {
         console.log('EntityView render');
         this.$el.html(this.template(this.model.toJSON()));
-        //shouldn't have to call this explicitly but some weird coupling between summaryview and this
-        this.delegateEvents(); 
         return this;
     },
     initialize: function() {
@@ -85,14 +83,17 @@ App.EntityView = Backbone.View.extend({
             return;
         }
 
-        var editBoxMenuId = 'editBoxMenu-' + this.model.get('domId');
+        var editBoxContainer = 'textareaContainer-' + this.model.get('domId');
         var editBoxId = 'editBox-' + this.model.get('domId');
         var $p = this.$('.description');
-        var $textarea = this.$('#'+editBoxId);
+        var $textAreaContainer = this.$('#'+editBoxContainer);
 
         if (mode == "edit") {
-            $textarea.html($p.html());
+            wideArea('#'+editBoxContainer);
+            var $textarea = $textAreaContainer.find("textarea");
+            $textarea.text(($p.html()));
 
+            /*
             this.editBox = new nicEditor({buttonList : [
                                              'fontSize',
                                              'bold',
@@ -109,30 +110,26 @@ App.EntityView = Backbone.View.extend({
             */
 
             $p.hide(); 
+            $textAreaContainer.show();
         }
         else if (mode == "save") {
-            var editor = nicEditors.findEditor(editBoxId);
-            var newTxt = editor.getContent();
-            this.model.set('description',newTxt);
+            //var editor = nicEditors.findEditor(editBoxId);
+            //var newTxt = editor.getContent();
+            var $textarea = $textAreaContainer.find("textarea");
+            var newTxt = $textarea.val();
 
+            this.model.set('description', newTxt);
             $p.html(newTxt);
 
-            this.editBox.removeInstance(editBoxId);
-            $textarea.hide();
-
+            //this.editBox.removeInstance(editBoxId);
+            $textAreaContainer.hide();
             $p.show();
-            //this.model.save();
         }
         else { //Cancel
-            var editor = nicEditors.findEditor(editBoxId);
             $p.html(this.model.get('description'));
-
-            this.editBox.removeInstance(editBoxId);
-            $textarea.hide();
-
+            //this.editBox.removeInstance(editBoxId);
+            $textAreaContainer.hide();
             $p.show();
-
-            this.$('.editBtn').text('Edit');
         }
     },
 });
@@ -795,7 +792,7 @@ App.SummaryCardView = Backbone.View.extend({
     },
     toggleCardHeaderBtn: function(e) {
         var eventType = e.type,
-            $btn = this.$('.card-header-right'),
+            $btn = this.$('.card-header-btn'),
             state = $btn.css('visibility');
 
         if (eventType === "mouseover" && state === "hidden") {
@@ -1270,6 +1267,17 @@ App.ConfigureTagit = function(option, that, editable) {
 App.CommentContainer = $('#commentContainer');
 App.LinkBox = $('#linkBox');
 App.MessageBox = $('.message-box');
+
+//TODO Fix this 
+var AppRouter = Backbone.Router.extend({
+        routers: {
+            "":"graph",
+        },
+        graph: function() {
+            alert('hi');
+        }
+});
+
 
 /*
     Support Functions

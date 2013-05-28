@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include "stdHead.partial" %}
+</head>
+<body>
+
+  {% include "header.partial" %}
+  {% include "sideMenu.partial" %}
+
+  <div class="container-narrow">
+    <hr>
+    <div class="row-fluid">
+      <div class="span5">
+        <form id="leftSearchForm" method="GET" class="navbar-search" action="/">
+          <div class="input-append">
+            <input type="search" name="q" placeholder="Search">
+            <button class="btn btn-success" type="button"><i class="icon-search"></i></button>
+          </div>
+        </form>
+      </div>
+      <div class="span2">
+        <div class="outer">
+          <button class="inner btn"><i class="icon-plus"></i> New Link</button>
+        </div>
+      </div>
+      <div class="span5">
+        <form id="rightSearchForm" method="GET" class="pull-right navbar-search" action="/">
+          <div class="input-append">
+            <input type="search" name="q" placeholder="Search">
+            <button class="btn btn-success" type="button"><i class="icon-search"></i></button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div id="col1" class="span3"></div>
+      <div id="col2" class="span2"></div>
+      <div id="col3" class="span2"></div>
+      <div id="col4" class="span2"></div>
+      <div id="col5" class="span3"></div>
+    </div>
+    <div id="mediaQuery" class="hidden-desktop" style="position:absolute;left:-1200px;"></div>
+  </div>
+    
+  {% csrf_token %}
+
+  {% include "imageChangeModal.partial" %}
+
+  {% if FEEDBACK_ENABLED %} 
+    {% include "feedbackForm.partial" %}
+  {% endif %}
+
+  {% include "stdScript.partial" %}
+  {% include "modelScript.partial" %}
+
+  <script src="{{STATIC_URL}}script/app.js"></script> 
+
+</body>
+</html>

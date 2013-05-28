@@ -13,5 +13,6 @@ urlpatterns = patterns('',
     url(r'^signin$', views.SigninHandler),
     url(r'^signout$', logout, {'next_page': '/signin'}),
     url(r'^privacy$', views.PrivacyHandler),
+    url(r'^graph$', views.GraphHandler),
     url(r'^$', views.PageHandler)
 )

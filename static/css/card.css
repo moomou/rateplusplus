@@ -22,7 +22,7 @@
 .inner {
   display: inline-block;
   max-width: 40em;
-  /*width: 90%;*/
+  width: 95%;
 }
 
 .card:hover {
@@ -193,6 +193,7 @@
   color: gray;
   margin: 0 1em;
   text-align: left;
+  word-wrap: break-word;
 }
 
 .voteBtn {
@@ -225,10 +226,8 @@
 }
 
 .editBox {
-  max-width: 16em;
-  width: 16em;
-  height: 10em;
-  max-height: 100%;
+  height: 7em;
+  width: 96%;
 }
 .profileimg {
   width: 100%;
@@ -249,7 +248,10 @@
   padding: 10px;
   background: white;
 }
-.summary, .tagsContent {
+.summary {
+  padding: 1em;
+} 
+.tagsContent {
   margin-top: 0.5em;
 }
 .profileContent {
@@ -262,7 +264,7 @@
 }
 
 .editHighlight {
-    border: 2px dashed pink;
+    border: 3px dashed pink;
 }
 .editHighlight:hover {
     border-color: pink;

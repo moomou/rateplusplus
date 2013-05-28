@@ -81,5 +81,3 @@ class AdSerializer(serializers.ModelSerializer):
                   'name',
                   'imageURL',
                   'redirectURL')
-
-

@@ -39,9 +39,10 @@ class Entity(BaseModel):
     tags = TaggableManager()
 
     extURL = models.URLField(max_length=1000, blank=True)
-     
+    relatedEntity = models.ManyToManyField("self", through='EntitytoEntityRelationship', symmetrical=False) 
+
     def __unicode__(self):
-        return unicode(self.name) + u':' + unicode(self.id)
+        return u'entity' + u":" + unicode(self.name) + u':' + unicode(self.id)
 
     #overriding save to auto increment version
     def save(self, **kwargs):
@@ -67,9 +68,9 @@ class Attribute(BaseModel):
     name = models.CharField(max_length=200, 
                             default="Attribute Name")
 
-    upVote = models.IntegerField()
-    downVote = models.IntegerField()
-    voteCount = models.IntegerField()
+    upVote = models.IntegerField(default=0)
+    downVote = models.IntegerField(default=0)
+    voteCount = models.IntegerField(default=0)
 
     def __unicode__(self):
         return unicode(self.name) + u':' + unicode(self.id)
@@ -127,10 +128,23 @@ class Vote(models.Model):
         return ":".join([unicode(self.userId),
                         unicode(self.content_object)])
 
+''' Relationship '''
 class EntityOwnerMembership(models.Model):
     entity = models.OneToOneField(Entity, primary_key=True)
     user = models.ForeignKey(User)
 
+class EntitytoEntityRelationship(models.Model):
+    relationship = models.CharField(max_length = 100)
+    me = models.ForeignKey(Entity, related_name = "me_set")
+    other = models.ForeignKey(Entity, related_name = "other_set")
+
+    def __unicode__(self):
+        return self.relationship + ":" + unicode(self.id)
+
+class EntityClass(models.Model):
+    name = models.CharField(max_length=100)
+    presetAttributes = models.TextField()
+ 
 ''' Stats '''
 class VoteAggregate(models.Model):
     attribute = models.ForeignKey(Attribute)

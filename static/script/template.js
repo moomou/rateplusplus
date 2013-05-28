@@ -38,30 +38,23 @@ var Template = (function() {
           "<a href='' class='btn btn-mini voteBtn downVote btn-danger'>No <i class='downVote icon-thumbs-down'></i></a>" + 
         "</div>",
         entityTemplate = "" +
-        "<div class='description'><%=description%></div>" +
-        "<div id='editBoxMenu-<%=domId%>'></div>" + 
-          "<textarea class='editBox' id='editBox-<%=domId%>' style='display:none;'></textarea>" + 
+        "<p class='description'><%=description%></p>" +
+        "<div id='textareaContainer-<%=domId%>' class='hide'>" + 
+          "<textarea class='editBox' placeholder='Add Description' data-widearea='enable'></textarea>" + 
         "</div>", 
         summaryCardTemplate = "" +
           "<div class='card-header'>" + 
               "<legend contenteditable='<%=obj.editable%>' class='card-title'><%=obj.name%></legend>" + 
             "<div class='card-header-btn card-header-left'>" + 
               "<div class='card-status'>" + 
-                "<i title='<%= obj.private ? 'Private' : 'Public'%>' class='icon-large icon-<%= obj.private ? 'lock' : 'globe'%> '></i>" + 
+                "<i title='<%= obj.private ? 'Private' : 'Public'%>' class='icon-<%= obj.private ? 'lock' : 'globe'%> '></i> " + 
+                "<i title='<%= obj.collected ? 'Bookmarked' : 'Add to Bookmark'%>' class='icon-bookmark'></i> " + 
+                "<i title='<%= obj.favorite ? 'Favorited' : 'Add to Favorite'%>' class='icon-heart'></i>" + 
               "</div>" + 
             "</div>" + 
             "<div class='card-header-btn card-header-right'>" +
               "<div class='xbtn-group'>" + 
-              "<button class='btn btn-mini voteBtn btn-success'><i class='icon-edit'></i></button>" + 
-                /*"<a class='plain-btn btn btn-small share'><i class='icon-share'></i></a>" + 
-                "<button data-toggle='dropdown' class='plain-btn btn btn-small dropdown-toggle'>" +
-                  "<span class='caret'></span>" + 
-                "</button>" + 
-                "<ul class='dropdown-menu'>" +
-                  "<li><a class='edit'><i class='icon-edit'></i> Edit</a></li>" + 
-                  "<li><a class='report' title='Report as Inappropriate'><i class='icon-minus-sign'></i> Report</a></li>" + 
-                "</ul>" + 
-                */
+                "<button class='btn btn-mini voteBtn btn-success'><i class='icon-edit'></i></button>" + 
               "</div>" + 
             "</div>" + 
             "<div data-toggle='tooltip' title='Close' class='close closeBtn'><i class='icon-remove-sign icon-large'></i></div>" +
@@ -80,7 +73,7 @@ var Template = (function() {
             "<% } %>" + 
           "</div>" + 
           "<div class='contentContainer outer'>" + 
-            "<div class='inner summary'>" + 
+            "<div class='summary'>" + 
               summaryTemplate + 
             "</div>" + 
             "<div class='entityDetail'>" + 
