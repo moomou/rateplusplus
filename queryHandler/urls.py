@@ -21,6 +21,6 @@ urlpatterns = patterns('',
     url(r'^comment/(?P<pk>[0-9]+)/?$', restAPI.CommentDetail.as_view()),
     url(r'^comment/(?P<pk>[0-9]+)/vote/?$', restAPI.VoteQueue.as_view(), {'queueType': 'cmt'}),
     url(r'^commentlist/$', restAPI.CommentList().as_view()),
-    url(r'^relation/?$', restAPI.RelationDetail.as_view()),
-    url(r'^relation/(?P<pk>[0-9]+)/?$', restAPI.RelationDetail.as_view()),
+    url(r'^relationlist/?$', restAPI.RelationList.as_view()),
+    #url(r'^relation/(?P<pk>[0-9]+)/?$', restAPI.RelationDetail.as_view()),
 )

@@ -1,8 +1,5 @@
 <div class="" id="sidr">
  <div class="sideMenuContainer">
-  <span class="sideMenuHomeBtn">Cloverite</span>
-  <span class="logo" style="font-size: 32px;top: -50px;"></span>
-
   <ul class="menu">
     {% if authenticated %}
     <li class="item-label">Personal</li>

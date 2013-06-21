@@ -2,6 +2,7 @@
 pageView = undefined;
 
 $(function() {
+    // Initiate the router
     var query = $('#searchInput').val(),
         cmtCollectionView = undefined, 
         pathname = window.location.pathname.split('/'),

@@ -3,6 +3,7 @@ import json
 from presetAttrs import presetAttrs
 from models import EntityClass
 
+print "Populating Default Attr"
 for item in presetAttrs:
     res = EntityClass.objects.filter(name=item['name'])
     if not res:

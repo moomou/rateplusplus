@@ -1,10 +1,11 @@
 //'<!--Start of Build In Javascript Template-->'
 var Template = (function() {
     var summaryTemplate = "" + 
-        "<h3 class='pull-left' style='margin-top:0;font-size:15px;'>Rating <%=obj.summary.avgScore%>% </h3>" + 
+        "<input type='text' value='<%=obj.summary.avgScore%>' class='pull-left idial'>" + 
+        "<span class='pull-left sdial'><%=obj.summary.avgScore%></span>" + 
         "<ul class='pull-right'>" + 
-          "<li><%=obj.summary.totalVote%> Votes</li>" + 
-          "<li><%=obj.summary.totalAttribute%> Attributes</li>" + 
+          "<li> <i class='icon-check '></i> <%=obj.summary.totalVote%> Votes</li>" + 
+          "<li> <i class='icon-tags '></i> <%=obj.summary.totalAttribute%> Attributes</li>" + 
         "</ul>",
         commentTemplate = "" + 
         "<div class='comment'>" + 
@@ -12,11 +13,21 @@ var Template = (function() {
           "<i class='icon-frown icon-2x btn cmtDownVote hide' style='position:absolute;margin-left: 1em;'></i>" +
           "<p class='noSelect'><%=content%></p>" + 
           "<div class='commentInfo'>" + 
-            "<span class='pull-left date'><%=modifiedDate%></span>" + 
+            "<span class='pull-left date'><%=lastUpdated%></span>" + 
             "<span class='pull-right vote'>" +
               "<%=upVote%><i style='margin: 0 0.5em 0 0.5em;' class='icon-group'></i> agree" + 
             "</span>" + 
           "</div>" +
+        "</div>",
+        linkTemplate = "" + 
+        "<div>" + 
+          "<div data-toggle='tooltip' title='Save' class='close attrSaveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
+          "<div data-toggle='tooltip' title='Close' class='close attrCloseBtn'><i class='icon-remove-sign icon-large'></i></div>" +
+        "</div>" + 
+        "<div class='inner'>" + 
+          "<span class='pull-left link' data-link='LtoR' contenteditable='<%=editable%>' ><%=LtoR%></span>" + 
+          "<span><i class='icon-link'></i></span>" + 
+          "<span class='pull-right link' data-link='RtoL' contenteditable='<%=editable%>' ><%=RtoL%></span>" + 
         "</div>",
         attributeTemplate = "" + 
         "<div>" + 
@@ -54,7 +65,8 @@ var Template = (function() {
             "</div>" + 
             "<div class='card-header-btn card-header-right'>" +
               "<div class='xbtn-group'>" + 
-                "<button class='btn btn-mini voteBtn btn-success'><i class='icon-edit'></i></button>" + 
+                "<button class='btn btn-mini headBtn btn-warning linkBtn hide'><i class='icon-paper-clip icon-large'></i></button>" + 
+                "<button class='btn btn-mini headBtn btn-success editBtn '><i class='icon-edit icon-large'></i></button>" + 
               "</div>" + 
             "</div>" + 
             "<div data-toggle='tooltip' title='Close' class='close closeBtn'><i class='icon-remove-sign icon-large'></i></div>" +
@@ -124,11 +136,13 @@ var Template = (function() {
           "</div>";
 
   return {
-    commentTemplate: commentTemplate,
     attributeTemplate: attributeTemplate,
+    commentTemplate: commentTemplate,
+    linkTemplate: linkTemplate,
     entityTemplate: entityTemplate,
     summaryCardTemplate: summaryCardTemplate,
     summaryTemplate: summaryTemplate,
     sponsoredTemplate: sponsoredTemplate
+
   };
 }) ();

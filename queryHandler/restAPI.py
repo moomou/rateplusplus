@@ -49,7 +49,7 @@ class Result():
     def __unicode__(self):
         return unicode('static class')
 
-#RESTful API
+#Postgres
 class Autocomplete(APIView):
     def get(self, request, format=None):
         reqType = request.path_info
@@ -160,7 +160,7 @@ class EntityList(generics.ListAPIView):
         filterList = [] 
         print 'attr',query.strip().split()
         for word in query.strip().split():
-            attrQ = Q(attribute__name__startswith=word)
+            attrQ = Q(attribute__name__contains=word)
             filterList.append(attrQ)
         return res.filter(reduce(operator.or_, filterList))
 
@@ -407,8 +407,21 @@ class CommentDetail(APIView):
 
         return Response(cmtSerializer.data)
 
-class RelationDetail(APIView):
+#Redis
+class RelationList(APIView):
     def get_redisKey(self, request):
+        pass
+
+
+    def populateRelationMeta(self, request):
+        '''
+        count:entity:id::votes::
+        count:entity:id::votes::timestamp
+        count:entity:id::positive_votes
+        count:entity:id::relationName
+        count:entity:id::entity:id 
+        count:entity:id::
+        '''
         pass
         
     def get(self, request):
@@ -422,7 +435,14 @@ class RelationDetail(APIView):
         # entity:id::entity:id = reLtoR:id::reRtoL:id, ...
         r = rredis.getRedisConnection()
         redisKey = "entity:"+leftId + "::" + "entity:" + rightId
-        result = r.smembers(unicode(redisKey))
+        relations = r.smembers(unicode(redisKey))
+        
+        result = {
+            'count': len(relations),
+            'results': relations,
+            'previous': None,
+            'next': None,
+        }
 
         return Response(result, status=status.HTTP_200_OK) 
 
@@ -448,7 +468,7 @@ class RelationDetail(APIView):
         reRtoL = EntitytoEntityRelationship(
             me = entityRight,
             other = entityLeft,
-            relationship = reLeft
+            relationship = reRight
         )
 
         reLtoR.save()
@@ -461,6 +481,45 @@ class RelationDetail(APIView):
 
         r.sadd(LtoRKey, unicode(reLtoR)+u'::'+unicode(reRtoL))
         r.sadd(RtoLKey, unicode(reRtoL)+u'::'+unicode(reLtoR))
+
+        return Response(Result.BOOLEAN(True, "success"), status=status.HTTP_200_OK)
+                    
+    def delete(self, request):
+        pass
+
+class FavoriteDetail(APIView):
+    r = rredis.getRedisConnection()
+
+    def get_redisKey(self, request):
+        pass
+        
+    def get(self, request):
+        if not request.user.is_authenticated():
+            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+       
+        # user:id::favorite = entity:id, ...
+        userId = request.user.id
+        redisKey = u"user:"+userId+ u"::favorite"
+        result = r.smembers(unicode(redisKey))
+
+        return Response(result, status=status.HTTP_200_OK) 
+
+    def post(self, request):
+        if not request.user.is_authenticated():
+            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+        
+        entityId = request.GET.get('entityId', None)
+
+        if not entityId: 
+            return Response(Result.BOOLEAN(False, 'Mising entityId'), 
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        userId = request.user.id
+        redisKey = "user:"+userId+ "::favorite"
+
+        #key format
+        # user:id::favorite = entity:id, ...
+        r.sadd(redisKey, u'entity::'+unicode(entityId))
 
         return Response(Result.BOOLEAN(True, "success"), status=status.HTTP_200_OK)
                     
