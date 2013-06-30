@@ -3,7 +3,8 @@ var App = App || {};
 /*
     Constants for App
 */
-App.API_VERSION = '/api/v0/';
+App.API_SERVER = 'http://api.cloverite.com/';
+App.API_VERSION = '';
 App.AE_H_URL = App.API_VERSION + 'ae/tag';
 App.AE_C_URL = App.API_VERSION + 'ae/cat';
 
@@ -41,33 +42,26 @@ App.AdView = Backbone.View.extend({
 });
 
 App.EntityModel = Backbone.Model.extend({
-	urlRoot: App.API_VERSION + 'entity/',
-    /*url: function() {
-        return window.location.origin + "/" + this.urlRoot + (this.id ? this.id : "");
-    },*/
+	urlRoot: App.API_VERSION + App.API_VERSION + 'entity/',
     defaults: {
-        domId: undefined,
+        //DOM
+        editable: true,
+        //Backend
     	id: undefined,
         name: 'New Entity',
         private: false,
-        imageURL: '',
+        imgURL: '',
         description: 'Add Short Description',
-        tags: [],
-        tagDOM: '', 
-        version: 0,
-        attributes: undefined,
-        editable: true 
+        tags: [''],
     },
-    validate: function(attrs) {
-	},
     initialize: function() {
-        this.set('domId', guidGenerator());
+        this.set('domId', _.uniqueId('domId'));
     },
 });
 
 App.EntityView = Backbone.View.extend({
-    tagName: "div",
-    className: "inner",
+    tagName: 'div',
+    className: 'inner',
     events: {
         'click .editProfileBtn': 'editProfile',
     },
@@ -91,46 +85,25 @@ App.EntityView = Backbone.View.extend({
         var $p = this.$('.description');
         var $textAreaContainer = this.$('#'+editBoxContainer);
 
-        if (mode == "edit") {
+        if (mode == 'edit') {
             wideArea('#'+editBoxContainer);
-            var $textarea = $textAreaContainer.find("textarea");
+            var $textarea = $textAreaContainer.find('textarea');
             $textarea.text(($p.html()));
-
-            /*
-            this.editBox = new nicEditor({buttonList : [
-                                             'fontSize',
-                                             'bold',
-                                             'italic',
-                                             'image',
-                                             'left',
-                                             'center',
-                                             'link']
-                                             })
-                .panelInstance(editBoxId);
-            /*
-            this.editBox.setPanel(editBoxMenuId);
-            this.editBox.addInstance(editBoxId);
-            */
-
             $p.hide(); 
             $textAreaContainer.show();
         }
-        else if (mode == "save") {
-            //var editor = nicEditors.findEditor(editBoxId);
-            //var newTxt = editor.getContent();
+        else if (mode == 'save') {
             var $textarea = $textAreaContainer.find("textarea");
             var newTxt = $textarea.val();
 
             this.model.set('description', newTxt);
             $p.html(newTxt);
 
-            //this.editBox.removeInstance(editBoxId);
             $textAreaContainer.hide();
             $p.show();
         }
         else { //Cancel
             $p.html(this.model.get('description'));
-            //this.editBox.removeInstance(editBoxId);
             $textAreaContainer.hide();
             $p.show();
         }
@@ -138,16 +111,18 @@ App.EntityView = Backbone.View.extend({
 });
 
 App.AttributeModel = Backbone.Model.extend({
-    urlRoot: App.API_VERSION + 'attribute/',
+    urlRoot: App.API_SERVER + App.API_VERSION + 'attribute/',
     defaults: {
+        //DOM
+        editable: false, 
+        //BACKEND
     	id: undefined,
         entity: undefined,
         name: 'New Attribute',
-        tone: 1, //defaults to +,
+        tone: 'pos', //defaults to +,
         upVote: 0,
         downVote: 0,
         voteCount: 0,
-        editable: false, 
         voted: false,
     },
     //Builtin Function
@@ -501,7 +476,7 @@ App.SummaryCardModel = Backbone.Model.extend({
 	},
 	initialize: function(spec) {
         console.log('init SummaryCardModel');
-        this.set('domId', guidGenerator());
+        this.set('domId', _.uniqueId("domId"));
 
         if (this.isNew()) {
             this.set('editable', true);
@@ -1147,7 +1122,7 @@ App.AttributeCollectionView = Backbone.View.extend({
 });
 
 App.SummaryCardCollection = Backbone.Collection.extend({
-	url: App.API_VERSION + 'entitylist/', 
+	url: App.API_SERVER + App.API_VERSION + 'entity/', 
     model: App.SummaryCardModel,
     comparator: function(m) {
         return -m.get('summary').totalVote;
@@ -1185,8 +1160,8 @@ App.CommentCollection = Backbone.Collection.extend({
     comparator: function(m) {
         return -m.get('upVote');
     },
-
 });
+
 App.CommentCollectionView = Backbone.View.extend({
     initialize: function(data) {
         this.collection = new App.CommentCollection();
@@ -1571,4 +1546,5 @@ App.AppRouter = Backbone.Router.extend({
 });
 
 var appRouter = new App.AppRouter;
+
 Backbone.history.start({pushState: true});
