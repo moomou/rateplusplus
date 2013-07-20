@@ -26,7 +26,7 @@ $(function() {
     } //on specific page
     else {
         pageView = new App.PageView({id:parseInt(id)}); //search for particular id
-        cmtCollectionView = new App.CommentCollectionView({entityId:id});
+        //cmtCollectionView = new App.CommentCollectionView({entityId:id});
     }
 
     $('#sortBtn').click(function(e) {

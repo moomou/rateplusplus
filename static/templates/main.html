@@ -1,42 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  {% include "stdHead.partial" %}
-</head>
-<body>
+  <head>
+    {% include "stdHead.partial" %}
+  </head>
 
-  {% include "header.partial" %}
-  {% include "sideMenu.partial" %}
+  <body>
 
-  <div class="container-narrow">
-    <hr>
-    {% include "messageBox.partial" %}
-    <div class="row-fluid">
-      <div class="span3" id="col1"></div>
-      <div class="span3" id="col2"></div>
-      <div class="span3" id="col3"></div>
-      <div class="span3" id="col4"></div>
+    {% include "header.partial" %}
+    {% include "sideMenu.partial" %}
+
+    <div class="container-narrow">
+      <hr>
+      {% include "messageBox.partial" %}
+
+      <div id="detailRow" class="row-fluid">
+        <div class="span3" id="dr1"></div>
+        <div class="span7" id="dr2"></div>
+        <div class="span2" id="dr3"></div>
+      </div>
+
+      <div id="rankingRow" class="row-fluid">
+        <div class="span8" id="top1"></div>
+        <div class="span3" id="top2"></div>
+        <div class="span1" id="top3"></div>
+      </div>
+
+      <div id="colRow" class="row-fluid">
+        <div class="span3" id="col1"></div>
+        <div class="span3" id="col2"></div>
+        <div class="span3" id="col3"></div>
+        <div class="span3" id="col4"></div>
+      </div>
+
+      {% if specific_entity %}
+        {% include "comment.partial" %}
+      {% endif %}
+
+      <div id="mediaQuery" class="hidden-desktop" style="position:absolute;left:-1200px;"></div>
     </div>
+      
+    {% csrf_token %}
 
-    {% if specific_entity %}
-      {% include "comment.partial" %}
+    {% include "imageChangeModal.partial" %}
+
+    {% if FEEDBACK_ENABLED %} 
+      {% include "feedbackForm.partial" %}
     {% endif %}
 
-    <div id="mediaQuery" class="hidden-desktop" style="position:absolute;left:-1200px;"></div>
-  </div>
-    
-  {% csrf_token %}
+    {% include "stdScript.partial" %}
+    {% include "modelScript.partial" %}
 
-  {% include "imageChangeModal.partial" %}
+    <script src="{{STATIC_URL}}script/app.js"></script> 
+  </body>
 
-  {% if FEEDBACK_ENABLED %} 
-    {% include "feedbackForm.partial" %}
-  {% endif %}
-
-  {% include "stdScript.partial" %}
-  {% include "modelScript.partial" %}
-
-  <script src="{{STATIC_URL}}script/app.js"></script> 
-
-</body>
 </html>

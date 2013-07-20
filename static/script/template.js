@@ -33,7 +33,7 @@ var Template = (function() {
         "<div>" + 
           "<div data-toggle='tooltip' title='Save' class='close attrSaveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
           "<div data-toggle='tooltip' title='Close' class='close attrCloseBtn'><i class='icon-remove-sign icon-large'></i></div>" +
-          "<div class='pull-left tone cursor-pointer'><i data-toggle='tooltip' title='<%=TONE%>' class='icon-heart <%=TONE_ICON%>'></i></div>" + 
+          "<div class='pull-left tone cursor-pointer'><i data-toggle='tooltip' title='<%=tone%>' class='icon-heart <%=TONE_ICON%>'></i></div>" + 
           "<div class='pull-right menu'>"+
             "<i class='cursor-pointer subtle icon-star' title='Highlight'></i>" + 
           "</div>" + 
@@ -79,7 +79,7 @@ var Template = (function() {
             "<% if (obj.id) { %>" +
               "<a href='/entity/<%=obj.id%>'>" + 
             "<% } %>" + 
-              "<img class='profileimg' id='img-<%=obj.domId%>' src='<%=obj.imageURL ? obj.imageURL : '/static/img/blank.png'%>'></img>" + 
+              "<img class='profileimg' id='img-<%=obj.domId%>' src='<%=obj.imgURL ? obj.imgURL : '/static/img/blank.png'%>'></img>" + 
             "<% if (obj.id) { %>" + 
               "</a>" + 
             "<% } %>" + 
@@ -92,21 +92,23 @@ var Template = (function() {
               "<div class='profileContent outer'>" + 
               "</div>" +
               "<div class='tagsContent outer'>" +
-                "<div class='hashTag'>" +
-                 "<i class='tagBullet icon-ellipsis-vertical'></i>" + 
+                "<div class='hashTag cardView'>" +
+                 "<i class='tagBullet cardView icon-ellipsis-vertical'></i>" + 
                  "<ul class='tags' id='hashtags-<%=obj.domId%>'>" +
                   "<%=obj.hashTags%>" +
                   "</ul>" + 
                 "</div>" +  
-                "<div class='catTag'>" +
+                /*"<div class='catTag'>" +
                   "<i class='tagBullet icon-ellipsis-vertical'></i>" + 
                   "<ul class='tags' id='cattags-<%=obj.domId%>'>" +
                     "<%=obj.catTags%>" +
                   "</ul>" + 
                 "</div>" +  
+                */
               "</div>" + 
             "</div>" +
             "<div class='break break-mini'></div>" +
+            /*
             "<div class='attrContainer' >" + 
               "<form class='form-search' style='margin:0; width: 90%;'>" + 
                 "<input type='text' class='attrSearchInput search-query'>" + 
@@ -116,7 +118,7 @@ var Template = (function() {
               "<div class='outer' style='min-height:20px;margin-top:0.25em;'><i class='hide scroll up cursor-pointer icon-chevron-up'></i></div>" + 
               "<div class='attrContent'></div>" +
               "<div class='outer' style='min-height:20px;'><i class='scroll down cursor-pointer icon-chevron-down'></i></div>" + 
-            "</div>" + 
+            "</div>" +  */
           "</div>",
         sponsoredTemplate = "" +
           "<div class='card-header'>" + 
@@ -133,7 +135,48 @@ var Template = (function() {
                 "</a>" + 
               "</div>" + 
             "</div>" + 
-          "</div>";
+          "</div>",
+        attributeRow = "" + 
+          "<td class='ranking tdDivider'>" + 
+            "<i style='font-size: 3em;' data-toggle='tooltip' title='<%=tone%>' class='icon-heart <%=TONE_ICON%>'></i></div>" + 
+          "</td>" + 
+          "<td class='head'>" + 
+            "<h3><%=obj.name%></h3>" + 
+            "<span style='position: absolute; top: 5px; right: 5px;'>" +
+              "<i class="icon-link"><a href='<%=obj.srcLink%> Source</a></i></span>" + 
+            "<div class='voteBtns'>" +
+              "<a href='' class='btn voteBtn upVote btn-success'>Yes <i class='upVote icon-thumbs-up'></i></a>" +
+              "<a href='' class='btn voteBtn downVote btn-danger'>No <i class='downVote icon-thumbs-down'></i></a>" +
+            "</div>" +
+           "</td>",
+        rankingRow = "" +
+          "<td class='ranking tdDivider'>" + 
+            "<input type='text' value='<%=obj.summary.avgScore%>' class='pull-left idial span1'>" +  //
+            "<span class='pull-left sdial'><%=obj.summary.avgScore%></span>" + 
+          "</td>" + 
+          "<td class='head'>" + 
+            "<h3><%=obj.name%></h3>" + 
+            "<div style='max-height: 75px;' class='hashTag bottom'>" +
+              "<i class='tagBullet icon-ellipsis-vertical'></i>" + 
+              "<ul class='tagit tagitRow' id='hashtags-<%=obj.domId%>'>" +
+              "<%=obj.hashTags%>" +
+              "</ul>" + 
+            "</div>" + 
+          "</td>" + 
+          "<td class='body tdDivider'>" + 
+            "<div class='rowDescription'><%=obj.description%></div>" +
+          "</td>" + 
+          "<td class='stat'>" + 
+            "<ul class='statList'>" + 
+              "<li><i class='icon-check'></i> <%=obj.summary.totalVote%> Votes</li>" + 
+              "<li><i class='icon-tags'></i> <%=obj.summary.totalAttribute%> Attributes</li>" + 
+              "<li><i class='icon-file'></i> <%=obj.summary.totalAttribute%> Files</li>" + 
+            "</ul>"+
+          "</td>",
+        titleRow = "" + 
+          "<th style='text-align: center;' colspan='4'><%=title%></th>",
+        genericTable = "<trbody>"  +
+          "</trbody>";
 
   return {
     attributeTemplate: attributeTemplate,
@@ -142,7 +185,10 @@ var Template = (function() {
     entityTemplate: entityTemplate,
     summaryCardTemplate: summaryCardTemplate,
     summaryTemplate: summaryTemplate,
-    sponsoredTemplate: sponsoredTemplate
-
+    sponsoredTemplate: sponsoredTemplate,
+    tableTemplate: genericTable,
+    attributeRowTemplate: attributeRow,
+    rankingRowTemplate: rankingRow,
+    titleRowTemplate: titleRow
   };
 }) ();
