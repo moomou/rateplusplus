@@ -1,5 +1,5 @@
 /*
-  Ranking Table
+  Table CSS
 */
 td h3 {
   margin-top: -5px;
@@ -22,7 +22,6 @@ td h3 {
   -moz-transition-timing-function:linear;
   -moz-transition-delay:0s; 
 }
-
 .rankingTable tr:hover {
   border-color: gray;
 }
@@ -30,10 +29,12 @@ td h3 {
 .ranking {
   width: 15%;
 }
+
 .head {
-  width: 25%;
+  text-align: center !important;
   position: relative;
 }
+
 .body {
   width: 40%;
 }
@@ -134,7 +135,7 @@ td h3 {
   visibility:hidden;
 }
 .card-header-right {
-  left: 75%;
+  right: 0.5em;
   visibility:hidden;
 }
 
@@ -325,6 +326,7 @@ td h3 {
 .tagBullet {
  position: absolute;
  margin-top: 0.5em;
+ left: 0;
  }
 
  .tagBullet.cardView {

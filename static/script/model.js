@@ -221,9 +221,9 @@ App.EntityAttributeModel = Backbone.Model.extend({
 });
 
 App.AttributeView = Backbone.View.extend({
-    template: _.template(Template.attributeTemplate),
-    tagName: 'div',
-    className: 'page-curl editHighlight outer',
+    template: _.template(Template.attributeRowTemplate),
+    tagName: 'tr',
+    className: 'row',
     events: {
         'click .menu': 'menuHandler',
         'click .tone': 'toneChange',
@@ -718,9 +718,7 @@ App.SummaryCardView = Backbone.View.extend({
     },
     renderDetail: function(editing) {
         console.log("renderDetail");
-        this.$('.attrContainer').hide();
         this.attributeCollectionView.render(this.$('.attrContent'));
-        this.addNewAttribute();
     },
     renderGraph: function(editing) {
         console.log("renderDetail");
@@ -1044,18 +1042,6 @@ App.TitleRowView = Backbone.View.extend({
     }
 });
 
-App.AttributeRowView = Backbone.View.extend({
-    template: _.template(Template.attributeRowTemplate),
-    tagName: 'tr',
-    className: 'row',
-    initialize: function() {
-    },
-    render: function() {
-        this.$el.html(this.template(this.model.toJSON()));
-        return this;
-    },
-});
-
 App.RankingRowView = Backbone.View.extend({
     template: _.template(Template.rankingRowTemplate),
     tagName: 'tr',
@@ -1181,7 +1167,7 @@ App.AttributeCollectionView = Backbone.View.extend({
             this.collection = new App.AttributeCollection();
         }
 
-        this.renderMode = this["render" + capFirstLetter(setting.renderMode || 'default')]; 
+        this.renderMode = this.renderTableView; //this["render" + capFirstLetter(setting.renderMode || 'default')]; 
         this.colManager = setting.colManager || App.ColManager;
     },
     render: function(attrContainer) {
@@ -1212,6 +1198,22 @@ App.AttributeCollectionView = Backbone.View.extend({
             var attr = that.renderAttribute(attr);
             this.colManager.addAttribute(attr.el, attr.model.get('tone'));}, this);
     },
+    renderTableView: function() {
+        var that = this,
+            tableView = new App.TableView(),
+            titleRow = new App.TitleRowView();
+             
+        tableView.el.appendChild(titleRow.render("Attribute").el);
+
+        _.each(this.collection.models, function(attr) {
+            var rowView = new App.AttributeView({
+                model: attr
+            });
+            tableView.el.appendChild(rowView.render().el);
+        });
+
+        document.getElementById('dr2').appendChild(tableView.el);
+    },
     //Custom Func
     clean: function(tone) {
         var toRemove = [];
@@ -1239,10 +1241,10 @@ App.TableCardCollectionView = Backbone.View.extend({
         this.pageType = {'type': "search", 'value': this.query};
     },
     render: function() {
-        var that = this;
-        var rowViews = [];
-        var tableView = new App.TableView();
-        var titleRow = new App.TitleRowView();
+        var that = this,
+            rowViews = [],
+            tableView = new App.TableView(),
+            titleRow = new App.TitleRowView();
         
         tableView.el.appendChild(titleRow.render("Ranking: " + this.query).el);
 
@@ -1386,13 +1388,20 @@ App.PageView = Backbone.View.extend({
     },
     renderSummaryCard: function(item, renderMode) {
         console.log("Rendering summaryCard");
+
         var cardView = new App.SummaryCardView({
             model: item,
             renderMode: renderMode,
             colManager: App.ColManager,
         });
 
-        App.ColManager.nextCol('card').append(cardView.render().el);
+
+        if (renderMode == "detail") {
+            document.getElementById('dr1').appendChild(cardView.render().el);
+        }
+        else {
+            App.ColManager.nextCol('card').append(cardView.render().el);
+        }
     },
 });
 

@@ -137,13 +137,13 @@ var Template = (function() {
             "</div>" + 
           "</div>",
         attributeRow = "" + 
-          "<td class='ranking tdDivider'>" + 
+          "<td style='width:15%;' class='tdDivider text-h-center text-v-center'>" + 
             "<i style='font-size: 3em;' data-toggle='tooltip' title='<%=tone%>' class='icon-heart <%=TONE_ICON%>'></i></div>" + 
           "</td>" + 
           "<td class='head'>" + 
             "<h3><%=obj.name%></h3>" + 
             "<span style='position: absolute; top: 5px; right: 5px;'>" +
-              "<i class="icon-link"><a href='<%=obj.srcLink%> Source</a></i></span>" + 
+              "<i class='icon-link'><a href='<%=obj.srcLink%>'> Source</a></i></span>" + 
             "<div class='voteBtns'>" +
               "<a href='' class='btn voteBtn upVote btn-success'>Yes <i class='upVote icon-thumbs-up'></i></a>" +
               "<a href='' class='btn voteBtn downVote btn-danger'>No <i class='downVote icon-thumbs-down'></i></a>" +
@@ -154,7 +154,7 @@ var Template = (function() {
             "<input type='text' value='<%=obj.summary.avgScore%>' class='pull-left idial span1'>" +  //
             "<span class='pull-left sdial'><%=obj.summary.avgScore%></span>" + 
           "</td>" + 
-          "<td class='head'>" + 
+          "<td class='head' style='width:25%;'>" + 
             "<h3><%=obj.name%></h3>" + 
             "<div style='max-height: 75px;' class='hashTag bottom'>" +
               "<i class='tagBullet icon-ellipsis-vertical'></i>" + 
@@ -174,7 +174,14 @@ var Template = (function() {
             "</ul>"+
           "</td>",
         titleRow = "" + 
-          "<th style='text-align: center;' colspan='4'><%=title%></th>",
+          "<th style='font-size:20px;' colspan='4'>" + 
+            "<%=title%>" + 
+            "<div class='pull-right cursor-pointer'>" +
+              "<div>" +
+                "<i title='Add New' class='icon-plus-sign-alt'> </i>" +
+                "<i title='Show Stats' class='icon-bar-chart'> </i>" +
+              "</div>" +
+          "</th>",
         genericTable = "<trbody>"  +
           "</trbody>";
 

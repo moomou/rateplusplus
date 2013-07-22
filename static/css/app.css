@@ -135,21 +135,29 @@ ul {
   list-style-type: none;
 }
 .noSelect {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
+
 .center {
-    display: block;
-    margin: 0 auto;
+  display: block;
+  margin: 0 auto;
 }
+.text-h-center {
+  text-align: center !important;
+}
+.text-v-center {
+  vertical-align: middle !important;
+}
+
 .break {
-    visibility: hidden;
-    clear: both;
-    height: 3em;
+  visibility: hidden;
+  clear: both;
+  height: 3em;
 }
 .break-mini {
   height: 1em;
@@ -157,31 +165,30 @@ ul {
 .break-large {
   height: 5em;
 }
-
 .tabpane {
   margin:0 1em 0.5em 1em;
 }
 
 .toolbar {
-    position: fixed;
-    top: 50%;
-    left: 95%;
-    height: 10em;
-    border: 2px dashed gray;
-    background: whitesmoke;
-    padding: 1em;
+  position: fixed;
+  top: 50%;
+  left: 95%;
+  height: 10em;
+  border: 2px dashed gray;
+  background: whitesmoke;
+  padding: 1em;
 
-    -webkit-transition: left;
-    -webkit-transition-duration:0.2s;
-    -webkit-transition-timing-function:linear;
-    -webkit-transition-delay:0s; 
-    -moz-transition: left;
-    -moz-transition-duration:0.2s;
-    -moz-transition-timing-function:linear;
-    -moz-transition-delay:0s; 
+  -webkit-transition: left;
+  -webkit-transition-duration:0.2s;
+  -webkit-transition-timing-function:linear;
+  -webkit-transition-delay:0s; 
+  -moz-transition: left;
+  -moz-transition-duration:0.2s;
+  -moz-transition-timing-function:linear;
+  -moz-transition-delay:0s; 
 }
 .toolbar:hover {
-    left: 92%;
+  left: 92%;
 }
 
 .footer, .footer a {
@@ -197,14 +204,14 @@ ul {
 }
 
 .comment {
-    -webkit-transition: color;
-    -webkit-transition-duration:0.2s;
-    -webkit-transition-timing-function:linear;
-    -webkit-transition-delay:0s; 
-    -moz-transition: color;
-    -moz-transition-duration:0.2s;
-    -moz-transition-timing-function:linear;
-    -moz-transition-delay:0s; 
+  -webkit-transition: color;
+  -webkit-transition-duration:0.2s;
+  -webkit-transition-timing-function:linear;
+  -webkit-transition-delay:0s; 
+  -moz-transition: color;
+  -moz-transition-duration:0.2s;
+  -moz-transition-timing-function:linear;
+  -moz-transition-delay:0s; 
   }
 
   .comment:hover {
