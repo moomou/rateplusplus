@@ -222,16 +222,17 @@ App.EntityAttributeModel = Backbone.Model.extend({
 
 App.AttributeView = Backbone.View.extend({
     template: _.template(Template.attributeRowTemplate),
+    editTemplate: _.template(Template.attributeRowEditTemplate),
     tagName: 'tr',
     className: 'row',
     events: {
-        'click .menu': 'menuHandler',
         'click .tone': 'toneChange',
         'click .voteBtn': 'attrVote',
-        'click .attrName': 'editName',
+        'focusout .attrName': 'editName',
+        'focusout .srcURL': 'editSrcURL',
         'click .tone': 'toneChange',
-        'click .attrSaveBtn': 'saveAttr',
-        'click .attrCloseBtn': 'removeAttr',
+        'click .saveBtn': 'saveAttr',
+        'click .closeBtn': 'removeAttr',
     },
     initialize: function(inactive) {
         var that = this;
@@ -242,13 +243,13 @@ App.AttributeView = Backbone.View.extend({
     render: function() {
         console.log('AttributeView Render');
 
-        this.$el.html(this.template(this.model.toJSON()));
-
-        if (!this.model.isNew()) {
-            this.$el.removeClass('editHighlight focusOnHover');
-            this.$el.find('.close').hide();//hide save and del btn
+        if (this.model.isNew()) {
+            this.$el.addClass('editHighlight focusOnHover');
+            this.$el.html(this.editTemplate(this.model.toJSON()));
         }
         else {
+            this.$el.removeClass('editHighlight focusOnHover');
+            this.$el.html(this.template(this.model.toJSON()));
             this.$el.find('.menu').hide(); //hide report btn
         }
 
@@ -260,14 +261,8 @@ App.AttributeView = Backbone.View.extend({
         return this;
     },
      //Event Handler
-    menuHandler: function(e) {
-    },
     toneChange: function(e) {
-        if (!this.model.get('editable')) {
-            return;
-        }
-
-        var $i = this.$('.tone').find('i');
+        var $i = this.$('.tone');
 
         if ($i.hasClass('black-heart')) {
             $i.removeClass('black-heart');
@@ -279,9 +274,6 @@ App.AttributeView = Backbone.View.extend({
             $i.addClass('black-heart');
             this.model.set('tone', App.NEGATIVE);
         }
-
-        this.model.set('editable', true);
-        this.render();
     },
     attrVote: function(e) {
         e.preventDefault();
@@ -296,18 +288,12 @@ App.AttributeView = Backbone.View.extend({
     },
     editName: function(e) {
         console.log('editName called');
-        if (this.model.get('editable')) {
-            var domRef = this.$('.attrName');
-            var that = this;
-
-            domRef.attr('contenteditable', true);
-            domRef.focus();
-
-            domRef.focusout(function() {
-                that.model.set('name', domRef.text());
-                console.log(domRef.text());
-            });
-        }
+        var domRef = this.$('.attrName');
+        this.model.set('name', domRef.text());
+        console.log(this.model.get('name'));
+    },
+    editSrcURL: function(e) {
+        this.model.set('srcURL', this.$(".srcURL").val());
     },
     saveAttr: function(e) {
         this.model.save();
@@ -595,7 +581,6 @@ App.SummaryCardView = Backbone.View.extend({
 	template: _.template(Template.summaryCardTemplate, null, {variable: 'obj'}),
     summaryTemplate: _.template(Template.summaryTemplate, null, {variable: 'obj'}),
 	events: {
-        'click .addAttrBtn': 'addNewAttribute',
         'click .card-header-left': 'leftCardHeaderBtnHandler',
         'click .card-header-right': 'rightCardHeaderBtnHandler',
         'click .card-title': 'updateCardTitle', 
@@ -621,11 +606,13 @@ App.SummaryCardView = Backbone.View.extend({
 
         this.entityView = new App.EntityView({model: this.model.get('entityModel')});
         this.attributeCollectionView = new App.AttributeCollectionView({
+            entityId: this.entityView.model.get('id'),
             collection: this.model.get('attributeCollection'),
             renderMode: setting.renderMode,
             colManager: setting.colManager});
                 
         this.side = setting.side;
+
         this.listenTo(this.model.get('attributeCollection'), 'change', this.attrChange);
     },
 	render: function(editing, renderMode) {
@@ -644,7 +631,7 @@ App.SummaryCardView = Backbone.View.extend({
 
         this.$el.html(this.template(entityModel));
         this.$('.profileContent').empty().append(this.entityView.render().el);
-        this.attributeCollectionView.clean(); //remove extra 
+        //this.attributeCollectionView.clean(); //remove extra 
 
         var that = this,
             hashTagsUL = this.$('#hashtags-'+domId),
@@ -712,7 +699,6 @@ App.SummaryCardView = Backbone.View.extend({
     },
     renderSearch: function(editing) {
         console.log("renderSearch");
-
         this.attributeCollectionView.render(this.$('.attrContent'));
         this.renderChevrons();
     },
@@ -941,7 +927,7 @@ App.SummaryCardView = Backbone.View.extend({
     attrChange: function(e) {
         console.log('AttrChange Called');
 
-        this.attributeCollectionView.clean(e.get('tone'));
+        //this.attributeCollectionView.clean(e.get('tone'));
 
         var attrs = _.invoke(_.filter(
             this.attributeCollectionView.collection.models,
@@ -993,24 +979,6 @@ App.SummaryCardView = Backbone.View.extend({
         this.$('.sdial').attr('style', this.$('.idial').attr('style'));
         this.$('.idial').hide();
     },
-    getNewAttrModel: function(tone) {
-        tone = tone ? tone : App.POSITIVE; //default to pos
-        var entityId = this.entityView.model.get('id');
-
-        if (!entityId) {
-            console.log('need to save entity before adding attribute');
-            return;
-        }
-
-        var attrModel = new App.EntityAttributeModel({
-            entity:entityId, 
-            editable:true, 
-            tone:tone}); 
-
-        this.attributeCollectionView.collection.add(attrModel);
-
-        return attrModel;
-    },
     toggleVisibility: function(e, selector) {
         var eventType = e.type;
 
@@ -1042,7 +1010,7 @@ App.TitleRowView = Backbone.View.extend({
     }
 });
 
-App.RankingRowView = Backbone.View.extend({
+App.RankingRowView = App.SummaryCardView.extend({
     template: _.template(Template.rankingRowTemplate),
     tagName: 'tr',
     className: 'row',
@@ -1075,11 +1043,16 @@ App.TableView = Backbone.View.extend({
     template: _.template(Template.tableTemplate),
     tagName: 'table',
     className: 'rankingTable table',
-    initialize: function() {
+    events: {
+        'click .addNew': 'addNew'
     },
     render: function() {
         this.$el.html(this.template({}));
         return this;
+    },
+    // Event handler
+    addNew: function() {
+        console.log('Not implemented');
     }
 });
 
@@ -1156,7 +1129,7 @@ App.CommentCollection = Backbone.Collection.extend({
 App.GenericCardView = Backbone.View.extend({
 });
 
-App.AttributeCollectionView = Backbone.View.extend({
+App.AttributeCollectionView = App.TableView.extend({
     initialize: function(setting) {
         console.log('Attr Collection View');
 
@@ -1167,9 +1140,11 @@ App.AttributeCollectionView = Backbone.View.extend({
             this.collection = new App.AttributeCollection();
         }
 
+        this.entityId = setting.entityId
         this.renderMode = this.renderTableView; //this["render" + capFirstLetter(setting.renderMode || 'default')]; 
         this.colManager = setting.colManager || App.ColManager;
     },
+    // render functions
     render: function(attrContainer) {
         this.attrContainer = attrContainer;
         this.renderMode();
@@ -1191,41 +1166,50 @@ App.AttributeCollectionView = Backbone.View.extend({
     },
     renderDetail: function() {
         var that = this;
-
         this.colManager.resetCol('card',[1,2]);
-
         _.each(this.collection.models, function(attr) {
             var attr = that.renderAttribute(attr);
             this.colManager.addAttribute(attr.el, attr.model.get('tone'));}, this);
     },
     renderTableView: function() {
-        var that = this,
-            tableView = new App.TableView(),
-            titleRow = new App.TitleRowView();
+        // create table
+        this.$el.html(this.template({}));
              
-        tableView.el.appendChild(titleRow.render("Attribute").el);
+        // add title
+        this.el.appendChild(
+            new App.TitleRowView().render("Attribute").el);
 
+        // add each attribute
+        var that = this;
         _.each(this.collection.models, function(attr) {
-            var rowView = new App.AttributeView({
-                model: attr
-            });
-            tableView.el.appendChild(rowView.render().el);
+            that.el.appendChild(that.renderAttribute(attr));
         });
 
-        document.getElementById('dr2').appendChild(tableView.el);
+        // TODO change
+        document.getElementById('dr2').appendChild(this.el);
     },
-    //Custom Func
-    clean: function(tone) {
-        var toRemove = [];
-        _.each(this.collection.models, function(model) {
-            if (model.isNew()) {
-                if (tone === undefined || tone === model.get('tone')) {
-                    toRemove.push(model);
-                }
-            }
-        }, this);
+    renderAttribute: function(newAttr) {
+        var rowView = new App.AttributeView({
+            model: newAttr
+        });
+        return rowView.render().el;
+    },
+    // event handler 
+    addNew: function(e) {
+        var newAttr = this.getNewAttrModel();
+        this.$el.find('th').parent().after(this.renderAttribute(newAttr));
+    },
+    // Custom Func
+    getNewAttrModel: function(tone) {
+        tone = tone ? tone : App.POSITIVE; //default to pos
+        var entityId = this.entityId,
+            attrModel = new App.EntityAttributeModel({
+                entity:entityId, 
+                editable:true, 
+                tone:tone}); 
 
-        this.collection.remove(toRemove);
+        this.collection.add(attrModel);
+        return attrModel;
     },
 });
 
@@ -1246,7 +1230,7 @@ App.TableCardCollectionView = Backbone.View.extend({
             tableView = new App.TableView(),
             titleRow = new App.TitleRowView();
         
-        tableView.el.appendChild(titleRow.render("Ranking: " + this.query).el);
+        tableView.el.appendChild(titleRow.render("Ranking - " + this.query).el);
 
         _.each(this.collection.models, function(row) {
             rowViews.push(that.renderRow(row, tableView));

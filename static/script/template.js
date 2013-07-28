@@ -136,6 +136,19 @@ var Template = (function() {
               "</div>" + 
             "</div>" + 
           "</div>",
+        attributeRowEdit = "" + 
+          "<td style='width:15%;' class='tdDivider text-h-center text-v-center'>" + 
+            "<div data-toggle='tooltip' title='Save' class='close saveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
+            "<i style='font-size: 3em;' data-toggle='tooltip' title='<%=tone%>' class='cursor-pointer tone icon-heart <%=TONE_ICON%>'></i></div>" + 
+          "</td>" + 
+          "<td class='head'>" + 
+            "<div data-toggle='tooltip' title='Close' class='close closeBtn'><i class='icon-remove-sign icon-large'></i></div>" +
+            "<h3 class='attrName' contenteditable='true' ><%=obj.name%></h3>" + 
+            "<div class='input-prepend'>" +
+              "<span class='add-on'><i class='icon-link'> Source</i></span>" + 
+              "<input class='srcURL' type='text' placeholder='http://'>" +
+            "</div>" +
+          "</td>",
         attributeRow = "" + 
           "<td style='width:15%;' class='tdDivider text-h-center text-v-center'>" + 
             "<i style='font-size: 3em;' data-toggle='tooltip' title='<%=tone%>' class='icon-heart <%=TONE_ICON%>'></i></div>" + 
@@ -143,7 +156,7 @@ var Template = (function() {
           "<td class='head'>" + 
             "<h3><%=obj.name%></h3>" + 
             "<span style='position: absolute; top: 5px; right: 5px;'>" +
-              "<i class='icon-link'><a href='<%=obj.srcLink%>'> Source</a></i></span>" + 
+              "<i class='icon-link'><a href='<%=obj.srcURL%>'> Source</a></i></span>" + 
             "<div class='voteBtns'>" +
               "<a href='' class='btn voteBtn upVote btn-success'>Yes <i class='upVote icon-thumbs-up'></i></a>" +
               "<a href='' class='btn voteBtn downVote btn-danger'>No <i class='downVote icon-thumbs-down'></i></a>" +
@@ -178,12 +191,11 @@ var Template = (function() {
             "<%=title%>" + 
             "<div class='pull-right cursor-pointer'>" +
               "<div>" +
-                "<i title='Add New' class='icon-plus-sign-alt'> </i>" +
+                "<i title='Add New' class='addNew icon-plus-sign-alt'> </i>" +
                 "<i title='Show Stats' class='icon-bar-chart'> </i>" +
               "</div>" +
           "</th>",
-        genericTable = "<trbody>"  +
-          "</trbody>";
+        genericTable = "";
 
   return {
     attributeTemplate: attributeTemplate,
@@ -195,6 +207,7 @@ var Template = (function() {
     sponsoredTemplate: sponsoredTemplate,
     tableTemplate: genericTable,
     attributeRowTemplate: attributeRow,
+    attributeRowEditTemplate: attributeRowEdit,
     rankingRowTemplate: rankingRow,
     titleRowTemplate: titleRow
   };

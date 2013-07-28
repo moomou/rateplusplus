@@ -10,6 +10,7 @@ td h3 {
 
 .rankingTable td {
   padding-left: 1em;
+  position: relative;
 }
 .rankingTable tr {
   -webkit-transition: border-color;
@@ -57,15 +58,6 @@ td h3 {
 
 .vote > li {
   float: right;
-}
-
-.attrName {
-  margin: -5px;
-  font-size: 17px;
-}
-.attrName:focus {
-  border: 1px dashed pink;
-  outline: none;
 }
 
 .outer {
