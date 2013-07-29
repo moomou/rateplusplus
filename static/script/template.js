@@ -167,14 +167,14 @@ var Template = (function() {
             "<input type='text' value='<%=obj.summary.avgScore%>' class='pull-left idial span1'>" +  //
             "<span class='pull-left sdial'><%=obj.summary.avgScore%></span>" + 
           "</td>" + 
-          "<td class='head' style='width:25%;'>" + 
-            "<h3><%=obj.name%></h3>" + 
-            "<div style='max-height: 75px;' class='hashTag bottom'>" +
+          "<td class='head' style='width:25%;background: url(<%=obj.imgURL ? obj.imgURL : '/static/img/blank.png'%>)'>" + 
+            "<h4><%=obj.name%></h4>" + 
+            /*"<div style='max-height: 75px;' class='hashTag bottom'>" +
               "<i class='tagBullet icon-ellipsis-vertical'></i>" + 
               "<ul class='tagit tagitRow' id='hashtags-<%=obj.domId%>'>" +
               "<%=obj.hashTags%>" +
               "</ul>" + 
-            "</div>" + 
+            "</div>" + */
           "</td>" + 
           "<td class='body tdDivider'>" + 
             "<div class='rowDescription'><%=obj.description%></div>" +
