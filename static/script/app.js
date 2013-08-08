@@ -15,7 +15,7 @@ $(function() {
             $.sidr('toogle', 'sidr');
         });
     }
-    
+
     $('#sortBtn').click(function(e) {
         var sortBy = e.target.getAttribute('data-sortBy');
         if (sortBy) {

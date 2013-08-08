@@ -215,6 +215,7 @@ var Template = (function() {
     attributeRowTemplate: attributeRow,
     attributeRowEditTemplate: attributeRowEdit,
     rankingRowTemplate: rankingRow,
-    titleRowTemplate: titleRow
+    titleRowTemplate: titleRow,
+    saveCancelBtnTemplate: saveCancelBtn
   };
 }) ();
