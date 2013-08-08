@@ -613,8 +613,8 @@ App.SummaryCardView = Backbone.View.extend({
             renderMode: setting.renderMode,
             colManager: setting.colManager});
 
+        this.preSaveAttr = [];
         this.side = setting.side;
-
         this.listenTo(this.model.get('attributeCollection'), 'change', this.attrChange);
     },
     renderSaveCancelBtns: function() {
@@ -829,8 +829,10 @@ App.SummaryCardView = Backbone.View.extend({
                 console.log(this.model.get('id'));
                 var attrView = new App.AttributeView({model:this.getNewAttrModel()});
                 attrView.$el.addClass('focusOnHover');
-
                 App.ColManager.addAttribute(attrView.render().el, App.POSITIVE); //pos
+
+                // save for easy access later
+                this.preSaveAttr.push(attrView);
             }
             if (!modifiedAttrTone || modifiedAttrTone == App.NEGATIVE) {
                 var attrView = new App.AttributeView({model:this.getNewAttrModel(App.NEGATIVE)});
@@ -1000,6 +1002,11 @@ App.SummaryCardView = Backbone.View.extend({
         else if (eventType === "mouseout") {
             $btn.css('visibility', 'hidden');
         }
+    },
+    saveAllAttributes: function() {
+        _.each(this.preSaveAttr, function(attrView) {
+            attrView.saveAttr();
+        });
     },
 });
 
@@ -1740,7 +1747,7 @@ App.AppRouter = Backbone.Router.extend({
             saveCancelBtn = _.template(Template.saveCancelBtnTemplate);
 
         $('#dr1').append(saveCancelBtn({
-            'id': 'saveAndNext',
+            'id': 'saveCancelContainer',
             'saveId': 'saveAndNext',
             'cancelId': 'cancelAndNext'
         }));
@@ -1749,16 +1756,27 @@ App.AppRouter = Backbone.Router.extend({
         $("#saveAndNext").click(function(e) {
             switch (stateVar) {
                 case 0:
+                    stateVar = -1; // hacky way to disabel btn
                     cardRef.saveCreation();
-                    $('#dr2').show();
-                    // get ref and call save
-                    // animate in step 2
-                    // set state var to 1
+                    cardRef.addNewAttribute();
+
+                    $('#dr2').removeClass('hidden');
+
+                    $('#saveCancelContainer').detach();
+                    $('#dr2').append($('#saveCancelContainer'));
+
+                    stateVar = 1;
                     break;
                 case 1:
-                    // get ref and call save
-                    // animate in step 2
-                    // set state var to 1
+                    stateVar = -1;
+
+                    cardRef.saveAllAttributes();
+                    $('#dr3').removeClass('hidden');
+
+                    $('#saveCancelContainer').detach();
+                    $('#dr3').append($('#saveCancelContainer'));
+
+                    stateVar = 2;
                     break;
                 case 2:
                     // get ref and finalize
