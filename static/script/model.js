@@ -777,7 +777,7 @@ App.SummaryCardView = Backbone.View.extend({
         var $target = $(e.target);
         console.log($target);
     },
-    saveCreation: function(e) {
+    saveCreation: function(e, cb) {
         var that = this;
 
         this.$('.card-status').html('<i class="icon-spinner icon-spin icon-2x pull-left"></i>');
@@ -788,11 +788,15 @@ App.SummaryCardView = Backbone.View.extend({
             success: function(model, response) {
                 //update summary
                 $.extend(that.model.attributes, response);
+
                 that.model.trigger('entityModelUpdated');
+                that.model.attributeCollectionView.entityId = model.get('id');
 
                 //UI update
                 that.model.set('editable', false);
                 that.render();
+
+                cb();
             },
         });
     },
@@ -1759,15 +1763,17 @@ App.AppRouter = Backbone.Router.extend({
             switch (stateVar) {
                 case 0:
                     stateVar = -1; // hacky way to disabel btn
-                    cardRef.saveCreation();
-                    cardRef.addNewAttribute();
 
-                    $('#dr2').removeClass('hidden');
+                    cardRef.saveCreation(null, function() {
+                        cardRef.addNewAttribute();
 
-                    var dom = $('#saveCancelContainer').detach();
-                    $('#dr2').append(dom);
+                        $('#dr2').removeClass('hidden');
 
-                    stateVar = 1;
+                        var dom = $('#saveCancelContainer').detach();
+                        $('#dr2').append(dom);
+
+                        stateVar = 1;
+                    });
                     break;
                 case 1:
                     stateVar = -1;
