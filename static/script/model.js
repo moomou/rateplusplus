@@ -1739,7 +1739,7 @@ App.AppRouter = Backbone.Router.extend({
             cardRef  = App.createNewCard(),
             saveCancelBtn = _.template(Template.saveCancelBtnTemplate);
 
-        $('#dr1').appendChild(saveCancelBtn({
+        $('#dr1').append(saveCancelBtn({
             'id': 'saveAndNext',
             'saveId': 'saveAndNext',
             'cancelId': 'cancelAndNext'
