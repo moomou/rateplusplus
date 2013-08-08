@@ -8,7 +8,7 @@ var Template = (function() {
           "<li> <i class='icon-tags '></i> <%=obj.summary.totalAttribute%> Attributes</li>" + 
         "</ul>",
         saveCancelBtn = "" + 
-        "<div id='<%=id%>-interac'>"+
+        "<div id='<%=id%>'>"+
           "<button id='<%=saveId%>' type='button' class='btn btn-success' style='position: relative; width: 100%;'> Save</button>" +
           "<button id='<%=cancelId%>' type='button' class='btn btn-danger' style='position: relative; width: 100%;'> Cancel</button>" +
          "</div>",
