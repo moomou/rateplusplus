@@ -827,7 +827,8 @@ App.SummaryCardView = Backbone.View.extend({
             //add extra attr to each col
             if (!modifiedAttrTone || modifiedAttrTone == App.POSITIVE) {
                 console.log(this.model.get('id'));
-                var attrView = new App.AttributeView({model:this.getNewAttrModel()});
+                var attrView = new App.AttributeView({
+                    model:this.attributeCollectionView.getNewAttrModel()});
                 attrView.$el.addClass('focusOnHover');
                 App.ColManager.addAttribute(attrView.render().el, App.POSITIVE); //pos
 
@@ -835,7 +836,8 @@ App.SummaryCardView = Backbone.View.extend({
                 this.preSaveAttr.push(attrView);
             }
             if (!modifiedAttrTone || modifiedAttrTone == App.NEGATIVE) {
-                var attrView = new App.AttributeView({model:this.getNewAttrModel(App.NEGATIVE)});
+                var attrView = new App.AttributeView({
+                    model:this.AttributeCollectionView.getNewAttrModel(App.NEGATIVE)});
                 attrView.$el.addClass('focusOnHover');
                 App.ColManager.addAttribute(attrView.render().el, App.NEGATIVE); //neg
             }
