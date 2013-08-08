@@ -488,6 +488,7 @@ App.SummaryCardModel = Backbone.Model.extend({
 	},
     parse: function(response) {
         console.log("SummaryCardModel Parse");
+        debugger;
         var tags = this.getTags(response['tags']); 
 
         response['hashTags'] = tags['hashTags'];
@@ -580,6 +581,7 @@ App.SummaryCardView = Backbone.View.extend({
     className: 'card cardSize', 
 	template: _.template(Template.summaryCardTemplate, null, {variable: 'obj'}),
     summaryTemplate: _.template(Template.summaryTemplate, null, {variable: 'obj'}),
+    saveCancelTemplate: _.template(Template.summaryTemplate, null, {variable: 'obj'}),
 	events: {
         'click .card-header-left': 'leftCardHeaderBtnHandler',
         'click .card-header-right': 'rightCardHeaderBtnHandler',
@@ -614,6 +616,9 @@ App.SummaryCardView = Backbone.View.extend({
         this.side = setting.side;
 
         this.listenTo(this.model.get('attributeCollection'), 'change', this.attrChange);
+    },
+    renderSaveCancelBtns: function() {
+
     },
 	render: function(editing, renderMode) {
         /*
@@ -763,7 +768,7 @@ App.SummaryCardView = Backbone.View.extend({
                 $(document).trigger('graphLinkSet');
             }
         }
-        else {
+        else { // editing
             this.model.set('editable',true);
             this.render(true);
         }
@@ -1021,7 +1026,7 @@ App.RankingRowView = App.SummaryCardView.extend({
         return this;
     },
     renderKonb: function() {
-        var knobColor = hslInterpolation(75); //this.model.get('summary').avgScore); 
+        var knobColor = hslInterpolation(this.model.get('summary').avgScore); 
 
         this.$('.idial').knob({
             'fgColor': knobColor,
@@ -1141,7 +1146,7 @@ App.AttributeCollectionView = App.TableView.extend({
         }
 
         this.entityId = setting.entityId
-        this.renderMode = this.renderTableView; //this["render" + capFirstLetter(setting.renderMode || 'default')]; 
+        this.renderMode = this["render" + capFirstLetter(setting.renderMode || 'default')]; 
         this.colManager = setting.colManager || App.ColManager;
     },
     // render functions
@@ -1165,13 +1170,6 @@ App.AttributeCollectionView = App.TableView.extend({
     renderGraph: function() {
     },
     renderDetail: function() {
-        var that = this;
-        this.colManager.resetCol('card',[1,2]);
-        _.each(this.collection.models, function(attr) {
-            var attr = that.renderAttribute(attr);
-            this.colManager.addAttribute(attr.el, attr.model.get('tone'));}, this);
-    },
-    renderTableView: function() {
         // create table
         this.$el.html(this.template({}));
              
@@ -1326,7 +1324,8 @@ App.PageView = Backbone.View.extend({
         }
         else if (q.query) {//a search
             this.collection.url += 'search/';
-            this.collection.fetch({data: $.param({q: q.query})});
+            new App.TableCardCollectionView({query: q.query})
+            //this.collection.fetch({data: $.param({q: q.query})});
             this.pageType = {'type': "search", 'value': q.query};
         }
         else {//empty
@@ -1584,7 +1583,6 @@ App.ColManager = (function() {
         addAttribute: addAttr,
     };
 })();
-
 App.ShowTrendyLink = function() {
     $.ajax({
         'url': App.API_VERSION+'tags/',
@@ -1633,19 +1631,46 @@ App.ConfigureTagit = function(option, that, editable) {
     }
 };
 
+App.createNewCard = function() {
+    console.log("Creating new card")
+    var newEntityRow = document.getElementById('dr1');
+
+    // intentionally global to keep events 
+    newCard = new App.SummaryCardView({
+        model: new App.SummaryCardModel({}),
+        renderMode: "detail"}); 
+    newEntityRow.appendChild(newCard.render().el);
+
+    // manually activate edit mode
+    newCard.model.set('editable',true);
+    newCard.render(true);
+
+    return newCard;
+}
+
 /*
     Global Objects
 */
+App.State = (function() {
+    // private
+
+    // public
+    return {
+    };
+})();
+
 App.CommentContainer = $('#commentContainer');
 App.LinkBox = $('#linkBox');
 App.MessageBox = $('.message-box');
 
 App.AppRouter = Backbone.Router.extend({
     routes: {
-        "graph" : "graphEditorInit",
-        "" : "defaultRoute"
+        "graph" : "graphPageInit",
+        "entity/new" : "newEntityPageInit",
+        "entity/:id" : "detailEntityPageInit",
+        "" : "defaultPageInit" //handles query
     },
-    graphEditorInit: function() {
+    graphPageInit: function() {
         var that = this;
 
         this.leftSearch = new App.CardColView({col:0});
@@ -1673,12 +1698,100 @@ App.AppRouter = Backbone.Router.extend({
             var domContainer = App.ColManager.getCol('card').cols[1];
             var graphView = new App.GraphView({domContainer: domContainer});
         });
-
     },
-    defaultRoute: function() {
+    detailEntityPageInit: function(id) {
+        console.log("detail Entity");
+        pageView = new App.PageView({id:parseInt(id)}); //search for particular id
+        //cmtCollectionView = new App.CommentCollectionView({entityId:id});
+
+        $('#submitComment').click(function(e) {
+            var cmtForm = $('#commentForm'),
+                content = cmtForm.find('input[name=content]'),
+                btn = $(this);
+
+            if (!content.val()) {
+                return;
+            }
+
+            btn.button('loading');
+
+            var newComment = new App.CommentModel({});
+        
+            newComment.set('content', content.val());
+            newComment.set('private', cmtForm.find('input[name=private]').is(':checked'));
+            newComment.set('entityId', id);
+
+            newComment.save({}, {
+                success: function(response) {
+                    content.val('');
+                    btn.button('reset');
+                    cmtCollectionView.update(response);
+                },
+                error: function(response) {
+                },
+            });
+        });
+    },
+    newEntityPageInit: function() {
+        console.log("New Entity");
+
+        var stateVar = 0,
+            cardRef  = App.createNewCard();
+
+        // step 1
+        $("#saveAndNext").click(function(e) {
+            switch (stateVar) {
+                case 0:
+                    cardRef.save();
+                    // get ref and call save
+                    // animate in step 2
+                    // set state var to 1
+                    break;
+                case 1:
+                    // get ref and call save
+                    // animate in step 2
+                    // set state var to 1
+                    break;
+                case 2:
+                    // get ref and finalize
+                    // finish
+                    break;
+            }
+        });
+
+        // step 2
+        $("#step2Fin").click(function(e) {
+        });
+
+        $("#step2Fin").click(function(e) {
+        });
+    },
+    queryPageInit: function(query) {
+        console.log("QQQQ");
+    },
+    defaultPageInit: function() {
+        console.log("Default Route");
+
+        $('#addNewEntity').click(function(e) {
+            // hide message box
+            $('.message-box').slideUp();
+
+            // intentionally global??
+            newCard = new App.SummaryCardView({model: new App.SummaryCardModel({})}); 
+            App.ColManager.nextCol('card').prepend(newCard.render().$el);
+
+            // manually activate edit mode
+            newCard.model.set('editable',true);
+            newCard.render(true);
+        });
+
+        var query = $('#searchInput').val();
+
+        if (query) {
+            pageView = new App.PageView({query:query});
+        }
     }
 });
 
 var appRouter = new App.AppRouter;
-
 Backbone.history.start({pushState: true});

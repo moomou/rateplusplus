@@ -13,18 +13,6 @@
       <hr>
       {% include "messageBox.partial" %}
 
-      <div id="detailRow" class="row-fluid">
-        <div class="span3" id="dr1"></div>
-        <div class="span6" id="dr2"></div>
-        <div class="span3" id="dr3"></div>
-      </div>
-
-      <div id="rankingRow" class="row-fluid">
-        <div class="span8" id="top1"></div>
-        <div class="span3" id="top2"></div>
-        <div class="span1" id="top3"></div>
-      </div>
-
       <div id="colRow" class="row-fluid">
         <div class="span3" id="col1"></div>
         <div class="span3" id="col2"></div>
@@ -33,7 +21,18 @@
       </div>
 
       {% if specific_entity %}
+        <div id="detailRow" class="row-fluid">
+          <div class="span3" id="dr1"></div>
+          <div class="span6" id="dr2"></div>
+          <div class="span3" id="dr3"></div>
+        </div>
         {% include "comment.partial" %}
+      {% else %}
+        <div id="rankingRow" class="row-fluid">
+          <div class="span8" id="top1"></div>
+          <div class="span3" id="top2"></div>
+          <div class="span1" id="top3"></div>
+        </div>
       {% endif %}
 
       <div id="mediaQuery" class="hidden-desktop" style="position:absolute;left:-1200px;"></div>

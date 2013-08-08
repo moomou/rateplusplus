@@ -2,12 +2,17 @@
 var Template = (function() {
     var summaryTemplate = "" + 
         "<input type='text' value='<%=obj.summary.avgScore%>' class='pull-left idial'>" + 
-        "<span class='pull-left sdial'><%=obj.summary.avgScore%></span>" + 
+        "<span class='pull-left sdial'><%=obj.summary.avgScore%> %</span>" + 
         "<ul class='pull-right'>" + 
           "<li> <i class='icon-check '></i> <%=obj.summary.totalVote%> Votes</li>" + 
           "<li> <i class='icon-tags '></i> <%=obj.summary.totalAttribute%> Attributes</li>" + 
         "</ul>",
-        commentTemplate = "" + 
+        saveCancelBtn = "" + 
+        "<div id='<%=id%>-interac'>"+
+          "<button type='button' class='btn btn-success' style='position: relative; width: 100%;'> Save</button>button>" +
+          "<button type='button' class='btn btn-danger' style='position: relative; width: 100%;'> Cancel</button>button>" +
+         "</div>",
+         commentTemplate = "" + 
         "<div class='comment'>" + 
           "<i class='icon-smile icon-2x btn cmtUpVote hide' style='position:absolute;margin-left: -2em;'></i>" + 
           "<i class='icon-frown icon-2x btn cmtDownVote hide' style='position:absolute;margin-left: 1em;'></i>" +
@@ -52,7 +57,7 @@ var Template = (function() {
         "<p class='description'><%=description%></p>" +
         "<div id='textareaContainer-<%=domId%>' class='hide'>" + 
           "<textarea class='editBox' placeholder='Add Description' data-widearea='enable'></textarea>" + 
-        "</div>", 
+        "</div>",
         summaryCardTemplate = "" +
           "<div class='card-header'>" + 
               "<legend contenteditable='<%=obj.editable%>' class='card-title'><%=obj.name%></legend>" + 
@@ -146,7 +151,7 @@ var Template = (function() {
             "<h3 class='attrName' contenteditable='true' ><%=obj.name%></h3>" + 
             "<div class='input-prepend'>" +
               "<span class='add-on'><i class='icon-link'> Source</i></span>" + 
-              "<input class='srcURL' type='text' placeholder='http://'>" +
+              "<input style='width: 75%;' class='srcURL' type='text' placeholder='http://'>" +
             "</div>" +
           "</td>",
         attributeRow = "" + 
@@ -165,10 +170,11 @@ var Template = (function() {
         rankingRow = "" +
           "<td class='ranking tdDivider'>" + 
             "<input type='text' value='<%=obj.summary.avgScore%>' class='pull-left idial span1'>" +  //
-            "<span class='pull-left sdial'><%=obj.summary.avgScore%></span>" + 
+            "<span class='pull-left sdial'><%=obj.summary.avgScore%> %</span>" + 
           "</td>" + 
           "<td class='head' style='width:25%;background: url(<%=obj.imgURL ? obj.imgURL : '/static/img/blank.png'%>)'>" + 
             "<h4><%=obj.name%></h4>" + 
+            "<a class='brick' href='entity/<%=obj.id%>'></a>" +
             /*"<div style='max-height: 75px;' class='hashTag bottom'>" +
               "<i class='tagBullet icon-ellipsis-vertical'></i>" + 
               "<ul class='tagit tagitRow' id='hashtags-<%=obj.domId%>'>" +
