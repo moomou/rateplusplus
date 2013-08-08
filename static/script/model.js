@@ -837,7 +837,7 @@ App.SummaryCardView = Backbone.View.extend({
             }
             if (!modifiedAttrTone || modifiedAttrTone == App.NEGATIVE) {
                 var attrView = new App.AttributeView({
-                    model:this.AttributeCollectionView.getNewAttrModel(App.NEGATIVE)});
+                    model:this.attributeCollectionView.getNewAttrModel(App.NEGATIVE)});
                 attrView.$el.addClass('focusOnHover');
                 App.ColManager.addAttribute(attrView.render().el, App.NEGATIVE); //neg
             }
