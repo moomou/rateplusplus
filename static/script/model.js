@@ -1741,8 +1741,8 @@ App.AppRouter = Backbone.Router.extend({
 
         $('#dr1').appendChild(saveCancelBtn({
             'id': 'saveAndNext',
-            'save-id': 'saveAndNext',
-            'cancel-id': 'cancelAndNext'
+            'saveId': 'saveAndNext',
+            'cancelId': 'cancelAndNext'
         }));
 
         // step 1

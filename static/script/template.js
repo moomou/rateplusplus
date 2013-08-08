@@ -9,8 +9,8 @@ var Template = (function() {
         "</ul>",
         saveCancelBtn = "" + 
         "<div id='<%=id%>-interac'>"+
-          "<button id='<%=save-id%>' type='button' class='btn btn-success' style='position: relative; width: 100%;'> Save</button>button>" +
-          "<button id='<%=cancel-id%>' type='button' class='btn btn-danger' style='position: relative; width: 100%;'> Cancel</button>button>" +
+          "<button id='<%=saveId%>' type='button' class='btn btn-success' style='position: relative; width: 100%;'> Save</button>" +
+          "<button id='<%=cancelId%>' type='button' class='btn btn-danger' style='position: relative; width: 100%;'> Cancel</button>" +
          "</div>",
          commentTemplate = "" + 
         "<div class='comment'>" + 
