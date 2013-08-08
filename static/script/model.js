@@ -790,7 +790,7 @@ App.SummaryCardView = Backbone.View.extend({
                 $.extend(that.model.attributes, response);
 
                 that.model.trigger('entityModelUpdated');
-                that.model.attributeCollectionView.entityId = model.get('id');
+                that.attributeCollectionView.entityId = model.get('id');
 
                 //UI update
                 that.model.set('editable', false);
