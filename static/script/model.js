@@ -1764,8 +1764,8 @@ App.AppRouter = Backbone.Router.extend({
 
                     $('#dr2').removeClass('hidden');
 
-                    $('#saveCancelContainer').detach();
-                    $('#dr2').append($('#saveCancelContainer'));
+                    var dom = $('#saveCancelContainer').detach();
+                    $('#dr2').append(dom);
 
                     stateVar = 1;
                     break;
@@ -1775,8 +1775,8 @@ App.AppRouter = Backbone.Router.extend({
                     cardRef.saveAllAttributes();
                     $('#dr3').removeClass('hidden');
 
-                    $('#saveCancelContainer').detach();
-                    $('#dr3').append($('#saveCancelContainer'));
+                    var dom = $('#saveCancelContainer').detach();
+                    $('#dr3').append(dom);
 
                     stateVar = 2;
                     break;
