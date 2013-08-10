@@ -844,6 +844,9 @@ App.SummaryCardView = Backbone.View.extend({
                     model:this.attributeCollectionView.getNewAttrModel(App.NEGATIVE)});
                 attrView.$el.addClass('focusOnHover');
                 App.ColManager.addAttribute(attrView.render().el, App.NEGATIVE); //neg
+
+                // save for easy access later
+                this.preSaveAttr.push(attrView);
             }
         }
         else {
