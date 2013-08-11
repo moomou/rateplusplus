@@ -226,23 +226,24 @@ App.AttributeView = Backbone.View.extend({
     tagName: 'tr',
     className: 'row',
     events: {
-        'click .tone': 'toneChange',
+        'click .dropdown-menu': 'changeType',
+        'click .closeBtn': 'removeAttr',
+        'click .saveBtn': 'saveAttr',
         'click .voteBtn': 'attrVote',
+        'click .tone': 'toneChange',
         'focusout .attrName': 'editName',
         'focusout .srcURL': 'editSrcURL',
-        'click .tone': 'toneChange',
-        'click .saveBtn': 'saveAttr',
-        'click .closeBtn': 'removeAttr',
     },
     initialize: function(inactive) {
         var that = this;
+        console.log("AttrView init")
         this.model.on('sync', function(e) {
             that.render();
         });
     },
     render: function() {
         console.log('AttributeView Render');
-
+        console.log('this.model.isNew() == ' + this.model.isNew());
         if (this.model.isNew()) {
             this.$el.addClass('editHighlight focusOnHover');
             this.$el.html(this.editTemplate(this.model.toJSON()));
@@ -261,6 +262,40 @@ App.AttributeView = Backbone.View.extend({
         return this;
     },
      //Event Handler
+    attrVote: function(e) {
+        e.preventDefault();
+        console.log('attrVote called:');
+
+        if ($(e.target).hasClass('upVote')) {
+            this.model.enqueuVote(App.POSITIVE, this);
+        }
+        else {
+            this.model.enqueuVote(App.NEGATIVE, this);
+        }
+    },
+    changeType: function(e) {
+        var attrType = e.target.attributes.data.textContent,
+            iconClass ="<i class='icon-" + attrType + "'></i>";
+        this.model.set('type', attrType);
+        this.$('.typeIcon').html(iconClass);
+    },
+    editName: function(e) {
+        console.log('editName called');
+        var domRef = this.$('.attrName');
+        this.model.set('name', domRef.text());
+        console.log(this.model.get('name'));
+    },
+    editSrcURL: function(e) {
+        this.model.set('srcURL', this.$(".srcURL").val());
+    },
+    removeAttr: function(e) {
+        this.model.destroy();
+        this.remove();
+    },
+    saveAttr: function(e) {
+        console.log("save on AttributeView called");
+        this.model.save();
+    },
     toneChange: function(e) {
         var $i = this.$('.tone');
 
@@ -274,33 +309,6 @@ App.AttributeView = Backbone.View.extend({
             $i.addClass('black-heart');
             this.model.set('tone', App.NEGATIVE);
         }
-    },
-    attrVote: function(e) {
-        e.preventDefault();
-        console.log('attrVote called:');
-
-        if ($(e.target).hasClass('upVote')) {
-            this.model.enqueuVote(App.POSITIVE, this);
-        }
-        else {
-            this.model.enqueuVote(App.NEGATIVE, this);
-        }
-    },
-    editName: function(e) {
-        console.log('editName called');
-        var domRef = this.$('.attrName');
-        this.model.set('name', domRef.text());
-        console.log(this.model.get('name'));
-    },
-    editSrcURL: function(e) {
-        this.model.set('srcURL', this.$(".srcURL").val());
-    },
-    saveAttr: function(e) {
-        this.model.save();
-    },
-    removeAttr: function(e) {
-        this.model.destroy();
-        this.remove();
     },
 });
 
@@ -488,7 +496,6 @@ App.SummaryCardModel = Backbone.Model.extend({
 	},
     parse: function(response) {
         console.log("SummaryCardModel Parse");
-        debugger;
         var tags = this.getTags(response['tags']);
 
         response['hashTags'] = tags['hashTags'];
@@ -823,28 +830,14 @@ App.SummaryCardView = Backbone.View.extend({
         }
     },
     addNewAttribute: function(e, modifiedAttrTone) {
+        console.log("adNewAttribute called")
+
         if (e) { //if activated by UI
             e.preventDefault();
         }
 
         if (this.renderMode === this.renderDetail) {
-            //add extra attr to each col
-            if (!modifiedAttrTone || modifiedAttrTone == App.POSITIVE) {
-                console.log(this.model.get('id'));
-                var attrView = new App.AttributeView({
-                    model:this.attributeCollectionView.getNewAttrModel()});
-                attrView.$el.addClass('focusOnHover');
-                App.ColManager.addAttribute(attrView.render().el, App.POSITIVE); //pos
-
-                // save for easy access later
-                this.preSaveAttr.push(attrView);
-            }
-            if (!modifiedAttrTone || modifiedAttrTone == App.NEGATIVE) {
-                var attrView = new App.AttributeView({
-                    model:this.attributeCollectionView.getNewAttrModel(App.NEGATIVE)});
-                attrView.$el.addClass('focusOnHover');
-                App.ColManager.addAttribute(attrView.render().el, App.NEGATIVE); //neg
-            }
+            this.attributeCollectionView.addNew();
         }
         else {
             var $attrContent = this.$('.attrContent'),
@@ -1010,9 +1003,7 @@ App.SummaryCardView = Backbone.View.extend({
         }
     },
     saveAllAttributes: function() {
-        _.each(this.preSaveAttr, function(attrView) {
-            attrView.saveAttr();
-        });
+        this.attributeCollectionView.saveAll();
     },
 });
 
@@ -1158,6 +1149,7 @@ App.AttributeCollectionView = App.TableView.extend({
             this.collection = new App.AttributeCollection();
         }
 
+        this.preSaveAttrs = [];
         this.entityId = setting.entityId
         this.renderMode = this["render" + capFirstLetter(setting.renderMode || 'default')];
         this.colManager = setting.colManager || App.ColManager;
@@ -1199,18 +1191,20 @@ App.AttributeCollectionView = App.TableView.extend({
         // TODO change
         document.getElementById('dr2').appendChild(this.el);
     },
+    // event handler
+    addNew: function(e) {
+        var newAttr = this.getNewAttrModel();
+        this.$el.find('th').parent().after(this.renderAttribute(newAttr));
+        this.preSaveAttrs.push(newAttr);
+        return newAttr;
+    },
+    // Custom Func
     renderAttribute: function(newAttr) {
         var rowView = new App.AttributeView({
             model: newAttr
         });
         return rowView.render().el;
     },
-    // event handler
-    addNew: function(e) {
-        var newAttr = this.getNewAttrModel();
-        this.$el.find('th').parent().after(this.renderAttribute(newAttr));
-    },
-    // Custom Func
     getNewAttrModel: function(tone) {
         tone = tone ? tone : App.POSITIVE; //default to pos
         var entityId = this.entityId,
@@ -1221,6 +1215,12 @@ App.AttributeCollectionView = App.TableView.extend({
 
         this.collection.add(attrModel);
         return attrModel;
+    },
+    saveAll: function() {
+        _.each(this.preSaveAttrs, function(attr) {
+            attr.save();
+        });
+        this.preSaveAttrs = [];
     },
 });
 
@@ -1643,7 +1643,6 @@ App.ConfigureTagit = function(option, that, editable) {
         },
     }
 };
-
 App.createNewCard = function() {
     console.log("Creating new card")
     var newEntityRow = document.getElementById('dr1');
@@ -1782,22 +1781,15 @@ App.AppRouter = Backbone.Router.extend({
                     $('#dr3').removeClass('hidden');
 
                     var dom = $('#saveCancelContainer').detach();
+                    dom.find('#saveAndNext').html('Finished');
                     $('#dr3').append(dom);
-
+ 
                     stateVar = 2;
                     break;
                 case 2:
-                    // get ref and finalize
-                    // finish
+                    // Refresh page here
                     break;
             }
-        });
-
-        // step 2
-        $("#step2Fin").click(function(e) {
-        });
-
-        $("#step2Fin").click(function(e) {
         });
     },
     queryPageInit: function(query) {

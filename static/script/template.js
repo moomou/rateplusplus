@@ -9,8 +9,7 @@ var Template = (function() {
         "</ul>",
         saveCancelBtn = "" + 
         "<div id='<%=id%>'>"+
-          "<button id='<%=saveId%>' type='button' class='btn btn-success' style='position: relative; width: 100%;'> Save</button>" +
-          "<button id='<%=cancelId%>' type='button' class='btn btn-danger' style='position: relative; width: 100%;'> Cancel</button>" +
+          "<button id='<%=saveId%>' type='button' class='btn btn-success' style='position: relative; width: 100%;'> <i class='icon-arrow-right'></i> Save & Next</button>" +
          "</div>",
          commentTemplate = "" + 
         "<div class='comment'>" + 
@@ -148,6 +147,14 @@ var Template = (function() {
           "</td>" + 
           "<td class='head'>" + 
             "<div data-toggle='tooltip' title='Close' class='close closeBtn'><i class='icon-remove-sign icon-large'></i></div>" +
+            "<div class='dropdown' style='position:absolute;'>" +
+              "<span class='typeIcon'> <i class='icon-group'></i></span> " +
+              "<a style='color: black;' class='dropdown-toggle cursor-pointer' data-toggle='dropdown' data-target='#'> <i class='icon-collapse'></i></a>" +
+              "<ul class='dropdown-menu' role='menu' aria-labelledby='dLabel'>" +
+                "<li><a data='group' href='#'><i data='group' class='icon-group'></i> Vote</a></li>" +
+                "<li><a data='cloud-download' href='#'><i data='cloud-download' class='icon-cloud-download'></i> Auto</a></li>" +
+              "</ul>"+
+            "</div>" +
             "<h3 class='attrName' contenteditable='true' ><%=obj.name%></h3>" + 
             "<div class='input-prepend'>" +
               "<span class='add-on'><i class='icon-link'> Source</i></span>" + 
@@ -162,6 +169,11 @@ var Template = (function() {
             "<h3><%=obj.name%></h3>" + 
             "<span style='position: absolute; top: 5px; right: 5px;'>" +
               "<i class='icon-link'><a href='<%=obj.srcURL%>'> Source</a></i></span>" + 
+            "<span style='position: absolute; top: 5px; left: 10px;'>" +
+              "<% if (obj.type == 'auto') %>" +
+                "<i class='icon-cloud-download'></i></span>" + 
+              "<% else %>" +
+                "<i class='icon-group'></i></span>" + 
             "<div class='voteBtns'>" +
               "<a href='' class='btn voteBtn upVote btn-success'>Yes <i class='upVote icon-thumbs-up'></i></a>" +
               "<a href='' class='btn voteBtn downVote btn-danger'>No <i class='downVote icon-thumbs-down'></i></a>" +
