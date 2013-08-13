@@ -243,7 +243,15 @@ App.AttributeView = Backbone.View.extend({
     },
     render: function() {
         console.log('AttributeView Render');
-        console.log('this.model.isNew() == ' + this.model.isNew());
+        var dummyData = {
+            labels : ["","","","","","",""],
+             datasets : [{
+                fillColor : "rgba(220,220,220,0.5)",
+                strokeColor : "rgba(220,220,220,1)",
+                data : [2,5,7,7.5,9.5,9,10]
+             }]
+        };
+
         if (this.model.isNew()) {
             this.$el.addClass('editHighlight focusOnHover');
             this.$el.html(this.editTemplate(this.model.toJSON()));
@@ -251,17 +259,45 @@ App.AttributeView = Backbone.View.extend({
         else {
             this.$el.removeClass('editHighlight focusOnHover');
             this.$el.html(this.template(this.model.toJSON()));
-            this.$el.find('.menu').hide(); //hide report btn
         }
 
         if (this.model.get('voted')) {
             this.$('.voteBtns').hide();
             this.$('.progress').fadeToggle();
+            this.$('.vizGraph').removeClass('hidden');
+            this.renderActivityGraph(this.$('.vizGraph'), dummyData);
         }
 
         return this;
     },
-     //Event Handler
+    // Custom Function
+    renderActivityGraph: function(canvas, data) {
+        canvas = canvas[0];
+
+        var ctx = canvas.getContext('2d');
+
+        /*
+        canvas.width  = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+        */
+        new Chart(ctx).Bar(data, {
+            scaleOverride: true,
+            scaleSteps: 10,
+            scaleStepWidth: 1,
+            scaleStartValue: 0,
+            scaleLabel: '', 
+            scaleShowGridLines: false, 
+            barShowStroke: true,
+            barStrokeWidth: 0,
+            barValueSpacing: 0, 
+            scaleShowLabels: false, 
+            barShowStroke: false, 
+            scaleShowGridLines: false, 
+            scaleGridLineColor: "white", 
+            scaleLineColor: "white", 
+            scaleLineWidth: 0, barDatasetSpacing: 0});
+    },
+    //Event Handler
     attrVote: function(e) {
         e.preventDefault();
         console.log('attrVote called:');
@@ -803,7 +839,7 @@ App.SummaryCardView = Backbone.View.extend({
                 that.model.set('editable', false);
                 that.render();
 
-                cb();
+                if (cb) cb();
             },
         });
     },

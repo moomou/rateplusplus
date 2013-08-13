@@ -22,15 +22,57 @@
 
       {% if specific_entity %}
         <div id="detailRow" class="row-fluid">
-          <div class="span3" id="dr1"></div>
+          <div class="span4" id="dr1"></div>
           <div class="span6" id="dr2"></div>
-          <div class="span3" id="dr3"></div>
+          <div class="span2" id="dr3"></div>
         </div>
         {% include "comment.partial" %}
       {% else %}
         <div id="rankingRow" class="row-fluid">
-          <div class="span8" id="top1"></div>
-          <div class="span3" id="top2"></div>
+          <div class="span8" id="top1">
+          </div>
+          <div class="span7" id="top2">
+            <div class="addContentContainer">
+              <div class="addContentBox tab-content">
+                <div id="write" class="tab-pane active">
+                  <textarea id="" name="" cols="30" rows="5"></textarea>
+                </div>
+                <div id="pictureframe" class="tab-pane fade">
+                  <div class="dragdrop"></div>
+                </div>
+                <div id="movieTheatre" class="tab-pane fade">
+                  <div class="dragdrop"></div>
+                </div>
+                <div id="linkChain" class="tab-pane fade">
+                  <div class="dragdrop"></div>
+                </div>
+                <div id="fileBucket" class="tab-pane fade">
+                  <div class="dragdrop"></div>
+                </div>
+              </div>
+              <div class="downTriangleBorder"></div>
+              <div class="downTriangle"></div>
+              <ul class="addContentType tab" id="addContent">
+                <li class="contentType cursor-pointer" data-target='#pictureframe'>
+                  <i class="icon-picture icon-2x block"></i>
+                  <span>Picture</span>
+                </li>
+                <li class="contentType cursor-pointer" data-target='#movieTheatre'>
+                  <i class="icon-youtube-play icon-2x block"></i>
+                  <span> Video</span>
+                </li>
+                <li class="contentType cursor-pointer" data-target='#linkChain'>
+                  <i class="icon-link icon-2x block"></i>
+                  <span> Link</span>
+                </li>
+                <li class="contentType cursor-pointer"data-target='fileBucket'>
+                  <i class="icon-file icon-2x block"></i>
+                  <span> File</span>
+                </li>
+              </ul>
+            </div>
+
+          </div>
           <div class="span1" id="top3"></div>
         </div>
       {% endif %}

@@ -170,14 +170,16 @@ var Template = (function() {
             "<span style='position: absolute; top: 5px; right: 5px;'>" +
               "<i class='icon-link'><a href='<%=obj.srcURL%>'> Source</a></i></span>" + 
             "<span style='position: absolute; top: 5px; left: 10px;'>" +
-              "<% if (obj.type == 'auto') %>" +
+              "<% if (obj.type == 'auto') { %>" +
                 "<i class='icon-cloud-download'></i></span>" + 
-              "<% else %>" +
+              "<% } else { %>" +
                 "<i class='icon-group'></i></span>" + 
-            "<div class='voteBtns'>" +
-              "<a href='' class='btn voteBtn upVote btn-success'>Yes <i class='upVote icon-thumbs-up'></i></a>" +
-              "<a href='' class='btn voteBtn downVote btn-danger'>No <i class='downVote icon-thumbs-down'></i></a>" +
-            "</div>" +
+                "<div class='voteBtns'>" +
+                  "<a href='' class='btn voteBtn upVote btn-success'>Yes <i class='upVote icon-thumbs-up'></i></a>" +
+                  "<a href='' class='btn voteBtn downVote btn-danger'>No <i class='downVote icon-thumbs-down'></i></a>" +
+                "</div>" +
+              "<% } %>" +
+            "<canvas height='55' width='412' style='position: absolute; top: 59%; left: 2px; width: 100%; height: 45%;' class='vizGraph hidden'></canvas>" +
            "</td>",
         rankingRow = "" +
           "<td class='ranking tdDivider'>" + 
