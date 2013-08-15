@@ -10,10 +10,9 @@
     {% include "sideMenu.partial" %}
 
     <div class="container-narrow">
-      <hr>
       {% include "messageBox.partial" %}
 
-      <div id="colRow" class="row-fluid">
+      <div id="colRow" class="row-fluid hidden">
         <div class="span3" id="col1"></div>
         <div class="span3" id="col2"></div>
         <div class="span3" id="col3"></div>
@@ -22,14 +21,36 @@
 
       {% if specific_entity %}
         <div id="detailRow" class="row-fluid">
+          <div class="span12">
+            <ul id="myTab" class="nav nav-tabs" style="margin-left: 2em;">
+              <li class=""><span href="#home" style="
+                padding-right: 5.5em;
+                font-size: 24px;
+              "><i class="icon-lock"></i> New Entity</span></li>
+              <li class=""><a href="#home" data-toggle="tab"> Attributes</a></li>
+              <li class=""><a href="#home" data-toggle="tab"> Content</a></li>
+              <li class=""><a href="#profile" data-toggle="tab"> Relation</a></li>
+              <li class=""><a href="#profile" data-toggle="tab"> Stats</a></li>
+              <li class="pull-right">
+                <ul class="entityStats">
+                  <li>
+                    12 <i class="icon-bookmark icon-large"></i>
+                  </li>
+                  <li>
+                    12 <i class="icon-heart icon-large"></i>
+                  </li>
+                </ul>
+              </li> 
+            </ul>
+          </div> 
           <div class="span3" id="dr1"></div>
-          <div class="span5" id="dr2"></div>
-          <div class="span4" id="dr3"></div>
+          <div class="span6" id="dr2"></div>
+          <div class="span3" id="dr3"></div>
         </div>
         {% include "comment.partial" %}
       {% else %}
         <div id="rankingRow" class="row-fluid">
-          <div class="span7" id="top1">
+          <div class="span12" id="top1">
           </div>
           <div class="span5" id="top2">
             <div class="addContentContainer">

@@ -1750,6 +1750,7 @@ App.AppRouter = Backbone.Router.extend({
     detailEntityPageInit: function(id) {
         console.log("detail Entity");
         pageView = new App.PageView({id:parseInt(id)}); //search for particular id
+
         //cmtCollectionView = new App.CommentCollectionView({entityId:id});
 
         $('#submitComment').click(function(e) {

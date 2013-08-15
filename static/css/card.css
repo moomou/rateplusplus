@@ -49,6 +49,7 @@ td h4 {
 
 .ranking {
   width: 15%;
+  text-align: center !important;
 }
 
 .head {
@@ -70,6 +71,7 @@ td h4 {
   margin: 0;
 }
 
+/** Card */
 
 .table {
   display: table;   /* Allow the centering to work */
@@ -349,6 +351,18 @@ td h4 {
 
 .red-heart {
   color: red;
+}
+
+/**
+  Detail
+*/
+.entityStats {
+  margin-top: 0.5em;
+}
+.entityStats li {
+  float: left;
+  margin: 5px 0 0 1em;
+  font-size: 15px;
 }
 
 /**

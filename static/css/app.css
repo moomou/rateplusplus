@@ -1,5 +1,4 @@
 body {
-  padding-top: 20px;
   background: url(http://cloverite.com/static/img/cream_dust_@2X.png); /*From SubtlePatterns.com*/
   -webkit-tap-highlight-color: rgba(0,0,0,0);  
 }
@@ -12,12 +11,21 @@ textarea {
 #searchForm {
   margin: 1em 0 1em 0;
 }
-#searchBtn {
+.searchBar {
   background: rgb(105, 213, 71);
 }
-#searchBtn:hover {
+.searchBar:hover {
   opacity: 0.98;
 }
+.searchBar:focus {
+  width: 275px;
+  transition: width 0.25s;
+  -webkit-transition: width 0.25s;
+  transition-property: width;
+  transition-duration: 0.25s;
+  transition-timing-function: linear;
+}
+
 .attrSearchInput {
   width: 7em;
 }
@@ -68,11 +76,15 @@ textarea {
   margin: 15px 0px 10px 0px;
   padding-right: 3em;
 }
+.head-nav {
+  margin-top: 8px !important;
+  font-size: 17px;
+}
 
 /* Custom container */
 .container-narrow, .container-footer {
   margin: 0 auto;
-  max-width: 1300px;
+  max-width: 1000px;
   padding: 0 2em 0 2em;
   }
   .container-narrow > hr {
