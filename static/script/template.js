@@ -212,7 +212,9 @@ var Template = (function() {
             "<div class='pull-right cursor-pointer'>" +
               "<div>" +
                 "<i title='Add New' class='addNew icon-plus-sign-alt'> </i>" +
-                "<i title='Show Stats' class='icon-bar-chart'> </i>" +
+                //"<i title='Show Stats' class='icon-bar-chart'> </i>" +
+                "<i title='Filter' class='filter icon-filter'> </i>" +
+                "<i title='Rearrange' class='rearrange icon-sort-by-attributes'> </i>" +
               "</div>" +
           "</th>",
         genericTable = "";

@@ -24,9 +24,9 @@
         {% if NAV_ENABLED %}
         <ul class="nav pull-right" style="margin-top:10px;">
           {% if authenticated %}
-          <li><a id="addNewEntity" title="Create New Entry" href="#"><i class="icon-plus"></i></a></li>
-          <li><a id="" href="#" title="Explore Random Topic"><i class="icon-random"></i></a></li>
-          <li class="dropdown">
+          <li><a id="explore" href="#" title="Explore Random Topic"><i class="icon-random"> Explore</i></a></li>
+
+          <!--<li class="dropdown">
             <a id="" href="#" title="Filter Search" class="dropdown-toggle" data-hover="dropdown" role="button"><i class="icon-reorder"></i></a>
             <ul id="sortBtn" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
               <li role="presentation" style="text-align:center;">Sort By</li>
@@ -49,24 +49,17 @@
               <li role="presentation"><a data-filterBy="votesAt25" role="menuitem">Greater than 25 votes</a></li>
             </ul>
           </li>
-          <!--<li><a id="" href="#" title="Formula" ><i class="icon-tasks"></i></a></li>-->
+          <li><a id="" href="#" title="Formula" ><i class="icon-tasks"></i></a></li>-->
 
-          <li class="divider-vertical"></li>
+          <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="icon-user"> ppymou</i></a></li>
+          <li><a id="createNew" title="Create New Entry" href="#"><i class="icon-plus"> New</i></a></li>
+          <li><a href="{% url 'django.contrib.auth.views.logout' %}" role="menuitem"><i class="icon-signout"></i></a></li>
 
-          <li class="dropdown">
-            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="icon-user"></i><b class="caret"></b></a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-              <li role="presentation"><a href="" role="menuitem">Profile</a></li>
-              <li role="presentation"><a href="" role="menuitem">Setting</a></li>
-              <li role="presentation" class="divider"></li>
-              <li role="presentation"><a href="{% url 'django.contrib.auth.views.logout' %}" role="menuitem"><i class="icon-signout"></i> Sign out</a></li>
-            </ul>
-          </li>
           {% else %}
-          <li><a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}"><i class="icon-signin"></i> Sign in</a></li>
-          {% endif %}
 
-          <li class="divider-vertical"></li>
+          <li><a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}"><i class="icon-signin"></i> Sign in</a></li>
+
+          {% endif %}
         </ul>
         {% endif %}
 
