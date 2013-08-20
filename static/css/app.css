@@ -148,9 +148,16 @@ textarea {
   display: block;
 }
 
+.entityTitle {
+  font-size: 24px;
+  float: left;
+  width: 10.5em;
+}
+
 ul {
   list-style-type: none;
 }
+
 .noSelect {
   -webkit-touch-callout: none;
   -webkit-user-select: none;

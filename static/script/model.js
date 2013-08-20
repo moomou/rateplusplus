@@ -661,7 +661,6 @@ App.SummaryCardView = Backbone.View.extend({
         this.listenTo(this.model.get('attributeCollection'), 'change', this.attrChange);
     },
     renderSaveCancelBtns: function() {
-
     },
 	render: function(editing, renderMode) {
         /*
@@ -778,6 +777,7 @@ App.SummaryCardView = Backbone.View.extend({
         });
     },
     changePrivacy: function(e) {
+        /* Privacy settings - to be migrated
         var entityModel = this.entityView.model;
 
         if (!entityModel.isNew()) {
@@ -795,7 +795,7 @@ App.SummaryCardView = Backbone.View.extend({
             this.$('.card-status').find('i')
                 .attr('class', 'icon-lock icon-large')
                 .attr('title', 'Private');
-        }
+        }*/
     },
     rightCardHeaderBtnHandler: function(e) {
         var target = $(e.target);
@@ -824,7 +824,6 @@ App.SummaryCardView = Backbone.View.extend({
         var that = this;
 
         this.$('.card-status').html('<i class="icon-spinner icon-spin icon-2x pull-left"></i>');
-
         this.entityView.editProfile('save'); //save the description
 
         this.entityView.model.save({}, {
@@ -902,7 +901,7 @@ App.SummaryCardView = Backbone.View.extend({
     },
     toggleCardHeaderBtn: function(e) {
         var eventType = e.type,
-            $btn = this.$('.card-header-btn'),
+            $btn = this.$('.card-header-right'),
             state = $btn.css('visibility');
 
         if (eventType === "mouseover" && state === "hidden") {
@@ -1040,6 +1039,10 @@ App.SummaryCardView = Backbone.View.extend({
     },
     saveAllAttributes: function() {
         this.attributeCollectionView.saveAll();
+    },
+    setPublic: function(isPublic) {
+        this.model.set('private', !isPublic);
+        console.log("Private: " + this.model.get('private'));
     },
 });
 
@@ -1799,7 +1802,8 @@ App.AppRouter = Backbone.Router.extend({
             switch (stateVar) {
                 case 0:
                     stateVar = -1; // hacky way to disabel btn
-
+                    
+                    cardRef.setPublic($('#publicCheckBox').is(':checked'));
                     cardRef.saveCreation(null, function() {
                         cardRef.addNewAttribute();
 

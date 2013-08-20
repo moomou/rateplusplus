@@ -72,7 +72,6 @@ td h4 {
 }
 
 /** Card */
-
 .table {
   display: table;   /* Allow the centering to work */
   margin: 0 auto;
@@ -141,7 +140,6 @@ td h4 {
 }
 .card-header-left {
   left: 10px;
-  visibility:hidden;
 }
 .card-header-right {
   right: 0.5em;

@@ -62,9 +62,6 @@ var Template = (function() {
               "<legend contenteditable='<%=obj.editable%>' class='card-title'><%=obj.name%></legend>" + 
             "<div class='card-header-btn card-header-left'>" + 
               "<div class='card-status'>" + 
-                "<i title='<%= obj.private ? 'Private' : 'Public'%>' class='icon-<%= obj.private ? 'lock' : 'globe'%> '></i> " + 
-                "<i title='<%= obj.collected ? 'Bookmarked' : 'Add to Bookmark'%>' class='icon-bookmark'></i> " + 
-                "<i title='<%= obj.favorite ? 'Favorited' : 'Add to Favorite'%>' class='icon-heart'></i>" + 
               "</div>" + 
             "</div>" + 
             "<div class='card-header-btn card-header-right'>" +
