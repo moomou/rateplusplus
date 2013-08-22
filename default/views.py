@@ -119,6 +119,13 @@ def EntityHandler(request, pk):
     c = RequestContext(request, renderCxt)
 
     return HttpResponse(t.render(c))
+
+def NewEntityHandler(request):
+    renderCxt = ContextSetup(request)
+    t = loader.get_template('new.html')
+    c = RequestContext(request, renderCxt)
+
+    return HttpResponse(t.render(c))
  
 def SearchPage(request, query):
     renderCxt = ContextSetup(request)

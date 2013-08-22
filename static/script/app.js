@@ -3,30 +3,17 @@ pageView = undefined;
 
 $(function() {
     // Initiate the router
-    var query = $('#searchInput').val(),
-        cmtCollectionView = undefined, 
-        pathname = window.location.pathname.split('/'),
-        id = pathname[pathname.length-1],
-        searchView = window.location.search,
+    var searchView = window.location.search,
         $mediaQuery = $('#mediaQuery');
 
     //only enable side menu if on small screen
-    if (true) { //$mediaQuery.css('display') !== "none") {
+    if (false) { //$mediaQuery.css('display') !== "none") {
         $('#sidr').sidr();
         $('.sideMenuContainer').show();
 
         $('#sideMenu').click(function(e) {
             $.sidr('toogle', 'sidr');
         });
-    }
-    
-    //if on general search page
-    if (searchView) {
-        pageView = new App.PageView({query:query});
-    } //on specific page
-    else {
-        pageView = new App.PageView({id:parseInt(id)}); //search for particular id
-        cmtCollectionView = new App.CommentCollectionView({entityId:id});
     }
 
     $('#sortBtn').click(function(e) {
@@ -69,34 +56,6 @@ $(function() {
         return false;
     });
 
-    $('#submitComment').click(function(e) {
-        var cmtForm = $('#commentForm'),
-            content = cmtForm.find('input[name=content]'),
-            btn = $(this);
-
-        if (!content.val()) {
-            return;
-        }
-
-        btn.button('loading');
-
-        var newComment = new App.CommentModel({});
-    
-        newComment.set('content', content.val());
-        newComment.set('private', cmtForm.find('input[name=private]').is(':checked'));
-        newComment.set('entityId', id);
-
-        newComment.save({}, {
-            success: function(response) {
-                content.val('');
-                btn.button('reset');
-                cmtCollectionView.update(response);
-            },
-            error: function(response) {
-            },
-        });
-    });
-
     $('#submitFeedbackForm').click(function(e) {
         $('#feedbackForm').submit();
     });
@@ -110,16 +69,5 @@ $(function() {
 
     $('#searchBtn').click(function(e) {
         $('#searchForm').submit()
-    });
-
-    $('#addNewEntity').click(function(e) {
-        //hide message box
-        $('.message-box').slideUp();
-        newCard = new App.SummaryCardView({model: new App.SummaryCardModel({})}); 
-        App.ColManager.nextCol('card').prepend(newCard.render().$el);
-
-        //manually activate edit mode
-        newCard.model.set('editable',true);
-        newCard.render(true);
     });
 });

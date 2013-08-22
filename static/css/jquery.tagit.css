@@ -1,13 +1,17 @@
 .hashTag, .catTag {
   /*border-left: 5px solid rgb(182, 239, 250);*/
-  margin-left: 1em;
   min-height: 2em;
   border-radius: 5px;
   clear: both;
+  .hashTag.cardView {
+    margin-left: 1em;
+  }
+}
+.tagitRow {
+  margin-left: 5px;
 }
 
 ul.tagit {
-  margin:0 0 0 1em;
   padding:0;
   right:24px;
   bottom:-12px;
