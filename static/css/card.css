@@ -1,18 +1,84 @@
+/*
+  Table CSS
+*/
+td h4 {
+  margin-top: -5px;
+  background: -webkit-linear-gradient(bottom,rgba(146, 146, 146, 0),rgba(73, 72, 72, 0.7) 35px,rgba(114, 114, 114, 0.9));
+  line-height: 32px;
+  display: block;
+  color: #fff;
+  orphans: 2;
+  vertical-align: top;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  margin-top: -9px;
+}
+.brick {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.tdDivider {
+  box-shadow: 1px 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+.rankingTable td {
+  background-size: cover !important;
+  background-repeat: no-repeat;
+  padding-left: 1em;
+  position: relative;
+}
+.rankingTable tr {
+  -webkit-transition: border-color;
+  -webkit-transition-duration:0.2s;
+  -webkit-transition-timing-function:linear;
+  -webkit-transition-delay:0s; 
+
+  -moz-transition: border-color;
+  -moz-transition-duration:0.2s;
+  -moz-transition-timing-function:linear;
+  -moz-transition-delay:0s; 
+}
+.rankingTable tr:hover {
+  border-color: gray;
+}
+
+.ranking {
+  width: 15%;
+  text-align: center !important;
+}
+
+.head {
+  text-align: center !important;
+  position: relative;
+}
+
+.body {
+  width: 40%;
+}
+.body div {
+  overflow-y: scroll;
+  height: 100px;
+}
+.stat {
+  width: 25%;
+}
+.statList {
+  margin: 0;
+}
+
+/** Card */
 .table {
   display: table;   /* Allow the centering to work */
   margin: 0 auto;
 }
+
 .vote > li {
   float: right;
-}
-
-.attrName {
-  margin: -5px;
-  font-size: 17px;
-}
-.attrName:focus {
-  border: 1px dashed pink;
-  outline: none;
 }
 
 .outer {
@@ -28,12 +94,11 @@
 .card:hover {
   border-color: gray;
 }
-.card {
+.card, .rankingTable {
   position:relative;
-  margin: 1.5em auto;
+  margin-bottom: 1.5em;
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.150);
-  max-width: 35em;
 
   -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
   -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
@@ -55,16 +120,14 @@
   -moz-transition-timing-function:linear;
   -moz-transition-delay:0s; 
 }
+.cardSize {
+  max-width: 35em;
+}
 .card-title {
   font-size: 14px;
   text-align: center;
-  background: whitesmoke;
-  margin-bottom: 0;
+  margin-bottom: -1px;
   word-wrap: break-word;
-
-  -webkit-border-radius: 10px 10px 0 0;
-  -moz-border-radius: 10px 10px 0 0;
-  border-radius: 10px 10px 0 0;
 }
 .card-title:focus {
   border: 1px dashed pink;
@@ -77,10 +140,9 @@
 }
 .card-header-left {
   left: 10px;
-  visibility:hidden;
 }
 .card-header-right {
-  left: 75%;
+  right: 0.5em;
   visibility:hidden;
 }
 
@@ -229,9 +291,9 @@
 }
 
 .editBox {
-  margin-left: -3px;
+  margin-left: -6px;
   height: 7em;
-  width: 96%;
+  width: 100%;
 }
 .profileimg {
   width: 100%;
@@ -270,8 +332,12 @@
 
 .tagBullet {
  position: absolute;
- left: 1em;
  margin-top: 0.5em;
+ left: 0;
+ }
+
+ .tagBullet.cardView {
+    left: 1em;
 }
 
 .editHighlight {
@@ -283,4 +349,65 @@
 
 .red-heart {
   color: red;
+}
+
+/**
+  Detail
+*/
+.entityStats {
+  margin-top: 0.5em;
+}
+.entityStats li {
+  float: left;
+  margin: 5px 0 0 1em;
+  font-size: 15px;
+}
+
+/**
+ For Content Association
+*/
+.addContentContainer {
+  padding-right: 1em;
+  border: 1px solid rgba(0, 0, 0, 0.150);
+
+  -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
+  -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
+
+ 
+  }
+  .addContentBox {
+    padding: 1em;
+  }
+  .addContentBox textarea {
+    width: 100%;
+  }
+  .addContentType {
+    text-align: center;
+  }
+  .addContentType li {
+    display: inline-block;
+    width: 90px;
+    margin: 0.5em;
+  }
+  .contentType {
+
+  }
+  .downTriangle {
+    margin-top: -25px;
+    margin-left: 100px;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+  }
+  .downTriangleBorder {
+    position: absolute;
+    margin-top: -25px;
+    margin-left: 98px;
+    border-left: 17px solid transparent;
+    border-right: 17px solid transparent;
+    border-top: 17px solid hsl(0, 0%, 89%);
 }

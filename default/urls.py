@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     url(r'^feedback$', views.FeedbackHandler),
     url(r'^advertise$', views.AdHandler),
     url(r'^entity/(?P<pk>[0-9]+)/?$', views.EntityHandler),
+    url(r'^entity/new/?$', views.NewEntityHandler),
 
     url(r'^signup$', views.SignupHandler),
     url(r'^signin$', views.SigninHandler),

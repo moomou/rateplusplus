@@ -1,42 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  {% include "stdHead.partial" %}
-</head>
-<body>
+  <head>
+    {% include "stdHead.partial" %}
+  </head>
 
-  {% include "header.partial" %}
-  {% include "sideMenu.partial" %}
+  <body>
 
-  <div class="container-narrow">
-    <hr>
-    {% include "messageBox.partial" %}
-    <div class="row-fluid">
-      <div class="span3" id="col1"></div>
-      <div class="span3" id="col2"></div>
-      <div class="span3" id="col3"></div>
-      <div class="span3" id="col4"></div>
+    {% include "header.partial" %}
+    {% include "sideMenu.partial" %}
+
+    <div class="container-narrow">
+      {% include "messageBox.partial" %}
+
+      <div id="colRow" class="row-fluid hidden">
+        <div class="span3" id="col1"></div>
+        <div class="span3" id="col2"></div>
+        <div class="span3" id="col3"></div>
+        <div class="span3" id="col4"></div>
+      </div>
+
+      {% if specific_entity %}
+        <div id="detailRow" class="row-fluid">
+          <div class="span12">
+            <ul id="myTab" class="nav nav-tabs" style="margin-left: 2em;">
+              <li class="">
+                <span href="#home" class="entityTitle">
+                  <i class="icon-lock privacy-setting"> New Entity</i> 
+                </span>
+              </li>
+              <li class="active"><a href="#attribute" data-toggle="tab"> Attributes</a></li>
+              <li class="hidden"><a href="#content" data-toggle="tab"> Content</a></li>
+              <li class="hidden"><a href="#relation" data-toggle="tab"> Relation</a></li>
+              <li class="hidden"><a href="#stat" data-toggle="tab"> Stats</a></li>
+              <li class="pull-right">
+                <ul class="entityStats">
+                  <li>
+                    12 <i class="icon-bookmark icon-large"></i>
+                  </li>
+                  <li>
+                    12 <i class="icon-heart icon-large"></i>
+                  </li>
+                </ul>
+              </li> 
+            </ul>
+          </div> 
+          <div class="span3" id="dr1"></div>
+          <div class="span6" id="dr2">
+            <div id="myTabContent" class="tab-content" style='overflow: visible;'>
+              <div class="tab-pane active" id="attribute">
+              </div>
+              <div class="tab-pane" id="content">
+                <div class="addContentContainer">
+                  <div class="addContentBox tab-content">
+                    <div id="write" class="tab-pane active">
+                      <textarea id="" name="" cols="30" rows="5"></textarea>
+                    </div>
+                    <div id="pictureframe" class="tab-pane">
+                      <div class="dragdrop"></div>
+                    </div>
+                    <div id="movieTheatre" class="tab-pane">
+                      <div class="dragdrop"></div>
+                    </div>
+                    <div id="linkChain" class="tab-pane">
+                      <div class="dragdrop"></div>
+                    </div>
+                    <div id="fileBucket" class="tab-pane">
+                      <div class="dragdrop"></div>
+                    </div>
+                  </div>
+                  <div class="downTriangleBorder"></div>
+                  <div class="downTriangle"></div>
+                  <ul class="addContentType tab" id="addContent">
+                    <li class="contentType cursor-pointer" data-target='#pictureframe'>
+                      <i class="icon-picture icon-2x block"></i>
+                      <span>Picture</span>
+                    </li>
+                    <li class="contentType cursor-pointer" data-target='#movieTheatre'>
+                      <i class="icon-youtube-play icon-2x block"></i>
+                      <span> Video</span>
+                    </li>
+                    <li class="contentType cursor-pointer" data-target='#linkChain'>
+                      <i class="icon-link icon-2x block"></i>
+                      <span> Link</span>
+                    </li>
+                    <li class="contentType cursor-pointer"data-target='fileBucket'>
+                      <i class="icon-file icon-2x block"></i>
+                      <span> File</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="tab-pane" id="relation">
+              </div>
+              <div class="tab-pane" id="stat">
+              </div>
+            </div>
+          </div>
+          <div class="span3" id="dr3"></div>
+        </div>
+        {% include "comment.partial" %}
+      {% else %}
+        <div id="rankingRow" class="row-fluid">
+          <div class="span12" id="top1">
+          </div>
+          <div class="span5" id="top2">
+          </div>
+          <div class="span2" id="top3"></div>
+        </div>
+      {% endif %}
+
+      <div id="mediaQuery" class="hidden-desktop" style="position:absolute;left:-1200px;"></div>
     </div>
+      
+    {% csrf_token %}
 
-    {% if specific_entity %}
-      {% include "comment.partial" %}
+    {% include "imageChangeModal.partial" %}
+
+    {% if FEEDBACK_ENABLED %} 
+      {% include "feedbackForm.partial" %}
     {% endif %}
 
-    <div id="mediaQuery" class="hidden-desktop" style="position:absolute;left:-1200px;"></div>
-  </div>
-    
-  {% csrf_token %}
+    {% include "stdScript.partial" %}
+    {% include "modelScript.partial" %}
 
-  {% include "imageChangeModal.partial" %}
+    <script src="{{STATIC_URL}}script/app.js"></script> 
+  </body>
 
-  {% if FEEDBACK_ENABLED %} 
-    {% include "feedbackForm.partial" %}
-  {% endif %}
-
-  {% include "stdScript.partial" %}
-  {% include "modelScript.partial" %}
-
-  <script src="{{STATIC_URL}}script/app.js"></script> 
-
-</body>
 </html>

@@ -3,9 +3,12 @@ var App = App || {};
 /*
     Constants for App
 */
-App.API_VERSION = '/api/v0/';
+App.API_SERVER = 'http://api.cloverite.com/';
+App.API_VERSION = '';
 App.AE_H_URL = App.API_VERSION + 'ae/tag';
 App.AE_C_URL = App.API_VERSION + 'ae/cat';
+App.POSITIVE = "positive";
+App.NEGATIVE = "negative";
 
 /*
     Individual Component
@@ -18,7 +21,7 @@ App.AdModel = Backbone.Model.extend({
     },
     parse: function(response) {
         console.log('Get Ad');
-        return response; 
+        return response;
     },
 });
 
@@ -30,7 +33,7 @@ App.AdView = Backbone.View.extend({
        var that = this;
 
        this.model.on('sync', function(e) {
-           that.render(); 
+           that.render();
        });
     },
     render: function() {
@@ -41,33 +44,26 @@ App.AdView = Backbone.View.extend({
 });
 
 App.EntityModel = Backbone.Model.extend({
-	urlRoot: App.API_VERSION + 'entity/',
-    /*url: function() {
-        return window.location.origin + "/" + this.urlRoot + (this.id ? this.id : "");
-    },*/
+	urlRoot: App.API_SERVER + App.API_VERSION + 'entity/',
     defaults: {
-        domId: undefined,
+        //DOM
+        editable: true,
+        //Backend
     	id: undefined,
         name: 'New Entity',
         private: false,
-        imageURL: '',
+        imgURL: '',
         description: 'Add Short Description',
-        tags: [],
-        tagDOM: '', 
-        version: 0,
-        attributes: undefined,
-        editable: true 
+        tags: [''],
     },
-    validate: function(attrs) {
-	},
     initialize: function() {
-        this.set('domId', guidGenerator());
+        this.set('domId', _.uniqueId('domId'));
     },
 });
 
 App.EntityView = Backbone.View.extend({
-    tagName: "div",
-    className: "inner",
+    tagName: 'div',
+    className: 'inner',
     events: {
         'click .editProfileBtn': 'editProfile',
     },
@@ -91,69 +87,63 @@ App.EntityView = Backbone.View.extend({
         var $p = this.$('.description');
         var $textAreaContainer = this.$('#'+editBoxContainer);
 
-        if (mode == "edit") {
+        if (mode == 'edit') {
             wideArea('#'+editBoxContainer);
-            var $textarea = $textAreaContainer.find("textarea");
+            var $textarea = $textAreaContainer.find('textarea');
             $textarea.text(($p.html()));
-
-            /*
-            this.editBox = new nicEditor({buttonList : [
-                                             'fontSize',
-                                             'bold',
-                                             'italic',
-                                             'image',
-                                             'left',
-                                             'center',
-                                             'link']
-                                             })
-                .panelInstance(editBoxId);
-            /*
-            this.editBox.setPanel(editBoxMenuId);
-            this.editBox.addInstance(editBoxId);
-            */
-
-            $p.hide(); 
+            $p.hide();
             $textAreaContainer.show();
         }
-        else if (mode == "save") {
-            //var editor = nicEditors.findEditor(editBoxId);
-            //var newTxt = editor.getContent();
+        else if (mode == 'save') {
             var $textarea = $textAreaContainer.find("textarea");
             var newTxt = $textarea.val();
 
             this.model.set('description', newTxt);
             $p.html(newTxt);
 
-            //this.editBox.removeInstance(editBoxId);
             $textAreaContainer.hide();
             $p.show();
         }
         else { //Cancel
             $p.html(this.model.get('description'));
-            //this.editBox.removeInstance(editBoxId);
             $textAreaContainer.hide();
             $p.show();
         }
     },
 });
 
-App.AttributeModel = Backbone.Model.extend({
-    urlRoot: App.API_VERSION + 'attribute/',
+App.EntityAttributeModel = Backbone.Model.extend({
+    urlRoot: function() {
+        return [App.API_SERVER,
+            App.API_VERSION,
+            'entity/',
+            this.get('entity') + '/',
+            'attribute/'].join("");
+    },
     defaults: {
+        //DOM
+        editable: false,
+        //BACKEND
     	id: undefined,
         entity: undefined,
         name: 'New Attribute',
-        tone: 1, //defaults to +,
+        tone: App.POSITIVE,
         upVote: 0,
         downVote: 0,
         voteCount: 0,
-        editable: false, 
         voted: false,
     },
     //Builtin Function
     initialize: function() {
-        var rating = this.getRating();  
+        var rating = this.getRating();
         var that = this;
+
+        var getToneIcon = function(tone) {
+            if (tone !== App.POSITIVE) {
+                return 'black-heart';
+            }
+            return 'red-heart';
+        };
 
         this.set('rating', rating);
         this.set('upVotePer100', rating);
@@ -165,22 +155,10 @@ App.AttributeModel = Backbone.Model.extend({
             this.set('downVotePer100', 100 - rating);
         }
 
-        if (this.get('tone') < 0) {
-            this.set('TONE_ICON', 'black-heart');
-            this.set('TONE', 'Negative');
-        }
-        else {
-            this.set('TONE_ICON', 'red-heart');
-            this.set('TONE', 'Positive');
-        }
+        this.set('TONE_ICON', getToneIcon(this.get('tone')));
 
         this.on('change:tone', function(e) {
-            if (this.get('tone') < 0 ) {
-                this.set('TONE_ICON', 'black-heart');
-            }
-            else {
-                this.set('TONE_ICON', 'red-heart');
-            }
+            this.set('TONE_ICON', getToneIcon(this.get('tone')));
         });
     },
     parse: function(response) {
@@ -188,12 +166,16 @@ App.AttributeModel = Backbone.Model.extend({
     },
     //Custom Func
     getRating: function() {
+        this.set('voteCount', this.get('upVote') + this.get('downVote'));
+
         var rating = this.get('upVote')/(this.get('voteCount') || 1);
-        rating = this.get('voteCount') ? (rating*100).toFixed(0) : 0; 
+        rating = this.get('voteCount') ? (rating*100).toFixed(0) : 0;
         return rating;
     },
     enqueuVote: function(voteType, view) {
         var that = this;
+        var voteURL = this.url()+"/vote";
+
         this.set('voted', true);
 
         if (this.isNew()) {
@@ -208,22 +190,20 @@ App.AttributeModel = Backbone.Model.extend({
 
         $.ajax({
             type: "POST",
-            url: this.url() + "/vote/",
-            data: {voteType: voteType},
+            url: voteURL,
+            data: {type: voteType},
         })
         .done(function(res) {
             if (!res.error) {
                 that.updateVoteCount(voteType, view);
-                that.fetch();
             }
         })
         .fail(function(msg) {
+            //this.set('voted', false);
         });
     },
     updateVoteCount: function(voteType, view) {
-        this.set('voteCount', this.get('voteCount')+1); 
-
-        if (voteType === "+") {
+        if (voteType === App.POSITIVE) {
             this.set('upVote', this.get('upVote')+1);
         }
         else {
@@ -241,101 +221,132 @@ App.AttributeModel = Backbone.Model.extend({
 });
 
 App.AttributeView = Backbone.View.extend({
-    template: _.template(Template.attributeTemplate),
-    tagName: 'div',
-    className: 'page-curl editHighlight outer',
+    template: _.template(Template.attributeRowTemplate),
+    editTemplate: _.template(Template.attributeRowEditTemplate),
+    tagName: 'tr',
+    className: 'row',
     events: {
-        'click .menu': 'menuHandler',
-        'click .tone': 'toneChange',
-        'click .voteBtn': 'attrVote',
-        'click .attrName': 'editName',
-        'click .tone': 'toneChange',
-        'click .saveBtn': 'saveAttr',
+        'click .dropdown-menu': 'changeType',
         'click .closeBtn': 'removeAttr',
+        'click .saveBtn': 'saveAttr',
+        'click .voteBtn': 'attrVote',
+        'click .tone': 'toneChange',
+        'focusout .attrName': 'editName',
+        'focusout .srcURL': 'editSrcURL',
     },
     initialize: function(inactive) {
         var that = this;
-
+        console.log("AttrView init")
         this.model.on('sync', function(e) {
             that.render();
         });
     },
     render: function() {
         console.log('AttributeView Render');
+        var dummyData = {
+            labels : ["","","","","","",""],
+             datasets : [{
+                fillColor : "rgba(220,220,220,0.5)",
+                strokeColor : "rgba(220,220,220,1)",
+                data : [2,5,7,7.5,9.5,9,10]
+             }]
+        };
 
-        this.$el.html(this.template(this.model.toJSON()));
-
-        if (!this.model.isNew()) {
-            this.$el.removeClass('editHighlight focusOnHover');
-            this.$el.find('.close').hide();//hide save and del btn
+        if (this.model.isNew()) {
+            this.$el.addClass('editHighlight focusOnHover');
+            this.$el.html(this.editTemplate(this.model.toJSON()));
         }
         else {
-            this.$el.find('.menu').hide(); //hide report btn
+            this.$el.removeClass('editHighlight focusOnHover');
+            this.$el.html(this.template(this.model.toJSON()));
         }
 
         if (this.model.get('voted')) {
             this.$('.voteBtns').hide();
             this.$('.progress').fadeToggle();
+            this.$('.vizGraph').removeClass('hidden');
+            this.renderActivityGraph(this.$('.vizGraph'), dummyData);
         }
 
         return this;
     },
-     //Event Handler
-    menuHandler: function(e) {
+    // Custom Function
+    renderActivityGraph: function(canvas, data) {
+        canvas = canvas[0];
+
+        var ctx = canvas.getContext('2d');
+
+        /*
+        canvas.width  = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+        */
+        new Chart(ctx).Bar(data, {
+            scaleOverride: true,
+            scaleSteps: 10,
+            scaleStepWidth: 1,
+            scaleStartValue: 0,
+            scaleLabel: '', 
+            scaleShowGridLines: false, 
+            barShowStroke: true,
+            barStrokeWidth: 0,
+            barValueSpacing: 0, 
+            scaleShowLabels: false, 
+            barShowStroke: false, 
+            scaleShowGridLines: false, 
+            scaleGridLineColor: "white", 
+            scaleLineColor: "white", 
+            scaleLineWidth: 0, barDatasetSpacing: 0});
     },
-    toneChange: function(e) {
-        if (!this.model.get('editable')) {
-            return;
-        }
-
-        var $i = this.$('.tone').find('i');
-
-        if ($i.hasClass('black-heart')) {
-            $i.removeClass('black-heart');
-            $i.addClass('red-heart');
-            this.model.set('tone', 1);
-        }
-        else {
-            $i.removeClass('red-heart');
-            $i.addClass('black-heart');
-            this.model.set('tone', -1);
-        }
-
-        this.model.set('editable', true);
-        this.render();
-    },
+    //Event Handler
     attrVote: function(e) {
         e.preventDefault();
         console.log('attrVote called:');
 
         if ($(e.target).hasClass('upVote')) {
-            this.model.enqueuVote('+', this);
+            this.model.enqueuVote(App.POSITIVE, this);
         }
         else {
-            this.model.enqueuVote('-', this);
+            this.model.enqueuVote(App.NEGATIVE, this);
         }
+    },
+    changeType: function(e) {
+        var attrType = e.target.attributes.data.textContent,
+            iconClass ="<i class='icon-" + attrType + "'></i>";
+        this.model.set('type', attrType);
+        this.$('.typeIcon').html(iconClass);
     },
     editName: function(e) {
         console.log('editName called');
-        if (this.model.get('editable')) {
-            var domRef = this.$('.attrName');
-            var that = this;
-
-            domRef.attr('contenteditable', true);
-            domRef.focus();
-
-            domRef.focusout(function() {
-                that.model.set('name', domRef.text());
-                console.log(domRef.text());
-            });
-        }
+        var domRef = this.$('.attrName');
+        this.model.set('name', domRef.text());
+        console.log(this.model.get('name'));
     },
-    saveAttr: function(e) {
-        this.model.save();
+    editSrcURL: function(e) {
+        this.model.set('srcURL', this.$(".srcURL").val());
     },
     removeAttr: function(e) {
         this.model.destroy();
         this.remove();
+    },
+    saveAttr: function(e) {
+        console.log("save on AttributeView called");
+        this.model.save();
+    },
+    toneChange: function(e) {
+        var $i = this.$('.tone');
+
+        if ($i.hasClass('black-heart')) {
+            $i.removeClass('black-heart');
+            $i.addClass('red-heart');
+            this.model.set('tone', App.POSITIVE);
+            this.$('.toneText').html('positive');
+        }
+        else {
+            $i.removeClass('red-heart');
+            $i.addClass('black-heart');
+            this.model.set('tone', App.NEGATIVE);
+            this.$('.toneText').html('negative');
+        }
     },
 });
 
@@ -346,7 +357,7 @@ App.CommentModel = Backbone.Model.extend({
         entityId: undefined,
         user: 'Anonymous',
         private: false,
-        editable: false, 
+        editable: false,
         upVote: 0,
         downVote: 0,
         totalVote: 0
@@ -396,7 +407,7 @@ App.CommentView = Backbone.View.extend({
     },
     commentVote: function(e) {
         var btn = $(e.target),
-            voteType = "+",
+            voteType = "pos",
             that = this;
 
         if (this.voted) {
@@ -404,9 +415,9 @@ App.CommentView = Backbone.View.extend({
         }
 
         this.voted = true;
-        
+
         if (btn.hasClass('cmtDownVote')) {
-            voteType = "-";
+            voteType = "neg";
         }
 
         $.ajax({
@@ -436,7 +447,6 @@ App.LinkModel = Backbone.Model.extend({
     },
     parse: function(response) {
         console.log(response);
-        debugger;
     },
 });
 
@@ -501,7 +511,7 @@ App.SummaryCardModel = Backbone.Model.extend({
 	},
 	initialize: function(spec) {
         console.log('init SummaryCardModel');
-        this.set('domId', guidGenerator());
+        this.set('domId', _.uniqueId("domId"));
 
         if (this.isNew()) {
             this.set('editable', true);
@@ -524,15 +534,14 @@ App.SummaryCardModel = Backbone.Model.extend({
 	},
     parse: function(response) {
         console.log("SummaryCardModel Parse");
-        var tags = this.getTags(response['tags']); 
-        var newEntity = new App.EntityModel(response);
+        var tags = this.getTags(response['tags']);
 
         response['hashTags'] = tags['hashTags'];
         response['catTags'] = tags['catTags'];
 
-        response['summary'] = this.getEntityStats(response['attributes']); 
-        response['entityModel'] = newEntity;
-        response['attributeCollection'] = new App.AttributeCollection(response['attributes']);
+        response['summary'] = this.getEntityStats(response['attributes']);
+        response['entityModel'] = new App.EntityModel(response);
+        response['attributeCollection'] = new App.AttributeCollection(response['attributes'], response['id']);
 
         return response;
     },
@@ -555,6 +564,9 @@ App.SummaryCardModel = Backbone.Model.extend({
             if (tag[0] == "#") {
                 hashTags += '<li>'+tag.substr(1)+'</li>';
             }
+            else if (tag[0] != "$") {
+                hashTags += '<li>'+tag+'</li>';
+            }
             else {
                 catTags += '<li>'+tag.substr(1)+'</li>';
             }
@@ -566,28 +578,31 @@ App.SummaryCardModel = Backbone.Model.extend({
         };
     },
     updateEntityStats: function(attrs) {
-        console.log('updateEntityStats called!!');
+        console.log('updateEntityStats');
         $.extend(this.get('summary'), this.getEntityStats(attrs));
     },
     getEntityStats: function(attrs) {
+        console.log('GetEntityStats Called');
         var attrLength = attrs ? attrs.length : 0,
-            posAttr = 0, 
+            posAttr = 0,
             negAttr = 0,
             totalVote = 0,
             avgScore = 0,
             upVote = 0;
 
         _.each(attrs, function(attr) {
+            attr['voteCount'] = attr['upVote']+attr['downVote'];
             totalVote += attr['voteCount'];
         });
 
         if (totalVote !== 0) {
             _.each(attrs, function(attr) {
-                var attrScore = attr['upVote']/(attr['voteCount'] || 1);  //divide by totalCount unless 0
-                avgScore += attrScore * (attr['voteCount']/(totalVote || 1)) * (attr['tone'] < 0 ? -1 : 1) ;
+                var attrScore = attr['upVote']/(attr['voteCount'] || 1); //divide by totalCount unless 0
+                avgScore += attrScore * (attr['voteCount']/(totalVote || 1)) * (attr['tone'] === App.NEGATIVE ? -1 : 1) ;
 
                 upVote += attr['upVote'];
-                if (attr['tone']) {
+
+                if (attr['tone'] === App.POSITIVE) {
                     posAttr += 1;
                 }
             });
@@ -608,14 +623,14 @@ App.SummaryCardModel = Backbone.Model.extend({
 });
 
 App.SummaryCardView = Backbone.View.extend({
-    className: 'card', 
+    className: 'card cardSize',
 	template: _.template(Template.summaryCardTemplate, null, {variable: 'obj'}),
     summaryTemplate: _.template(Template.summaryTemplate, null, {variable: 'obj'}),
+    saveCancelTemplate: _.template(Template.summaryTemplate, null, {variable: 'obj'}),
 	events: {
-        'click .addAttrBtn': 'addNewAttribute',
         'click .card-header-left': 'leftCardHeaderBtnHandler',
         'click .card-header-right': 'rightCardHeaderBtnHandler',
-        'click .card-title': 'updateCardTitle', 
+        'click .card-title': 'updateCardTitle',
         'click .card-status': 'changePrivacy',
         'click .closeBtn': 'cancelCreation',
         'click .editImgBtn': 'changeImg',
@@ -631,42 +646,43 @@ App.SummaryCardView = Backbone.View.extend({
     //Builtin Func
     initialize: function(setting) {
 		console.log("App.SummaryCardView initialize");
-        
+
         /* 4 render mode: default, search, detail, graph */
-        this.renderMode = this["render" + capFirstLetter(setting.renderMode || 'default')]; 
+        this.renderMode = this["render" + capFirstLetter(setting.renderMode || 'default')];
         this.colManager = setting.colManager || App.ColManager;
 
         this.entityView = new App.EntityView({model: this.model.get('entityModel')});
         this.attributeCollectionView = new App.AttributeCollectionView({
+            entityId: this.entityView.model.get('id'),
             collection: this.model.get('attributeCollection'),
             renderMode: setting.renderMode,
             colManager: setting.colManager});
-                
+
+        this.preSaveAttr = [];
         this.side = setting.side;
-        this.listenTo(this.model.get('attributeCollection'), 'sync', this.attrChange);
+        this.listenTo(this.model.get('attributeCollection'), 'change', this.attrChange);
+    },
+    renderSaveCancelBtns: function() {
     },
 	render: function(editing, renderMode) {
-        /*
-            Editable and Editing confusing
-        */
+        /* Editable and Editing confusing */
 		console.log("App.SummaryCardView Render");
+
         var editable = this.model.get('editable'),
             domId = this.model.get('domId'),
-            entityModel = this.model.toJSON(), 
+            entityModel = this.model.toJSON(),
             isNew = this.entityView.model.isNew(),
             private = this.entityView.model.get('private');
-        
-        //_.extend(entityModel, {searchView: this.searchView});
 
         this.$el.html(this.template(entityModel));
         this.$('.profileContent').empty().append(this.entityView.render().el);
-        this.attributeCollectionView.clean(); //remove extra 
 
         var that = this,
             hashTagsUL = this.$('#hashtags-'+domId),
-            catTagsUL = this.$('#cattags-'+domId); 
+            catTagsUL = this.$('#cattags-'+domId);
 
         if (editing) {
+            console.log("Editing");
             this.$('.attrContainer').hide();
             this.$('.summary').hide();
             this.entityView.editProfile('edit');
@@ -681,6 +697,8 @@ App.SummaryCardView = Backbone.View.extend({
         catTagsUL.tagit(App.ConfigureTagit('cat', that, editable));
 
         if (!editable) {
+            this.entityView.editProfile('editable');
+
             if (!this.model.get('hashTags')) {
                 this.$('.hashTag').hide();
             }
@@ -704,19 +722,21 @@ App.SummaryCardView = Backbone.View.extend({
             //Hide details that require model to be saved first
             this.$('.card-header-right').hide();
 
-            hashTagsUL.find('input').css('display', '')
-                                    .attr('placeholder', 'Add New Hash Tag');
-            catTagsUL.find('input').css('display', '')
-                                    .attr('placeholder', 'Add New Category Tag');
-            if (!isNew) {
+            hashTagsUL.find('input')
+                .css('display', '')
+                .attr('placeholder', 'Add New Hash Tag');
+
+            catTagsUL.find('input')
+                .css('display', '')
+                .attr('placeholder', 'Add New Category Tag');
+
+            if (isNew) {
+                this.$('.closeBtn').hide();
+                this.$('.saveBtn').hide();
+            }
+            else {
                 this.$('.closeBtn').hide();
             }
-        }
-
-        if (this.renderMode === "renderDefault") {
-            this.$('.attrContainer').hide();
-        }
-        else {
         }
 
         return this;
@@ -732,9 +752,7 @@ App.SummaryCardView = Backbone.View.extend({
     },
     renderDetail: function(editing) {
         console.log("renderDetail");
-        this.$('.attrContainer').hide();
         this.attributeCollectionView.render(this.$('.attrContent'));
-        this.addNewAttribute();
     },
     renderGraph: function(editing) {
         console.log("renderDetail");
@@ -760,6 +778,7 @@ App.SummaryCardView = Backbone.View.extend({
         });
     },
     changePrivacy: function(e) {
+        /* Privacy settings - to be migrated
         var entityModel = this.entityView.model;
 
         if (!entityModel.isNew()) {
@@ -777,7 +796,7 @@ App.SummaryCardView = Backbone.View.extend({
             this.$('.card-status').find('i')
                 .attr('class', 'icon-lock icon-large')
                 .attr('title', 'Private');
-        }
+        }*/
     },
     rightCardHeaderBtnHandler: function(e) {
         var target = $(e.target);
@@ -793,7 +812,7 @@ App.SummaryCardView = Backbone.View.extend({
                 $(document).trigger('graphLinkSet');
             }
         }
-        else {
+        else { // editing
             this.model.set('editable',true);
             this.render(true);
         }
@@ -802,21 +821,25 @@ App.SummaryCardView = Backbone.View.extend({
         var $target = $(e.target);
         console.log($target);
     },
-    saveCreation: function(e) {
+    saveCreation: function(e, cb) {
         var that = this;
-    
-        this.$('.card-status').html('<i class="icon-spinner icon-spin icon-2x pull-left"></i>');
 
+        this.$('.card-status').html('<i class="icon-spinner icon-spin icon-2x pull-left"></i>');
         this.entityView.editProfile('save'); //save the description
+
         this.entityView.model.save({}, {
             success: function(model, response) {
-                //update summary 
+                //update summary
                 $.extend(that.model.attributes, response);
+
                 that.model.trigger('entityModelUpdated');
+                that.attributeCollectionView.entityId = model.get('id');
 
                 //UI update
                 that.model.set('editable', false);
                 that.render();
+
+                if (cb) cb();
             },
         });
     },
@@ -843,27 +866,18 @@ App.SummaryCardView = Backbone.View.extend({
         }
     },
     addNewAttribute: function(e, modifiedAttrTone) {
+        console.log("adNewAttribute called")
+
         if (e) { //if activated by UI
             e.preventDefault();
         }
 
-        if (this.renderMode === "renderDetail") {
-            //add extra attr to each col
-            if (!modifiedAttrTone || modifiedAttrTone == 1) {
-                var attrView = new App.AttributeView({model:this.getNewAttrModel()}); 
-                attrView.$el.addClass('focusOnHover');
-
-                App.ColManager.addAttribute(attrView.render().el, 1); //pos
-            }
-            if (!modifiedAttrTone || modifiedAttrTone == -1) {
-                var attrView = new App.AttributeView({model:this.getNewAttrModel(-1)}); 
-                attrView.$el.addClass('focusOnHover');
-                App.ColManager.addAttribute(attrView.render().el, -1); //neg
-            }
+        if (this.renderMode === this.renderDetail) {
+            this.attributeCollectionView.addNew();
         }
         else {
             var $attrContent = this.$('.attrContent'),
-                attrView = new App.AttributeView({model:this.getNewAttrModel()}); 
+                attrView = new App.AttributeView({model:this.getNewAttrModel()});
 
             $attrContent.prepend(attrView.render().el);
             this.renderChevrons();
@@ -888,7 +902,7 @@ App.SummaryCardView = Backbone.View.extend({
     },
     toggleCardHeaderBtn: function(e) {
         var eventType = e.type,
-            $btn = this.$('.card-header-btn'),
+            $btn = this.$('.card-header-right'),
             state = $btn.css('visibility');
 
         if (eventType === "mouseover" && state === "hidden") {
@@ -902,20 +916,20 @@ App.SummaryCardView = Backbone.View.extend({
         e.preventDefault();
 
         var that = this;
-        
+
         $('#imageChangeTitle').html("Update Image for " +this.$('.card-title').text());
-        $('#imageURLInput').val(this.entityView.model.get('imageURL'));
+        $('#imageURLInput').val(this.entityView.model.get('imgURL'));
 
         $('#imageURLSaveBtn').off('click.appspace');
         $('#imageURLSaveBtn').on('click.appspace', function() {
-            that.model.set('imageURL', $('#imageURLInput').val());
-            that.entityView.model.set('imageURL', $('#imageURLInput').val());
+            that.model.set('imgURL', $('#imageURLInput').val());
+            that.entityView.model.set('imgURL', $('#imageURLInput').val());
             that.$('#img-'+that.model.get('domId')).attr('src', $('#imageURLInput').val());
         });
     },
     searchIconClick: function(e) {
-        var $e = $(e.target); 
-        console.log($e);
+        var $e = $(e.target);
+
         if ($e.hasClass('icon-remove')) {
             $e.addClass('icon-search')
               .removeClass('icon-remove');
@@ -955,13 +969,13 @@ App.SummaryCardView = Backbone.View.extend({
     attrChange: function(e) {
         console.log('AttrChange Called');
 
-        this.attributeCollectionView.clean(e.get('tone'));
+        //this.attributeCollectionView.clean(e.get('tone'));
 
         var attrs = _.invoke(_.filter(
             this.attributeCollectionView.collection.models,
             function(attr) { return !attr.isNew() }), 'toJSON');
-            
-        this.model.updateEntityStats(attrs); 
+
+        this.model.updateEntityStats(attrs);
 
         this.$el.find('.summary').html(this.summaryTemplate(this.model.toJSON()));
         this.renderKonb();
@@ -991,7 +1005,7 @@ App.SummaryCardView = Backbone.View.extend({
         }
     },
     renderKonb: function() {
-        var knobColor = hslInterpolation(this.model.get('summary').avgScore); 
+        var knobColor = hslInterpolation(this.model.get('summary').avgScore);
 
         this.$('.idial').knob({
             'fgColor': knobColor,
@@ -1007,20 +1021,6 @@ App.SummaryCardView = Backbone.View.extend({
         this.$('.sdial').attr('style', this.$('.idial').attr('style'));
         this.$('.idial').hide();
     },
-    getNewAttrModel: function(tone) {
-        tone = tone ? tone : 1; //default to pos
-        var entityId = this.entityView.model.get('id');
-
-        if (!entityId) {
-            console.log('need to save entity before adding attribute');
-            return;
-        }
-
-        var attrModel = new App.AttributeModel({entity:entityId, editable:true, tone:tone}); 
-        this.attributeCollectionView.collection.add(attrModel);
-
-        return attrModel;
-    },
     toggleVisibility: function(e, selector) {
         var eventType = e.type;
 
@@ -1028,7 +1028,7 @@ App.SummaryCardView = Backbone.View.extend({
             return;
         }
 
-        var $btn = this.$(selector), 
+        var $btn = this.$(selector),
             state = $btn.css('visibility');
 
         if (eventType === "mouseover" && state === "hidden") {
@@ -1038,124 +1038,107 @@ App.SummaryCardView = Backbone.View.extend({
             $btn.css('visibility', 'hidden');
         }
     },
+    saveAllAttributes: function() {
+        this.attributeCollectionView.saveAll();
+    },
+    setPublic: function(isPublic) {
+        this.model.set('private', !isPublic);
+        console.log("Private: " + this.model.get('private'));
+    },
 });
+
+App.TitleRowView = Backbone.View.extend({
+    template: _.template(Template.titleRowTemplate),
+    tagName: 'tr',
+    className: 'row title',
+    initialize: function() {
+    },
+    render: function(title) {
+        this.$el.html(this.template({"title": title}));
+        return this;
+    }
+});
+
+App.RankingRowView = App.SummaryCardView.extend({
+    template: _.template(Template.rankingRowTemplate),
+    tagName: 'tr',
+    className: 'row',
+    initialize: function() {
+    },
+    render: function() {
+        this.$el.html(this.template(this.model.toJSON()));
+        return this;
+    },
+    renderKonb: function() {
+        var knobColor = hslInterpolation(this.model.get('summary').avgScore);
+
+        this.$('.idial').knob({
+            'fgColor': knobColor,
+            'inputColor': knobColor,
+            'thickness': 0.4,
+            'angleOffset': -125,
+            'angleArc': 250,
+            'width': 75,
+            'height': 75,
+            'readOnly': true,
+        });
+
+        this.$('.sdial').attr('style', this.$('.idial').attr('style'));
+        this.$('.idial').hide();
+    },
+});
+
+App.TableView = Backbone.View.extend({
+    template: _.template(Template.tableTemplate),
+    tagName: 'table',
+    className: 'rankingTable table',
+    events: {
+        'click .addNew': 'addNew'
+    },
+    render: function() {
+        this.$el.html(this.template({}));
+        return this;
+    },
+    // Event handler
+    addNew: function() {
+        console.log('Not implemented');
+    }
+});
+
 
 /*
     Collections
 */
 App.LinkCollection = Backbone.Collection.extend({
-    url: App.API_VERSION + 'relationlist/', 
+    url: App.API_VERSION + 'relationlist/',
     model: App.LinkModel,
     parse: function(response) {
         return response.results;
     },
 });
 
-App.LinkCollectionView = Backbone.View.extend({
-    initialize: function(setting) {
-        console.log('Link Collection View');
-
-        if (setting.collection) {
-            this.collection = setting.collection;
-        }
-        else {
-            this.collection = new App.LinkCollection();
-        }
-
-        this.renderMode = this["render" + capFirstLetter(setting.renderMode || 'default')]; 
-    },
-    render: function(domContainer) {
-        this.domContainer = domContainer;
-        this.renderMode();
-    },
-    renderLink: function(item) {
-        var linkView = new App.LinkView({
-            model: item
-        });
-        return linkView.render();
-    },
-    renderDefault: function() {
-        var that = this;
-        _.each(this.collection.models, function(item) {
-            that.domContainer.append(that.renderLink(item).el);}, this);
-    },
-});
-
-
 App.AttributeCollection = Backbone.Collection.extend({
-    model: App.AttributeModel,
+    initialize: function(models, entity) {
+        if (entity) {
+            _.each(models, function(model) { model['entity'] = entity})
+        }
+    },
+    model: App.EntityAttributeModel,
     comparator: function(m) {
         return -m.get('voteCount');
     },
 });
 
-App.AttributeCollectionView = Backbone.View.extend({
-    initialize: function(setting) {
-        console.log('Attr Collection View');
-
-        if (setting.collection) {
-            this.collection = setting.collection;
-        }
-        else {
-            this.collection = new App.AttributeCollection();
-        }
-
-        this.renderMode = this["render" + capFirstLetter(setting.renderMode || 'default')]; 
-        this.colMaanager = setting.colManager || App.ColManager;
-    },
-    render: function(attrContainer) {
-        this.attrContainer = attrContainer;
-        this.renderMode();
-    },
-    renderAttribute: function(item) {
-        var attrView = new App.AttributeView({
-            model: item
-        });
-        return attrView.render();
-    },
-    renderDefault: function() {
-        var that = this;
-        _.each(this.collection.models, function(item) {
-            that.attrContainer.append(that.renderAttribute(item).el);}, this);
-    },
-    renderSearch: function() {
-    },
-    renderGraph: function() {
-    },
-    renderDetail: function() {
-        var that = this;
-
-        this.colManager.resetCol('card',[1,2]);
-
-        _.each(this.collection.models, function(attr) {
-            var attr = that.renderAttribute(item);
-            this.colManager.addAttribute(attr.el, attr.model.get('tone'));}, this);
-    },
-    //Custom Func
-    clean: function(tone) {
-        var toRemove = [];
-        _.each(this.collection.models, function(model) {
-            if (model.isNew()) {
-                if (tone === undefined || tone === model.get('tone')) {
-                    toRemove.push(model);
-                }
-            }
-        }, this);
-
-        this.collection.remove(toRemove);
-    },
-});
-
 App.SummaryCardCollection = Backbone.Collection.extend({
-	url: App.API_VERSION + 'entitylist/', 
+	url: App.API_SERVER + App.API_VERSION + 'entity/',
     model: App.SummaryCardModel,
     comparator: function(m) {
         return -m.get('summary').totalVote;
     },
     parse: function(response) {
-        return response.results;
+        return response;
     },
-    //Custom Func 
+    //Custom Func
     sortByX: function(option) {
         this.sortProp = option.prop;
         this.sortOrder= option.order;
@@ -1177,7 +1160,7 @@ App.SummaryCardCollection = Backbone.Collection.extend({
 });
 
 App.CommentCollection = Backbone.Collection.extend({
-    url: App.API_VERSION + 'commentlist/', 
+    url: App.API_VERSION + 'commentlist/',
     model: App.CommentModel,
     parse: function(response) {
         return response.results;
@@ -1185,40 +1168,141 @@ App.CommentCollection = Backbone.Collection.extend({
     comparator: function(m) {
         return -m.get('upVote');
     },
-
 });
-App.CommentCollectionView = Backbone.View.extend({
-    initialize: function(data) {
-        this.collection = new App.CommentCollection();
-        this.data = data;
 
-        this.collection.fetch({data: $.param(data)});
-        this.collection.on('reset', this.render, this);
-    },
-    update: function(newCmt) {
-        App.ColManager.getCol('cmt').cols[0].prepend(this.renderComment(newCmt).el);
-        this.collection.add(newCmt);
-    },
-    render: function() {
-        var that = this;
-        this.cmtViews = [];
+/*
+    App Level Component
+*/
 
-        _.each(this.collection.models, function(item) {
-            that.cmtViews.push(that.renderComment(item));
-            App.ColManager.nextCol('cmt').append(that.renderComment(item).el);
-        }, this);
+//TODO - make other card view extend this
+App.GenericCardView = Backbone.View.extend({
+});
 
-        return this;
+App.AttributeCollectionView = App.TableView.extend({
+    initialize: function(setting) {
+        console.log('Attr Collection View');
+
+        if (setting.collection) {
+            this.collection = setting.collection;
+        }
+        else {
+            this.collection = new App.AttributeCollection();
+        }
+
+        this.preSaveAttrs = [];
+        this.entityId = setting.entityId
+        this.renderMode = this["render" + capFirstLetter(setting.renderMode || 'default')];
+        this.colManager = setting.colManager || App.ColManager;
     },
-    renderComment: function(item) {
-        var cmtView = new App.CommentView({
+    // render functions
+    render: function(attrContainer) {
+        this.attrContainer = attrContainer;
+        this.renderMode();
+    },
+    renderAttribute: function(item) {
+        var attrView = new App.AttributeView({
             model: item
         });
-        return cmtView.render();
+        return attrView.render();
+    },
+    renderDefault: function() {
+        var that = this;
+        _.each(this.collection.models, function(item) {
+            that.attrContainer.append(that.renderAttribute(item).el);}, this);
+    },
+    renderSearch: function() {
+    },
+    renderGraph: function() {
+    },
+    renderDetail: function() {
+        // create table
+        this.$el.html(this.template({}));
+
+        // add title
+        this.el.appendChild(
+            new App.TitleRowView().render("Attribute").el);
+
+        // add each attribute
+        var that = this;
+        _.each(this.collection.models, function(attr) {
+            that.el.appendChild(that.renderAttribute(attr));
+        });
+
+        // TODO change
+        document.getElementById('attribute').appendChild(this.el);
+    },
+    // event handler
+    addNew: function(e) {
+        var newAttr = this.getNewAttrModel();
+        this.$el.find('th').parent().after(this.renderAttribute(newAttr));
+        this.preSaveAttrs.push(newAttr);
+        return newAttr;
+    },
+    // Custom Func
+    renderAttribute: function(newAttr) {
+        var rowView = new App.AttributeView({
+            model: newAttr
+        });
+        return rowView.render().el;
+    },
+    getNewAttrModel: function(tone) {
+        tone = tone ? tone : App.POSITIVE; //default to pos
+        var entityId = this.entityId,
+            attrModel = new App.EntityAttributeModel({
+                entity:entityId,
+                editable:true,
+                tone:tone});
+
+        this.collection.add(attrModel);
+        return attrModel;
+    },
+    saveAll: function() {
+        _.each(this.preSaveAttrs, function(attr) {
+            attr.save();
+        });
+        this.preSaveAttrs = [];
+    },
+});
+
+App.TableCardCollectionView = Backbone.View.extend({
+    initialize: function(setting) {
+        this.query = setting.query;
+
+        this.collection = new App.SummaryCardCollection();
+        this.collection.on('reset', this.render, this);
+
+        this.collection.url += 'search/';
+        this.collection.fetch({data: $.param({q: this.query})});
+        this.pageType = {'type': "search", 'value': this.query};
+    },
+    render: function() {
+        var that = this,
+            rowViews = [],
+            tableView = new App.TableView(),
+            titleRow = new App.TitleRowView();
+
+        tableView.el.appendChild(titleRow.render("Ranking - " + this.query).el);
+
+        _.each(this.collection.models, function(row) {
+            rowViews.push(that.renderRow(row, tableView));
+        });
+
+        document.getElementById('top1').appendChild(tableView.el);
+
+        _.each(rowViews, function(rowView) {
+            rowView.renderKonb();
+        });
+    },
+    renderRow: function(mRow, tableView) {
+        var that = this;
+        var rowView = new App.RankingRowView({
+            model: mRow
+        });
+        tableView.el.appendChild(rowView.render().el);
+        return rowView;
     }
 });
 
-//App Level Component
 App.CardColView = Backbone.View.extend({
     initialize: function(setting) {
         this._filter = function(e) {
@@ -1276,59 +1360,25 @@ App.CardColView = Backbone.View.extend({
     },
 });
 
-App.GraphView = Backbone.View.extend({
-    initialize: function(setting) {
-        this.collection = new App.LinkCollection();
-        this._filter = function(e) {
-            return true;
-        };
-
-        this.domContainer = setting.domContainer;
-        this.collection.fetch({data: $.param({leftId: App.leftId, rightId: App.rightId})});
-        this.collection.on('reset', this.render, this);
-    },
-    filter: function(func) {
-        if (!func) {
-            this._filter = function(e) {
-                return true;
-            }
-        }
-        else {
-            this._filter = func;
-        }
-    },
-    render: function() {
-        var that = this,
-            filteredList = _.filter(this.collection.models, this._filter);
-
-        console.log('In LinkCollectionView');
-        debugger;
-        _.each(filteredList, function(item) {
-            that.renderLink(item);
-        }, this);
-    },
-    renderLink: function(item) {
-        var linkView = new App.LinkView({
-            model: item
-        });
-
-        this.domContainer.append(linkView.render().el);
-    },
-});
-
 App.PageView = Backbone.View.extend({
     initialize: function(q) {
+        this.renderMode = 'default';
         this.collection = new App.SummaryCardCollection();
         this._filter = function(e) {
             return true;
         };
 
         if (q.id) {//specific entity
-            this.collection.fetch({data: $.param({id: q.id})});
+            this.collection.url += q.id;
+            this.collection.fetch();
+
             this.pageType = {'type': 'id', 'value': q.id};
+            this.renderMode = 'detail';
         }
         else if (q.query) {//a search
-            this.collection.fetch({data: $.param({q: q.query})});
+            this.collection.url += 'search/';
+            new App.TableCardCollectionView({query: q.query})
+            //this.collection.fetch({data: $.param({q: q.query})});
             this.pageType = {'type': "search", 'value': q.query};
         }
         else {//empty
@@ -1355,7 +1405,7 @@ App.PageView = Backbone.View.extend({
         console.log('In summaryCardCollectionView');
 
         _.each(filteredList, function(item) {
-            that.renderSummaryCard(item);
+            that.renderSummaryCard(item, this.renderMode);
         }, this);
 
         if (!this.collection.models.length) {
@@ -1372,14 +1422,125 @@ App.PageView = Backbone.View.extend({
             adModel.fetch();
         }
     },
-    renderSummaryCard: function(item) {
+    renderSummaryCard: function(item, renderMode) {
+        console.log("Rendering summaryCard");
+
         var cardView = new App.SummaryCardView({
+            model: item,
+            renderMode: renderMode,
+            colManager: App.ColManager,
+        });
+
+
+        if (renderMode == "detail") {
+            document.getElementById('dr1').appendChild(cardView.render().el);
+        }
+        else {
+            App.ColManager.nextCol('card').append(cardView.render().el);
+        }
+    },
+});
+
+App.GraphView = Backbone.View.extend({
+    initialize: function(setting) {
+        this.collection = new App.LinkCollection();
+        this._filter = function(e) {
+            return true;
+        };
+
+        this.domContainer = setting.domContainer;
+        this.collection.fetch({data: $.param({leftId: App.leftId, rightId: App.rightId})});
+        this.collection.on('reset', this.render, this);
+    },
+    filter: function(func) {
+        if (!func) {
+            this._filter = function(e) {
+                return true;
+            }
+        }
+        else {
+            this._filter = func;
+        }
+    },
+    render: function() {
+        var that = this,
+            filteredList = _.filter(this.collection.models, this._filter);
+
+        console.log('In LinkCollectionView');
+        _.each(filteredList, function(item) {
+            that.renderLink(item);
+        }, this);
+    },
+    renderLink: function(item) {
+        var linkView = new App.LinkView({
             model: item
         });
 
-        App.ColManager.nextCol('card').append(cardView.render().el);
+        this.domContainer.append(linkView.render().el);
     },
 });
+
+App.LinkCollectionView = Backbone.View.extend({
+    initialize: function(setting) {
+        console.log('Link Collection View');
+
+        if (setting.collection) {
+            this.collection = setting.collection;
+        }
+        else {
+            this.collection = new App.LinkCollection();
+        }
+
+        this.renderMode = this["render" + capFirstLetter(setting.renderMode || 'default')];
+    },
+    render: function(domContainer) {
+        this.domContainer = domContainer;
+        this.renderMode();
+    },
+    renderLink: function(item) {
+        var linkView = new App.LinkView({
+            model: item
+        });
+        return linkView.render();
+    },
+    renderDefault: function() {
+        var that = this;
+        _.each(this.collection.models, function(item) {
+            that.domContainer.append(that.renderLink(item).el);}, this);
+    },
+});
+
+App.CommentCollectionView = Backbone.View.extend({
+    initialize: function(data) {
+        this.collection = new App.CommentCollection();
+        this.data = data;
+
+        this.collection.fetch({data: $.param(data)});
+        this.collection.on('reset', this.render, this);
+    },
+    update: function(newCmt) {
+        App.ColManager.getCol('cmt').cols[0].prepend(this.renderComment(newCmt).el);
+        this.collection.add(newCmt);
+    },
+    render: function() {
+        var that = this;
+        this.cmtViews = [];
+
+        _.each(this.collection.models, function(item) {
+            that.cmtViews.push(that.renderComment(item));
+            App.ColManager.nextCol('cmt').append(that.renderComment(item).el);
+        }, this);
+
+        return this;
+    },
+    renderComment: function(item) {
+        var cmtView = new App.CommentView({
+            model: item
+        });
+        return cmtView.render();
+    }
+});
+
 
 /*
     Utility Functions
@@ -1392,12 +1553,12 @@ App.Utility = (function() {
         return text.toLowerCase().split(/\s+/);
     };
 
-    var partialMatch = function(original, fragment) {   
+    var partialMatch = function(original, fragment) {
         //get the words of each input string
         var origWords = toWords(original + ""), //force to string
         fragWords = toWords(fragment);
 
-        //if all words in the fragment match any of the original words, 
+        //if all words in the fragment match any of the original words,
         //returns true, otherwise false
         return _.all(fragWords, function(frag) {
             return _.any(origWords, function(orig) {
@@ -1462,19 +1623,19 @@ App.ColManager = (function() {
         },
         addAttr = function(el, tone) {
             var colObj = getCol('card');
-            var ind = tone == 1 ? 1 : 2; //pos on col1 neg on col2
+            var ind = tone == App.POSITIVE ? 1 : 2; //pos on col1 neg on col2
+
             colObj.cols[ind].append(el);
         };
 
     return {
-        getCol: getCol, 
+        getCol: getCol,
         nextCol: nextCol,
         resetCol: resetCol,
         lastCol: lastCol,
         addAttribute: addAttr,
     };
 })();
-
 App.ShowTrendyLink = function() {
     $.ajax({
         'url': App.API_VERSION+'tags/',
@@ -1493,14 +1654,13 @@ App.ConfigureTagit = function(option, that, editable) {
     var sourceURL = App.AE_C_URL,
         prefix = "$";
 
-        
     if (option == "hash") {
         sourceURL = App.AE_H_URL;
         prefix = "#";
     }
 
     return {
-        autocomplete: {delay: 0, minLength: 2, source: sourceURL}, 
+        autocomplete: {delay: 0, minLength: 2, source: sourceURL},
         afterTagAdded: function(event, ui) {
             var tags = that.entityView.model.get('tags');
             if (tags.indexOf(prefix+ui.tagLabel) < 0) {
@@ -1523,20 +1683,46 @@ App.ConfigureTagit = function(option, that, editable) {
         },
     }
 };
+App.createNewCard = function() {
+    console.log("Creating new card")
+    var newEntityRow = document.getElementById('dr1');
+
+    // intentionally global to keep events
+    newCard = new App.SummaryCardView({
+        model: new App.SummaryCardModel({}),
+        renderMode: "detail"});
+    newEntityRow.appendChild(newCard.render().el);
+
+    // manually activate edit mode
+    newCard.model.set('editable',true);
+    newCard.render(true);
+
+    return newCard;
+}
 
 /*
     Global Objects
 */
+App.State = (function() {
+    // private
+
+    // public
+    return {
+    };
+})();
+
 App.CommentContainer = $('#commentContainer');
 App.LinkBox = $('#linkBox');
 App.MessageBox = $('.message-box');
 
 App.AppRouter = Backbone.Router.extend({
     routes: {
-        "graph" : "graphEditorInit",
-        "" : "defaultRoute"
+        "graph" : "graphPageInit",
+        "entity/new" : "newEntityPageInit",
+        "entity/:id" : "detailEntityPageInit",
+        "" : "defaultPageInit" //handles query
     },
-    graphEditorInit: function() {
+    graphPageInit: function() {
         var that = this;
 
         this.leftSearch = new App.CardColView({col:0});
@@ -1564,9 +1750,114 @@ App.AppRouter = Backbone.Router.extend({
             var domContainer = App.ColManager.getCol('card').cols[1];
             var graphView = new App.GraphView({domContainer: domContainer});
         });
-
     },
-    defaultRoute: function() {
+    detailEntityPageInit: function(id) {
+        console.log("detail Entity");
+        pageView = new App.PageView({id:parseInt(id)}); //search for particular id
+
+        //cmtCollectionView = new App.CommentCollectionView({entityId:id});
+
+        $('#submitComment').click(function(e) {
+            var cmtForm = $('#commentForm'),
+                content = cmtForm.find('input[name=content]'),
+                btn = $(this);
+
+            if (!content.val()) {
+                return;
+            }
+
+            btn.button('loading');
+
+            var newComment = new App.CommentModel({});
+
+            newComment.set('content', content.val());
+            newComment.set('private', cmtForm.find('input[name=private]').is(':checked'));
+            newComment.set('entityId', id);
+
+            newComment.save({}, {
+                success: function(response) {
+                    content.val('');
+                    btn.button('reset');
+                    cmtCollectionView.update(response);
+                },
+                error: function(response) {
+                },
+            });
+        });
+    },
+    newEntityPageInit: function() {
+        console.log("New Entity");
+
+        var stateVar = 0,
+            cardRef  = App.createNewCard(),
+            saveCancelBtn = _.template(Template.saveCancelBtnTemplate);
+
+        $('#dr1').append(saveCancelBtn({
+            'id': 'saveCancelContainer',
+            'saveId': 'saveAndNext',
+            'cancelId': 'cancelAndNext'
+        }));
+
+        // step 1
+        $("#saveAndNext").click(function(e) {
+            switch (stateVar) {
+                case 0:
+                    stateVar = -1; // hacky way to disabel btn
+                    
+                    cardRef.setPublic($('#publicCheckBox').is(':checked'));
+
+                    cardRef.saveCreation(null, function() {
+                        cardRef.addNewAttribute();
+
+                        $('#attribute').removeClass('hidden');
+                        var dom = $('#saveCancelContainer').detach();
+                        $('#attribute').append(dom);
+
+                        stateVar = 1;
+                    });
+                    break;
+                case 1:
+                    stateVar = -1;
+
+                    cardRef.saveAllAttributes();
+                    $('#dr3').removeClass('hidden');
+
+                    var dom = $('#saveCancelContainer').detach();
+                    dom.find('#saveAndNext').html('Finished');
+                    $('#dr3').append(dom);
+ 
+                    stateVar = 2;
+                    break;
+                case 2:
+                    // Refresh page here
+                    break;
+            }
+        });
+    },
+    queryPageInit: function(query) {
+        console.log("QQQQ");
+    },
+    defaultPageInit: function() {
+        console.log("Default Route");
+
+        $('#addNewEntity').click(function(e) {
+            // hide message box
+            $('.message-box').slideUp();
+
+            // intentionally global??
+            newCard = new App.SummaryCardView({model: new App.SummaryCardModel({})});
+            App.ColManager.nextCol('card').prepend(newCard.render().$el);
+
+            // manually activate edit mode
+            newCard.model.set('editable',true);
+            newCard.render(true);
+        });
+
+        var query = $('#searchInput').val();
+
+        if (query) {
+            pageView = new App.PageView({query:query});
+        }
     }
 });
 

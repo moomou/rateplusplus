@@ -1,15 +1,18 @@
-  <div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-      <div class="container">
+  <div class="navbar">
+    <div class="navbar-inner" style="height: 55px;">
+      <div class="container-narrow">
         <a id="sideMenu" href="#" class="noSelect muted home-btn pull-left"><span style="left: 145px;" class="logo"></span>Cloverite </a>
 
         {% if SEARCH_ENABLED %}
         <form method="GET" id="searchForm" class="navbar-search" action="{% url 'default.views.PageHandler' %}">
-          <div class="input-append">
-            <input type="search" class="span3" name='q' id="searchInput" type="text" placeholder="Search" value="{{QUERY}}">
-            <button id="searchBtn" class="btn btn-success" type="button"><i class="icon-search"></i></button>
-          </div>
+          <input type="search" class="span2 searchBar" name='q' id="searchInput" type="text" placeholder="Search" value="{{QUERY}}">
         </form>
+        {% endif %}
+
+        {% if NAV_ENABLED %}
+        <ul class="nav head-nav">
+          <li><a href="#"> Explore</a></li>
+        </ul>
         {% endif %}
 
         {% if STATS_ENABLED %}
@@ -22,11 +25,9 @@
         {% endif %}
 
         {% if NAV_ENABLED %}
-        <ul class="nav pull-right" style="margin-top:10px;">
+        <ul class="nav pull-right head-nav">
           {% if authenticated %}
-          <li><a id="addNewEntity" title="Create New Entry" href="#"><i class="icon-plus"></i></a></li>
-          <li><a id="" href="#" title="Explore Random Topic"><i class="icon-random"></i></a></li>
-          <li class="dropdown">
+          <!--<li class="dropdown">
             <a id="" href="#" title="Filter Search" class="dropdown-toggle" data-hover="dropdown" role="button"><i class="icon-reorder"></i></a>
             <ul id="sortBtn" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
               <li role="presentation" style="text-align:center;">Sort By</li>
@@ -49,24 +50,16 @@
               <li role="presentation"><a data-filterBy="votesAt25" role="menuitem">Greater than 25 votes</a></li>
             </ul>
           </li>
-          <!--<li><a id="" href="#" title="Formula" ><i class="icon-tasks"></i></a></li>-->
+          <li><a id="" href="#" title="Formula" ><i class="icon-tasks"></i></a></li>-->
+          <li><a id="userIcon" title="Profile" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="icon-user"> </i></a></li>
+          <li><a id="createNew" title="New Entry" href="{% url 'default.views.NewEntityHandler' %}"><i class="icon-plus"> </i></a></li>
+          <li><a id="signOutIcon" title="Sign Out" href="{% url 'django.contrib.auth.views.logout' %}" role="menuitem"><i class="icon-signout"></i></a></li>
 
-          <li class="divider-vertical"></li>
-
-          <li class="dropdown">
-            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="icon-user"></i><b class="caret"></b></a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-              <li role="presentation"><a href="" role="menuitem">Profile</a></li>
-              <li role="presentation"><a href="" role="menuitem">Setting</a></li>
-              <li role="presentation" class="divider"></li>
-              <li role="presentation"><a href="{% url 'django.contrib.auth.views.logout' %}" role="menuitem"><i class="icon-signout"></i> Sign out</a></li>
-            </ul>
-          </li>
           {% else %}
-          <li><a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}"><i class="icon-signin"></i> Sign in</a></li>
-          {% endif %}
 
-          <li class="divider-vertical"></li>
+          <li><a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}"><i class="icon-signin"></i> Sign in</a></li>
+
+          {% endif %}
         </ul>
         {% endif %}
 
