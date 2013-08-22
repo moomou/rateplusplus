@@ -6,13 +6,13 @@
 <meta name="author" content="">
 
 <!--
+Removed repsonsive
 -->
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css"/>
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-responsive.min.css"/>
 <!--<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/font-awesome.min.css"/>-->
 <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/toggle-switch.css"/>
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery.sidr.light.css"/>
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery.tagit.css"/>
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/widearea.css"/>
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/card.css"/>

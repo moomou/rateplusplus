@@ -52,7 +52,7 @@
           </li>
           <li><a id="" href="#" title="Formula" ><i class="icon-tasks"></i></a></li>-->
           <li><a id="userIcon" title="Profile" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="icon-user"> </i></a></li>
-          <li><a id="createNew" title="New Entry" href="#"><i class="icon-plus"> </i></a></li>
+          <li><a id="createNew" title="New Entry" href="{% url 'default.views.NewEntityHandler' %}"><i class="icon-plus"> </i></a></li>
           <li><a id="signOutIcon" title="Sign Out" href="{% url 'django.contrib.auth.views.logout' %}" role="menuitem"><i class="icon-signout"></i></a></li>
 
           {% else %}

@@ -28,10 +28,10 @@
                   <i class="icon-lock privacy-setting"> New Entity</i> 
                 </span>
               </li>
-              <li class=""><a href="#home" data-toggle="tab"> Attributes</a></li>
-              <li class=""><a href="#home" data-toggle="tab"> Content</a></li>
-              <li class=""><a href="#profile" data-toggle="tab"> Relation</a></li>
-              <li class=""><a href="#profile" data-toggle="tab"> Stats</a></li>
+              <li class="active"><a href="#attribute" data-toggle="tab"> Attributes</a></li>
+              <li class="hidden"><a href="#content" data-toggle="tab"> Content</a></li>
+              <li class="hidden"><a href="#relation" data-toggle="tab"> Relation</a></li>
+              <li class="hidden"><a href="#stat" data-toggle="tab"> Stats</a></li>
               <li class="pull-right">
                 <ul class="entityStats">
                   <li>
@@ -45,7 +45,57 @@
             </ul>
           </div> 
           <div class="span3" id="dr1"></div>
-          <div class="span6" id="dr2"></div>
+          <div class="span6" id="dr2">
+            <div id="myTabContent" class="tab-content" style='overflow: visible;'>
+              <div class="tab-pane active" id="attribute">
+              </div>
+              <div class="tab-pane" id="content">
+                <div class="addContentContainer">
+                  <div class="addContentBox tab-content">
+                    <div id="write" class="tab-pane active">
+                      <textarea id="" name="" cols="30" rows="5"></textarea>
+                    </div>
+                    <div id="pictureframe" class="tab-pane">
+                      <div class="dragdrop"></div>
+                    </div>
+                    <div id="movieTheatre" class="tab-pane">
+                      <div class="dragdrop"></div>
+                    </div>
+                    <div id="linkChain" class="tab-pane">
+                      <div class="dragdrop"></div>
+                    </div>
+                    <div id="fileBucket" class="tab-pane">
+                      <div class="dragdrop"></div>
+                    </div>
+                  </div>
+                  <div class="downTriangleBorder"></div>
+                  <div class="downTriangle"></div>
+                  <ul class="addContentType tab" id="addContent">
+                    <li class="contentType cursor-pointer" data-target='#pictureframe'>
+                      <i class="icon-picture icon-2x block"></i>
+                      <span>Picture</span>
+                    </li>
+                    <li class="contentType cursor-pointer" data-target='#movieTheatre'>
+                      <i class="icon-youtube-play icon-2x block"></i>
+                      <span> Video</span>
+                    </li>
+                    <li class="contentType cursor-pointer" data-target='#linkChain'>
+                      <i class="icon-link icon-2x block"></i>
+                      <span> Link</span>
+                    </li>
+                    <li class="contentType cursor-pointer"data-target='fileBucket'>
+                      <i class="icon-file icon-2x block"></i>
+                      <span> File</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="tab-pane" id="relation">
+              </div>
+              <div class="tab-pane" id="stat">
+              </div>
+            </div>
+          </div>
           <div class="span3" id="dr3"></div>
         </div>
         {% include "comment.partial" %}
@@ -54,45 +104,6 @@
           <div class="span12" id="top1">
           </div>
           <div class="span5" id="top2">
-            <div class="addContentContainer">
-              <div class="addContentBox tab-content">
-                <div id="write" class="tab-pane active">
-                  <textarea id="" name="" cols="30" rows="5"></textarea>
-                </div>
-                <div id="pictureframe" class="tab-pane fade">
-                  <div class="dragdrop"></div>
-                </div>
-                <div id="movieTheatre" class="tab-pane fade">
-                  <div class="dragdrop"></div>
-                </div>
-                <div id="linkChain" class="tab-pane fade">
-                  <div class="dragdrop"></div>
-                </div>
-                <div id="fileBucket" class="tab-pane fade">
-                  <div class="dragdrop"></div>
-                </div>
-              </div>
-              <div class="downTriangleBorder"></div>
-              <div class="downTriangle"></div>
-              <ul class="addContentType tab" id="addContent">
-                <li class="contentType cursor-pointer" data-target='#pictureframe'>
-                  <i class="icon-picture icon-2x block"></i>
-                  <span>Picture</span>
-                </li>
-                <li class="contentType cursor-pointer" data-target='#movieTheatre'>
-                  <i class="icon-youtube-play icon-2x block"></i>
-                  <span> Video</span>
-                </li>
-                <li class="contentType cursor-pointer" data-target='#linkChain'>
-                  <i class="icon-link icon-2x block"></i>
-                  <span> Link</span>
-                </li>
-                <li class="contentType cursor-pointer"data-target='fileBucket'>
-                  <i class="icon-file icon-2x block"></i>
-                  <span> File</span>
-                </li>
-              </ul>
-            </div>
           </div>
           <div class="span2" id="top3"></div>
         </div>

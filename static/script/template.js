@@ -140,10 +140,13 @@ var Template = (function() {
         attributeRowEdit = "" + 
           "<td style='width:15%;' class='tdDivider text-h-center text-v-center'>" + 
             "<div data-toggle='tooltip' title='Save' class='close saveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
-            "<i style='font-size: 3em;' data-toggle='tooltip' title='<%=tone%>' class='cursor-pointer tone icon-heart <%=TONE_ICON%>'></i></div>" + 
+            "<i style='font-size: 3em;' data-toggle='tooltip' title='<%=tone%>' class='cursor-pointer tone icon-heart <%=TONE_ICON%>'>" + 
+              "<span class='noSelect toneText' style='font-size: 14px;'> <%=tone%><span>" +
+            "</i></div>" + 
           "</td>" + 
           "<td class='head'>" + 
             "<div data-toggle='tooltip' title='Close' class='close closeBtn'><i class='icon-remove-sign icon-large'></i></div>" +
+            /*
             "<div class='dropdown' style='position:absolute;'>" +
               "<span class='typeIcon'> <i class='icon-group'></i></span> " +
               "<a style='color: black;' class='dropdown-toggle cursor-pointer' data-toggle='dropdown' data-target='#'> <i class='icon-collapse'></i></a>" +
@@ -152,25 +155,28 @@ var Template = (function() {
                 "<li><a data='cloud-download' href='#'><i data='cloud-download' class='icon-cloud-download'></i> Auto</a></li>" +
               "</ul>"+
             "</div>" +
+            */
             "<h3 class='attrName' contenteditable='true' ><%=obj.name%></h3>" + 
-            "<div class='input-prepend'>" +
+            "<div class='input-prepend' style='display: block;'>" +
               "<span class='add-on'><i class='icon-link'> Source</i></span>" + 
               "<input style='width: 75%;' class='srcURL' type='text' placeholder='http://'>" +
             "</div>" +
           "</td>",
         attributeRow = "" + 
           "<td style='width:15%;' class='tdDivider text-h-center text-v-center'>" + 
-            "<i style='font-size: 3em;' data-toggle='tooltip' title='<%=tone%>' class='icon-heart <%=TONE_ICON%>'></i></div>" + 
+            "<i style='font-size: 3em;' data-toggle='tooltip' title='<%=tone%>' class='icon-heart <%=TONE_ICON%>'>" +
+              "<span class='noSelect toneText' style='font-size: 14px;'> <%=tone%><span>" +
+            "</i></div>" + 
           "</td>" + 
           "<td class='head'>" + 
             "<h3><%=obj.name%></h3>" + 
             "<span style='position: absolute; top: 5px; right: 5px;'>" +
               "<i class='icon-link'><a href='<%=obj.srcURL%>'> Source</a></i></span>" + 
-            "<span style='position: absolute; top: 5px; left: 10px;'>" +
+            "<span style='position: absolute; top: 5px; left: 10px;'></span>" +
               "<% if (obj.type == 'auto') { %>" +
-                "<i class='icon-cloud-download'></i></span>" + 
+              //  "<i class='icon-cloud-download'></i></span>" + 
               "<% } else { %>" +
-                "<i class='icon-group'></i></span>" + 
+              //  "<i class='icon-group'></i></span>" + 
                 "<div class='voteBtns'>" +
                   "<a href='' class='btn voteBtn upVote btn-success'>Yes <i class='upVote icon-thumbs-up'></i></a>" +
                   "<a href='' class='btn voteBtn downVote btn-danger'>No <i class='downVote icon-thumbs-down'></i></a>" +

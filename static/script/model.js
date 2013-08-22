@@ -339,11 +339,13 @@ App.AttributeView = Backbone.View.extend({
             $i.removeClass('black-heart');
             $i.addClass('red-heart');
             this.model.set('tone', App.POSITIVE);
+            this.$('.toneText').html('positive');
         }
         else {
             $i.removeClass('red-heart');
             $i.addClass('black-heart');
             this.model.set('tone', App.NEGATIVE);
+            this.$('.toneText').html('negative');
         }
     },
 });
@@ -663,9 +665,7 @@ App.SummaryCardView = Backbone.View.extend({
     renderSaveCancelBtns: function() {
     },
 	render: function(editing, renderMode) {
-        /*
-            Editable and Editing confusing
-        */
+        /* Editable and Editing confusing */
 		console.log("App.SummaryCardView Render");
 
         var editable = this.model.get('editable'),
@@ -674,11 +674,8 @@ App.SummaryCardView = Backbone.View.extend({
             isNew = this.entityView.model.isNew(),
             private = this.entityView.model.get('private');
 
-        //_.extend(entityModel, {searchView: this.searchView});
-
         this.$el.html(this.template(entityModel));
         this.$('.profileContent').empty().append(this.entityView.render().el);
-        //this.attributeCollectionView.clean(); //remove extra
 
         var that = this,
             hashTagsUL = this.$('#hashtags-'+domId),
@@ -733,7 +730,11 @@ App.SummaryCardView = Backbone.View.extend({
                 .css('display', '')
                 .attr('placeholder', 'Add New Category Tag');
 
-            if (!isNew) {
+            if (isNew) {
+                this.$('.closeBtn').hide();
+                this.$('.saveBtn').hide();
+            }
+            else {
                 this.$('.closeBtn').hide();
             }
         }
@@ -1228,7 +1229,7 @@ App.AttributeCollectionView = App.TableView.extend({
         });
 
         // TODO change
-        document.getElementById('dr2').appendChild(this.el);
+        document.getElementById('attribute').appendChild(this.el);
     },
     // event handler
     addNew: function(e) {
@@ -1804,13 +1805,13 @@ App.AppRouter = Backbone.Router.extend({
                     stateVar = -1; // hacky way to disabel btn
                     
                     cardRef.setPublic($('#publicCheckBox').is(':checked'));
+
                     cardRef.saveCreation(null, function() {
                         cardRef.addNewAttribute();
 
-                        $('#dr2').removeClass('hidden');
-
+                        $('#attribute').removeClass('hidden');
                         var dom = $('#saveCancelContainer').detach();
-                        $('#dr2').append(dom);
+                        $('#attribute').append(dom);
 
                         stateVar = 1;
                     });
