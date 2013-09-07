@@ -121,15 +121,20 @@ App.EntityAttributeModel = Backbone.Model.extend({
             'attribute/'].join("");
     },
     defaults: {
-        //DOM
+        // DOM
         editable: false,
-        //BACKEND
-    	id: undefined,
-        entity: undefined,
-        name: 'New Attribute',
+        // BACKEND
+    	id: undefined,      // unique attr id
+        entity: undefined,  // unique entity id
+        type: undefined,    // type of attr data
         tone: App.POSITIVE,
+        name: 'New Attribute',
         upVote: 0,
         downVote: 0,
+        // link data
+        srcURL: undefined,
+        description: undefined,
+        // LOCAL
         voteCount: 0,
         voted: false,
     },

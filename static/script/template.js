@@ -138,7 +138,7 @@ var Template = (function() {
             "</div>" + 
           "</div>",
         attributeRowEdit = "" + 
-          "<td style='width:15%;' class='tdDivider text-h-center text-v-center'>" + 
+          "<td style='width:17%;' class='tdDivider text-h-center text-v-center noSelect'>" + 
             "<div data-toggle='tooltip' title='Save' class='close saveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
             "<i style='font-size: 3em;' data-toggle='tooltip' title='<%=tone%>' class='cursor-pointer tone icon-heart <%=TONE_ICON%>'>" + 
               "<span class='noSelect toneText' style='font-size: 14px;'> <%=tone%><span>" +
@@ -163,7 +163,7 @@ var Template = (function() {
             "</div>" +
           "</td>",
         attributeRow = "" + 
-          "<td style='width:15%;' class='tdDivider text-h-center text-v-center'>" + 
+          "<td style='width:17%;' class='tdDivider text-h-center text-v-center noSelect'>" + 
             "<i style='font-size: 3em;' data-toggle='tooltip' title='<%=tone%>' class='icon-heart <%=TONE_ICON%>'>" +
               "<span class='noSelect toneText' style='font-size: 14px;'> <%=tone%><span>" +
             "</i></div>" + 
