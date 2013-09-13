@@ -1,15 +1,8 @@
-<div class="outer hide" id="commentContainer">
+<div style="display: block; position: relative;">
   <hr>
-  <div id="commentForm" class="inner">
-    <div class="input-append">
-      <input name="content" class="span5" placeholder="Enter Comment" type="text">
-      <div class="btn-group">
-        <button id="submitComment" class="btn btn-success" data-loading-text="Sending...">Submit</button>
-      </div>
-    </div>
-    <label class="pull-right checkbox"> 
-      <input name="private" type="checkbox" />Anonymous
-    </label>
+  <div class="absCenter" style="height: 50%; width: 75%;">
+    <textarea id="commentForm" rows="3" style="width: 100%; display: block;"></textarea>
+    <button id="submitComment" class="btn btn-large btn-success noSelect pull-right" data-loading-text="Sending...">Submit</button>
   </div>
   <div class="row-fluid">
     <div class="span4" id="cmt1"></div>

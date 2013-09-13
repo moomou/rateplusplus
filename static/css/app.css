@@ -167,6 +167,15 @@ ul {
   user-select: none;
 }
 
+.absCenter {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
 .center {
   display: block;
   margin: 0 auto;
@@ -227,6 +236,11 @@ ul {
   margin-top: 1em;
 }
 
+#commentContainer {
+  overflow-y: visible;
+  position: relative;
+}
+
 .comment {
   -webkit-transition: color;
   -webkit-transition-duration:0.2s;
@@ -236,6 +250,7 @@ ul {
   -moz-transition-duration:0.2s;
   -moz-transition-timing-function:linear;
   -moz-transition-delay:0s; 
+  padding: 1em;
   }
 
   .comment:hover {
@@ -325,6 +340,26 @@ ul {
 }
 .icon-remove-sign:hover {
   color: red;
+}
+.debug {
+  border: 1px solid red;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Discussion Timeline
+ */
+.timeline {
+  vertical-align: middle;
+  height: 110%;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 7px;
+  background: rgba(150, 250, 190, 0.25);
 }
 
 /*Fix for Chrome slow scroll*/

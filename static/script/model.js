@@ -356,16 +356,25 @@ App.AttributeView = Backbone.View.extend({
 });
 
 App.CommentModel = Backbone.Model.extend({
-    urlRoot: App.API_VERSION + 'comment/',
+    urlRoot: function() {
+        return [App.API_SERVER,
+            App.API_VERSION,
+            'entity/',
+            this.get('entity') + '/',
+            'comment/'].join("");
+    },
     defaults: {
+        // required
     	id: undefined,
-        entityId: undefined,
-        user: 'Anonymous',
-        private: false,
-        editable: false,
-        upVote: 0,
-        downVote: 0,
-        totalVote: 0
+        // Required
+        entity: undefined,
+        username: 'Anonymous',
+        // Server side
+        comment: '',
+        location: '', 
+        createdAt: '',
+        modifiedAt: '',
+        private: false
     },
     //Builtin Function
     initialize: function() {
@@ -378,8 +387,8 @@ App.CommentModel = Backbone.Model.extend({
 App.CommentView = Backbone.View.extend({
     template: _.template(Template.commentTemplate),
     tagName: 'div',
-    className: 'page-curl outer',
-    initialize: function() {
+    className: 'card comment',
+    initialize: function(setting) {
         this.voted = false;
     },
     events: {
@@ -388,7 +397,7 @@ App.CommentView = Backbone.View.extend({
         'click .btn': 'commentVote'
     },
     render: function() {
-        console.log('Comentview Render');
+        console.log('Commentview Render');
         this.$el.html(this.template(this.model.toJSON()));
         return this;
     },
@@ -438,6 +447,20 @@ App.CommentView = Backbone.View.extend({
         .fail(function(msg) {
             this.voted = false;
         });
+    },
+});
+
+App.RowCommentView = Backbone.View.extend({
+    template: _.template(Template.commentRowTemplate),
+    className: 'row-fluid',
+    initialize: function(setting) {
+        this.commentView = setting.commentView;
+    },
+    render: function(side) {
+        console.log('CommentRowView Render');
+        this.$el.html(this.template());
+        this.$('.' + side).append(this.commentView.render().el);
+        return this;
     },
 });
 
@@ -1123,12 +1146,12 @@ App.LinkCollection = Backbone.Collection.extend({
 });
 
 App.AttributeCollection = Backbone.Collection.extend({
+    model: App.EntityAttributeModel,
     initialize: function(models, entity) {
         if (entity) {
             _.each(models, function(model) { model['entity'] = entity})
         }
     },
-    model: App.EntityAttributeModel,
     comparator: function(m) {
         return -m.get('voteCount');
     },
@@ -1143,7 +1166,7 @@ App.SummaryCardCollection = Backbone.Collection.extend({
     parse: function(response) {
         return response;
     },
-    //Custom Func
+    // Custom Func
     sortByX: function(option) {
         this.sortProp = option.prop;
         this.sortOrder= option.order;
@@ -1165,13 +1188,16 @@ App.SummaryCardCollection = Backbone.Collection.extend({
 });
 
 App.CommentCollection = Backbone.Collection.extend({
-    url: App.API_VERSION + 'commentlist/',
-    model: App.CommentModel,
-    parse: function(response) {
-        return response.results;
+    url: function() {
+        return [App.API_SERVER,
+            App.API_VERSION,
+            'entity/',
+            this.entity + '/',
+            'comment/'].join("");
     },
-    comparator: function(m) {
-        return -m.get('upVote');
+    model: App.CommentModel,
+    initialize: function(settings) {
+        this.entity = settings.entity;
     },
 });
 
@@ -1517,32 +1543,45 @@ App.LinkCollectionView = Backbone.View.extend({
 
 App.CommentCollectionView = Backbone.View.extend({
     initialize: function(data) {
-        this.collection = new App.CommentCollection();
+        console.log(data);
+        this.collection = new App.CommentCollection({entity: data.entityId});
         this.data = data;
-
-        this.collection.fetch({data: $.param(data)});
+        this.side = 'left';
+        this.collection.fetch();
         this.collection.on('reset', this.render, this);
     },
     update: function(newCmt) {
-        App.ColManager.getCol('cmt').cols[0].prepend(this.renderComment(newCmt).el);
+        $('#commentContainer').append(
+            this.renderComment(newCmt, this.side).el);
         this.collection.add(newCmt);
     },
     render: function() {
-        var that = this;
+        var that = this,
+            prev = null,
+            side = this.side;  
         this.cmtViews = [];
 
-        _.each(this.collection.models, function(item) {
-            that.cmtViews.push(that.renderComment(item));
-            App.ColManager.nextCol('cmt').append(that.renderComment(item).el);
+        _.each(this.collection.models, function(cmt) {
+            if (prev != cmt.get('username')) {
+                side = (side == 'left') ? 'right' : 'left';
+                prev = cmt.get('username');
+            }
+            var result = that.renderComment(cmt, side);
+            that.cmtViews.push(result);
+            $('#commentContainer').append(result.el);
         }, this);
 
         return this;
     },
-    renderComment: function(item) {
+    renderComment: function(item, side) {
         var cmtView = new App.CommentView({
-            model: item
-        });
-        return cmtView.render();
+                model: item
+            }),
+            rowCmtView = new App.RowCommentView({
+                commentView: cmtView
+            });
+        var result = rowCmtView.render(side);
+        return result;
     }
 });
 
@@ -1758,16 +1797,15 @@ App.AppRouter = Backbone.Router.extend({
     },
     detailEntityPageInit: function(id) {
         console.log("detail Entity");
-        pageView = new App.PageView({id:parseInt(id)}); //search for particular id
 
-        //cmtCollectionView = new App.CommentCollectionView({entityId:id});
+        pageView = new App.PageView({id: parseInt(id)}); //search for particular id
+        entityCommentsView = new App.CommentCollectionView({entityId: parseInt(id)});
 
         $('#submitComment').click(function(e) {
-            var cmtForm = $('#commentForm'),
-                content = cmtForm.find('input[name=content]'),
+            var comment = $('#commentForm'),
                 btn = $(this);
 
-            if (!content.val()) {
+            if (!comment.val()) {
                 return;
             }
 
@@ -1775,15 +1813,13 @@ App.AppRouter = Backbone.Router.extend({
 
             var newComment = new App.CommentModel({});
 
-            newComment.set('content', content.val());
-            newComment.set('private', cmtForm.find('input[name=private]').is(':checked'));
-            newComment.set('entityId', id);
+            newComment.set('comment', comment.val());
+            newComment.set('entity', id);
 
             newComment.save({}, {
                 success: function(response) {
-                    content.val('');
                     btn.button('reset');
-                    cmtCollectionView.update(response);
+                    entityCommentsView.update(response);
                 },
                 error: function(response) {
                 },
@@ -1867,4 +1903,5 @@ App.AppRouter = Backbone.Router.extend({
 });
 
 var appRouter = new App.AppRouter;
+
 Backbone.history.start({pushState: true});

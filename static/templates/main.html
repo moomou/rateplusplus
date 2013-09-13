@@ -20,16 +20,17 @@
       </div>
 
       {% if specific_entity %}
-        <div id="detailRow" class="row-fluid">
+        <div id="" class="row-fluid">
           <div class="span12">
-            <ul id="myTab" class="nav nav-tabs" style="margin-left: 2em;">
+            <ul id="myTab" class="nav nav-tabs">
               <li class="">
                 <span href="#home" class="entityTitle">
                   <i class="icon-lock privacy-setting"> New Entity</i> 
                 </span>
               </li>
-              <li class="active"><a href="#attribute" data-toggle="tab"> Attributes</a></li>
-              <li class="hidden"><a href="#content" data-toggle="tab"> Content</a></li>
+              <li class="noSelect active"><a href="#attribute" data-toggle="tab"> Attributes</a></li>
+              <li class="noSelect"><a href="#discussion" data-toggle="tab"> Discussion</a></li>
+              <li class="noSelect"><a href="#content" data-toggle="tab"> Content</a></li>
               <li class="hidden"><a href="#relation" data-toggle="tab"> Relation</a></li>
               <li class="hidden"><a href="#stat" data-toggle="tab"> Stats</a></li>
               <li class="pull-right">
@@ -44,10 +45,18 @@
               </li> 
             </ul>
           </div> 
+        </div> 
+        <div id="detailRow" class="row-fluid">
           <div class="span3" id="dr1"></div>
-          <div class="span6" id="dr2">
+          <div class="span9" id="dr2">
             <div id="myTabContent" class="tab-content" style='overflow: visible;'>
               <div class="tab-pane active" id="attribute">
+              </div>
+              <div class="tab-pane" id="discussion">
+                <div id="commentContainer" class="commentContainer">
+                  <div class="timeline hidden-phone"></div>
+                </div>
+                {% include "comment.partial" %}
               </div>
               <div class="tab-pane" id="content">
                 <div class="addContentContainer">
@@ -96,9 +105,7 @@
               </div>
             </div>
           </div>
-          <div class="span3" id="dr3"></div>
         </div>
-        {% include "comment.partial" %}
       {% else %}
         <div id="rankingRow" class="row-fluid">
           <div class="span12" id="top1">

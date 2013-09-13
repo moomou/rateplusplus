@@ -347,6 +347,10 @@ td h4 {
     border-color: pink;
 }
 
+.toneText {
+  font-size: 14px;
+  display: block;
+}
 .red-heart {
   color: red;
 }

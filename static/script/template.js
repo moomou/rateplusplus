@@ -11,18 +11,21 @@ var Template = (function() {
         "<div id='<%=id%>'>"+
           "<button id='<%=saveId%>' type='button' class='btn btn-success' style='position: relative; width: 100%;'> <i class='icon-arrow-right'></i> Save & Next</button>" +
          "</div>",
-         commentTemplate = "" + 
-        "<div class='comment'>" + 
-          "<i class='icon-smile icon-2x btn cmtUpVote hide' style='position:absolute;margin-left: -2em;'></i>" + 
-          "<i class='icon-frown icon-2x btn cmtDownVote hide' style='position:absolute;margin-left: 1em;'></i>" +
-          "<p class='noSelect'><%=content%></p>" + 
+        commentTemplate = "" + 
+          //"<i class='icon-smile icon-2x btn cmtUpVote hide' style='position:absolute;margin-left: -2em;'></i>" + 
+          //"<i class='icon-frown icon-2x btn cmtDownVote hide' style='position:absolute;margin-left: 1em;'></i>" +
+          "<p class='noSelect'><%=comment%></p>" + 
           "<div class='commentInfo'>" + 
-            "<span class='pull-left date'><%=lastUpdated%></span>" + 
-            "<span class='pull-right vote'>" +
-              "<%=upVote%><i style='margin: 0 0.5em 0 0.5em;' class='icon-group'></i> agree" + 
-            "</span>" + 
-          "</div>" +
-        "</div>",
+            "<span class='pull-left date'><%=modifiedAt%></span>" + 
+            "<span class='pull-right'><%=username%></span>" + 
+            //"<span class='pull-right vote'>" +
+            //  "<%=upVote%><i style='margin: 0 0.5em 0 0.5em;' class='icon-group'></i> agree" + 
+            //"</span>" + 
+          "</div>",
+        commentRowTemplate = "" + 
+        "<div class='span5 left'></div>" +
+        "<div class='span2'></div>" +
+        "<div class='span5 right'></div>",
         linkTemplate = "" + 
         "<div>" + 
           "<div data-toggle='tooltip' title='Save' class='close attrSaveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
@@ -141,7 +144,7 @@ var Template = (function() {
           "<td style='width:17%;' class='tdDivider text-h-center text-v-center noSelect'>" + 
             "<div data-toggle='tooltip' title='Save' class='close saveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
             "<i style='font-size: 3em;' data-toggle='tooltip' title='<%=tone%>' class='cursor-pointer tone icon-heart <%=TONE_ICON%>'>" + 
-              "<span class='noSelect toneText' style='font-size: 14px;'> <%=tone%><span>" +
+              "<span class='noSelect toneText'> <%=tone%><span>" +
             "</i></div>" + 
           "</td>" + 
           "<td class='head'>" + 
@@ -165,7 +168,7 @@ var Template = (function() {
         attributeRow = "" + 
           "<td style='width:17%;' class='tdDivider text-h-center text-v-center noSelect'>" + 
             "<i style='font-size: 3em;' data-toggle='tooltip' title='<%=tone%>' class='icon-heart <%=TONE_ICON%>'>" +
-              "<span class='noSelect toneText' style='font-size: 14px;'> <%=tone%><span>" +
+              "<span class='noSelect toneText'> <%=tone%><span>" +
             "</i></div>" + 
           "</td>" + 
           "<td class='head'>" + 
@@ -225,6 +228,7 @@ var Template = (function() {
   return {
     attributeTemplate: attributeTemplate,
     commentTemplate: commentTemplate,
+    commentRowTemplate: commentRowTemplate,
     linkTemplate: linkTemplate,
     entityTemplate: entityTemplate,
     summaryCardTemplate: summaryCardTemplate,
