@@ -6,6 +6,8 @@ from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
 
+from django.shortcuts import redirect
+
 #App Stuff
 from forms import SignupForm, FeedbackForm, EMAIL_MSG 
 
@@ -143,6 +145,23 @@ def GraphHandler(request):
     c = RequestContext(request, renderCxt) 
 
     return HttpResponse(t.render(c))
+
+def ProfileHandler(request):
+    renderCxt = ContextSetup(request)
+
+    if not renderCxt['authenticated']:
+        return redirect('signin-page')
+
+    if request.method == "GET":
+        ''' Renders Profile Page '''
+        t = loader.get_template('profile.html')
+        c = RequestContext(request, renderCxt) 
+
+        return HttpResponse(t.render(c))
+
+    elif request.method == "POST":
+        ''' Handlers User Setting '''
+        return HttpResponse(json.dumps("Not Implemented"), mimetype="application/json")
 
 #Landing Page
 def DefaultPage(request):

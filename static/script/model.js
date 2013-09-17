@@ -1762,6 +1762,7 @@ App.MessageBox = $('.message-box');
 App.AppRouter = Backbone.Router.extend({
     routes: {
         "graph" : "graphPageInit",
+        "profile" : "profilePageInit",
         "entity/new" : "newEntityPageInit",
         "entity/:id" : "detailEntityPageInit",
         "" : "defaultPageInit" //handles query
@@ -1794,6 +1795,12 @@ App.AppRouter = Backbone.Router.extend({
             var domContainer = App.ColManager.getCol('card').cols[1];
             var graphView = new App.GraphView({domContainer: domContainer});
         });
+    },
+    profilePageInit: function() {
+        console.log("Profile Page Init");
+        
+        // Init discussion panel
+        // Init request panel
     },
     detailEntityPageInit: function(id) {
         console.log("detail Entity");

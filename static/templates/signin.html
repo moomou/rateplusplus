@@ -7,7 +7,7 @@
   {% include "header.partial" %}
 
   <div class="container-narrow">
-    <hr><div class="break"></div>
+    <div class="break"></div>
     <form id="signinForm" class="form-signin" method="post" action="{% url 'default.views.SigninHandler' %}">
       {% csrf_token %}
 
