@@ -275,12 +275,12 @@ td h4 {
 .closeBtn {
   position: absolute;
   top: -12px;
-  left: 97%;
+  left: 99%;
 }
 .saveBtn{
   position: absolute;
   top: -12px;
-  left: -10px;
+  left: -15px;
 }
 .attrSaveBtn {
   float: left;

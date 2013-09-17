@@ -29,8 +29,8 @@
                 </span>
               </li>
               <li class="noSelect active"><a href="#attribute" data-toggle="tab"> Attributes</a></li>
-              <li class="noSelect"><a href="#discussion" data-toggle="tab"> Discussion</a></li>
               <li class="noSelect"><a href="#content" data-toggle="tab"> Content</a></li>
+              <li class="noSelect"><a href="#discussion" data-toggle="tab"> Discussion</a></li>
               <li class="hidden"><a href="#relation" data-toggle="tab"> Relation</a></li>
               <li class="hidden"><a href="#stat" data-toggle="tab"> Stats</a></li>
               <li class="pull-right">
@@ -115,7 +115,6 @@
           <div class="span2" id="top3"></div>
         </div>
       {% endif %}
-
       <div id="mediaQuery" class="hidden-desktop" style="position:absolute;left:-1200px;"></div>
     </div>
       
@@ -127,10 +126,15 @@
       {% include "feedbackForm.partial" %}
     {% endif %}
 
+    {% if REQUEST_ENABLED %} 
+      {% include "requestForm.partial" %}
+    {% endif %}
+
     {% include "stdScript.partial" %}
     {% include "modelScript.partial" %}
 
     <script src="{{STATIC_URL}}script/app.js"></script> 
+
   </body>
 
 </html>

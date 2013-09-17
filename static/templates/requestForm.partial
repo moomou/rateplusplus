@@ -1,0 +1,16 @@
+<div id="requestModal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3><i class="icon-envelope-alt"></i> Request</h3>
+  </div>
+  <div class="modal-body" style="height: 10em;">
+    <span style="margin-top:-1em;" class="help-inline"> Receiver </span>
+    <input type="text" name="username" class="field" placeholder="Username" />
+    <h6> Ask Your Friend for Recommendations</h6>
+    <textarea autofocus rows="5" name="request" class="absCenter" style="height: 5em; width:95%; max-width:95%; top: 6em;">
+    </textarea>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success" data-loading-text="Sending..." id="sendRequestBtn"> Send </button>
+  </div>
+</div>

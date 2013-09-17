@@ -167,6 +167,10 @@ ul {
   user-select: none;
 }
 
+.noSelect:focus {
+  outline: 0;
+}
+
 .absCenter {
   margin: auto;
   position: absolute;
@@ -299,6 +303,11 @@ ul {
 .modal-backdrop, .modal-backdrop.fade.in {
   opacity: 0.001;
 }
+
+.modal {
+  top: 20% !important;
+}
+
 .navbar-inner {
   background-color:white;
   min-height: 40px;

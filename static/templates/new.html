@@ -45,6 +45,10 @@
       {% include "feedbackForm.partial" %}
     {% endif %}
 
+    {% if REQUEST_ENABLED %} 
+      {% include "requestForm.partial" %}
+    {% endif %}
+
     {% include "stdScript.partial" %}
     {% include "modelScript.partial" %}
 

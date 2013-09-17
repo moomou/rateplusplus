@@ -651,7 +651,7 @@ App.SummaryCardModel = Backbone.Model.extend({
 });
 
 App.SummaryCardView = Backbone.View.extend({
-    className: 'card cardSize',
+    className: 'card',
 	template: _.template(Template.summaryCardTemplate, null, {variable: 'obj'}),
     summaryTemplate: _.template(Template.summaryTemplate, null, {variable: 'obj'}),
     saveCancelTemplate: _.template(Template.summaryTemplate, null, {variable: 'obj'}),
@@ -1888,6 +1888,7 @@ App.AppRouter = Backbone.Router.extend({
     defaultPageInit: function() {
         console.log("Default Route");
 
+        // Legacy code, if not required, stash
         $('#addNewEntity').click(function(e) {
             // hide message box
             $('.message-box').slideUp();
@@ -1906,6 +1907,21 @@ App.AppRouter = Backbone.Router.extend({
         if (query) {
             pageView = new App.PageView({query:query});
         }
+        $('#filterBtn').click(function(e) {
+            var filterBy = e.target.getAttribute('data-filterBy');
+            if (searchView) { //filter on summary card
+            }
+            else { //filter on attr
+            }
+        });
+
+        $('#sortBtn').click(function(e) {
+            var sortBy = e.target.getAttribute('data-sortBy');
+            if (sortBy) {
+                pageView.collection.sortByX({'prop': sortBy});
+                pageView.render();
+            }
+        });
     }
 });
 

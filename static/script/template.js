@@ -217,12 +217,20 @@ var Template = (function() {
             "<%=title%>" + 
             "<div class='pull-right cursor-pointer'>" +
               "<div>" +
-                "<i title='Add New' class='addNew icon-plus-sign-alt'> </i>" +
-                //"<i title='Show Stats' class='icon-bar-chart'> </i>" +
                 "<i title='Filter' class='filter icon-filter'> </i>" +
                 "<i title='Rearrange' class='rearrange icon-sort-by-attributes'> </i>" +
               "</div>" +
           "</th>",
+        discussionRow = "" +
+        "<td style='width: 10%' class='tdDivider text-h-center text-v-center noSelect'>" +
+          "<i style='font-size: 2em;' data-toggle='tooltip' title='positive' class='icon-cog'></i>" +
+          "<span> <%=username%></span>" +
+        "</td>" +
+        "<td style='width: 90%' class='head'>" +
+          "<div>" +
+            "<h5> <%=comment%></h5>" +
+          "</div>" +
+        "</td>" +
         genericTable = "";
 
   return {
@@ -239,6 +247,7 @@ var Template = (function() {
     attributeRowEditTemplate: attributeRowEdit,
     rankingRowTemplate: rankingRow,
     titleRowTemplate: titleRow,
+    discussionRowTemplate: discussionRow,
     saveCancelBtnTemplate: saveCancelBtn
   };
 }) ();

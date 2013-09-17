@@ -20,6 +20,7 @@ FEATURE_FLAG = {
     'SEARCH_ENABLED': True,
     'STATS_ENABLED': True,
     'FEEDBACK_ENABLED': True,
+    'REQUEST_ENABLED': True,
     'NAV_ENABLED': True,
 }
 

@@ -12,7 +12,26 @@
       {% include "messageBox.partial" %}
 
       <div id="profileRow" class="row-fluid">
-        
+
+        <table id="Recommendation" class="rankingTable table span6">
+          <tbody>
+            <tr class="row title">
+              <th colspan="2"> Recommendation</th>
+            </tr>
+          </tbody>
+        </table>
+
+        <table id="requestTable" class="rankingTable table span6">
+          <tbody>
+            <tr class="row title">
+              <th colspan="2"> Request</th>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <div id="statusRow" class="row-fluid">
         <table id="discussionTable" class="rankingTable table span6">
           <tbody>
             <tr class="row title">
@@ -29,19 +48,9 @@
             </tr>
           </tbody>
         </table>
-        <table id="requestTable" class="rankingTable table span6">
-          <tbody>
-            <tr class="row title">
-              <th colspan="2"> Request</th>
-            </tr>
-          </tbody>
-        </table>
 
-      </div>
 
-      <div id="statusRow" class="row-fluid">
-        
-        <table id="requestTable" class="rankingTable table span6">
+        <table id="settingTable" class="rankingTable table span6">
           <tbody>
             <tr class="row title">
               <th colspan="2"> Setting</th>
@@ -72,6 +81,10 @@
 
     {% if FEEDBACK_ENABLED %} 
       {% include "feedbackForm.partial" %}
+    {% endif %}
+
+    {% if REQUEST_ENABLED %} 
+      {% include "requestForm.partial" %}
     {% endif %}
 
     {% include "stdScript.partial" %}

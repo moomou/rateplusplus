@@ -5,9 +5,9 @@
     </div>
 
     <div class="modal-body">
-      <div class="input-prepend">
-        <span class="add-on">Image URL</span>
-        <input class="span4" id="imageURLInput" type="text" placeholder="http://">
+      <div class="input-prepend" style="display: block;">
+        <span class="add-on"><i class="icon-link"> Source</i></span>
+        <input style="width: 75%;" id="imageURLInput" class="srcURL" type="text" placeholder="http://">
       </div>
     </div>
 
