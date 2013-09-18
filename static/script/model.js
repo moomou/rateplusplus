@@ -464,6 +464,34 @@ App.RowCommentView = Backbone.View.extend({
     },
 });
 
+App.ProfileRowModel = Backbone.Model.extend({
+    urlRoot: function() {
+        return [App.API_SERVER,
+            App.API_VERSION,
+            'profile/',
+            this.get('user') + '/',
+            this.get('resourceType')].join("");
+    },
+    defaults: {
+        // required
+    	id: undefined,
+        // Required
+        user: undefined,
+        resourceType: undefined
+    }
+});
+
+App.ProfileRowView = Backbone.View.extend({
+    template: _.template(Template.profileRowTemplate),
+    tagName: 'tr',
+    className: 'row',
+    render: function() {
+        console.log('proilfeRowView Render');
+        this.$el.html(this.template(this.model.toJSON()));
+        return this;
+    },
+});
+
 App.LinkModel = Backbone.Model.extend({
     urlRoot: App.API_VERSION + 'relation/',
     defaults: {
@@ -1798,8 +1826,6 @@ App.AppRouter = Backbone.Router.extend({
     },
     profilePageInit: function() {
         console.log("Profile Page Init");
-        
-        // Init discussion panel
         // Init request panel
     },
     detailEntityPageInit: function(id) {

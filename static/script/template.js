@@ -221,7 +221,7 @@ var Template = (function() {
                 "<i title='Rearrange' class='rearrange icon-sort-by-attributes'> </i>" +
               "</div>" +
           "</th>",
-        discussionRow = "" +
+        profileRow = "" +
         "<td style='width: 10%' class='tdDivider text-h-center text-v-center noSelect'>" +
           "<i style='font-size: 2em;' data-toggle='tooltip' title='positive' class='icon-cog'></i>" +
           "<span> <%=username%></span>" +
@@ -247,7 +247,7 @@ var Template = (function() {
     attributeRowEditTemplate: attributeRowEdit,
     rankingRowTemplate: rankingRow,
     titleRowTemplate: titleRow,
-    discussionRowTemplate: discussionRow,
+    profileRowTemplate: profileRow,
     saveCancelBtnTemplate: saveCancelBtn
   };
 }) ();

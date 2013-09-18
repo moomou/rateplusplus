@@ -7,7 +7,7 @@ $(function() {
 
     $('#feedbackForm').submit(function() {
         $(this).ajaxSubmit({
-            dataType:'json',
+            dataType: 'json',
             beforeSubmit: function(formData, jqFOrm, options) {
                 formData.push({
                     name: 'pageurl',

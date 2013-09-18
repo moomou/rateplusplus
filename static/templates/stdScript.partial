@@ -7,6 +7,7 @@
 <script src="{{STATIC_URL}}js/bootstrap.min.js"></script>
 <script src="{{STATIC_URL}}js/jquery.form.js"></script>
 <script src="{{STATIC_URL}}js/jquery.knob.js"></script>
+<script src="{{STATIC_URL}}js/socket.io.min.js"></script>
 
 <script src="{{STATIC_URL}}js/widearea.min.js"></script>
 <script src="{{STATIC_URL}}js/twitter-bootstrap-hover-dropdown.min.js"></script>

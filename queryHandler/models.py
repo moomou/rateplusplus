@@ -25,6 +25,12 @@ class Customer(models.Model):
     gender = models.IntegerField(choices=GENDER_CHOICES)
     reputation = models.IntegerField(default=50)
 
+    # Neo4j is public id
+    neo4jId = models.LongField(required=True)
+
+    # This is private accessToken used for authentication
+    accessToken = models.CharField(max_length=40)
+
     def __unicode__(self):
         return unicode(self.user.email) + u':' + unicode(self.id)
 
