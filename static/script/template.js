@@ -212,9 +212,9 @@ var Template = (function() {
               "<li><i class='icon-file'></i> <%=obj.summary.totalAttribute%> Files</li>" + 
             "</ul>"+
           "</td>",
-        titleRow = "" + 
-          "<th style='font-size:20px;' colspan='4'>" + 
-            "<%=title%>" + 
+        titleRow = "" +
+          "<th style='font-size:20px;' colspan='4'>" +
+            "<%=title%>" +
             "<div class='pull-right cursor-pointer'>" +
               "<div>" +
                 "<i title='Filter' class='filter icon-filter'> </i>" +
@@ -230,7 +230,7 @@ var Template = (function() {
           "<div>" +
             "<h5> <%=comment%></h5>" +
           "</div>" +
-        "</td>" +
+        "</td>",
         genericTable = "";
 
   return {

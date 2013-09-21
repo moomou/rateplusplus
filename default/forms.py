@@ -1,6 +1,14 @@
 from django import forms
 from django.contrib.auth.models import User
 
+from models import Clover
+
+import json
+import requests
+
+CLOVERITE_GRAPH_URL = "http://localhost:3000/v0/user"
+CLOVERITE_HEADERS = {'content-type': 'application/json', "access-token": "superman"}
+
 EMAIL_MSG = '''
     Hi there,
 
@@ -30,7 +38,7 @@ class FeedbackForm(forms.Form):
 class SignupForm(forms.Form):
     first_name = forms.CharField()
     last_name = forms.CharField()
-
+    username = forms.CharField()
     email = forms.EmailField()
     password = forms.CharField()
 
@@ -39,14 +47,44 @@ class SignupForm(forms.Form):
             User.objects.get(email__iexact=self.cleaned_data['email'])
         except User.DoesNotExist:
             return self.cleaned_data['email']
-
         raise forms.ValidationError(u'Email already registered. Please choose another.')
+
+    def clean_username(self):
+        try:
+            User.objects.get(username__iexact=self.cleaned_data['username'])
+        except User.DoesNotExist:
+            return self.cleaned_data['username']
+        raise forms.ValidationError(u'Username already registered. Please choose another.')
+
     def save(self):
-        newUser = User.objects.create_user(self.cleaned_data['email'],
+        newUser = User.objects.create_user(self.cleaned_data['username'],
                         self.cleaned_data['email'],
                         self.cleaned_data['password'])
         newUser.first_name = self.cleaned_data['first_name']
         newUser.last_name =  self.cleaned_data['last_name']
-        newUser.save()
+        
+        postData = {
+            "firstname" : newUser.first_name,
+            "lastname" : newUser.last_name,
+            "username" : newUser.username,
+            "email" : newUser.email
+        }
 
-        return newUser
+        res = requests.post(
+                CLOVERITE_GRAPH_URL, 
+                headers = CLOVERITE_HEADERS,
+                data = json.dumps(postData))
+
+        if res.status_code != 201:
+            print("Call to Cloverite Graph Failed")
+            return None
+
+        newUser.save()
+        neo4jData = res.json()
+
+        print(neo4jData)
+
+        newClover = Clover(user = newUser, neo4jId = neo4jData['id'])
+        newClover.save()
+        
+        return newClover

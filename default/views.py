@@ -1,5 +1,5 @@
 #Django Stuff
-from django.http import HttpResponse
+from django.http import *
 from django.template import RequestContext, loader
 from django.conf import settings
 from django.core.mail import send_mail
@@ -11,10 +11,18 @@ from django.shortcuts import redirect
 #App Stuff
 from forms import SignupForm, FeedbackForm, EMAIL_MSG 
 
+import logging
 import json
 import pygeoip 
 
+import rredis
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+r = rredis.getRedisConnection()
 gi = pygeoip.GeoIP(settings.PROJECT_ROOT+'/../db/GeoLiteCity.dat', pygeoip.MEMORY_CACHE)
+
+DEFAULT_EXPIRY = 600
 
 FEATURE_FLAG = {
     'SEARCH_ENABLED': True,
@@ -26,6 +34,9 @@ FEATURE_FLAG = {
 
 def ContextSetup(request):
     authenticated = request.user.is_authenticated()
+
+    logger.info("User Session: " + str(request.session.session_key))
+
 
     renderCxt = {
         'authenticated': authenticated,
@@ -71,21 +82,26 @@ def SigninHandler(request):
         return HttpResponse(t.render(c))
 
     elif request.method == "POST":
-        username = request.POST['email']
+        username = request.POST['username']
         password = request.POST['password']
 
         user = authenticate(username=username, password=password)
 
-        if user:
-            if user.is_active:
-                login(request, user)
-                res = {'redirect': request.session.get('next', '/')}
-                return HttpResponse(json.dumps(res), mimetype="application/json")
+        if user and user.is_active:
+            login(request, user)
 
-        return HttpResponse(json.dumps({'error':'x'}), mimetype="application/json")
+            logger.info("Graph Id: " + str(user.clover.neo4jId))
+
+            r.set(request.session.session_key, user.clover.neo4jId)
+            res = {'redirect': request.session.get('next', '/')}
+
+            return HttpResponse(json.dumps(res), mimetype="application/json")
+
+        return HttpResponse(json.dumps({'error':'Authentication failed'}), mimetype="application/json")
 
 def SignoutHandler(request):
     if request.method == "GET":
+        r.delete(request.session.session_key)
         logout(request)
 
 def SignupHandler(request):
@@ -102,7 +118,9 @@ def SignupHandler(request):
         form = SignupForm(request.POST)
 
         if form.is_valid():
-            form.save() 
+            if not form.save():
+                return HttpResponseServerError(
+                    json.dumps({"error": "Please try again later."}))
             return SigninHandler(request)
 
         return HttpResponse(json.dumps(form.errors), mimetype="application/json")

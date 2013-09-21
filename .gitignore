@@ -8,5 +8,6 @@ include/
 lib/
 local/
 staticfiles/
+log/
 local_settings.py
 settings.py

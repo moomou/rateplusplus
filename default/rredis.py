@@ -10,6 +10,5 @@ def getRedisConnection():
     global r
 
     if not r:
-        r = redis.StrictRedis(host=REDIS_HOST,port=PORT, db=REDIS_DB)
-
+        r = redis.StrictRedis(host=REDIS_HOST, port=PORT)
     return r

@@ -4,7 +4,7 @@ var App = App || {};
     Constants for App
 */
 App.API_SERVER = 'http://api.cloverite.com/';
-App.API_VERSION = '';
+App.API_VERSION = 'v0/';
 App.AE_H_URL = App.API_VERSION + 'ae/tag';
 App.AE_C_URL = App.API_VERSION + 'ae/cat';
 App.POSITIVE = "positive";
@@ -468,13 +468,16 @@ App.ProfileRowModel = Backbone.Model.extend({
     urlRoot: function() {
         return [App.API_SERVER,
             App.API_VERSION,
-            'profile/',
+            'user/',
             this.get('user') + '/',
             this.get('resourceType')].join("");
     },
     defaults: {
         // required
     	id: undefined,
+        to: undefined,
+        from: undefined,
+
         // Required
         user: undefined,
         resourceType: undefined
@@ -1775,14 +1778,6 @@ App.createNewCard = function() {
 /*
     Global Objects
 */
-App.State = (function() {
-    // private
-
-    // public
-    return {
-    };
-})();
-
 App.CommentContainer = $('#commentContainer');
 App.LinkBox = $('#linkBox');
 App.MessageBox = $('.message-box');
