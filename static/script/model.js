@@ -753,7 +753,7 @@ App.SummaryCardView = Backbone.View.extend({
         this.renderKonb();
 
         hashTagsUL.tagit(App.ConfigureTagit('hash', that, editable));
-        catTagsUL.tagit(App.ConfigureTagit('cat', that, editable));
+        //catTagsUL.tagit(App.ConfigureTagit('cat', that, editable));
 
         if (!editable) {
             this.entityView.editProfile('editable');
@@ -886,6 +886,7 @@ App.SummaryCardView = Backbone.View.extend({
         this.$('.card-status').html('<i class="icon-spinner icon-spin icon-2x pull-left"></i>');
         this.entityView.editProfile('save'); //save the description
 
+        this.entity.model.get('tags', )
         this.entityView.model.save({}, {
             success: function(model, response) {
                 //update summary
@@ -1738,9 +1739,10 @@ App.ConfigureTagit = function(option, that, editable) {
         autocomplete: {delay: 0, minLength: 2, source: sourceURL},
         afterTagAdded: function(event, ui) {
             var tags = that.entityView.model.get('tags');
-            if (tags.indexOf(prefix+ui.tagLabel) < 0) {
+            if (ui.tagLabel && tags.indexOf(prefix+ui.tagLabel) < 0) {
                 var label = ui.tagLabel[0] == prefix ? ui.tagLabel : prefix + ui.tagLabel;
                 tags.push(label);
+                console.log("New Tags");
                 console.log(tags);
             }
         },

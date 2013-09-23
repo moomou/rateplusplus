@@ -184,12 +184,12 @@ def ProfileHandler(request):
 
 #Landing Page
 def DefaultPage(request):
-    ipaddr = request.META['HTTP_X_REAL_IP']
+    ipaddr = request.META.get('HTTP_X_REAL_IP', '127.0.0.1')
     geoInfo = gi.record_by_addr(ipaddr)
-    defaultQuery = " ".join([geoInfo['city']]) #,geoInfo['country_name']])
+    #defaultQuery = " ".join([geoInfo['city']]) #,geoInfo['country_name']])
 
     renderCxt = ContextSetup(request)
-    renderCxt['DEFAULT_QUERY'] = defaultQuery
+    renderCxt['DEFAULT_QUERY'] = '' #defaultQuery
     renderCxt['SEARCH_ENABLED'] = False
     renderCxt['FEEDBACK_ENABLED'] = False
     
