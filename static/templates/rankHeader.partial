@@ -1,0 +1,12 @@
+<div id="rankingHeader" style="display:none;" class="navbar">
+  <div class="navbar-inner rankbar">
+    <div class="container-narrow">
+      <span contenteditable="true" id="rankingName">New Ranking</span>
+      <ul id="rankingList">
+      </ul>
+      <button id="rankingCancelBtn" class="btn" style="float: right; margin-top: -7px;"> Cancel</button>
+      <button id="rankingSaveBtn" class="btn btn-success" style=" float: right; margin-top: -7px; margin-right: 5px; "> Save</button>
+    </div>
+  </div>
+</div>
+

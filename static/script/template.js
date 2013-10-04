@@ -231,23 +231,38 @@ var Template = (function() {
             "<h5> <%=comment%></h5>" +
           "</div>" +
         "</td>",
-        genericTable = "";
+        genericTable = "",
+        rankingListIcon = "" +
+        "<a href='<%=link%>' class='rankContainer'>" +
+           "<i class='<%=icon%> icon-2x' style='margin-left: -5px;'></i>" +
+           "<span class='rankingNo'> <%=rank%> </span>" + 
+        "</a>",
+        rankBadge = "" + 
+        "<i class='<%=icon%> rankIcon absCenter' style='font-size:72px; height: 85px;'></i>" +
+        "<span class='absCenter' style='height:35px;font-size:32px;color:white;'><%=rank%></span>";
 
   return {
     attributeTemplate: attributeTemplate,
-    commentTemplate: commentTemplate,
-    commentRowTemplate: commentRowTemplate,
-    linkTemplate: linkTemplate,
-    entityTemplate: entityTemplate,
-    summaryCardTemplate: summaryCardTemplate,
-    summaryTemplate: summaryTemplate,
-    sponsoredTemplate: sponsoredTemplate,
-    tableTemplate: genericTable,
     attributeRowTemplate: attributeRow,
     attributeRowEditTemplate: attributeRowEdit,
-    rankingRowTemplate: rankingRow,
-    titleRowTemplate: titleRow,
+
+    commentTemplate: commentTemplate,
+    commentRowTemplate: commentRowTemplate,
+
+    entityTemplate: entityTemplate,
+    linkTemplate: linkTemplate,
+
     profileRowTemplate: profileRow,
-    saveCancelBtnTemplate: saveCancelBtn
+    rankingRowTemplate: rankingRow,
+    rankingListIconTemplate: rankingListIcon,
+    rankBadgetTemplate: rankBadge,
+
+    saveCancelBtnTemplate: saveCancelBtn,
+    sponsoredTemplate: sponsoredTemplate,
+    summaryCardTemplate: summaryCardTemplate,
+    summaryTemplate: summaryTemplate,
+
+    tableTemplate: genericTable,
+    titleRowTemplate: titleRow,
   };
 }) ();

@@ -308,6 +308,40 @@ ul {
   top: 20% !important;
 }
 
+.rankbar {
+  margin-top: -20px;
+  max-height: 45px;
+  padding-top: 5px;
+  }
+  #rankingName {
+    float: left !important;
+    margin-right: 25px;
+    border-bottom: 1px dashed pink;
+  }
+  #rankingList li {
+    position: relative;
+    margin: -5px 5px 0 0;
+    width: 35px;
+    float: left;
+}
+
+.rankingContainer {
+  display: block;
+  position: relative;
+  }
+  .rankingNo.shadow {
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.18);
+  }
+  .rankingNo {
+    font-size: 10px;
+    color: white;
+    position: absolute;
+    width: 50%;   
+    height: 50%;
+    overflow: auto;   margin: auto;   position: absolute;   
+    top: -5px; left: 0; bottom: 0; right: 0;
+  }
+
 .navbar-inner {
   background-color:white;
   min-height: 40px;

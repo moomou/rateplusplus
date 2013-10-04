@@ -1,0 +1,27 @@
+.rankContainer {
+  display: block;
+  }
+  .rankIcon {
+    font-size: 72px;
+    height: 85px;
+  }
+  .rankText {
+    font-size: 32px;
+    color: white;
+    height: 35px;
+  }
+
+  .rank1 {
+    color: gold;
+  }
+  .rank2 {
+    color: #ecf0f1;
+  }
+  .rank3 {
+  }
+  .rankOther {
+    opacity: 0.35;
+  }
+
+
+
