@@ -47,11 +47,8 @@ td h4 {
   border-color: gray;
 }
 .rankingTable tr th {
-  border-top: 5px solid whitesmoke;
   font-size: 21px;
 }
-
-
 
 .ranking {
   width: 15%;

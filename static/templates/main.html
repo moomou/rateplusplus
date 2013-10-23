@@ -25,22 +25,24 @@
             <ul id="myTab" class="nav nav-tabs">
               <li class="">
                 <span href="#home" class="entityTitle">
-                  <i class="icon-lock privacy-setting"> New Entity</i> 
+                  <i class="icon-lock" id="privacy-setting"> New Entity</i> 
                 </span>
               </li>
               <li class="noSelect active"><a href="#attribute" data-toggle="tab"> Attributes</a></li>
-              <li class="noSelect"><a href="#content" data-toggle="tab"> Content</a></li>
-              <li class="noSelect"><a href="#discussion" data-toggle="tab"> Discussion</a></li>
+              <!-- <li class="noSelect"><a href="#content" data-toggle="tab"> Content</a></li> 
+              <li class="noSelect"><a href="#discussion" data-toggle="tab"> Comment</a></li>-->
               <li class="hidden"><a href="#relation" data-toggle="tab"> Relation</a></li>
               <li class="hidden"><a href="#stat" data-toggle="tab"> Stats</a></li>
               <li class="pull-right">
                 <ul class="entityStats">
+                  <!--
                   <li>
                     12 <i class="icon-bookmark icon-large"></i>
                   </li>
                   <li>
                     12 <i class="icon-heart icon-large"></i>
                   </li>
+                  -->
                 </ul>
               </li> 
             </ul>
@@ -58,6 +60,7 @@
                 </div>
                 {% include "comment.partial" %}
               </div>
+              <!--
               <div class="tab-pane" id="content">
                 <div class="addContentContainer">
                   <div class="addContentBox tab-content">
@@ -99,6 +102,7 @@
                   </ul>
                 </div>
               </div>
+              -->
               <div class="tab-pane" id="relation">
               </div>
               <div class="tab-pane" id="stat">

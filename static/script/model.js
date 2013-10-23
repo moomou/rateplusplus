@@ -196,7 +196,7 @@ App.EntityAttributeModel = Backbone.Model.extend({
         $.ajax({
             type: "POST",
             url: voteURL,
-            data: {type: voteType},
+            data: {tone: voteType},
         })
         .done(function(res) {
             if (!res.error) {
@@ -250,11 +250,16 @@ App.AttributeView = Backbone.View.extend({
         console.log('AttributeView Render');
         var dummyData = {
             labels : ["","","","","","",""],
-             datasets : [{
-                fillColor : "rgba(220,220,220,0.5)",
-                strokeColor : "rgba(220,220,220,1)",
-                data : [2,5,7,7.5,9.5,9,10]
-             }]
+             datasets : [
+                {
+                    fillColor : "#EE796C",
+                    data : _(7).times(function(n) { return Math.round( Math.random() * 100);} )
+                },
+                {
+                    fillColor : "#66EBA0",
+                    data : _(7).times(function(n) { return Math.round( Math.random() * 100);} )
+                }
+            ]
         };
 
         if (this.model.isNew()) {
@@ -281,26 +286,22 @@ App.AttributeView = Backbone.View.extend({
 
         var ctx = canvas.getContext('2d');
 
-        /*
-        canvas.width  = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
-        */
         new Chart(ctx).Bar(data, {
             scaleOverride: true,
             scaleSteps: 10,
-            scaleStepWidth: 1,
-            scaleStartValue: 0,
-            scaleLabel: '', 
-            scaleShowGridLines: false, 
+            scaleStepWidth: 5,
+            scaleLabel: '',
+            scaleShowGridLines: false,
             barShowStroke: true,
             barStrokeWidth: 0,
-            barValueSpacing: 0, 
-            scaleShowLabels: false, 
-            barShowStroke: false, 
-            scaleShowGridLines: false, 
-            scaleGridLineColor: "white", 
-            scaleLineColor: "white", 
-            scaleLineWidth: 0, barDatasetSpacing: 0});
+            scaleShowLabels: false,
+            barShowStroke: false,
+            barDatasetSpacing : 1,
+            barValueSpacing : 5,
+            scaleShowGridLines: false,
+            scaleGridLineColor: "white",
+            scaleLineColor: "white",
+            scaleLineWidth: 0});
     },
     //Event Handler
     attrVote: function(e) {
@@ -371,7 +372,7 @@ App.CommentModel = Backbone.Model.extend({
         username: 'Anonymous',
         // Server side
         comment: '',
-        location: '', 
+        location: '',
         createdAt: '',
         modifiedAt: '',
         private: false
@@ -559,6 +560,20 @@ App.LinkView = Backbone.View.extend({
     }
 });
 
+App.LinkModel = Backbone.Model.extend({
+    urlRoot: App.API_VERSION + 'relation/',
+    defaults: {
+        editable: true,
+        LtoR: "-> New Link",
+        RtoL: "New Link <-",
+    },
+    initialize: function() {
+    },
+    parse: function(response) {
+        console.log(response);
+    },
+});
+
 
 /*
     Summary Model: EntityModel + Summary Stats + Attr; there is no SummaryModel in the server
@@ -690,7 +705,6 @@ App.SummaryCardView = Backbone.View.extend({
         'click .card-header-left': 'leftCardHeaderBtnHandler',
         'click .card-header-right': 'rightCardHeaderBtnHandler',
         'click .card-title': 'updateCardTitle',
-        'click .card-status': 'changePrivacy',
         'click .closeBtn': 'cancelCreation',
         'click .editImgBtn': 'changeImg',
         'click .scroll': 'attrContentScrollHandler',
@@ -836,27 +850,6 @@ App.SummaryCardView = Backbone.View.extend({
                 that.renderChevrons();
         });
     },
-    changePrivacy: function(e) {
-        /* Privacy settings - to be migrated
-        var entityModel = this.entityView.model;
-
-        if (!entityModel.isNew()) {
-            return;
-        }
-
-        if (entityModel.get('private')) {
-            entityModel.set('private', false);
-            this.$('.card-status').find('i')
-                .attr('class', 'icon-globe icon-large')
-                .attr('title', 'Public');
-        }
-        else {
-            entityModel.set('private', true);
-            this.$('.card-status').find('i')
-                .attr('class', 'icon-lock icon-large')
-                .attr('title', 'Private');
-        }*/
-    },
     rightCardHeaderBtnHandler: function(e) {
         var target = $(e.target);
         if (target.hasClass('icon-paper-clip') || target.hasClass('linkBtn')) {
@@ -898,7 +891,6 @@ App.SummaryCardView = Backbone.View.extend({
                 that.model.set('editable', false);
                 that.render();
 
-                console.log("WHAT IS HAPPENING!");
                 if (cb) cb();
             },
             error: function(m, y) {
@@ -1104,8 +1096,8 @@ App.SummaryCardView = Backbone.View.extend({
     saveAllAttributes: function() {
         this.attributeCollectionView.saveAll();
     },
-    setPublic: function(isPublic) {
-        this.model.set('private', !isPublic);
+    setPrivacy: function(isPublic) {
+        this.entityView.model.set('private', !isPublic);
         console.log("Private: " + this.model.get('private'));
     },
 });
@@ -1122,40 +1114,107 @@ App.TitleRowView = Backbone.View.extend({
     }
 });
 
-App.RankListIconView = Backbone.View.extend({
-    template: _.template(Template.rankingListIconTemplate),
-    tagName: 'li',
-    className: 'ranking',
-    initialize: function(settings) {
-        this.model = {
-            rank: settings.rank || 1,
-            icon: settings.icon || 'icon-circle',
-            color: settings.color || '',
-            link: settings.link || '#'
-        }
-    },
-    render: function() {
-        this.$el.html(this.template(this.model));
-        return this;
-    },
-});
-
 App.RankBadgeView = Backbone.View.extend({
     template: _.template(Template.rankBadgetTemplate),
     tagName: 'span',
     className: 'rankContainer',
     initialize: function(settings) {
+        var color = settings.color || '';
+
+        if (settings.rank <= Constants.rankColor.length) {
+            color = Constants.rankColor[settings.rank - 1];
+        }
+
         this.model = {
             rank: settings.rank || 1,
             icon: settings.icon || 'icon-circle',
-            color: settings.color || ''
+            color: color
+        }
+    },
+    render: function() {
+        this.$el
+            .html(this.template(this.model))
+            .data('rank', this.model.rank)
+            .attr('draggable', 'true')
+            .attr('id', _.uniqueId());
+
+        this.el.addEventListener('dragstart', function(ev) {
+            ev.dataTransfer.setData("exchangeRank", $(ev.target).data('rank'));
+            ev.dataTransfer.setData("exchangeId", ev.target.id);
+        });
+        return this;
+    },
+});
+
+App.RankListIconView = Backbone.View.extend({
+    template: _.template(Template.rankingListIconTemplate),
+    tagName: 'li',
+    events: 'click .rankContainer': 'updateSessionStorage',
+    className: 'ranking',
+    initialize: function(settings) {
+        var color = settings.color || '',
+            domId = settings.domId || "rankingList",
+            sessionStorageInd = settings.sessionStorageInd || '';
+
+        if (settings.rank <= Constants.rankColor.length) {
+            color = Constants.rankColor[settings.rank - 1];
+        }
+
+        this.model = {
+            domId: domId,
+            rank: settings.rank || 1,
+            icon: settings.icon || 'icon-circle',
+            color: color,
+            link: settings.link || '#',
+            sessionStorageInd: sessionStorageInd
         }
     },
     render: function() {
         this.$el.html(this.template(this.model));
         return this;
     },
+    // event handler
+    updateSessionStorage: function(e) {
+        // write the indicated index data to rankingession
+        var allRankingInd = this.model.sessionStorageInd;
+
+        if (rankingId) {
+            var allRankings = sessionStorage.get("allRankings") &&
+                JSON.parse(sessionStorage.get("allRankings")),
+                currentRanking = allRankingInd < allRankings.length && allRankings[allRankingInd];
+            sessionStorage.setItem("viewRanking", JSON.toString(currentRanking));
+        }
+    }
 });
+
+App.RankListToolbarView = (function() {
+    var empty = true;
+
+    // private
+    var addNewRank = function(entityId, rank) {
+        if (empty) {
+            $('#rankList').prev().hide();
+            empty = false;
+        }
+
+        var link = window.location.origin + "/entity/" + entityId,
+            rankListIcon = new App.RankListIconView({rank: rank, link: link});
+
+        $('#rankList').append(rankListIcon.render().el);
+    };
+
+    // public
+    return {
+        addNewRank: addNewRank,
+        addNewRanks: function(entityIds) {
+            var i = 1;
+            _.each(entityIds, function(entityId) {
+                addNewRank(entityId, i);
+                i += 1;
+            });
+        }
+    };
+})();
 
 App.RankingRowView = App.SummaryCardView.extend({
     template: _.template(Template.rankingRowTemplate),
@@ -1167,7 +1226,45 @@ App.RankingRowView = App.SummaryCardView.extend({
     initialize: function() {
     },
     render: function() {
+        var that = this;
+
         this.$el.html(this.template(this.model.toJSON()));
+        this.el.addEventListener('dragover', function(ev) {
+            ev.preventDefault();
+        });
+
+        this.el.addEventListener('drop', function(ev) {
+            ev.preventDefault();
+
+            var badgeId = ev.dataTransfer.getData('exchangeId'),
+                otherRankBadge = $('#' + badgeId),
+                otherTdHead = $('#' + badgeId).parent(),
+                tdHead = that.$('.ranking'),
+                rankBadge = tdHead.find('.rankContainer'),
+                rankingSession = JSON.parse(sessionStorage.getItem('rankingSession')),
+                rankInd = ev.dataTransfer.getData('exchangeRank'),
+                otherRankInd = rankBadge.data('rank');
+
+            // exchanging background data
+            var tmp = rankingSession.ranks[rankInd - 1];
+            rankingSession.ranks[rankInd- 1] = rankingSession.ranks[otherRankInd - 1];
+            rankingSession.ranks[otherRankInd - 1] = tmp;
+            sessionStorage.setItem('rankingSession', JSON.stringify(rankingSession));
+
+            // exchanging row UI
+            otherRankBadge.detach();
+            rankBadge.detach();
+            tdHead.append(otherRankBadge);
+            otherTdHead.append(rankBadge);
+
+            // exchange toolbar UI
+            var otherRankListIcon = $('#rankingList li:nth-child(' + otherRankInd + ')'),
+                rankListIcon = $('#rankingList li:nth-child(' + rankInd + ')');
+                otherLink = otherRankListIcon.find('a').attr('href');
+            otherRankListIcon.find('a').attr('href', rankListIcon.find('a').attr('href'));
+            rankListIcon.find('a').attr('href', otherLink);
+        });
+
         return this;
     },
     renderKonb: function() {
@@ -1192,15 +1289,14 @@ App.RankingRowView = App.SummaryCardView.extend({
             rankingSession = rawRankingSession && JSON.parse(rawRankingSession);
 
         if (rankingSession) {
-            var rank = rankingSession.ranks.indexOf(this.model.get('id')),
-                link = window.location.origin + "/entity/" + this.model.get('id');
+            var rank = rankingSession.ranks.indexOf(this.model.get('id'));
 
             if (rank < 0) {
                 rank = rankingSession.ranks.length + 1;
-                var rankListIcon = new App.RankListIconView({rank: rank, link: link});
-                $('#rankingList').append(rankListIcon.render().el);
                 rankingSession.ranks.push(this.model.get('id'));
                 sessionStorage.setItem('rankingSession', JSON.stringify(rankingSession));
+
+                App.RankListToolbarView.addNewRank(this.model.get('id'), rank);
             }
             else {
                 rank += 1;
@@ -1409,6 +1505,7 @@ App.TableCardCollectionView = Backbone.View.extend({
             titleRow = new App.TitleRowView();
 
         tableView.el.appendChild(titleRow.render("Ranking - " + this.query).el);
+        titleRow.$('.addNew').hide();
 
         _.each(this.collection.models, function(row) {
             rowViews.push(that.renderRow(row, tableView));
@@ -1417,10 +1514,12 @@ App.TableCardCollectionView = Backbone.View.extend({
         document.getElementById('top1').appendChild(tableView.el);
 
         _.each(rowViews, function(rowView) {
-            var rankingSession = sessionStorage.getItem('rankingSession'); 
-            if (!rankingSession) {
+            var rawRankingSession = sessionStorage.getItem('rankingSession'),
+                rankingSession = rawRankingSession && JSON.parse(rawRankingSession);
+
+            if (!rankingSession || rankingSession.ranks.indexOf(rowView.model.get('id')) < 0) {
                 rowView.renderKonb();
-            } 
+            }
             else {
                 rowView.assignRanking();
             }
@@ -1533,18 +1632,21 @@ App.PageView = Backbone.View.extend({
     },
     render: function() {
         var that = this,
-            filteredList = _.filter(this.collection.models, this._filter);
+            filteredList = _.filter(this.collection.models, this._filter),
+            isPrivate = false;
 
-        console.log('In summaryCardCollectionView');
+        console.log('In PageView summaryCardCollectionView');
 
         _.each(filteredList, function(item) {
             that.renderSummaryCard(item, this.renderMode);
+            isPrivate = item.get('private');
         }, this);
 
         if (!this.collection.models.length) {
             App.ShowTrendyLink();
         }
-        else if (this.pageType['type'] === 'id') {
+        else if (this.pageType.type === 'id') {
+            $('#privacy-setting').attr('class', isPrivate ? "icon-lock" : "icon-globe");
             App.CommentContainer.show();
         }
 
@@ -1660,7 +1762,7 @@ App.CommentCollectionView = Backbone.View.extend({
     render: function() {
         var that = this,
             prev = null,
-            side = this.side;  
+            side = this.side;
         this.cmtViews = [];
 
         _.each(this.collection.models, function(cmt) {
@@ -1893,13 +1995,57 @@ App.AppRouter = Backbone.Router.extend({
     },
     profilePageInit: function() {
         console.log("Profile Page Init");
-        // Init request panel
+        $.ajax({
+            type: "GET",
+            url: App.API_SERVER + App.API_VERSION + 'user/' + getCookie('userid') + "/ranked"
+        })
+        .done(function(res) {
+            if (!res.error) { // clear local session
+                var allRankings = res.data,
+                    rowViews = [],
+                    tableView = new App.TableView(),
+                    titleRow = new App.TitleRowView(),
+                    sessionStorageInd = 0;
+
+                tableView.el.appendChild(titleRow.render(getCookie('username') + "'s Rankings").el);
+                titleRow.$('.addNew').hide();
+
+                document.getElementById('top1').appendChild(tableView.el);
+
+                _(res.data).each(function(ranking) {
+                    sessionStorage.setItem("allRankings", JSON.toString(res.data));
+                    sessionStorage.setItem("currentRankingInd", "");
+
+                    var rankListIcons = [],
+                        rankingRow = new App.ProfileRowView({model: ranking}).render(),
+                        rank = 1;
+
+                    _(ranking.ranks).each(function(entityid)) {
+                        var link = window.location.origin + "/entity/" + entityId,
+                            rankListIcon = new App.RankListIconView({rank: rank, link: link, sessionStorageInd: sessionStorageInd});
+
+                        rank += 1;
+                        rankingRow.$('.head').append(rankListIcon.render().el);
+                    }
+
+                    tableView.el.appendChild(rankingRow.el);
+                    sessionStorageInd += 1;
+                });
+
+                // put table into view
+
+            }
+        })
+        .fail(function(msg) {
+            // Tell the user
+        });
     },
     detailEntityPageInit: function(id) {
         console.log("detail Entity");
 
         pageView = new App.PageView({id: parseInt(id)}); //search for particular id
         entityCommentsView = new App.CommentCollectionView({entityId: parseInt(id)});
+        $('#privacy-setting')
 
         $('#submitComment').click(function(e) {
             var comment = $('#commentForm'),
@@ -1944,17 +2090,13 @@ App.AppRouter = Backbone.Router.extend({
             switch (stateVar) {
                 case 0:
                     stateVar = -1; // hacky way to disabel btn
-                    
-                    cardRef.setPublic($('#publicCheckBox').is(':checked'));
 
+                    cardRef.setPrivacy($('#publicCheckBox').is(':checked'));
                     cardRef.saveCreation(null, function() {
-                        debugger;
                         cardRef.addNewAttribute();
-
                         $('#attribute').removeClass('hidden');
                         var dom = $('#saveCancelContainer').detach();
                         $('#attribute').append(dom);
-
                         stateVar = 1;
                     });
                     break;
@@ -1967,7 +2109,7 @@ App.AppRouter = Backbone.Router.extend({
                     var dom = $('#saveCancelContainer').detach();
                     dom.find('#saveAndNext').html('Finished');
                     $('#dr3').append(dom);
- 
+
                     stateVar = 2;
                     break;
                 case 2:
@@ -1979,24 +2121,21 @@ App.AppRouter = Backbone.Router.extend({
     defaultPageInit: function() {
         console.log("Default Route");
         var query = $('#searchInput').val(),
-            rankingSession = sessionStorage.getItem('rankingSession');
-        
+            getRankingSession = function() {
+                var rankingSession = sessionStorage.getItem('rankingSession') || "{}";
+                rankingSession = JSON.parse(rankingSession);
+                return rankingSession;
+            };
+
+        var rankingSession = getRankingSession();
+
         if (query) {
             pageView = new App.PageView({query:query});
         }
 
-        if (rankingSession) {
-            rankingSession = JSON.parse(rankingSession);
+        if (!_.isEmpty(rankingSession)) {
             $('#rankingHeader').show();
-            var i = 1;
-            _.each(rankingSession.ranks, function(rank) {
-                var rankListIcon = new App.RankListIconView({
-                    rank: i,
-                    link: window.location.origin + "/entity/" + rank
-                });
-                i += 1;
-                $('#rankingList').append(rankListIcon.render().el);
-            });
+            App.RankListToolbarView.addNewRanks(rankingSession.ranks);
         }
 
         $('#newRanking').click(function(e) {
@@ -2007,7 +2146,7 @@ App.AppRouter = Backbone.Router.extend({
                 // inform user another session in progress and whether to override
             }
 
-            if (!rankingSession || forceClear) {
+            if (_.isEmpty(rankingSession) || forceClear) {
                 rankingSession = {
                     inSession: true,
                     ranks: []
@@ -2017,18 +2156,27 @@ App.AppRouter = Backbone.Router.extend({
         });
 
         $('#rankingSaveBtn').click(function(e) {
+            rankingSession = getRankingSession();
+            rankingSession.name = $('#rankingName').text();
+
+            if (!rankingSession.name || !rankingSession.ranks) {
+                // inform user
+                return;
+            }
+
             $.ajax({
                 type: "POST",
-                url: App.API_SERVER + App.API_VERSION + '/user/' + getCookie('userId') + "/ranking",
+                url: App.API_SERVER + App.API_VERSION + 'user/' + getCookie('userid') + "/ranking",
                 data: rankingSession
             })
             .done(function(res) {
                 if (!res.error) { // clear local session
+                    $('#rankingHeader').hide();
                     sessionStorage.removeItem('rankingSession');
                 }
             })
             .fail(function(msg) {
-                // Tell the user 
+                // Tell the user
             });
         });
 
@@ -2050,5 +2198,4 @@ App.AppRouter = Backbone.Router.extend({
     }
 });
 
-var appRouter = new App.AppRouter;
 Backbone.history.start({pushState: true});

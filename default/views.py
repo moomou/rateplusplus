@@ -91,11 +91,14 @@ def SigninHandler(request):
             login(request, user)
 
             logger.info("Graph Id: " + str(user.clover.neo4jId))
+            usertoken = request.session.session_key
+            r.set(usertoken, user.clover.neo4jId)
 
-            r.set(request.session.session_key, user.clover.neo4jId)
             res = {'redirect': request.session.get('next', '/')}
-
-            return HttpResponse(json.dumps(res), mimetype="application/json")
+            response = HttpResponse(json.dumps(res), mimetype="application/json")
+            response.set_cookie("userid", user.clover.neo4jId)
+            response.set_cookie("usertoken", usertoken)
+            return response
 
         return HttpResponse(json.dumps({'error':'Authentication failed'}), mimetype="application/json")
 

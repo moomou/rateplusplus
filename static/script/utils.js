@@ -66,13 +66,13 @@ function capFirstLetter(input) {
 
 //Configuring Ajax to include CSRF
 var csrftoken = getCookie('csrftoken');
-var accesstoken = getCookie('sessionid');
+var accesstoken = getCookie('usertoken');
 
 $.ajaxSetup({
     beforeSend: function(xhr, settings) {
         if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
         }
-        //xhr.setRequestHeader("access-token", accesstoken);
+        xhr.setRequestHeader("x-access-token", accesstoken);
     },
 });

@@ -9,7 +9,7 @@
         </form>
         {% endif %}
 
-        {% if NAV_ENABLED %}
+        {% if TOPIC_ENABLED %}
         <ul class="nav head-nav">
           <li><a href="#"> Explore</a></li>
         </ul>
@@ -27,11 +27,9 @@
         {% if NAV_ENABLED %}
         <ul class="nav pull-right head-nav">
           {% if authenticated %}
-          <li><a class="noSelect" data-toggle="modal" role="button" id="requestBtn" href="#requestModal" title="Send Request"><i class="icon-envelope-alt"></i></a></li>
-          <li><a id="newRanking" title="New Ranking" href="#"><i class="icon-sort-by-attributes-alt icon-flip-vertical"> </i></a></li>
-          <li class="divider"></li>
-          <li><a title="New Entry" href="{% url 'default.views.NewEntityHandler' %}"><i class="icon-plus-sign"> </i></a></li>
-          <li><a title="Profile" href="{% url 'default.views.ProfileHandler' %}"><i class="icon-user"> </i></a></li>
+          <li><a title="Create New Entry" href="{% url 'default.views.NewEntityHandler' %}"><i class="icon-plus-sign"> </i></a></li>
+          <li><a id="newRanking" title="Create New Ranking" href="#"><i class="icon-list"> </i></a></li>
+          <li><a title="Rankings" href="{% url 'default.views.ProfileHandler' %}"><i class="icon-reorder"> </i></a></li>
           <li><a title="Sign Out" href="{% url 'django.contrib.auth.views.logout' %}" role="menuitem"><i class="icon-signout"></i></a></li>
           {% else %}
           <li><a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}"><i class="icon-signin"></i> Sign in</a></li>

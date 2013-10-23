@@ -160,10 +160,12 @@ var Template = (function() {
             "</div>" +
             */
             "<h3 class='attrName' contenteditable='true' ><%=obj.name%></h3>" + 
+            /*
             "<div class='input-prepend' style='display: block;'>" +
               "<span class='add-on'><i class='icon-link'> Source</i></span>" + 
               "<input style='width: 75%;' class='srcURL' type='text' placeholder='http://'>" +
             "</div>" +
+            */
           "</td>",
         attributeRow = "" + 
           "<td style='width:17%;' class='tdDivider text-h-center text-v-center noSelect'>" + 
@@ -173,8 +175,8 @@ var Template = (function() {
           "</td>" + 
           "<td class='head'>" + 
             "<h3><%=obj.name%></h3>" + 
-            "<span style='position: absolute; top: 5px; right: 5px;'>" +
-              "<i class='icon-link'><a href='<%=obj.srcURL%>'> Source</a></i></span>" + 
+            //"<span style='position: absolute; top: 5px; right: 5px;'>" +
+              //"<i class='icon-link'><a href='<%=obj.srcURL%>'> Source</a></i></span>" + 
             "<span style='position: absolute; top: 5px; left: 10px;'></span>" +
               "<% if (obj.type == 'auto') { %>" +
               //  "<i class='icon-cloud-download'></i></span>" + 
@@ -185,7 +187,7 @@ var Template = (function() {
                   "<a href='' class='btn voteBtn downVote btn-danger'>No <i class='downVote icon-thumbs-down'></i></a>" +
                 "</div>" +
               "<% } %>" +
-            "<canvas height='55' width='412' style='position: absolute; top: 59%; left: 2px; width: 100%; height: 45%;' class='vizGraph hidden'></canvas>" +
+            "<canvas height='55' width='412' style='top: 85%;' class='vizGraph absCenter hidden'></canvas>" +
            "</td>",
         rankingRow = "" +
           "<td class='ranking tdDivider'>" + 
@@ -209,7 +211,7 @@ var Template = (function() {
             "<ul class='statList'>" + 
               "<li><i class='icon-check'></i> <%=obj.summary.totalVote%> Votes</li>" + 
               "<li><i class='icon-tags'></i> <%=obj.summary.totalAttribute%> Attributes</li>" + 
-              "<li><i class='icon-file'></i> <%=obj.summary.totalAttribute%> Files</li>" + 
+              //"<li><i class='icon-file'></i> <%=obj.summary.totalAttribute%> Files</li>" + 
             "</ul>"+
           "</td>",
         titleRow = "" +
@@ -217,28 +219,26 @@ var Template = (function() {
             "<%=title%>" +
             "<div class='pull-right cursor-pointer'>" +
               "<div>" +
-                "<i title='Filter' class='filter icon-filter'> </i>" +
-                "<i title='Rearrange' class='rearrange icon-sort-by-attributes'> </i>" +
+                "<i title='Add New' class='addNew icon-plus'> </i>" +
+                //"<i title='Filter' class='filter icon-filter'> </i>" +
+                //"<i title='Rearrange' class='rearrange icon-sort-by-attributes'> </i>" +
               "</div>" +
           "</th>",
         profileRow = "" +
         "<td style='width: 10%' class='tdDivider text-h-center text-v-center noSelect'>" +
           "<i style='font-size: 2em;' data-toggle='tooltip' title='positive' class='icon-cog'></i>" +
-          "<span> <%=username%></span>" +
+          "<span> <%=name%></span>" +
         "</td>" +
         "<td style='width: 90%' class='head'>" +
-          "<div>" +
-            "<h5> <%=comment%></h5>" +
-          "</div>" +
         "</td>",
         genericTable = "",
         rankingListIcon = "" +
         "<a href='<%=link%>' class='rankContainer'>" +
-           "<i class='<%=icon%> icon-2x' style='margin-left: -5px;'></i>" +
+           "<i class='<%=icon%> icon-2x' style='margin-left: -5px; color: <%=color%>'></i>" +
            "<span class='rankingNo'> <%=rank%> </span>" + 
         "</a>",
         rankBadge = "" + 
-        "<i class='<%=icon%> rankIcon absCenter' style='font-size:72px; height: 85px;'></i>" +
+        "<i class='<%=icon%> rankIcon absCenter' style='font-size:72px; height: 85px; color: <%=color%>'></i>" +
         "<span class='absCenter' style='height:35px;font-size:32px;color:white;'><%=rank%></span>";
 
   return {

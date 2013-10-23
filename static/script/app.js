@@ -42,4 +42,6 @@ $(function() {
     $('#searchBtn').click(function(e) {
         $('#searchForm').submit()
     });
+
+    var appRouter = new App.AppRouter();
 });
