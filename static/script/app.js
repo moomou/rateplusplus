@@ -43,5 +43,4 @@ $(function() {
         $('#searchForm').submit()
     });
 
-    var appRouter = new App.AppRouter();
 });

@@ -318,12 +318,18 @@ ul {
     margin-right: 25px;
     border-bottom: 1px dashed pink;
   }
-  #rankingList li {
+  .rankingList li {
     position: relative;
     margin: -5px 5px 0 0;
     width: 35px;
     float: left;
-}
+  }
+  .rankingListProfile li {
+    position: relative;
+    margin: 0px 5px 0 0;
+    width: 35px;
+    float: left;
+  }
 
 .rankingContainer {
   display: block;

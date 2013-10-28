@@ -3,10 +3,13 @@
     <div class="container-narrow">
       <span contenteditable="true" id="rankingName">New Ranking</span>
       <span id="rankInstruction" style="float:left;"> Click on rating to assign rank </span>
-      <ul id="rankingList">
+      <ul id="rankingList" class='rankingList'>
       </ul>
-      <button id="rankingCancelBtn" class="btn" style="float: right; margin-top: -7px;"> Cancel</button>
-      <button id="rankingSaveBtn" class="btn btn-success" style=" float: right; margin-top: -7px; margin-right: 5px; "> Save</button>
+      <div id="rank-sessionButtons">
+        <button id="rankingCancelBtn" class="btn" style="float: right; margin-top: -7px;"> Cancel</button>
+        <button id="rankingSaveBtn" class="btn btn-success" style=" float: right; margin-top: -7px; margin-right: 5px; "> Save</button>
+      </div>
+      <div id="rank-viewButtons"><i id="rankingViewCancelBtn" style="float: right; margin-top: -7px;" class="icon-remove-sign icon-2x"></i></div>
     </div>
   </div>
 </div>
