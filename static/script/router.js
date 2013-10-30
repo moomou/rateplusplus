@@ -1,3 +1,4 @@
+
 App.AppRouter = Backbone.Router.extend({
     routes: {
         "graph" : "graphPageInit",
@@ -63,13 +64,17 @@ App.AppRouter = Backbone.Router.extend({
 
             _(allRankings).each(function(ranking) {
                 var rankListIcons = [],
-                    rankingRow = new App.ProfileRowView({model: ranking}).render(),
+                    rankingRow = new App.ProfileRowView({
+                        model: ranking, 
+                        sessionStorageInd: sessionStorageInd
+                    }).render(),
                     rank = 1;
 
                 _(ranking.ranks).each(function(entityId) {
                     var link = window.location.origin + "/entity/" + entityId;
                     rankListIcon = 
-                        new App.RankListIconView({rank: rank, link: link, sessionStorageInd: sessionStorageInd});
+                        new App.RankListIconView(
+                            {rank: rank, link: link, sessionStorageInd: sessionStorageInd});
 
                     rank += 1;
                     rankingRow.$('.rankingList').append(rankListIcon.render().el);
@@ -129,9 +134,9 @@ App.AppRouter = Backbone.Router.extend({
             'cancelId': 'cancelAndNext'
         }));
 
-        // step 1
         $("#saveAndNext").click(function(e) {
             switch (stateVar) {
+                // step 1
                 case 0:
                     stateVar = -1; // hacky way to disabel btn
 
@@ -144,6 +149,7 @@ App.AppRouter = Backbone.Router.extend({
                         stateVar = 1;
                     });
                     break;
+                // step 2
                 case 1:
                     stateVar = -1;
 
@@ -156,8 +162,9 @@ App.AppRouter = Backbone.Router.extend({
 
                     stateVar = 2;
                     break;
+                // step 3
                 case 2:
-                    // Refresh page here
+
                     break;
             }
         });

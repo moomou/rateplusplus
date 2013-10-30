@@ -227,6 +227,7 @@ var Template = (function() {
         profileRow = "" +
         "<td class='tdDivider text-h-center text-v-center noSelect'>" +
           "<span> <%=name%></span>" +
+          "<i class='btn pull-right icon-search'>" +
         "</td>" +
         "<td class='head'>" +
           "<ul class='rankingList'>" +

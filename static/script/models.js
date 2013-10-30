@@ -25,24 +25,6 @@ App.AdModel = Backbone.Model.extend({
     },
 });
 
-App.AdView = Backbone.View.extend({
-    tagName: 'div',
-    className: 'card',
-    template: _.template(Template.sponsoredTemplate),
-    initialize: function() {
-       var that = this;
-
-       this.model.on('sync', function(e) {
-           that.render();
-       });
-    },
-    render: function() {
-        this.$el.html(this.template(this.model.toJSON()));
-        App.Cols[2].prepend(this.el);
-        return this;
-    },
-});
-
 App.EntityModel = Backbone.Model.extend({
 	urlRoot: App.API_SERVER + App.API_VERSION + 'entity/',
     defaults: {
@@ -58,57 +40,6 @@ App.EntityModel = Backbone.Model.extend({
     },
     initialize: function() {
         this.set('domId', _.uniqueId('domId'));
-    },
-});
-
-App.EntityView = Backbone.View.extend({
-    tagName: 'div',
-    className: 'inner',
-    events: {
-        'click .editProfileBtn': 'editProfile',
-    },
-    template: _.template(Template.entityTemplate),
-    render: function() {
-        console.log('EntityView render');
-        this.$el.html(this.template(this.model.toJSON()));
-        return this;
-    },
-    initialize: function() {
-    },
-    //Event Handler
-    editProfile: function(mode) {
-        console.log('Editing Box');
-        if (!this.model.get('editable')) {
-            return;
-        }
-
-        var editBoxContainer = 'textareaContainer-' + this.model.get('domId');
-        var editBoxId = 'editBox-' + this.model.get('domId');
-        var $p = this.$('.description');
-        var $textAreaContainer = this.$('#'+editBoxContainer);
-
-        if (mode == 'edit') {
-            wideArea('#'+editBoxContainer);
-            var $textarea = $textAreaContainer.find('textarea');
-            $textarea.text(($p.html()));
-            $p.hide();
-            $textAreaContainer.show();
-        }
-        else if (mode == 'save') {
-            var $textarea = $textAreaContainer.find("textarea");
-            var newTxt = $textarea.val();
-
-            this.model.set('description', newTxt);
-            $p.html(newTxt);
-
-            $textAreaContainer.hide();
-            $p.show();
-        }
-        else { //Cancel
-            $p.html(this.model.get('description'));
-            $textAreaContainer.hide();
-            $p.show();
-        }
     },
 });
 
@@ -225,137 +156,6 @@ App.EntityAttributeModel = Backbone.Model.extend({
     },
 });
 
-App.AttributeView = Backbone.View.extend({
-    template: _.template(Template.attributeRowTemplate),
-    editTemplate: _.template(Template.attributeRowEditTemplate),
-    tagName: 'tr',
-    className: 'row',
-    events: {
-        'click .dropdown-menu': 'changeType',
-        'click .closeBtn': 'removeAttr',
-        'click .saveBtn': 'saveAttr',
-        'click .voteBtn': 'attrVote',
-        'click .tone': 'toneChange',
-        'focusout .attrName': 'editName',
-        'focusout .srcURL': 'editSrcURL',
-    },
-    initialize: function(inactive) {
-        var that = this;
-        console.log("AttrView init")
-        this.model.on('sync', function(e) {
-            that.render();
-        });
-    },
-    render: function() {
-        console.log('AttributeView Render');
-        var dummyData = {
-            labels : ["","","","","","",""],
-             datasets : [
-                {
-                    fillColor : "#EE796C",
-                    data : _(7).times(function(n) { return Math.round( Math.random() * 100);} )
-                },
-                {
-                    fillColor : "#66EBA0",
-                    data : _(7).times(function(n) { return Math.round( Math.random() * 100);} )
-                }
-            ]
-        };
-
-        if (this.model.isNew()) {
-            this.$el.addClass('editHighlight focusOnHover');
-            this.$el.html(this.editTemplate(this.model.toJSON()));
-        }
-        else {
-            this.$el.removeClass('editHighlight focusOnHover');
-            this.$el.html(this.template(this.model.toJSON()));
-        }
-
-        if (this.model.get('voted')) {
-            this.$('.voteBtns').hide();
-            this.$('.progress').fadeToggle();
-            this.$('.vizGraph').removeClass('hidden');
-            this.renderActivityGraph(this.$('.vizGraph'), dummyData);
-        }
-
-        return this;
-    },
-    // Custom Function
-    renderActivityGraph: function(canvas, data) {
-        canvas = canvas[0];
-
-        var ctx = canvas.getContext('2d');
-
-        new Chart(ctx).Bar(data, {
-            scaleOverride: true,
-            scaleSteps: 10,
-            scaleStepWidth: 5,
-            scaleLabel: '',
-            scaleShowGridLines: false,
-            barShowStroke: true,
-            barStrokeWidth: 0,
-            scaleShowLabels: false,
-            barShowStroke: false,
-            barDatasetSpacing : 1,
-            barValueSpacing : 5,
-            scaleShowGridLines: false,
-            scaleGridLineColor: "white",
-            scaleLineColor: "white",
-            scaleLineWidth: 0});
-    },
-    //Event Handler
-    attrVote: function(e) {
-        e.preventDefault();
-        console.log('attrVote called:');
-
-        if ($(e.target).hasClass('upVote')) {
-            this.model.enqueuVote(App.POSITIVE, this);
-        }
-        else {
-            this.model.enqueuVote(App.NEGATIVE, this);
-        }
-    },
-    changeType: function(e) {
-        var attrType = e.target.attributes.data.textContent,
-            iconClass ="<i class='icon-" + attrType + "'></i>";
-        this.model.set('type', attrType);
-        this.$('.typeIcon').html(iconClass);
-    },
-    editName: function(e) {
-        console.log('editName called');
-        var domRef = this.$('.attrName');
-        this.model.set('name', domRef.text());
-        console.log(this.model.get('name'));
-    },
-    editSrcURL: function(e) {
-        this.model.set('srcURL', this.$(".srcURL").val());
-    },
-    removeAttr: function(e) {
-        this.model.destroy();
-        this.remove();
-    },
-    saveAttr: function(e) {
-        console.log("save on AttributeView called");
-        this.model.save();
-    },
-    toneChange: function(e) {
-        var $i = this.$('.tone');
-
-        if ($i.hasClass('black-heart')) {
-            $i.removeClass('black-heart');
-            $i.addClass('red-heart');
-            this.model.set('tone', App.POSITIVE);
-            this.$('.toneText').html('positive');
-        }
-        else {
-            $i.removeClass('red-heart');
-            $i.addClass('black-heart');
-            this.model.set('tone', App.NEGATIVE);
-            this.$('.toneText').html('negative');
-        }
-    },
-});
-
 App.CommentModel = Backbone.Model.extend({
     urlRoot: function() {
         return [App.API_SERVER,
@@ -385,86 +185,6 @@ App.CommentModel = Backbone.Model.extend({
     },
 });
 
-App.CommentView = Backbone.View.extend({
-    template: _.template(Template.commentTemplate),
-    tagName: 'div',
-    className: 'card comment',
-    initialize: function(setting) {
-        this.voted = false;
-    },
-    events: {
-        'mouseover': 'toggleCommentVoteMenu',
-        'mouseout': 'toggleCommentVoteMenu',
-        'click .btn': 'commentVote'
-    },
-    render: function() {
-        console.log('Commentview Render');
-        this.$el.html(this.template(this.model.toJSON()));
-        return this;
-    },
-    //Event Handler
-    toggleCommentVoteMenu: function(e) {
-        var eventType = e.type,
-            $btns = this.$('.btn');
-            state = $btns.css('display');
-
-        if (this.voted) {
-            $btns.hide();
-            return;
-        }
-
-        if (eventType === "mouseover" && state === "none") {
-            $btns.show();
-        }
-        else if (eventType === "mouseout") {
-            $btns.hide();
-        }
-    },
-    commentVote: function(e) {
-        var btn = $(e.target),
-            voteType = "pos",
-            that = this;
-
-        if (this.voted) {
-            return;
-        }
-
-        this.voted = true;
-
-        if (btn.hasClass('cmtDownVote')) {
-            voteType = "neg";
-        }
-
-        $.ajax({
-            type: "POST",
-            url: this.model.url() + "/vote/",
-            data: {voteType: voteType},
-        })
-        .done(function(res) {
-            if (!res.error) {
-                that.$('.btn').fadeOut('fast');
-            }
-        })
-        .fail(function(msg) {
-            this.voted = false;
-        });
-    },
-});
-
-App.RowCommentView = Backbone.View.extend({
-    template: _.template(Template.commentRowTemplate),
-    className: 'row-fluid',
-    initialize: function(setting) {
-        this.commentView = setting.commentView;
-    },
-    render: function(side) {
-        console.log('CommentRowView Render');
-        this.$el.html(this.template());
-        this.$('.' + side).append(this.commentView.render().el);
-        return this;
-    },
-});
-
 App.ProfileRowModel = Backbone.Model.extend({
     urlRoot: function() {
         return [App.API_SERVER,
@@ -482,81 +202,6 @@ App.ProfileRowModel = Backbone.Model.extend({
         // Required
         user: undefined,
         resourceType: undefined
-    }
-});
-
-App.ProfileRowView = Backbone.View.extend({
-    template: _.template(Template.profileRowTemplate),
-    tagName: 'tr',
-    className: 'row',
-    render: function() {
-        console.log('proilfeRowView Render');
-        this.$el.html(this.template(this.model));
-        return this;
-    },
-});
-
-App.LinkModel = Backbone.Model.extend({
-    urlRoot: App.API_VERSION + 'relation/',
-    defaults: {
-        editable: true,
-        LtoR: "-> New Link",
-        RtoL: "New Link <-",
-    },
-    initialize: function() {
-    },
-    parse: function(response) {
-        console.log(response);
-    },
-});
-
-App.LinkView = Backbone.View.extend({
-    template: _.template(Template.linkTemplate),
-    tagName: 'div',
-    className: 'page-curl outer',
-    initialize: function() {
-    },
-    events: {
-        'click .close': 'saveCloseHandler',
-        'click .link': 'updateLink',
-    },
-    render: function() {
-        this.$el.html(this.template(this.model.toJSON()));
-        return this;
-    },
-    //Event Handler
-    updateLink: function(e) {
-        if (this.model.get('editable')) {
-            var domRef = $(e.target);
-            var that = this;
-
-            domRef.attr('contenteditable', true);
-            domRef.focus();
-
-            console.log(domRef.text());
-
-            domRef.focusout(function() {
-                that.model.set(domRef.data('link'), domRef.text());
-                console.log(that.model.get('LtoR'));
-                console.log(that.model.get('RtoL'));
-            });
-        }
-    },
-    saveCloseHandler: function(e) {
-        var target = $(e.target);
-
-        if (target.hasClass('icon-remove-sign')) {
-            this.remove();
-            this.model.destroy();
-        }
-        else { //save
-            var relationship = this.$('.pull-left').text() + ":" + this.$('.pull-right').text();
-            this.model.set("leftId", App.leftId);
-            this.model.set("rightId", App.rightId);
-            this.model.set("relationship", relationship);
-            console.log(this.model.get('relationship'));
-            this.model.save();
-        }
     }
 });
 
@@ -723,6 +368,20 @@ App.SummaryCardCollection = Backbone.Collection.extend({
 	url: App.API_SERVER + App.API_VERSION + 'entity/',
     model: App.SummaryCardModel,
     comparator: function(m) {
+
+        var currentRankingInd = parseInt(sessionStorage.getItem("currentRankingInd")),
+            allRankings = sessionStorage.getItem("allRankings") &&
+            JSON.parse(sessionStorage.getItem("allRankings"));
+
+        if (currentRankingInd >= 0 && allRankings) {
+            var currentRanking =
+                currentRankingInd < allRankings.length && allRankings[currentRankingInd],
+                rank = currentRanking.ranks.indexOf(m.get('id').toString());
+            if (rank >= 0)
+                return rank;
+            return 999; // a hack to put nonranked item to the bottom
+        }
+        
         return -m.get('summary').totalVote;
     },
     parse: function(response) {
@@ -804,6 +463,7 @@ App.Utility = (function() {
         filterCollection: filterCollection
     };
 })();
+
 App.ColManager = (function() {
     //private
     var cardCols = {
@@ -857,6 +517,7 @@ App.ColManager = (function() {
         addAttribute: addAttr,
     };
 })();
+
 App.ShowTrendyLink = function() {
     $.ajax({
         'url': App.API_VERSION+'tags/',
@@ -871,6 +532,7 @@ App.ShowTrendyLink = function() {
         App.LinkBox.html(aTags);
     });
 };
+
 App.ConfigureTagit = function(option, that, editable) {
     var sourceURL = App.AE_C_URL,
         prefix = "$";
@@ -905,6 +567,7 @@ App.ConfigureTagit = function(option, that, editable) {
         },
     }
 };
+
 App.CreateNewCard = function() {
     console.log("Creating new card")
     var newEntityRow = document.getElementById('dr1');

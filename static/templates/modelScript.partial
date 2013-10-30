@@ -2,4 +2,6 @@
 <script src="{{STATIC_URL}}script/config.js"></script>
 <script src="{{STATIC_URL}}script/template.js"></script>
 <script src="{{STATIC_URL}}script/utils.js"></script>
-<script src="{{STATIC_URL}}script/model.js"></script> 
+<script src="{{STATIC_URL}}script/models.js"></script> 
+<script src="{{STATIC_URL}}script/views.js"></script> 
+<script src="{{STATIC_URL}}script/router.js"></script> 
