@@ -376,6 +376,15 @@ ul {
 .btn-danger:hover {
   background-color: #EE796C;
 }
+.rating {
+  font-size: 36px;
+  }
+  .rating.goldStar {
+    color: gold;
+  }
+  .rating.blackStar {
+    color: black;
+}
 
 /*Random*/
 .focusOnHover {

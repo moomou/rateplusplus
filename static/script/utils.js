@@ -64,6 +64,9 @@ function capFirstLetter(input) {
     return input.charAt(0).toUpperCase() + input.slice(1);
 }
 
+function sessionStorageGetter() {
+}
+
 //Configuring Ajax to include CSRF
 var csrftoken = getCookie('csrftoken');
 var accesstoken = getCookie('usertoken');

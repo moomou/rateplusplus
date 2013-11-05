@@ -1,10 +1,24 @@
-/*
-    Global Objects
-*/
+/**
+ * Global Objects
+ */
+
+App.GlobalWidget = { 
+    searchMessageBox: $('#message-box'),
+    rankingHeader: $('#rankingHeader'),
+    rankingName: $('#rankingName'),
+    rankEditButtons: $('#rank-sessionButtons'),
+    rankViewButtons: $('#rank-viewButtons'),
+    shareModal: $('#shareModal')
+};
+
+App.DetailPage = {
+    commentContainer: $('#commentContainer')
+};
+
+App.ProfilePage = {
+};
 
 App.CommentContainer = $('#commentContainer');
-App.LinkBox = $('#linkBox');
-App.MessageBox = $('#message-box');
 
 /**
  * Common Utility Function
@@ -27,6 +41,7 @@ var updateSessionStorageRankingView = function(currentRankingInd) {
     sessionStorage.setItem("currentRankingInd", currentRankingInd);
 }
  
+
 /**
  * Individual Model Views
  */
@@ -131,68 +146,73 @@ App.AttributeView = Backbone.View.extend({
         'focusout .srcURL': 'editSrcURL',
     },
     initialize: function(inactive) {
-        var that = this;
         console.log("AttrView init")
+        var that = this;
+        this.model.set('ratingType', 
+            this.model.get('tone') == "positive" ? "goldStar" : 'blackStar');
         this.model.on('sync', function(e) {
             that.render();
         });
     },
     render: function() {
         console.log('AttributeView Render');
-        var dummyData = {
-            labels : ["","","","","","",""],
-             datasets : [
-                {
-                    fillColor : "#EE796C",
-                    data : _(7).times(function(n) { return Math.round( Math.random() * 100);} )
-                },
-                {
-                    fillColor : "#66EBA0",
-                    data : _(7).times(function(n) { return Math.round( Math.random() * 100);} )
-                }
-            ]
-        };
+        var model = this.model;
 
-        if (this.model.isNew()) {
+        if (model.isNew()) {
             this.$el.addClass('editHighlight focusOnHover');
-            this.$el.html(this.editTemplate(this.model.toJSON()));
+            this.$el.html(this.editTemplate(model.toJSON()));
         }
         else {
             this.$el.removeClass('editHighlight focusOnHover');
-            this.$el.html(this.template(this.model.toJSON()));
+            this.$el.html(this.template(model.toJSON()));
         }
 
-        if (this.model.get('voted')) {
+        if (model.get('voted')) {
             this.$('.voteBtns').hide();
             this.$('.progress').fadeToggle();
-            this.$('.vizGraph').removeClass('hidden');
-            this.renderActivityGraph(this.$('.vizGraph'), dummyData);
+            this.$('.rating').removeClass('hidden');
+            this.renderStarRating(this.$('.rating'), 
+                model.get('tone'), model.get('upVote'), model.get('downVote'));
         }
 
         return this;
     },
     // Custom Function
-    renderActivityGraph: function(canvas, data) {
-        canvas = canvas[0];
+    renderStarRating: function(canvas, tone, upVote, downVote) {
+        var starGen = function(stars) {
+            var starDOM = function(className) {
+                return "<i class='icon-" + className + "'></i>";
+            },
+            result = '';
 
-        var ctx = canvas.getContext('2d');
+            for (var i = 0; i < 5; i++) {
+                if (stars >= 1) {
+                    result += starDOM('star');
+                }
+                else if (stars >= 0.5) {
+                    result += starDOM('star-half-full');
+                }
+                else {
+                    result += starDOM('star-empty');
+                }
+                stars -= 1;
+            }
 
-        new Chart(ctx).Bar(data, {
-            scaleOverride: true,
-            scaleSteps: 10,
-            scaleStepWidth: 5,
-            scaleLabel: '',
-            scaleShowGridLines: false,
-            barShowStroke: true,
-            barStrokeWidth: 0,
-            scaleShowLabels: false,
-            barShowStroke: false,
-            barDatasetSpacing : 1,
-            barValueSpacing : 5,
-            scaleShowGridLines: false,
-            scaleGridLineColor: "white",
-            scaleLineColor: "white",
-            scaleLineWidth: 0});
+            return result;
+        },
+        score = upVote + downVote;
+
+        if (tone == "positive") {
+            score = upVote / score;
+        }
+        else {
+            score = downVote / score;
+        }
+
+        var stars = score * 5,
+            starDOM = starGen(stars);
+
+        this.$('.rating').removeClass('hidden').html(starDOM);
     },
     //Event Handler
     attrVote: function(e) {
@@ -313,50 +333,6 @@ App.CommentView = Backbone.View.extend({
     },
 });
 
-App.RowCommentView = Backbone.View.extend({
-    template: _.template(Template.commentRowTemplate),
-    className: 'row-fluid',
-    initialize: function(setting) {
-        this.commentView = setting.commentView;
-    },
-    render: function(side) {
-        console.log('CommentRowView Render');
-        this.$el.html(this.template());
-        this.$('.' + side).append(this.commentView.render().el);
-        return this;
-    },
-});
-
-App.ProfileRowView = Backbone.View.extend({
-    template: _.template(Template.profileRowTemplate),
-    tagName: 'tr',
-    className: 'row',
-    events: {
-        'click .icon-search': 'searchForRanking',
-    },
-    initialize: function(settings) {
-        this.model.sessionStorageInd = settings.sessionStorageInd;
-    },
-    render: function() {
-        console.log('proilfeRowView Render');
-        this.$el.html(this.template(this.model));
-        return this;
-    },
-    // event handler
-    searchForRanking: function(e) {
-
-        // update internal storage
-        var currentRankingInd = this.model.sessionStorageInd;
-        if (_.isNumber(currentRankingInd)) {
-            updateSessionStorageRankingView(currentRankingInd);
-        }
-
-        var newUrl = window.location.origin + 
-            "?q=" + encodeURIComponent("ranking: " + this.model.name)
-        document.location.href = newUrl;
-    }
-});
-
 App.LinkView = Backbone.View.extend({
     template: _.template(Template.linkTemplate),
     tagName: 'div',
@@ -407,487 +383,6 @@ App.LinkView = Backbone.View.extend({
     }
 });
 
-
-/*
-    App Level Component
-*/
-
-//TODO - make other card view extend this
-App.GenericCardView = Backbone.View.extend({
-});
-
-App.AttributeCollectionView = App.TableView.extend({
-    initialize: function(setting) {
-        console.log('Attr Collection View');
-
-        if (setting.collection) {
-            this.collection = setting.collection;
-        }
-        else {
-            this.collection = new App.AttributeCollection();
-        }
-
-        this.preSaveAttrs = [];
-        this.entityId = setting.entityId
-        this.renderMode = this["render" + capFirstLetter(setting.renderMode || 'default')];
-        this.colManager = setting.colManager || App.ColManager;
-    },
-    // render functions
-    render: function(attrContainer) {
-        this.attrContainer = attrContainer;
-        this.renderMode();
-    },
-    renderAttribute: function(item) {
-        var attrView = new App.AttributeView({
-            model: item
-        });
-        return attrView.render();
-    },
-    renderDefault: function() {
-        var that = this;
-        _.each(this.collection.models, function(item) {
-            that.attrContainer.append(that.renderAttribute(item).el);}, this);
-    },
-    renderSearch: function() {
-    },
-    renderGraph: function() {
-    },
-    renderDetail: function() {
-        // create table
-        this.$el.html(this.template({}));
-
-        // add title
-        this.el.appendChild(
-            new App.TitleRowView().render("Attribute").el);
-
-        // add each attribute
-        var that = this;
-        _.each(this.collection.models, function(attr) {
-            that.el.appendChild(that.renderAttribute(attr));
-        });
-
-        // TODO change
-        document.getElementById('attribute').appendChild(this.el);
-    },
-    // event handler
-    addNew: function(e) {
-        var newAttr = this.getNewAttrModel();
-        this.$el.find('th').parent().after(this.renderAttribute(newAttr));
-        this.preSaveAttrs.push(newAttr);
-        return newAttr;
-    },
-    // Custom Func
-    renderAttribute: function(newAttr) {
-        var rowView = new App.AttributeView({
-            model: newAttr
-        });
-        return rowView.render().el;
-    },
-    getNewAttrModel: function(tone) {
-        tone = tone ? tone : App.POSITIVE; //default to pos
-        var entityId = this.entityId,
-            attrModel = new App.EntityAttributeModel({
-                entity:entityId,
-                editable:true,
-                tone:tone});
-
-        this.collection.add(attrModel);
-        return attrModel;
-    },
-    saveAll: function() {
-        _.each(this.preSaveAttrs, function(attr) {
-            attr.save();
-        });
-        this.preSaveAttrs = [];
-    },
-});
-
-App.TableCardCollectionView = Backbone.View.extend({
-    initialize: function(setting) {
-        this.query = setting.query;
-
-        this.collection = new App.SummaryCardCollection();
-        this.collection.on('reset', this.render, this);
-
-        this.collection.url += 'search/';
-        this.collection.fetch({data: $.param({q: this.query})});
-        this.pageType = {'type': "search", 'value': this.query};
-    },
-    render: function() {
-        var that = this,
-            rowViews = [],
-            tableView = new App.TableView(),
-            titleRow = new App.TitleRowView();
-
-        tableView.el.appendChild(titleRow.render("Ranking - " + this.query).el);
-        titleRow.$('.addNew').hide();
-
-        _.each(this.collection.models, function(row) {
-            rowViews.push(that.renderRow(row, tableView));
-        });
-
-        document.getElementById('top1').appendChild(tableView.el);
-
-        _.each(rowViews, function(rowView) {
-            var rawRankingSession = sessionStorage.getItem('rankingSession'),
-                rankingSession = rawRankingSession && JSON.parse(rawRankingSession),
-                rawRankingView = sessionStorage.getItem('rankingView'),
-                rankingView = rawRankingView && JSON.parse(rawRankingView);
-            var referenceRanking = rankingSession || rankingView;
-
-            if (!referenceRanking || referenceRanking.ranks.indexOf(rowView.model.get('id')) < 0) {
-                rowView.renderKonb();
-            }
-            else {
-                rowView.assignRanking(rankingView);
-            }
-        });
-    },
-    renderRow: function(mRow, tableView) {
-        var that = this;
-        var rowView = new App.RankingRowView({
-            model: mRow
-        });
-        tableView.el.appendChild(rowView.render().el);
-        return rowView;
-    }
-});
-
-App.CardColView = Backbone.View.extend({
-    initialize: function(setting) {
-        this._filter = function(e) {
-            return true;
-        };
-
-        this.collection = new App.SummaryCardCollection();
-        this.col = App.ColManager.getCol('card').cols[setting.col];
-        this.colInd = setting.col;
-        this.collection.on('reset', this.render, this);
-    },
-    filter: function(func) {
-        if (!func) {
-            this._filter = function(e) {
-                return true;
-            }
-        }
-        else {
-            this._filter = func;
-        }
-    },
-    search: function(q) {
-        App.ColManager.resetCol('card', [this.colInd]);
-
-        if (q.id) {//specific entity
-            this.collection.fetch({data: $.param({id: q.id})});
-            this.pageType = {'type': 'id', 'value': q.id};
-        }
-        else if (q.query) {//a search
-            this.collection.fetch({data: $.param({q: q.query})});
-            this.pageType = {'type': "search", 'value': q.query};
-        }
-        else {//empty
-            this.collection.fetch({data: $.param({q: ''})});
-            this.pageType = "empty";
-        }
-    },
-    render: function() {
-        var that = this,
-            filteredList = _.filter(this.collection.models, this._filter);
-
-        _.each(filteredList, function(item) {
-            that.renderSummaryCard(item);
-        }, this);
-    },
-    renderSummaryCard: function(item) {
-        var that = this;
-        var cardView = new App.SummaryCardView({
-            model: item,
-            renderMode: 'graph',
-            side: this.colInd < 2 ? "left" : "right",
-        });
-
-        this.col.append(cardView.render().el);
-    },
-});
-
-App.PageView = Backbone.View.extend({
-    initialize: function(q) {
-        this.renderMode = 'default';
-        this.collection = new App.SummaryCardCollection();
-        this._filter = function(e) {
-            return true;
-        };
-
-        if (q.id) {//specific entity
-            this.collection.url += q.id;
-            this.collection.fetch();
-
-            this.pageType = {'type': 'id', 'value': q.id};
-            this.renderMode = 'detail';
-        }
-        else if (q.query) {//a search
-            this.collection.url += 'search/';
-            new App.TableCardCollectionView({query: q.query})
-            // this.collection.fetch({data: $.param({q: q.query})});
-            this.pageType = {'type': "search", 'value': q.query};
-        }
-        else { //empty
-            this.collection.fetch({data: $.param({q: ''})});
-            this.pageType = "empty";
-        }
-
-        this.collection.on('reset', this.render, this);
-    },
-    filter: function(func) {
-        if (!func) {
-            this._filter = function(e) {
-                return true;
-            }
-        }
-        else {
-            this._filter = func;
-        }
-    },
-    render: function() {
-        var that = this,
-            filteredList = _.filter(this.collection.models, this._filter),
-            isPrivate = false;
-
-        console.log('In PageView summaryCardCollectionView');
-
-        _.each(filteredList, function(item) {
-            that.renderSummaryCard(item, this.renderMode);
-            isPrivate = item.get('private');
-        }, this);
-
-        if (!this.collection.models.length) {
-            App.ShowTrendyLink();
-        }
-        else if (this.pageType.type === 'id') {
-            $('#privacy-setting').attr('class', isPrivate ? "icon-lock" : "icon-globe");
-            App.CommentContainer.show();
-        }
-
-        if (this.collection.models.length > 3) {
-            //show 1 sponsored ad
-            var adModel = new App.AdModel({});
-            var adView = new App.AdView({model:adModel});
-            adModel.fetch();
-        }
-    },
-    renderSummaryCard: function(item, renderMode) {
-        console.log("Rendering summaryCard");
-
-        var cardView = new App.SummaryCardView({
-            model: item,
-            renderMode: renderMode,
-            colManager: App.ColManager,
-        });
-
-
-        if (renderMode == "detail") {
-            document.getElementById('dr1').appendChild(cardView.render().el);
-        }
-        else {
-            App.ColManager.nextCol('card').append(cardView.render().el);
-        }
-    },
-});
-
-App.GraphView = Backbone.View.extend({
-    initialize: function(setting) {
-        this.collection = new App.LinkCollection();
-        this._filter = function(e) {
-            return true;
-        };
-
-        this.domContainer = setting.domContainer;
-        this.collection.fetch({data: $.param({leftId: App.leftId, rightId: App.rightId})});
-        this.collection.on('reset', this.render, this);
-    },
-    filter: function(func) {
-        if (!func) {
-            this._filter = function(e) {
-                return true;
-            }
-        }
-        else {
-            this._filter = func;
-        }
-    },
-    render: function() {
-        var that = this,
-            filteredList = _.filter(this.collection.models, this._filter);
-
-        console.log('In LinkCollectionView');
-        _.each(filteredList, function(item) {
-            that.renderLink(item);
-        }, this);
-    },
-    renderLink: function(item) {
-        var linkView = new App.LinkView({
-            model: item
-        });
-
-        this.domContainer.append(linkView.render().el);
-    },
-});
-
-App.LinkCollectionView = Backbone.View.extend({
-    initialize: function(setting) {
-        console.log('Link Collection View');
-
-        if (setting.collection) {
-            this.collection = setting.collection;
-        }
-        else {
-            this.collection = new App.LinkCollection();
-        }
-
-        this.renderMode = this["render" + capFirstLetter(setting.renderMode || 'default')];
-    },
-    render: function(domContainer) {
-        this.domContainer = domContainer;
-        this.renderMode();
-    },
-    renderLink: function(item) {
-        var linkView = new App.LinkView({
-            model: item
-        });
-        return linkView.render();
-    },
-    renderDefault: function() {
-        var that = this;
-        _.each(this.collection.models, function(item) {
-            that.domContainer.append(that.renderLink(item).el);}, this);
-    },
-});
-
-App.CommentCollectionView = Backbone.View.extend({
-    initialize: function(data) {
-        console.log(data);
-        this.collection = new App.CommentCollection({entity: data.entityId});
-        this.data = data;
-        this.side = 'left';
-        this.collection.fetch();
-        this.collection.on('reset', this.render, this);
-    },
-    update: function(newCmt) {
-        $('#commentContainer').append(
-            this.renderComment(newCmt, this.side).el);
-        this.collection.add(newCmt);
-    },
-    render: function() {
-        var that = this,
-            prev = null,
-            side = this.side;
-        this.cmtViews = [];
-
-        _.each(this.collection.models, function(cmt) {
-            if (prev != cmt.get('username')) {
-                side = (side == 'left') ? 'right' : 'left';
-                prev = cmt.get('username');
-            }
-            var result = that.renderComment(cmt, side);
-            that.cmtViews.push(result);
-            $('#commentContainer').append(result.el);
-        }, this);
-
-        return this;
-    },
-    renderComment: function(item, side) {
-        var cmtView = new App.CommentView({
-                model: item
-            }),
-            rowCmtView = new App.RowCommentView({
-                commentView: cmtView
-            });
-        var result = rowCmtView.render(side);
-        return result;
-    }
-});
-
-App.RankingControlView = function() {
-    var getRankingFromStorage = function(rankingType) {
-        var ranking = sessionStorage.getItem(rankingType);
-        ranking = (ranking && JSON.parse(ranking)) || null;
-        return ranking;
-    },
-    initRankingListToolbarView = function(rankingType, rankingObj) {
-        $('#rankingHeader').show();
-        App.RankListToolbarView.clear();
-        App.RankListToolbarView.mode(rankingType);
-        App.RankListToolbarView.setName(rankingObj.name);
-        App.RankListToolbarView.addNewRanks(rankingObj.ranks);
-    },
-    rankingSession = getRankingFromStorage("rankingSession"),
-    rankingView = getRankingFromStorage("rankingView");
-
-    if (!_.isEmpty(rankingSession)) {
-        initRankingListToolbarView("rankingSession", rankingSession);
-    }
-    else if (!_.isEmpty(rankingView)) {
-        initRankingListToolbarView("rankingView", rankingView);
-    }
-
-    $('#newRanking').click(function(e) {
-        var inUse = $('#rankingHeader').is(':visible'),
-            forceClear = false,
-            existingRankingSession = getRankingFromStorage("rankingSession");
-
-        if (inUse) {
-            forceClear = confirm("Start from scratch?");
-        }
-        else {
-            $('#rankingHeader').show()
-        }
-
-        if ((!inUse && _.isEmpty(existingRankingSession)) || forceClear) {
-            var newRankingSession = {
-                inSession: true,
-                ranks: []
-            }
-            sessionStorage.setItem('rankingSession', JSON.stringify(newRankingSession));
-            initRankingListToolbarView("rankingSession", newRankingSession.ranks);
-        }
-    });
-
-    $('#rankingSaveBtn').click(function(e) {
-        var existingRankingSession = getRankingFromStorage("rankingSession");
-        existingRankingSession.name = $('#rankingName').text();
-
-        if (!existingRankingSession.name || !existingRankingSession.ranks) {
-            alert("Please provide a name");
-            return;
-        }
-
-        $.ajax({
-            type: "POST",
-            url: App.API_SERVER + App.API_VERSION + 'user/' + getCookie('userid') + "/ranking",
-            data: existingRankingSession
-        })
-        .done(function(res) {
-            if (!res.error) { // clear local session
-                $('#rankingHeader').hide();
-                sessionStorage.removeItem('rankingSession');
-            }
-        })
-        .fail(function(msg) {
-            // Tell the user
-        });
-    });
-
-    $("#rankingCancelBtn").click(function(e) {
-        sessionStorage.removeItem("rankingSession");
-        $("#rankingHeader").hide();
-    });
-
-    $("#rankingViewCancelBtn").click(function(e) {
-        sessionStorage.removeItem("rankingView");
-        $("#rankingHeader").hide();
-    });
-};
-
 App.SummaryCardView = Backbone.View.extend({
     className: 'card',
 	template: _.template(Template.summaryCardTemplate, null, {variable: 'obj'}),
@@ -899,10 +394,7 @@ App.SummaryCardView = Backbone.View.extend({
         'click .card-title': 'updateCardTitle',
         'click .closeBtn': 'cancelCreation',
         'click .editImgBtn': 'changeImg',
-        'click .scroll': 'attrContentScrollHandler',
         'click .saveBtn': 'saveCreation',
-        'click .searchState': 'searchIconClick',
-        'keypress .search-query': 'attrSearch',
         'mouseover .photo': 'toggleEditImgBtn',
         'mouseout .photo': 'toggleEditImgBtn',
         'mouseover': 'toggleCardHeaderBtn',
@@ -923,11 +415,9 @@ App.SummaryCardView = Backbone.View.extend({
             renderMode: setting.renderMode,
             colManager: setting.colManager});
 
-        this.preSaveAttr = [];
+        //TODO change name
         this.side = setting.side;
         this.listenTo(this.model.get('attributeCollection'), 'change', this.attrChange);
-    },
-    renderSaveCancelBtns: function() {
     },
 	render: function(editing, renderMode) {
         /* Editable and Editing confusing */
@@ -936,15 +426,13 @@ App.SummaryCardView = Backbone.View.extend({
         var editable = this.model.get('editable'),
             domId = this.model.get('domId'),
             entityModel = this.model.toJSON(),
-            isNew = this.entityView.model.isNew(),
-            private = this.entityView.model.get('private');
+            isNew = this.entityView.model.isNew();
 
         this.$el.html(this.template(entityModel));
         this.$('.profileContent').empty().append(this.entityView.render().el);
 
         var that = this,
-            hashTagsUL = this.$('#hashtags-'+domId),
-            catTagsUL = this.$('#cattags-'+domId);
+            hashTagsUL = this.$('#hashtags-'+domId);
 
         if (editing) {
             console.log("Editing");
@@ -957,9 +445,7 @@ App.SummaryCardView = Backbone.View.extend({
         }
 
         this.renderKonb();
-
         hashTagsUL.tagit(App.ConfigureTagit('hash', that, editable));
-        //catTagsUL.tagit(App.ConfigureTagit('cat', that, editable));
 
         if (!editable) {
             this.entityView.editProfile('editable');
@@ -971,29 +457,17 @@ App.SummaryCardView = Backbone.View.extend({
                 hashTagsUL.find('input').hide();
             }
 
-            if (!this.model.get('catTags')) {
-                this.$('.catTag').hide();
-            }
-            else {
-                catTagsUL.find('input').hide();
-            }
-
             this.$('.close').hide(); //save and close btn
             this.$el.removeClass('editHighlight');
         }
         else {
-            this.$el.addClass('editHighlight');
-
-            //Hide details that require model to be saved first
+            // Hide details that require model to be saved first
             this.$('.card-header-right').hide();
 
-            hashTagsUL.find('input')
-                .css('display', '')
-                .attr('placeholder', 'Add New Hash Tag');
+            this.$el.addClass('editHighlight');
 
-            catTagsUL.find('input')
-                .css('display', '')
-                .attr('placeholder', 'Add New Category Tag');
+            hashTagsUL.find('input').css('display', '')
+                .attr('placeholder', 'Add New Tag');
 
             if (isNew) {
                 this.$('.closeBtn').hide();
@@ -1013,7 +487,6 @@ App.SummaryCardView = Backbone.View.extend({
     renderSearch: function(editing) {
         console.log("renderSearch");
         this.attributeCollectionView.render(this.$('.attrContent'));
-        this.renderChevrons();
     },
     renderDetail: function(editing) {
         console.log("renderDetail");
@@ -1027,21 +500,6 @@ App.SummaryCardView = Backbone.View.extend({
         this.attributeCollectionView.render(this.$('.attrContent'));
     },
     //Event Handler
-    attrContentScrollHandler: function(e) {
-        var $attrContent = this.$('.attrContent'),
-            $tar = $(e.target),
-            attrHeight = 320,
-            that = this;
-
-        if ($tar.hasClass('up')) {
-            attrHeight *= -1;
-        }
-
-        $attrContent.stop().animate({scrollTop: $attrContent.scrollTop()+attrHeight
-            }, 800, function() {
-                that.renderChevrons();
-        });
-    },
     rightCardHeaderBtnHandler: function(e) {
         var target = $(e.target);
         if (target.hasClass('icon-paper-clip') || target.hasClass('linkBtn')) {
@@ -1174,45 +632,6 @@ App.SummaryCardView = Backbone.View.extend({
             that.$('#img-'+that.model.get('domId')).attr('src', $('#imageURLInput').val());
         });
     },
-    searchIconClick: function(e) {
-        var $e = $(e.target);
-
-        if ($e.hasClass('icon-remove')) {
-            $e.addClass('icon-search')
-              .removeClass('icon-remove');
-
-            this.$('.search-query').val('');
-            this.$('.attrContent').html('');
-
-            //re-render stuff CHECK
-            _.each(this.attributeCollectionView.render(), function(el) {
-                this.$('.attrContent').append(el);
-            }, this);
-        }
-    },
-    //this function needs updating
-    attrSearch: function(e) {
-        console.log('Query Event: ' + query);
-        var query = (this.$el.find('.search-query').val());
-        if (query !== '') {
-            this.$el.find('.searchState')
-                .removeClass('icon-search')
-                .addClass('icon-remove');
-        }
-        else {
-            this.$el.find('.searchState')
-                .removeClass('icon-remove')
-                .addClass('icon-search');
-        }
-
-        var results = App.Utility.filterCollection(this.attributeCollectionView.collection, query);
-        this.$el.find('.attrContent').html('');
-
-        _.each(results, function(m) {
-            var mv = new App.AttributeView({model:m});
-            this.$el.find('.attrContent').append(mv.render().el);
-        }, this);
-    },
     attrChange: function(e) {
         console.log('AttrChange Called');
 
@@ -1232,25 +651,6 @@ App.SummaryCardView = Backbone.View.extend({
         }
     },
     //Misc. Func
-    renderChevrons: function() {
-        var chevronup = this.$('.up'),
-            chevrondown = this.$('.down');
-            attrContent= this.$('.attrContent'),
-            attrContentHeight = attrContent.children().length*135;
-
-        if (attrContentHeight == 0 || attrContent.scrollTop() == 0) {
-            chevronup.hide();
-        }
-        else {
-            chevronup.show();
-        }
-        if (attrContentHeight == 0 || attrContent.scrollTop() >= attrContentHeight) {
-            chevrondown.hide();
-        }
-        else {
-            chevrondown.show();
-        }
-    },
     renderKonb: function() {
         var knobColor = hslInterpolation(this.model.get('summary').avgScore);
 
@@ -1267,6 +667,7 @@ App.SummaryCardView = Backbone.View.extend({
 
         this.$('.sdial').attr('style', this.$('.idial').attr('style'));
         this.$('.idial').hide();
+        this.$('.sdial').show();
     },
     toggleVisibility: function(e, selector) {
         var eventType = e.type;
@@ -1294,6 +695,140 @@ App.SummaryCardView = Backbone.View.extend({
     },
 });
 
+
+/**
+ * Table Row View
+ */
+App.ProfileRowView = Backbone.View.extend({
+    template: _.template(Template.profileRowTemplate),
+    tagName: 'tr',
+    className: 'row',
+    events: {
+        'click .icon-share': 'shareRanking',
+        'click .viewRanking': 'viewRanking'
+    },
+    initialize: function(settings) {
+        this.model.sessionStorageInd = settings.sessionStorageInd;
+        this.model.rankingShareUrl = 
+            window.location.origin + '/ranking/' + this.model.shareToken;
+    },
+    render: function() {
+        console.log('proilfeRowView Render');
+        this.$el.html(this.template(this.model));
+        return this;
+    },
+    // event handler
+    shareRanking: function(e) {
+        var that = this;
+        App.GlobalWidget.shareModal.find('#shareName').html(this.model.name);
+        App.GlobalWidget.shareModal.on("shown", function() {
+            App.GlobalWidget.shareModal.find('#publicURL')
+                .val(that.model.rankingShareUrl).select();
+        });
+        App.GlobalWidget.shareModal.modal();
+    },
+    viewRanking: function(e) {
+        // update internal storage
+        var currentRankingInd = this.model.sessionStorageInd;
+        if (_.isNumber(currentRankingInd)) {
+            updateSessionStorageRankingView(currentRankingInd);
+        }
+        document.location.href = this.model.rankingShareUrl;
+    }
+});
+
+App.RankingRowView = App.SummaryCardView.extend({
+    template: _.template(Template.rankingRowTemplate),
+    tagName: 'tr',
+    className: 'row',
+    events: {
+        'click .ranking': 'assignRanking'
+    },
+    initialize: function() {
+    },
+    render: function() {
+        var that = this;
+
+        this.$el.html(this.template(this.model.toJSON()));
+        this.el.addEventListener('dragover', function(ev) {
+            ev.preventDefault();
+        });
+
+        this.el.addEventListener('drop', function(ev) {
+            ev.preventDefault();
+
+            var badgeId = ev.dataTransfer.getData('exchangeId'),
+                otherRankBadge = $('#' + badgeId),
+                otherTdHead = $('#' + badgeId).parent(),
+                tdHead = that.$('.ranking'),
+                rankBadge = tdHead.find('.rankContainer'),
+                rankingSession = JSON.parse(sessionStorage.getItem('rankingSession')),
+                rankInd = ev.dataTransfer.getData('exchangeRank'),
+                otherRankInd = rankBadge.data('rank');
+
+            // exchanging background data
+            var tmp = rankingSession.ranks[rankInd - 1];
+            rankingSession.ranks[rankInd- 1] = rankingSession.ranks[otherRankInd - 1];
+            rankingSession.ranks[otherRankInd - 1] = tmp;
+            sessionStorage.setItem('rankingSession', JSON.stringify(rankingSession));
+
+            // exchanging row UI
+            otherRankBadge.detach();
+            rankBadge.detach();
+            tdHead.append(otherRankBadge);
+            otherTdHead.append(rankBadge);
+
+            // exchange toolbar UI
+            var otherRankListIcon = $('#rankingList li:nth-child(' + otherRankInd + ')'),
+                rankListIcon = $('#rankingList li:nth-child(' + rankInd + ')');
+                otherLink = otherRankListIcon.find('a').attr('href');
+            otherRankListIcon.find('a').attr('href', rankListIcon.find('a').attr('href'));
+            rankListIcon.find('a').attr('href', otherLink);
+        });
+
+        return this;
+    },
+    renderKonb: function() {
+        var knobColor = hslInterpolation(this.model.get('summary').avgScore);
+
+        this.$('.idial').knob({
+            'fgColor': knobColor,
+            'inputColor': knobColor,
+            'thickness': 0.4,
+            'angleOffset': -125,
+            'angleArc': 250,
+            'width': 75,
+            'height': 75,
+            'readOnly': true,
+        });
+        
+        this.$('.sdial').attr('style', this.$('.idial').attr('style'));
+        this.$('.idial').hide();
+    },
+    assignRanking: function(rankingView) {
+        var rawRankingSession = sessionStorage.getItem('rankingSession'),
+            rankingSession = rawRankingSession && JSON.parse(rawRankingSession),
+            referenceRanking = rankingSession || rankingView;
+
+        if (referenceRanking) {
+            var rank = referenceRanking.ranks.indexOf(this.model.get('id'));
+
+            if (rankingSession && rank < 0) {
+                rank = rankingSession.ranks.length + 1;
+                rankingSession.ranks.push(this.model.get('id'));
+                sessionStorage.setItem('rankingSession', JSON.stringify(rankingSession));
+                App.RankListToolbarView.addNewRank(this.model.get('id'), rank);
+            }
+            else {
+                rank += 1;
+            }
+
+            var rankBadgeView = new App.RankBadgeView({rank: rank});
+            this.$('.ranking').empty().append(rankBadgeView.render().el);
+        }
+    }
+});
+
 App.TitleRowView = Backbone.View.extend({
     template: _.template(Template.titleRowTemplate),
     tagName: 'tr',
@@ -1305,6 +840,156 @@ App.TitleRowView = Backbone.View.extend({
         return this;
     }
 });
+
+
+// Ranking Related Views/Controllers
+App.RankListToolbarView = (function() {
+    var empty = true;
+
+    // private
+    var addNewRank = function(entityId, rank) {
+        $('#rankInstruction').hide();
+
+        if (empty) {
+            $('#rankingList').prev().hide();
+            empty = false;
+        }
+
+        var link = window.location.origin + "/entity/" + entityId,
+            rankListIcon = new App.RankListIconView({rank: rank, link: link});
+
+        $('#rankingList').append(rankListIcon.render().el);
+        return this;
+    },
+    clear = function() {
+        $('#rankingList').empty();
+        return this;
+    },
+    viewMode = function() {
+        $('#rank-sessionButtons').hide();
+        $('#rank-viewButtons').show();
+        $('#rankingName').attr('contenteditable', false);
+        return this;
+    },
+    interacMode = function() {
+        $('#rankInstruction').show();
+        $('#rank-sessionButtons').show();
+        $('#rank-viewButtons').hide();
+        $('#rankingName').attr('contenteditable', true);
+        return this;
+    },
+    setName = function(name) {
+        $('#rankingName').text(name);
+        return this;
+    };
+
+    // public
+    return {
+        mode: function(modeType) {
+            if (modeType == "rankingSession") {
+                interacMode();
+            }
+            else {
+                viewMode();
+            }
+            return this;
+        },
+        addNewRanks: function(entityIds) {
+            var i = 1;
+            _.each(entityIds, function(entityId) {
+                addNewRank(entityId, i);
+                i += 1;
+            });
+            return this;
+        },
+        clear: clear,
+        setName: setName,
+        addNewRank: addNewRank
+    };
+})();
+
+App.RankingController = function() {
+    var getRankingFromStorage = function(rankingType) {
+        var ranking = sessionStorage.getItem(rankingType);
+        ranking = (ranking && JSON.parse(ranking)) || null;
+        return ranking;
+    },
+    initRankingListToolbarView = function(rankingType, rankingObj) {
+        App.GlobalWidget.rankingHeader.show();
+        App.RankListToolbarView
+            .clear()
+            .mode(rankingType)
+            .setName(rankingObj.name)
+            .addNewRanks(rankingObj.ranks);
+    },
+    rankingSession = getRankingFromStorage("rankingSession"),
+    rankingView = getRankingFromStorage("rankingView");
+
+    if (!_.isEmpty(rankingSession)) {
+        initRankingListToolbarView("rankingSession", rankingSession);
+    }
+    else if (!_.isEmpty(rankingView)) {
+        initRankingListToolbarView("rankingView", rankingView);
+    }
+
+    $('#newRanking').click(function(e) {
+        var inUse = App.GlobalWidget.rankingHeader.is(':visible'),
+            existingRankingSession = getRankingFromStorage("rankingSession"),
+            forceClear = false;
+
+        if (inUse) {
+            forceClear = confirm("Start from scratch?");
+        }
+        else {
+            App.GlobalWidget.rankingHeader.show();
+        }
+
+        if ((!inUse && _.isEmpty(existingRankingSession)) || forceClear) {
+            var newRankingSession = {
+                inSession: true,
+                ranks: []
+            };
+
+            sessionStorage.setItem('rankingSession', JSON.stringify(newRankingSession));
+            initRankingListToolbarView("rankingSession", newRankingSession.ranks);
+        }
+    });
+
+    $('#rankingSaveBtn').click(function(e) {
+        var existingRankingSession = getRankingFromStorage("rankingSession");
+        existingRankingSession.name = $('#rankingName').text();
+
+        if (!existingRankingSession.name || !existingRankingSession.ranks) {
+            alert("Please provide a name");
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: App.API_SERVER + App.API_VERSION + 'user/' + getCookie('userid') + "/ranking",
+            data: existingRankingSession
+        })
+        .done(function(res) {
+            if (!res.error) { // clear local session
+                $('#rankingHeader').hide();
+                sessionStorage.removeItem('rankingSession');
+            }
+        })
+        .fail(function(msg) {
+            // Tell the user
+        });
+    });
+
+    $("#rankingCancelBtn").click(function(e) {
+        sessionStorage.removeItem("rankingSession");
+        $("#rankingHeader").hide();
+    });
+
+    $("#rankingViewCancelBtn").click(function(e) {
+        sessionStorage.removeItem("rankingView");
+        $("#rankingHeader").hide();
+    });
+};
 
 App.RankBadgeView = Backbone.View.extend({
     template: _.template(Template.rankBadgetTemplate),
@@ -1376,153 +1061,413 @@ App.RankListIconView = Backbone.View.extend({
     }
 });
 
-App.RankListToolbarView = (function() {
-    var empty = true;
 
-    // private
-    var addNewRank = function(entityId, rank) {
-        $('#rankInstruction').hide();
-        if (empty) {
-            $('#rankingList').prev().hide();
-            empty = false;
+/* Composite View Component */
+
+App.AttributeCollectionView = App.TableView.extend({
+    initialize: function(setting) {
+        console.log('Attr Collection View');
+
+        if (setting.collection) {
+            this.collection = setting.collection;
+        }
+        else {
+            this.collection = new App.AttributeCollection();
         }
 
-        var link = window.location.origin + "/entity/" + entityId,
-            rankListIcon = new App.RankListIconView({rank: rank, link: link});
+        this.preSaveAttrs = [];
+        this.entityId = setting.entityId
+        this.renderMode = this["render" + capFirstLetter(setting.renderMode || 'default')];
+        this.colManager = setting.colManager || App.ColManager;
+    },
+    // render functions
+    render: function(attrContainer) {
+        this.attrContainer = attrContainer;
+        this.renderMode();
+    },
+    renderAttribute: function(item) {
+        var attrView = new App.AttributeView({
+            model: item
+        });
+        return attrView.render();
+    },
+    renderDefault: function() {
+        var that = this;
+        _.each(this.collection.models, function(item) {
+            that.attrContainer.append(that.renderAttribute(item).el);}, this);
+    },
+    renderSearch: function() {
+    },
+    renderGraph: function() {
+    },
+    renderDetail: function() {
+        // create table
+        this.$el.html(this.template({}));
 
-        $('#rankingList').append(rankListIcon.render().el);
-    },
-    clear = function() {
-        $('#rankingList').empty();
-    },
-    viewMode = function() {
-        $('#rank-sessionButtons').hide();
-        $('#rank-viewButtons').show();
-        $('#rankingName').attr('contenteditable', false);
-    },
-    interacMode = function() {
-        $('#rankInstruction').show();
-        $('#rank-sessionButtons').show();
-        $('#rank-viewButtons').hide();
-        $('#rankingName').attr('contenteditable', true);
-    },
-    setName = function(name) {
-        $('#rankingName').text(name);
-    };
+        // add title
+        this.el.appendChild(
+            new App.TitleRowView().render("Attribute").el);
 
-    // public
-    return {
-        clear: clear,
-        mode: function(modeType) {
-            if (modeType == "rankingSession") {
-                interacMode();
-            }
-            else {
-                viewMode();
-            }
-        },
-        setName: setName,
-        addNewRank: addNewRank,
-        addNewRanks: function(entityIds) {
-            var i = 1;
-            _.each(entityIds, function(entityId) {
-                addNewRank(entityId, i);
-                i += 1;
+        // add each attribute
+        var that = this;
+        _.each(this.collection.models, function(attr) {
+            that.el.appendChild(that.renderAttribute(attr));
+        });
+
+        // TODO change
+        document.getElementById('attribute').appendChild(this.el);
+    },
+    // event handler
+    addNew: function(e) {
+        var newAttr = this.getNewAttrModel();
+        this.$el.find('th').parent().after(this.renderAttribute(newAttr));
+        this.preSaveAttrs.push(newAttr);
+        return newAttr;
+    },
+    // Custom Func
+    renderAttribute: function(newAttr) {
+        var rowView = new App.AttributeView({
+            model: newAttr
+        });
+        return rowView.render().el;
+    },
+    getNewAttrModel: function(tone) {
+        tone = tone ? tone : App.POSITIVE; //default to pos
+        var entityId = this.entityId,
+            attrModel = new App.EntityAttributeModel({
+                entity:entityId,
+                editable:true,
+                tone:tone});
+
+        this.collection.add(attrModel);
+        return attrModel;
+    },
+    saveAll: function() {
+        _.each(this.preSaveAttrs, function(attr) {
+            attr.save();
+        });
+        this.preSaveAttrs = [];
+    },
+});
+
+App.TableCardCollectionView = Backbone.View.extend({
+    initialize: function(settings) {
+        if (settings.rankingId) {
+            this.collection = new App.SummaryCardCollection({
+                urlStub: 'ranking/share/' + settings.rankingId
             });
+            this.collection.fetch();
+            this.title = "Ranking";
         }
-    };
-})();
-
-App.RankingRowView = App.SummaryCardView.extend({
-    template: _.template(Template.rankingRowTemplate),
-    tagName: 'tr',
-    className: 'row',
-    events: {
-        'click .ranking': 'assignRanking'
-    },
-    initialize: function() {
+        else if (settings.query){ // query
+            this.collection = new App.SummaryCardCollection({
+                urlStub: 'entity/search/'
+            });
+            this.collection.fetch({data: $.param({q: settings.query})});
+            this.title = "Result for " + settings.query;
+        }
+        
+        this.collection.on('reset', this.render, this);
+        this.pageType = {'type': "search", 'value': this.query};
     },
     render: function() {
+        var that = this,
+            rowViews = [],
+            tableView = new App.TableView(),
+            titleRow = new App.TitleRowView();
+
+        tableView.el.appendChild(titleRow.render(this.title).el);
+        titleRow.$('.addNew').hide();
+
+        _.each(this.collection.models, function(row) {
+            rowViews.push(that.renderRow(row, tableView));
+        });
+
+        document.getElementById('top1').appendChild(tableView.el);
+
+        _.each(rowViews, function(rowView) {
+            var rawRankingSession = sessionStorage.getItem('rankingSession'),
+                rankingSession = rawRankingSession && JSON.parse(rawRankingSession),
+                rawRankingView = sessionStorage.getItem('rankingView'),
+                rankingView = rawRankingView && JSON.parse(rawRankingView);
+            var referenceRanking = rankingSession || rankingView;
+
+            if (!referenceRanking || referenceRanking.ranks.indexOf(rowView.model.get('id')) < 0) {
+                rowView.renderKonb();
+            }
+            else {
+                rowView.assignRanking(rankingView);
+            }
+        });
+    },
+    renderRow: function(mRow, tableView) {
         var that = this;
-
-        this.$el.html(this.template(this.model.toJSON()));
-        this.el.addEventListener('dragover', function(ev) {
-            ev.preventDefault();
+        var rowView = new App.RankingRowView({
+            model: mRow
         });
+        tableView.el.appendChild(rowView.render().el);
+        return rowView;
+    }
+});
 
-        this.el.addEventListener('drop', function(ev) {
-            ev.preventDefault();
+App.LinkCollectionView = Backbone.View.extend({
+    initialize: function(setting) {
+        console.log('Link Collection View');
 
-            var badgeId = ev.dataTransfer.getData('exchangeId'),
-                otherRankBadge = $('#' + badgeId),
-                otherTdHead = $('#' + badgeId).parent(),
-                tdHead = that.$('.ranking'),
-                rankBadge = tdHead.find('.rankContainer'),
-                rankingSession = JSON.parse(sessionStorage.getItem('rankingSession')),
-                rankInd = ev.dataTransfer.getData('exchangeRank'),
-                otherRankInd = rankBadge.data('rank');
+        if (setting.collection) {
+            this.collection = setting.collection;
+        }
+        else {
+            this.collection = new App.LinkCollection();
+        }
 
-            // exchanging background data
-            var tmp = rankingSession.ranks[rankInd - 1];
-            rankingSession.ranks[rankInd- 1] = rankingSession.ranks[otherRankInd - 1];
-            rankingSession.ranks[otherRankInd - 1] = tmp;
-            sessionStorage.setItem('rankingSession', JSON.stringify(rankingSession));
-
-            // exchanging row UI
-            otherRankBadge.detach();
-            rankBadge.detach();
-            tdHead.append(otherRankBadge);
-            otherTdHead.append(rankBadge);
-
-            // exchange toolbar UI
-            var otherRankListIcon = $('#rankingList li:nth-child(' + otherRankInd + ')'),
-                rankListIcon = $('#rankingList li:nth-child(' + rankInd + ')');
-                otherLink = otherRankListIcon.find('a').attr('href');
-            otherRankListIcon.find('a').attr('href', rankListIcon.find('a').attr('href'));
-            rankListIcon.find('a').attr('href', otherLink);
+        this.renderMode = this["render" + capFirstLetter(setting.renderMode || 'default')];
+    },
+    render: function(domContainer) {
+        this.domContainer = domContainer;
+        this.renderMode();
+    },
+    renderLink: function(item) {
+        var linkView = new App.LinkView({
+            model: item
         });
+        return linkView.render();
+    },
+    renderDefault: function() {
+        var that = this;
+        _.each(this.collection.models, function(item) {
+            that.domContainer.append(that.renderLink(item).el);}, this);
+    },
+});
+
+App.CommentCollectionView = Backbone.View.extend({
+    _commentBox: Backbone.View.extend({
+        template: _.template(Template.commentRowTemplate),
+        className: 'row-fluid',
+        initialize: function(setting) {
+            this.commentView = setting.commentView;
+        },
+        render: function(side) {
+            console.log('CommentRowView Render');
+            this.$el.html(this.template());
+            this.$('.' + side).append(this.commentView.render().el);
+            return this;
+        },
+    }),
+
+    initialize: function(data) {
+        console.log(data);
+        this.collection = new App.CommentCollection({entity: data.entityId});
+        this.data = data;
+        this.side = 'left';
+        this.collection.fetch();
+        this.collection.on('reset', this.render, this);
+    },
+    update: function(newCmt) {
+        $('#commentContainer').append(
+            this.renderComment(newCmt, this.side).el);
+        this.collection.add(newCmt);
+    },
+    render: function() {
+        var that = this,
+            prev = null,
+            side = this.side;
+        this.cmtViews = [];
+
+        _.each(this.collection.models, function(cmt) {
+            if (prev != cmt.get('username')) {
+                side = (side == 'left') ? 'right' : 'left';
+                prev = cmt.get('username');
+            }
+            var result = that.renderComment(cmt, side);
+            that.cmtViews.push(result);
+            $('#commentContainer').append(result.el);
+        }, this);
 
         return this;
     },
-    renderKonb: function() {
-        var knobColor = hslInterpolation(this.model.get('summary').avgScore);
-
-        this.$('.idial').knob({
-            'fgColor': knobColor,
-            'inputColor': knobColor,
-            'thickness': 0.4,
-            'angleOffset': -125,
-            'angleArc': 250,
-            'width': 75,
-            'height': 75,
-            'readOnly': true,
-        });
-
-        this.$('.sdial').attr('style', this.$('.idial').attr('style'));
-        this.$('.idial').hide();
-    },
-    assignRanking: function(rankingView) {
-        var rawRankingSession = sessionStorage.getItem('rankingSession'),
-            rankingSession = rawRankingSession && JSON.parse(rawRankingSession),
-            referenceRanking = rankingSession || rankingView;
-
-        if (referenceRanking) {
-            var rank = referenceRanking.ranks.indexOf(this.model.get('id'));
-
-            if (rankingSession && rank < 0) {
-                rank = rankingSession.ranks.length + 1;
-                rankingSession.ranks.push(this.model.get('id'));
-                sessionStorage.setItem('rankingSession', JSON.stringify(rankingSession));
-                App.RankListToolbarView.addNewRank(this.model.get('id'), rank);
-            }
-            else {
-                rank += 1;
-            }
-
-            var rankBadgeView = new App.RankBadgeView({rank: rank});
-            this.$('.ranking').empty().append(rankBadgeView.render().el);
-        }
+    renderComment: function(item, side) {
+        var cmtView = new App.CommentView({
+                model: item
+            }),
+            rowCmtView = new this._commentBox({
+                commentView: cmtView
+            });
+        var result = rowCmtView.render(side);
+        return result;
     }
 });
 
 
+// High level page
+
+App.PageView = Backbone.View.extend({
+    initialize: function(q) {
+        this._filter = function(e) {
+            return true;
+        };
+
+        this.renderMode = 'default';
+        if (q.id) { //specific entity
+            this.collection = new App.SummaryCardCollection({
+                urlStub: "entity/" + q.id
+            });
+            this.pageType = {'type': 'id', 'value': q.id};
+            this.renderMode = 'detail';
+            this.collection.on('reset', this.render, this);
+            this.collection.fetch();
+        }
+        else {
+            new App.TableCardCollectionView(q);
+        }
+    },
+    filter: function(func) {
+        if (!func) {
+            this._filter = function(e) {
+                return true;
+            }
+        }
+        else {
+            this._filter = func;
+        }
+    },
+    render: function() {
+        var that = this,
+            filteredList = _.filter(this.collection.models, this._filter),
+            isPrivate = false;
+
+        console.log('In PageView summaryCardCollectionView');
+
+        _.each(filteredList, function(item) {
+            that.renderSummaryCard(item, this.renderMode);
+            isPrivate = item.get('private');
+        }, this);
+
+        if (!this.collection.models.length) {
+            App.ShowTrendyLink();
+        }
+        else if (this.pageType.type === 'id') {
+            $('#privacy-setting').attr('class', isPrivate ? "icon-lock" : "icon-globe");
+            $('#privacy-setting').text(" " + this.collection.models[0].get('name'));
+            App.CommentContainer.show();
+        }
+
+        if (this.collection.models.length > 3) {
+            //show 1 sponsored ad
+            var adModel = new App.AdModel({});
+            var adView = new App.AdView({model:adModel});
+            adModel.fetch();
+        }
+    },
+    renderSummaryCard: function(item, renderMode) {
+        console.log("Rendering summaryCard");
+
+        var cardView = new App.SummaryCardView({
+            model: item,
+            renderMode: renderMode,
+            colManager: App.ColManager,
+        });
+
+
+        if (renderMode == "detail") {
+            document.getElementById('dr1').appendChild(cardView.render().el);
+        }
+        else {
+            App.ColManager.nextCol('card').append(cardView.render().el);
+        }
+    }
+});
+
+App.CardColView = Backbone.View.extend({
+    initialize: function(setting) {
+        this._filter = function(e) {
+            return true;
+        };
+
+        this.collection = new App.SummaryCardCollection({
+            urlStub: "entity/search"
+        });
+        this.col = App.ColManager.getCol('card').cols[setting.col];
+        this.colInd = setting.col;
+        this.collection.on('reset', this.render, this);
+    },
+    filter: function(func) {
+        if (!func) {
+            this._filter = function(e) {
+                return true;
+            }
+        }
+        else {
+            this._filter = func;
+        }
+    },
+    search: function(query) {
+        debugger;
+        App.ColManager.resetCol('card', [this.colInd]);
+        /*if (q.id) {//specific entity
+            /this.collection.fetch({data: $.param({id: q.id})});
+            this.pageType = {'type': 'id', 'value': q.id};
+        /}*/
+        if (query) {//a search
+            this.collection.fetch({data: $.param({q: query})});
+            this.pageType = {'type': "search", 'value': query};
+        }
+    },
+    render: function() {
+        var that = this,
+            filteredList = _.filter(this.collection.models, this._filter);
+
+        _.each(filteredList, function(item) {
+            that.renderSummaryCard(item);
+        }, this);
+    },
+    renderSummaryCard: function(item) {
+        var that = this;
+        var cardView = new App.SummaryCardView({
+            model: item,
+            renderMode: 'graph',
+            side: this.colInd < 2 ? "left" : "right",
+        });
+
+        this.col.append(cardView.render().el);
+    },
+});
+
+App.GraphView = Backbone.View.extend({
+    initialize: function(setting) {
+        this.collection = new App.LinkCollection();
+        this._filter = function(e) {
+            return true;
+        };
+
+        this.domContainer = setting.domContainer;
+        this.collection.fetch({data: $.param({leftId: App.leftId, rightId: App.rightId})});
+        this.collection.on('reset', this.render, this);
+    },
+    filter: function(func) {
+        if (!func) {
+            this._filter = function(e) {
+                return true;
+            }
+        }
+        else {
+            this._filter = func;
+        }
+    },
+    render: function() {
+        var that = this,
+            filteredList = _.filter(this.collection.models, this._filter);
+
+        console.log('In LinkCollectionView');
+        _.each(filteredList, function(item) {
+            that.renderLink(item);
+        }, this);
+    },
+    renderLink: function(item) {
+        var linkView = new App.LinkView({
+            model: item
+        });
+
+        this.domContainer.append(linkView.render().el);
+    },
+});

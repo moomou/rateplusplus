@@ -8,8 +8,6 @@
 
     <div class="container-narrow">
 
-      {% include "messageBox.partial" %}
-
       <div id="profileRow" class="row-fluid">
       </div>
 
@@ -26,6 +24,8 @@
     {% if REQUEST_ENABLED %} 
       {% include "requestForm.partial" %}
     {% endif %}
+
+    {% include "shareModal.partial" %}
 
     {% include "stdScript.partial" %}
     {% include "modelScript.partial" %}

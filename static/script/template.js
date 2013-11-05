@@ -1,4 +1,3 @@
-//'<!--Start of Build In Javascript Template-->'
 var Template = (function() {
     var summaryTemplate = "" +
         "<input type='text' value='<%=obj.summary.avgScore%>' class='pull-left idial'>" +
@@ -102,13 +101,6 @@ var Template = (function() {
                   "<%=obj.hashTags%>" +
                   "</ul>" +
                 "</div>" +
-                /*"<div class='catTag'>" +
-                  "<i class='tagBullet icon-ellipsis-vertical'></i>" +
-                  "<ul class='tags' id='cattags-<%=obj.domId%>'>" +
-                    "<%=obj.catTags%>" +
-                  "</ul>" +
-                "</div>" +
-                */
               "</div>" +
             "</div>" +
             "<div class='break break-mini'></div>" +
@@ -175,19 +167,13 @@ var Template = (function() {
           "</td>" +
           "<td class='head'>" +
             "<h3><%=obj.name%></h3>" +
-            //"<span style='position: absolute; top: 5px; right: 5px;'>" +
-              //"<i class='icon-link'><a href='<%=obj.srcURL%>'> Source</a></i></span>" +
             "<span style='position: absolute; top: 5px; left: 10px;'></span>" +
-              "<% if (obj.type == 'auto') { %>" +
-              //  "<i class='icon-cloud-download'></i></span>" +
-              "<% } else { %>" +
-              //  "<i class='icon-group'></i></span>" +
-                "<div class='voteBtns'>" +
-                  "<a href='' class='btn voteBtn upVote btn-success'>Yes <i class='upVote icon-thumbs-up'></i></a>" +
-                  "<a href='' class='btn voteBtn downVote btn-danger'>No <i class='downVote icon-thumbs-down'></i></a>" +
-                "</div>" +
-              "<% } %>" +
-            "<canvas height='55' width='412' style='top: 85%;' class='vizGraph absCenter hidden'></canvas>" +
+            "<div class='voteBtns'>" +
+              "<a href='' class='btn voteBtn upVote btn-success'>Yes <i class='upVote icon-thumbs-up'></i></a>" +
+              "<a href='' class='btn voteBtn downVote btn-danger'>No <i class='downVote icon-thumbs-down'></i></a>" +
+            "</div>" +
+            "<div class='hidden rating <%=ratingType%>'>" +
+            "</div>" +
            "</td>",
         rankingRow = "" +
           "<td class='ranking tdDivider'>" +
@@ -196,7 +182,7 @@ var Template = (function() {
           "</td>" +
           "<td class='head' style='width:25%;background: url(<%=obj.imgURL ? obj.imgURL : '/static/img/blank.png'%>)'>" +
             "<h4><%=obj.name%></h4>" +
-            "<a class='brick' href='entity/<%=obj.id%>'></a>" +
+            "<a class='brick' href='<%=window.location.origin%>/entity/<%=obj.id%>'></a>" +
             /*"<div style='max-height: 75px;' class='hashTag bottom'>" +
               "<i class='tagBullet icon-ellipsis-vertical'></i>" +
               "<ul class='tagit tagitRow' id='hashtags-<%=obj.domId%>'>" +
@@ -225,9 +211,9 @@ var Template = (function() {
               "</div>" +
           "</th>",
         profileRow = "" +
-        "<td class='tdDivider text-h-center text-v-center noSelect'>" +
-          "<span> <%=name%></span>" +
-          "<i class='btn pull-right icon-search'>" +
+        "<td class='tdDivider text-v-center noSelect'>" +
+          "<span class='viewRanking cursor-pointer'> <%=name%></span>" +
+          "<i class='btn pull-right icon-share'></i>" +
         "</td>" +
         "<td class='head'>" +
           "<ul class='rankingList'>" +
@@ -267,4 +253,4 @@ var Template = (function() {
     tableTemplate: genericTable,
     titleRowTemplate: titleRow,
   };
-}) ();
+})();

@@ -241,7 +241,6 @@ App.SummaryCardModel = Backbone.Model.extend({
             _.extend(this.attributes, newEntity.toJSON());
 
             this.set('hashTags', '');
-            this.set('catTags', '');
             this.set('summary', this.getEntityStats(this.get('attributes')));
             this.set('entityModel', newEntity);
             this.set('attributeCollection', newAttrCollection);
@@ -249,18 +248,17 @@ App.SummaryCardModel = Backbone.Model.extend({
 
         this.on('entityModelUpdated', this.updateSummaryCard);
     },
-	validate: function(attribs) {
-	},
     parse: function(response) {
         console.log("SummaryCardModel Parse");
-        var tags = this.getTags(response['tags']);
-
-        response['hashTags'] = tags['hashTags'];
-        response['catTags'] = tags['catTags'];
-
-        response['summary'] = this.getEntityStats(response['attributes']);
-        response['entityModel'] = new App.EntityModel(response);
-        response['attributeCollection'] = new App.AttributeCollection(response['attributes'], response['id']);
+        
+        response['hashTags'] =
+            this.cleanTags(response['tags']);
+        response['summary'] =
+            this.getEntityStats(response['attributes']);
+        response['entityModel'] =
+            new App.EntityModel(response);
+        response['attributeCollection'] =
+            new App.AttributeCollection(response['attributes'], response['id']);
 
         return response;
     },
@@ -268,33 +266,30 @@ App.SummaryCardModel = Backbone.Model.extend({
     updateSummaryCard: function() {
         console.log('Calling SummaryModel update');
         var entityModel = this;
-        var tags = this.getTags(entityModel.get('tags'));
+        var tags = this.cleanTags(entityModel.get('tags'));
 
         this.set('hashTags', tags['hashTags']);
-        this.set('catTags', tags['catTags']);
         this.set('summary', this.getEntityStats(entityModel.get('attributes')));
     },
     //Custom Functions
-    getTags: function(tags) {
+    cleanTags: function(tags) {
         var hashTags = '';
-        var catTags = '';
 
         _.each(tags, function(tag) {
+            if (tag.indexOf("__global__") >= 0) {
+                return;
+            }
+
             if (tag[0] == "#") {
                 hashTags += '<li>'+tag.substr(1)+'</li>';
             }
-            else if (tag[0] != "$") {
-                hashTags += '<li>'+tag+'</li>';
-            }
             else {
-                catTags += '<li>'+tag.substr(1)+'</li>';
+                console.log("Tag without hash prefix!");
+                hashTags += '<li>' + tag +'</li>';
             }
         });
-
-        return {
-            'hashTags': hashTags,
-            'catTags': catTags,
-        };
+    
+        return hashTags;
     },
     updateEntityStats: function(attrs) {
         console.log('updateEntityStats');
@@ -365,27 +360,28 @@ App.AttributeCollection = Backbone.Collection.extend({
 });
 
 App.SummaryCardCollection = Backbone.Collection.extend({
-	url: App.API_SERVER + App.API_VERSION + 'entity/',
+	url: function() {
+        return App.API_SERVER + App.API_VERSION + this.urlStub;
+    },
+    initialize: function(settings) {
+        this.urlStub = settings.urlStub;
+    },
     model: App.SummaryCardModel,
     comparator: function(m) {
-
         var currentRankingInd = parseInt(sessionStorage.getItem("currentRankingInd")),
             allRankings = sessionStorage.getItem("allRankings") &&
             JSON.parse(sessionStorage.getItem("allRankings"));
 
-        if (currentRankingInd >= 0 && allRankings) {
+        if (currentRankingInd >= 0 && allRankings && m.get('id')) {
             var currentRanking =
                 currentRankingInd < allRankings.length && allRankings[currentRankingInd],
                 rank = currentRanking.ranks.indexOf(m.get('id').toString());
+
             if (rank >= 0)
                 return rank;
-            return 999; // a hack to put nonranked item to the bottom
         }
-        
-        return -m.get('summary').totalVote;
-    },
-    parse: function(response) {
-        return response;
+
+        return -m.get('summary').totalVote + 999;
     },
     // Custom Func
     sortByX: function(option) {
@@ -534,18 +530,14 @@ App.ShowTrendyLink = function() {
 };
 
 App.ConfigureTagit = function(option, that, editable) {
-    var sourceURL = App.AE_C_URL,
-        prefix = "$";
-
-    if (option == "hash") {
-        sourceURL = App.AE_H_URL;
+    var sourceURL = App.AE_H_URL;
         prefix = "#";
-    }
 
     return {
         autocomplete: {delay: 0, minLength: 2, source: sourceURL},
         afterTagAdded: function(event, ui) {
             var tags = that.entityView.model.get('tags');
+
             if (ui.tagLabel && tags.indexOf(prefix+ui.tagLabel) < 0) {
                 var label = ui.tagLabel[0] == prefix ? ui.tagLabel : prefix + ui.tagLabel;
                 tags.push(label);
@@ -564,7 +556,7 @@ App.ConfigureTagit = function(option, that, editable) {
         onTagClicked: function(event, ui) {
             $('#searchInput').val(ui.tagLabel);
             $('#searchForm').submit();
-        },
+        }
     }
 };
 

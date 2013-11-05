@@ -21,11 +21,11 @@
         {% endif %}
 
         {% if FEEDBACK_ENABLED %}
-        <a class="btn btn-success pull-right" data-toggle="modal" role="button" id="feedbackBtn" href="#feedbackModal"> Feedback</a>
+        <a class="hidden-phone btn btn-success pull-right" data-toggle="modal" role="button" id="feedbackBtn" href="#feedbackModal"> Feedback</a>
         {% endif %}
 
         {% if NAV_ENABLED %}
-        <ul class="nav pull-right head-nav">
+        <ul class="hidden-phone nav pull-right head-nav">
           {% if authenticated %}
           <li><a title="Create New Entry" href="{% url 'default.views.NewEntityHandler' %}"><i class="icon-plus-sign"> </i></a></li>
           <li><a id="newRanking" title="Create New Ranking" href="#"><i class="icon-list"> </i></a></li>

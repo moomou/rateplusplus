@@ -1,9 +1,10 @@
-
+// Router File
 App.AppRouter = Backbone.Router.extend({
     routes: {
         "graph" : "graphPageInit",
         "profile" : "profilePageInit",
         "entity/new" : "newEntityPageInit",
+        "ranking/:id" : "rankingViewInit",
         "entity/:id" : "detailEntityPageInit",
         "" : "defaultPageInit", //handles query
     },
@@ -88,39 +89,6 @@ App.AppRouter = Backbone.Router.extend({
             // Tell the user
         });
     },
-    detailEntityPageInit: function(id) {
-        console.log("detail Entity");
-
-        App.RankingControlView();
-
-        pageView = new App.PageView({id: parseInt(id)}); //search for particular id
-        entityCommentsView = new App.CommentCollectionView({entityId: parseInt(id)});
-
-        $('#submitComment').click(function(e) {
-            var comment = $('#commentForm'),
-                btn = $(this);
-
-            if (!comment.val()) {
-                return;
-            }
-
-            btn.button('loading');
-
-            var newComment = new App.CommentModel({});
-
-            newComment.set('comment', comment.val());
-            newComment.set('entity', id);
-
-            newComment.save({}, {
-                success: function(response) {
-                    btn.button('reset');
-                    entityCommentsView.update(response);
-                },
-                error: function(response) {
-                },
-            });
-        });
-    },
     newEntityPageInit: function() {
         console.log("New Entity");
 
@@ -169,15 +137,52 @@ App.AppRouter = Backbone.Router.extend({
             }
         });
     },
+    rankingViewInit: function(id) {
+        App.RankingController();
+        pageView = new App.PageView({rankingId: id});
+    },
+    detailEntityPageInit: function(id) {
+        console.log("detail Entity");
+
+        App.RankingController();
+
+        pageView = new App.PageView({id: parseInt(id)}); //search for particular id
+        entityCommentsView = new App.CommentCollectionView({entityId: parseInt(id)});
+
+        $('#submitComment').click(function(e) {
+            var comment = $('#commentForm'),
+                btn = $(this);
+
+            if (!comment.val()) {
+                return;
+            }
+
+            btn.button('loading');
+
+            var newComment = new App.CommentModel({});
+
+            newComment.set('comment', comment.val());
+            newComment.set('entity', id);
+
+            newComment.save({}, {
+                success: function(response) {
+                    btn.button('reset');
+                    entityCommentsView.update(response);
+                },
+                error: function(response) {
+                },
+            });
+        });
+    },
     defaultPageInit: function() {
         console.log("Default Route");
         var query = $('#searchInput').val();
 
+        App.RankingController();
+
         if (query) {
             pageView = new App.PageView({query:query});
         }
-
-        App.RankingControlView();
 
         $('#filterBtn').click(function(e) {
             var filterBy = e.target.getAttribute('data-filterBy');
@@ -198,4 +203,5 @@ App.AppRouter = Backbone.Router.extend({
 });
 
 var appRouter = new App.AppRouter();
+
 Backbone.history.start({pushState: true});
