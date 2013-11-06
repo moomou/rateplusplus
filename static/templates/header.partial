@@ -28,7 +28,6 @@
         <ul class="hidden-phone nav pull-right head-nav">
           {% if authenticated %}
           <li><a title="Create New Entry" href="{% url 'default.views.NewEntityHandler' %}"><i class="icon-plus-sign"> </i></a></li>
-          <li><a id="newRanking" title="Create New Ranking" href="#"><i class="icon-list"> </i></a></li>
           <li><a title="Rankings" href="{% url 'default.views.ProfileHandler' %}"><i class="icon-reorder"> </i></a></li>
           <li><a title="Sign Out" href="{% url 'django.contrib.auth.views.logout' %}" role="menuitem"><i class="icon-signout"></i></a></li>
           {% else %}

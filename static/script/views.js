@@ -4,11 +4,12 @@
 
 App.GlobalWidget = { 
     searchMessageBox: $('#message-box'),
+    searchInput: $('#searchInput'),
     rankingHeader: $('#rankingHeader'),
     rankingName: $('#rankingName'),
     rankEditButtons: $('#rank-sessionButtons'),
     rankViewButtons: $('#rank-viewButtons'),
-    shareModal: $('#shareModal')
+    shareModal: $('#shareModal'),
 };
 
 App.DetailPage = {
@@ -436,7 +437,6 @@ App.SummaryCardView = Backbone.View.extend({
 
         if (editing) {
             console.log("Editing");
-            this.$('.attrContainer').hide();
             this.$('.summary').hide();
             this.entityView.editProfile('edit');
         }
@@ -635,8 +635,6 @@ App.SummaryCardView = Backbone.View.extend({
     attrChange: function(e) {
         console.log('AttrChange Called');
 
-        //this.attributeCollectionView.clean(e.get('tone'));
-
         var attrs = _.invoke(_.filter(
             this.attributeCollectionView.collection.models,
             function(attr) { return !attr.isNew() }), 'toJSON');
@@ -833,10 +831,18 @@ App.TitleRowView = Backbone.View.extend({
     template: _.template(Template.titleRowTemplate),
     tagName: 'tr',
     className: 'row title',
-    initialize: function() {
+    initialize: function(settings) {
+        this.settings = settings;
     },
     render: function(title) {
         this.$el.html(this.template({"title": title}));
+
+        var that = this;
+        if (that.settings) {
+            _(that.settings.hide).each(function(className) {
+                that.$el.find(className).hide(); 
+            });
+        }
         return this;
     }
 });
@@ -932,7 +938,7 @@ App.RankingController = function() {
         initRankingListToolbarView("rankingView", rankingView);
     }
 
-    $('#newRanking').click(function(e) {
+    $('.addNewRanking').click(function(e) {
         var inUse = App.GlobalWidget.rankingHeader.is(':visible'),
             existingRankingSession = getRankingFromStorage("rankingSession"),
             forceClear = false;
@@ -1106,7 +1112,7 @@ App.AttributeCollectionView = App.TableView.extend({
 
         // add title
         this.el.appendChild(
-            new App.TitleRowView().render("Attribute").el);
+            new App.TitleRowView({hide: ['.addNewRanking']}).render("Attribute").el);
 
         // add each attribute
         var that = this;
@@ -1171,13 +1177,22 @@ App.TableCardCollectionView = Backbone.View.extend({
         this.pageType = {'type': "search", 'value': this.query};
     },
     render: function() {
+        if (this.collection.models.length == 0) {
+            // Didn't fina anything
+            document.location.href = window.location.origin + 
+                "/entity/new?empty=true&searchterm=" + 
+                App.GlobalWidget.searchInput.val();
+            return;
+        }
+
         var that = this,
             rowViews = [],
             tableView = new App.TableView(),
-            titleRow = new App.TitleRowView();
+            titleRow = new App.TitleRowView({
+                'hide': ['.addNew']
+            });
 
         tableView.el.appendChild(titleRow.render(this.title).el);
-        titleRow.$('.addNew').hide();
 
         _.each(this.collection.models, function(row) {
             rowViews.push(that.renderRow(row, tableView));
@@ -1199,6 +1214,8 @@ App.TableCardCollectionView = Backbone.View.extend({
                 rowView.assignRanking(rankingView);
             }
         });
+
+        App.RankingController();
     },
     renderRow: function(mRow, tableView) {
         var that = this;
@@ -1367,7 +1384,6 @@ App.PageView = Backbone.View.extend({
             renderMode: renderMode,
             colManager: App.ColManager,
         });
-
 
         if (renderMode == "detail") {
             document.getElementById('dr1').appendChild(cardView.render().el);

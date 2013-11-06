@@ -52,11 +52,10 @@ App.AppRouter = Backbone.Router.extend({
             var allRankings = res,
                 rowViews = [],
                 tableView = new App.TableView(),
-                titleRow = new App.TitleRowView(),
+                titleRow = new App.TitleRowView({hide: ['.addNew', '.addNewRanking']}),
                 sessionStorageInd = 0;
 
             tableView.el.appendChild(titleRow.render(getCookie('username') + "'s Rankings").el);
-            titleRow.$('.addNew').hide();
 
             document.getElementById('profileRow').appendChild(tableView.el);
 
@@ -89,8 +88,15 @@ App.AppRouter = Backbone.Router.extend({
             // Tell the user
         });
     },
-    newEntityPageInit: function() {
+    newEntityPageInit: function(queryString) {
         console.log("New Entity");
+        var empty = getQueryVariable("empty"),
+            searchTerm = getQueryVariable("searchterm");
+
+        if (empty){
+            App.GlobalWidget.searchMessageBox.find('#searchTerm').html(searchTerm);
+            App.GlobalWidget.searchMessageBox.show();
+        }
 
         var stateVar = 0,
             cardRef  = App.CreateNewCard(),
@@ -125,20 +131,21 @@ App.AppRouter = Backbone.Router.extend({
                     $('#dr3').removeClass('hidden');
 
                     var dom = $('#saveCancelContainer').detach();
-                    dom.find('#saveAndNext').html('Finished');
+                    dom.find('#saveAndNext').html('Go to the new card');
                     $('#dr3').append(dom);
 
                     stateVar = 2;
                     break;
                 // step 3
                 case 2:
-
+                    document.location.href = 
+                        window.location.origin + "/entity/" + cardRef.model.get('id');
+                    console.log("Finished");
                     break;
             }
         });
     },
     rankingViewInit: function(id) {
-        App.RankingController();
         pageView = new App.PageView({rankingId: id});
     },
     detailEntityPageInit: function(id) {
@@ -178,7 +185,7 @@ App.AppRouter = Backbone.Router.extend({
         console.log("Default Route");
         var query = $('#searchInput').val();
 
-        App.RankingController();
+        //App.RankingController();
 
         if (query) {
             pageView = new App.PageView({query:query});

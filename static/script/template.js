@@ -76,7 +76,7 @@ var Template = (function() {
             "<div data-toggle='tooltip' title='Save' class='close saveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
           "</div>" +
           "<div class='photo'>" +
-            "<a data-toggle='modal' data-target='#imageChangeModal' id='editImgBtn-<%=obj.domId%>' class='editImgBtn btn btn-small' href='#'>" +
+            "<a data-toggle='modal' data-target='#imageChangeModal' id='editImgBtn-<%=obj.domId%>' class='editImgBtn btn btn-small btn-success' href='#'>" +
               "Change Image" +
             "</a>" +
             "<% if (obj.id) { %>" +
@@ -206,6 +206,7 @@ var Template = (function() {
             "<div class='pull-right cursor-pointer'>" +
               "<div>" +
                 "<i title='Add New' class='addNew icon-plus'> </i>" +
+                "<i title='Create New Ranking' class='addNewRanking icon-list'> </i>" +
                 //"<i title='Filter' class='filter icon-filter'> </i>" +
                 //"<i title='Rearrange' class='rearrange icon-sort-by-attributes'> </i>" +
               "</div>" +
