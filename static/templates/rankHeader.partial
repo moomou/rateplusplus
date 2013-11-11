@@ -1,6 +1,11 @@
 <div id="rankingHeader" style="display:none;" class="navbar">
   <div class="navbar-inner rankbar">
     <div class="container-narrow">
+      <i id="rankingPrivacy" class="icon-globe icon-2x" style="
+        float: left;
+        margin-right: 0.5em;
+        margin-top: -0.25em;">
+      </i>
       <span contenteditable="true" id="rankingName">New Ranking</span>
       <span id="rankInstruction" style="float:left;"> Click on rating to assign rank </span>
       <ul id="rankingList" class='rankingList'>

@@ -7,7 +7,7 @@ import json
 import requests
 
 CLOVERITE_GRAPH_URL = "http://localhost:3000/v0/user"
-CLOVERITE_HEADERS = {'content-type': 'application/json', "access-token": "superman"}
+CLOVERITE_HEADERS = {'content-type': 'application/json', "x-access-token": "superman"}
 
 EMAIL_MSG = '''
     Hi there,
@@ -36,8 +36,8 @@ class FeedbackForm(forms.Form):
         return message
 
 class SignupForm(forms.Form):
-    first_name = forms.CharField()
-    last_name = forms.CharField()
+    firstname = forms.CharField()
+    lastname = forms.CharField()
     username = forms.CharField()
     email = forms.EmailField()
     password = forms.CharField()
@@ -60,8 +60,8 @@ class SignupForm(forms.Form):
         newUser = User.objects.create_user(self.cleaned_data['username'],
                         self.cleaned_data['email'],
                         self.cleaned_data['password'])
-        newUser.first_name = self.cleaned_data['first_name']
-        newUser.last_name =  self.cleaned_data['last_name']
+        newUser.first_name = self.cleaned_data['firstname']
+        newUser.last_name =  self.cleaned_data['lastname']
         
         postData = {
             "firstname" : newUser.first_name,

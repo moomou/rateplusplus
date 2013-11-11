@@ -3,6 +3,7 @@ var App = App || {};
 /*
     Constants for App
 */
+App.TWITTER_LINK= "https://twitter.com/share?";
 App.API_SERVER = 'http://api.cloverite.com/';
 App.API_VERSION = 'v0/';
 App.AE_H_URL = App.API_VERSION + 'ae/tag';

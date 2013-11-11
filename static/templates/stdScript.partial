@@ -10,4 +10,3 @@
 
 <script src="{{STATIC_URL}}js/widearea.min.js"></script>
 <script src="{{STATIC_URL}}js/twitter-bootstrap-hover-dropdown.min.js"></script>
-<script src="{{STATIC_URL}}js/Chart.min.js"></script>

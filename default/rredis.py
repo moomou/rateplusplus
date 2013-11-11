@@ -1,7 +1,6 @@
 #Redis
 import redis
 
-REDIS_DB = 1
 REDIS_HOST = 'localhost'
 PORT = 6379
 

@@ -7,7 +7,16 @@
   {% include "header.partial" %}
 
   <div class="container-narrow">
+
+    {% if REDIRECTED %}
+    <div class="alert alert-block alert-error fade in">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      <h4 class="alert-heading">Oh snap! You need to login to do that.</h4>
+    </div>
+    {% endif %}
+
     <div class="break"></div>
+
     <form id="signinForm" class="form-signin" method="post" action="{% url 'default.views.SigninHandler' %}">
       {% csrf_token %}
 

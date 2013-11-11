@@ -3,6 +3,7 @@
  */
 
 App.GlobalWidget = { 
+    twitterShareBtn: $('#twitterBtn'),
     searchMessageBox: $('#message-box'),
     searchInput: $('#searchInput'),
     rankingHeader: $('#rankingHeader'),
@@ -718,11 +719,20 @@ App.ProfileRowView = Backbone.View.extend({
     // event handler
     shareRanking: function(e) {
         var that = this;
-        App.GlobalWidget.shareModal.find('#shareName').html(this.model.name);
+
+        App.GlobalWidget.twitterShareBtn
+            .attr('href', App.TWITTER_LINK + $.param({
+                'url': that.model.rankingShareUrl,
+                'text': that.model.name
+            }));
+
+        App.GlobalWidget.shareModal
+            .find('#shareName').html(this.model.name);
         App.GlobalWidget.shareModal.on("shown", function() {
             App.GlobalWidget.shareModal.find('#publicURL')
                 .val(that.model.rankingShareUrl).select();
         });
+
         App.GlobalWidget.shareModal.modal();
     },
     viewRanking: function(e) {
@@ -970,9 +980,11 @@ App.RankingController = function() {
             return;
         }
 
+        var userid = getCookie('userid') || 'public'
+
         $.ajax({
             type: "POST",
-            url: App.API_SERVER + App.API_VERSION + 'user/' + getCookie('userid') + "/ranking",
+            url: App.API_SERVER + App.API_VERSION + 'user/' + userid + "/ranking",
             data: existingRankingSession
         })
         .done(function(res) {

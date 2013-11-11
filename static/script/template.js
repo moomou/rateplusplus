@@ -205,7 +205,7 @@ var Template = (function() {
             "<%=title%>" +
             "<div class='pull-right cursor-pointer'>" +
               "<div>" +
-                "<i title='Add New' class='addNew icon-plus'> </i>" +
+                "<a class='addNew' href='#' style='color:black;'><i title='Add New' class='icon-plus'> </i></a>" +
                 "<i title='Create New Ranking' class='addNewRanking icon-list'> </i>" +
                 //"<i title='Filter' class='filter icon-filter'> </i>" +
                 //"<i title='Rearrange' class='rearrange icon-sort-by-attributes'> </i>" +

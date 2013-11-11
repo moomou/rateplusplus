@@ -1,7 +1,7 @@
   <div class="navbar">
     <div class="navbar-inner" style="height: 55px;">
       <div class="container-narrow">
-        <a id="sideMenu" href="#" class="noSelect muted home-btn pull-left"><span style="left: 145px;" class="logo"></span>Cloverite </a>
+        <a id="sideMenu" href="{% url 'default.views.PageHandler' %}" class="noSelect muted home-btn pull-left"><span style="left: 145px;" class="logo"></span>Cloverite </a>
 
         {% if SEARCH_ENABLED %}
         <form method="GET" id="searchForm" class="navbar-search" action="{% url 'default.views.PageHandler' %}">
@@ -20,18 +20,19 @@
         </div>
         {% endif %}
 
-        {% if FEEDBACK_ENABLED %}
-        <a class="hidden-phone btn btn-success pull-right" data-toggle="modal" role="button" id="feedbackBtn" href="#feedbackModal"> Feedback</a>
-        {% endif %}
-
         {% if NAV_ENABLED %}
         <ul class="hidden-phone nav pull-right head-nav">
           {% if authenticated %}
           <li><a title="Create New Entry" href="{% url 'default.views.NewEntityHandler' %}"><i class="icon-plus-sign"> </i></a></li>
           <li><a title="Rankings" href="{% url 'default.views.ProfileHandler' %}"><i class="icon-reorder"> </i></a></li>
-          <li><a title="Sign Out" href="{% url 'django.contrib.auth.views.logout' %}" role="menuitem"><i class="icon-signout"></i></a></li>
+          <li><a title="Sign Out" href="{% url 'default.views.SignoutHandler' %}" role="menuitem"><i class="icon-signout"></i></a></li>
+
           {% else %}
           <li><a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}"><i class="icon-signin"></i> Sign in</a></li>
+          {% endif %}
+
+          {% if FEEDBACK_ENABLED %}
+          <a style='margin-top: 5px;' class="hidden-phone btn btn-success pull-right" data-toggle="modal" role="button" id="feedbackBtn" href="#feedbackModal"> Feedback</a>
           {% endif %}
         </ul>
         {% endif %}

@@ -55,7 +55,7 @@ App.AppRouter = Backbone.Router.extend({
                 titleRow = new App.TitleRowView({hide: ['.addNew', '.addNewRanking']}),
                 sessionStorageInd = 0;
 
-            tableView.el.appendChild(titleRow.render(getCookie('username') + "'s Rankings").el);
+            tableView.el.appendChild(titleRow.render('My Rankings').el);
 
             document.getElementById('profileRow').appendChild(tableView.el);
 
@@ -184,8 +184,6 @@ App.AppRouter = Backbone.Router.extend({
     defaultPageInit: function() {
         console.log("Default Route");
         var query = $('#searchInput').val();
-
-        //App.RankingController();
 
         if (query) {
             pageView = new App.PageView({query:query});

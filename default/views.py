@@ -68,10 +68,11 @@ def FeedbackHandler(request):
         else:
             return HttpResponse(json.dumps(form.errors), mimetype="application/json")
 
-def SigninHandler(request):
+def SigninHandler(request, redirected = False):
     if request.method == "GET":
         renderCxt = ContextSetup(request)
         renderCxt['SEARCH_ENABLED'] = False
+        renderCxt['REDIRECTED'] = redirected
 
         t = loader.get_template('signin.html')
         c = RequestContext(request, renderCxt) 
@@ -102,10 +103,14 @@ def SigninHandler(request):
 
         return HttpResponse(json.dumps({'error':'Authentication failed'}), mimetype="application/json")
 
-def SignoutHandler(request):
+def SignoutHandler(request, nextPage):
     if request.method == "GET":
-        r.delete(request.session.session_key)
         logout(request)
+        response = redirect(nextPage)
+        response.delete_cookie('usertoken')
+        response.delete_cookie('sessionid')
+        response.delete_cookie('userid')
+        return response
 
 def SignupHandler(request):
     if request.method == "GET":
@@ -172,7 +177,7 @@ def ProfileHandler(request):
     renderCxt = ContextSetup(request)
 
     if not renderCxt['authenticated']:
-        return redirect('signin-page')
+        return SigninHandler(request, True) #HttpResponseRedirect(reverse('signin-page'))
 
     if request.method == "GET":
         ''' Renders Profile Page '''
