@@ -6,10 +6,16 @@ var App = App || {};
 App.TWITTER_LINK= "https://twitter.com/share?";
 App.API_SERVER = 'http://api.cloverite.com/';
 App.API_VERSION = 'v0/';
+
 App.AE_H_URL = App.API_VERSION + 'ae/tag';
 App.AE_C_URL = App.API_VERSION + 'ae/cat';
+
 App.POSITIVE = "positive";
 App.NEGATIVE = "negative";
+
+App.SEARCH_ENTITY  = 'entitySearch';
+App.SPECIFIC_ENTITY = 'specificEntity';
+App.SPECIFIC_RANKING = 'specificRanking';
 
 /*
     Individual Component
@@ -364,8 +370,19 @@ App.SummaryCardCollection = Backbone.Collection.extend({
 	url: function() {
         return App.API_SERVER + App.API_VERSION + this.urlStub;
     },
-    initialize: function(settings) {
-        this.urlStub = settings.urlStub;
+    initialize: function(cardType, data) {
+        if (cardType == App.SPECIFIC_RANKING) {
+            this.urlStub = 'ranking/share/' + data;
+            this.fetch();
+        }
+        else if (cardType == App.SPECIFIC_ENTITY) {
+            this.urlStub = "entity/" + data;
+            this.fetch();
+        }
+        else if (cardType == App.SEARCH_ENTITY) {
+            this.urlStub = 'entity/search/';
+            this.fetch({data: $.param({q: data})});
+        }
     },
     model: App.SummaryCardModel,
     comparator: function(m) {
@@ -463,55 +480,28 @@ App.Utility = (function() {
 
 App.ColManager = (function() {
     //private
-    var cardCols = {
-            cols: [$('#col1'), $('#col2'), $('#col3'), $('#col4')],
-            ind: 0,
-        },
-        cmtCols = {
-            cols: [$('#cmt1'), $('#cmt2'), $('#cmt3')],
-            ind: 0,
-        },
-        getCol = function(type) {
-            if (type == 'cmt' ) {
-                return cmtCols;
-            }
-            return cardCols;
-        },
-        nextCol = function(type) {
-            var colObj = getCol(type),
-                nextCol = colObj.cols[colObj.ind];
-            colObj.ind = (colObj.ind+1)%colObj.cols.length;
-            return nextCol;
-        },
-        resetCol = function(type, range) {
-            var colObj = getCol(type);
-
-            if (range) {
-                _.each(range, function(ind) {
-                    colObj.cols[ind].empty();
-                });
-            }
-            else {
-                _.invoke(colObj.cols, "invoke");
-            }
-        },
-        lastCol = function(type) {
-            var colObj = getCol(type);
-            return colObj.cols[colObj.cols.length-1];
-        },
-        addAttr = function(el, tone) {
-            var colObj = getCol('card');
-            var ind = tone == App.POSITIVE ? 1 : 2; //pos on col1 neg on col2
-
-            colObj.cols[ind].append(el);
+    var configCol = function(colRef) {
+        return function() {
+            return {
+                ind: 0,
+                cols: colRef,
+                getNext: function () {
+                    var curInd = this.ind;
+                    this.ind = (this.ind + 1) % colRef.length;
+                    return colRef[curInd];
+                },
+            };
         };
+    };
+
+    var cardCols = [$('#col1'), $('#col2'), $('#col3'), $('#col4')],
+        cmtCols = [$('#cmt1'), $('#cmt2'), $('#cmt3')],
+        getCardCol = configCol(cardCols),
+        getCmtCol = configCol(cmtCols);
 
     return {
-        getCol: getCol,
-        nextCol: nextCol,
-        resetCol: resetCol,
-        lastCol: lastCol,
-        addAttribute: addAttr,
+        getCardCol: getCardCol,
+        getCmtCol: getCmtCol
     };
 })();
 
@@ -576,4 +566,4 @@ App.CreateNewCard = function() {
     newCard.render(true);
 
     return newCard;
-}
+};

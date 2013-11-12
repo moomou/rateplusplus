@@ -411,6 +411,7 @@ App.SummaryCardView = Backbone.View.extend({
         this.colManager = setting.colManager || App.ColManager;
 
         this.entityView = new App.EntityView({model: this.model.get('entityModel')});
+
         this.attributeCollectionView = new App.AttributeCollectionView({
             entityId: this.entityView.model.get('id'),
             collection: this.model.get('attributeCollection'),
@@ -419,7 +420,9 @@ App.SummaryCardView = Backbone.View.extend({
 
         //TODO change name
         this.side = setting.side;
-        this.listenTo(this.model.get('attributeCollection'), 'change', this.attrChange);
+
+        if (!this.skipAttribute)
+            this.listenTo(this.model.get('attributeCollection'), 'change', this.attrChange);
     },
 	render: function(editing, renderMode) {
         /* Editable and Editing confusing */
@@ -487,18 +490,21 @@ App.SummaryCardView = Backbone.View.extend({
     },
     renderSearch: function(editing) {
         console.log("renderSearch");
-        this.attributeCollectionView.render(this.$('.attrContent'));
+        if (!this.skipAttribute) 
+            this.attributeCollectionView.render(this.$('.attrContent'));
     },
     renderDetail: function(editing) {
         console.log("renderDetail");
-        this.attributeCollectionView.render(this.$('.attrContent'));
+        if (!this.skipAttribute) 
+            this.attributeCollectionView.render(this.$('.attrContent'));
     },
     renderGraph: function(editing) {
         console.log("renderDetail");
         this.$('.attrContainer').hide();
         this.$('.editBtn').hide();
         this.$('.linkBtn').show();
-        this.attributeCollectionView.render(this.$('.attrContent'));
+        if (!this.skipAttribute) 
+            this.attributeCollectionView.render(this.$('.attrContent'));
     },
     //Event Handler
     rightCardHeaderBtnHandler: function(e) {
@@ -1081,6 +1087,52 @@ App.RankListIconView = Backbone.View.extend({
 
 
 /* Composite View Component */
+App.CardView = Backbone.View.extend({
+    initialize: function(settings) {
+        settings = settings || {};
+
+        if (settings.rankingId) {
+            this.collection = 
+                new App.SummaryCardCollection(App.SPECIFIC_RANKING,  settings.rankingId);
+        }
+        else if (settings.query){ // query
+            this.collection = 
+                new App.SummaryCardCollection(App.SEARCH_ENTITY, settings.query);
+        }
+        else { // Single
+            this.collection = 
+                new App.SummaryCardCollection(App.SPECIFIC_ENTITY, settings.id);
+        }
+        this.colManager = App.ColManager.getCardCol();
+        this.collection.on('reset', this.render, this);
+    },
+    filter: function(func) {
+        if (!func) {
+            this._filter = function(e) {
+                return true;
+            }
+        }
+        else {
+            this._filter = func;
+        }
+    },
+    render: function() {
+        var that = this,
+            filteredList = this.collection.models; 
+        //_.filter(this.collection.models, this.filter());
+        _.each(filteredList, function(item) { that.renderSummaryCard(item); }, this);
+    },
+    renderSummaryCard: function(item) {
+        var that = this,
+            cardView = new App.SummaryCardView({
+                model: item,
+                renderMode: 'detail',
+                skipAttribute: true
+            });
+
+        this.colManager.getNext().append(cardView.render().el);
+    }
+});
 
 App.AttributeCollectionView = App.TableView.extend({
     initialize: function(setting) {
@@ -1132,8 +1184,8 @@ App.AttributeCollectionView = App.TableView.extend({
             that.el.appendChild(that.renderAttribute(attr));
         });
 
-        // TODO change
-        document.getElementById('attribute').appendChild(this.el);
+        if (document.getElementById('attribute'))
+            document.getElementById('attribute').appendChild(this.el);
     },
     // event handler
     addNew: function(e) {
@@ -1171,18 +1223,14 @@ App.AttributeCollectionView = App.TableView.extend({
 App.TableCardCollectionView = Backbone.View.extend({
     initialize: function(settings) {
         if (settings.rankingId) {
-            this.collection = new App.SummaryCardCollection({
-                urlStub: 'ranking/share/' + settings.rankingId
-            });
-            this.collection.fetch();
             this.title = "Ranking";
+            this.collection = 
+                new App.SummaryCardCollection(App.SPECIFIC_RANKING,  settings.rankingId);
         }
         else if (settings.query){ // query
-            this.collection = new App.SummaryCardCollection({
-                urlStub: 'entity/search/'
-            });
-            this.collection.fetch({data: $.param({q: settings.query})});
             this.title = "Result for " + settings.query;
+            this.collection = 
+                new App.SummaryCardCollection(App.SEARCH_ENTITY, settings.query)
         }
         
         this.collection.on('reset', this.render, this);
@@ -1327,27 +1375,30 @@ App.CommentCollectionView = Backbone.View.extend({
     }
 });
 
-
 // High level page
-
 App.PageView = Backbone.View.extend({
-    initialize: function(q) {
+    initialize: function(settings) {
+        settings = settings || {};
+
+        this.renderMode = settings.renderMode || 'default';
         this._filter = function(e) {
             return true;
         };
 
-        this.renderMode = 'default';
-        if (q.id) { //specific entity
-            this.collection = new App.SummaryCardCollection({
-                urlStub: "entity/" + q.id
-            });
-            this.pageType = {'type': 'id', 'value': q.id};
+        if (settings.renderMode != "card" && settings.id) { //specific entity
+            this.collection = 
+                new App.SummaryCardCollection(App.SPECIFIC_ENTITY, settings.id);
             this.renderMode = 'detail';
+            this.pageType = {'type': 'id', 'value': settings.id};
             this.collection.on('reset', this.render, this);
-            this.collection.fetch();
         }
         else {
-            new App.TableCardCollectionView(q);
+            if (settings.renderMode == "card") {
+                new App.CardView(settings);
+            }
+            else { // default is tabular
+                new App.TableCardCollectionView(settings);
+            }
         }
     },
     filter: function(func) {
@@ -1404,61 +1455,6 @@ App.PageView = Backbone.View.extend({
             App.ColManager.nextCol('card').append(cardView.render().el);
         }
     }
-});
-
-App.CardColView = Backbone.View.extend({
-    initialize: function(setting) {
-        this._filter = function(e) {
-            return true;
-        };
-
-        this.collection = new App.SummaryCardCollection({
-            urlStub: "entity/search"
-        });
-        this.col = App.ColManager.getCol('card').cols[setting.col];
-        this.colInd = setting.col;
-        this.collection.on('reset', this.render, this);
-    },
-    filter: function(func) {
-        if (!func) {
-            this._filter = function(e) {
-                return true;
-            }
-        }
-        else {
-            this._filter = func;
-        }
-    },
-    search: function(query) {
-        debugger;
-        App.ColManager.resetCol('card', [this.colInd]);
-        /*if (q.id) {//specific entity
-            /this.collection.fetch({data: $.param({id: q.id})});
-            this.pageType = {'type': 'id', 'value': q.id};
-        /}*/
-        if (query) {//a search
-            this.collection.fetch({data: $.param({q: query})});
-            this.pageType = {'type': "search", 'value': query};
-        }
-    },
-    render: function() {
-        var that = this,
-            filteredList = _.filter(this.collection.models, this._filter);
-
-        _.each(filteredList, function(item) {
-            that.renderSummaryCard(item);
-        }, this);
-    },
-    renderSummaryCard: function(item) {
-        var that = this;
-        var cardView = new App.SummaryCardView({
-            model: item,
-            renderMode: 'graph',
-            side: this.colInd < 2 ? "left" : "right",
-        });
-
-        this.col.append(cardView.render().el);
-    },
 });
 
 App.GraphView = Backbone.View.extend({

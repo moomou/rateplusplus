@@ -1,7 +1,7 @@
   <div class="navbar">
     <div class="navbar-inner" style="height: 55px;">
       <div class="container-narrow">
-        <a id="sideMenu" href="{% url 'default.views.PageHandler' %}" class="noSelect muted home-btn pull-left"><span style="left: 145px;" class="logo"></span>Cloverite </a>
+        <a id="sideMenu" href="{% url 'default.views.PageHandler' %}" class="noSelect muted home-btn pull-left">Cloverite </a>
 
         {% if SEARCH_ENABLED %}
         <form method="GET" id="searchForm" class="navbar-search" action="{% url 'default.views.PageHandler' %}">

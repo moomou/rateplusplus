@@ -14,7 +14,8 @@ $(function() {
         }
             
         var allRankings = res;
-        pageView = new App.PageView({rankingId: res[0].shareToken});
+        var pageView = new App.PageView({rankingId: res[0].shareToken, renderMode: 'card'});
+            //rankingId: res[0].shareToken});
     })
     .fail(function(msg) {
     });
