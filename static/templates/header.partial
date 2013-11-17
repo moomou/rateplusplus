@@ -21,11 +21,11 @@
         {% endif %}
 
         {% if NAV_ENABLED %}
-        <ul class="hidden-phone nav pull-right head-nav">
+        <ul id="navBtns" class="hidden-phone nav pull-right head-nav">
           {% if authenticated %}
-          <li><a title="Create New Entry" href="{% url 'default.views.NewEntityHandler' %}"><i class="icon-plus-sign"> </i></a></li>
-          <li><a title="Rankings" href="{% url 'default.views.ProfileHandler' %}"><i class="icon-reorder"> </i></a></li>
-          <li><a title="Sign Out" href="{% url 'default.views.SignoutHandler' %}" role="menuitem"><i class="icon-signout"></i></a></li>
+          <li title="Create New Entity"><a href="{% url 'default.views.NewEntityHandler' %}"><i class="icon-plus-sign"> </i></a></li>
+          <li title="Rankings"><a href="{% url 'default.views.ProfileHandler' %}"><i class="icon-reorder"> </i></a></li>
+          <li title="Sign Out"><a href="{% url 'default.views.SignoutHandler' %}" role="menuitem"><i class="icon-signout"></i></a></li>
 
           {% else %}
           <li><a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}"><i class="icon-signin"></i> Sign in</a></li>

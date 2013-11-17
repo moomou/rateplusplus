@@ -42,4 +42,6 @@ $(function() {
     $('#searchBtn').click(function(e) {
         $('#searchForm').submit()
     });
+
+    $('#navBtns li').tooltip({placement: 'bottom'});
 });

@@ -110,8 +110,7 @@ App.EntityAttributeModel = Backbone.Model.extend({
     //Custom Func
     getRating: function() {
         this.set('voteCount', this.get('upVote') + this.get('downVote'));
-
-        var rating = this.get('upVote')/(this.get('voteCount') || 1);
+        var rating = this.get('upVote') / (this.get('voteCount') || 1);
         rating = this.get('voteCount') ? (rating*100).toFixed(0) : 0;
         return rating;
     },
@@ -147,17 +146,17 @@ App.EntityAttributeModel = Backbone.Model.extend({
     },
     updateVoteCount: function(voteType, view) {
         if (voteType === App.POSITIVE) {
-            this.set('upVote', this.get('upVote')+1);
+            this.set('upVote', this.get('upVote') + 1);
         }
         else {
-            this.set('downVote', this.get('downVote')+1);
+            this.set('downVote', this.get('downVote') + 1);
         }
 
         var rating = this.getRating();
 
         this.set('rating', rating);
         this.set('upVotePer100', rating);
-        this.set('downVotePer100', 100-rating);
+        this.set('downVotePer100', 100 - rating);
 
         view.render();
     },
@@ -304,6 +303,7 @@ App.SummaryCardModel = Backbone.Model.extend({
     },
     getEntityStats: function(attrs) {
         console.log('GetEntityStats Called');
+
         var attrLength = attrs ? attrs.length : 0,
             posAttr = 0,
             negAttr = 0,
@@ -312,20 +312,18 @@ App.SummaryCardModel = Backbone.Model.extend({
             upVote = 0;
 
         _.each(attrs, function(attr) {
-            attr['voteCount'] = attr['upVote']+attr['downVote'];
-            totalVote += attr['voteCount'];
+            attr.voteCount = attr.upVote + attr.downVote;
+            totalVote += attr.voteCount;
         });
 
         if (totalVote !== 0) {
             _.each(attrs, function(attr) {
-                var attrScore = attr['upVote']/(attr['voteCount'] || 1); //divide by totalCount unless 0
-                avgScore += attrScore * (attr['voteCount']/(totalVote || 1)) * (attr['tone'] === App.NEGATIVE ? -1 : 1) ;
-
-                upVote += attr['upVote'];
-
-                if (attr['tone'] === App.POSITIVE) {
+                var attrScore = attr.upVote / (attr.voteCount || 1); //divide by totalCount unless 0 
+                if (attr.tone == App.POSITIVE) {
                     posAttr += 1;
                 }
+                avgScore += attrScore * (attr.voteCount / (totalVote || 1));
+                upVote += attr.upVote;
             });
         }
 
@@ -338,7 +336,7 @@ App.SummaryCardModel = Backbone.Model.extend({
             'totalPosAttr': posAttr,
             'totalNegAttr': attrLength - posAttr,
             'avgScore': avgScore ? avgScore.toFixed(0).toString() : '-',
-            'totalAttribute': attrLength,
+            'totalAttribute': attrLength
         };
     },
 });

@@ -1,6 +1,6 @@
 body {
   background: url(http://cloverite.com/static/img/cream_dust_@2X.png); /*From SubtlePatterns.com*/
-  -webkit-tap-highlight-color: rgba(0,0,0,0);  
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 textarea {
@@ -66,7 +66,7 @@ textarea {
   border-radius: 1px;
   display: block;
   width: 7px;
-  left: 4.5em; 
+  left: 4.5em;
   top: -10px;
 }
 .subtle {
@@ -222,11 +222,11 @@ ul {
   -webkit-transition: left;
   -webkit-transition-duration:0.2s;
   -webkit-transition-timing-function:linear;
-  -webkit-transition-delay:0s; 
+  -webkit-transition-delay:0s;
   -moz-transition: left;
   -moz-transition-duration:0.2s;
   -moz-transition-timing-function:linear;
-  -moz-transition-delay:0s; 
+  -moz-transition-delay:0s;
 }
 .toolbar:hover {
   left: 92%;
@@ -253,11 +253,11 @@ ul {
   -webkit-transition: color;
   -webkit-transition-duration:0.2s;
   -webkit-transition-timing-function:linear;
-  -webkit-transition-delay:0s; 
+  -webkit-transition-delay:0s;
   -moz-transition: color;
   -moz-transition-duration:0.2s;
   -moz-transition-timing-function:linear;
-  -moz-transition-delay:0s; 
+  -moz-transition-delay:0s;
   padding: 1em;
   }
 
@@ -320,7 +320,6 @@ ul {
   #rankingName {
     float: left !important;
     margin-right: 25px;
-    border-bottom: 1px dashed pink;
   }
   .rankingList li {
     position: relative;
@@ -346,10 +345,10 @@ ul {
     font-size: 10px;
     color: white;
     position: absolute;
-    width: 50%;   
+    width: 50%;
     height: 50%;
-    overflow: auto;   margin: auto;   position: absolute;   
-    top: -6px; left: 0; bottom: 0; right: 0;
+    overflow: hidden;   margin: auto;   position: absolute;
+    top: -6px; left: 0; bottom: 0; right: 5px;
   }
 
 .navbar-inner {
@@ -368,11 +367,18 @@ ul {
   height: 2px;
   margin: 0;
 }
+
 .btn-success {
   background:#2ecc71;
 }
+.btn-inverse {
+  background:black;
+}
 .btn-danger {
   background: #e74c3c;
+}
+.btn-white {
+  background: white;
 }
 .btn-success:hover {
   background-color: #66EBA0;
@@ -380,6 +386,13 @@ ul {
 .btn-danger:hover {
   background-color: #EE796C;
 }
+.btn-inverse:hover {
+  background-color: #636363;
+}
+.btn-white:hover {
+  background-color: #FCFCFC;
+}
+
 .rating {
   font-size: 36px;
   }
@@ -409,6 +422,12 @@ ul {
   width: 100%;
   height: 100%;
 }
+.measure {
+    position: absolute;
+    visibility: hidden;
+    left: -1000px;
+    top: -1000px;
+}
 
 /* Discussion Timeline
  */
@@ -426,5 +445,5 @@ ul {
 
 /*Fix for Chrome slow scroll*/
 .navbar-fixed-top {
-  -webkit-transform: translateZ(0); 
+  -webkit-transform: translateZ(0);
 }

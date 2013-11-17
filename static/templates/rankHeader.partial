@@ -6,7 +6,7 @@
         margin-right: 0.5em;
         margin-top: -0.25em;">
       </i>
-      <span contenteditable="true" id="rankingName">New Ranking</span>
+      <span contenteditable="true" id="rankingName"> </span>
       <span id="rankInstruction" style="float:left;"> Click on rating to assign rank </span>
       <ul id="rankingList" class='rankingList'>
       </ul>

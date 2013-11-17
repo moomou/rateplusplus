@@ -35,25 +35,6 @@ var Template = (function() {
           "<span><i class='icon-link'></i></span>" +
           "<span class='pull-right link' data-link='RtoL' contenteditable='<%=editable%>' ><%=RtoL%></span>" +
         "</div>",
-        attributeTemplate = "" +
-        "<div>" +
-          "<div data-toggle='tooltip' title='Save' class='close attrSaveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
-          "<div data-toggle='tooltip' title='Close' class='close attrCloseBtn'><i class='icon-remove-sign icon-large'></i></div>" +
-          "<div class='pull-left tone cursor-pointer'><i data-toggle='tooltip' title='<%=tone%>' class='icon-heart <%=TONE_ICON%>'></i></div>" +
-          "<div class='pull-right menu'>"+
-            "<i class='cursor-pointer subtle icon-star' title='Highlight'></i>" +
-          "</div>" +
-          "<h3 class='attrName' contenteditable='<%=editable%>' ><%=name%></h3>" +
-          //"<h4 class='attrVoteCount'><%=upVote+downVote%> Votes</h4>" +
-        "</div>" +
-        "<div class='hide progress'>" +
-          "<div class='bar bar-success' style='width:<%=upVotePer100%>%;'><%=upVotePer100%>%</div>" +
-          "<div class='bar bar-danger' style='width:<%=downVotePer100%>%;'><%=downVotePer100%>%</div>" +
-        "</div>" +
-        "<div class='voteBtns'>" +
-          "<a href='' class='btn btn-mini voteBtn upVote btn-success'>Yes <i class='upVote icon-thumbs-up'></i></a>" +
-          "<a href='' class='btn btn-mini voteBtn downVote btn-danger'>No <i class='downVote icon-thumbs-down'></i></a>" +
-        "</div>",
         entityTemplate = "" +
         "<p class='description'><%=description%></p>" +
         "<div id='textareaContainer-<%=domId%>' class='hide'>" +
@@ -169,12 +150,24 @@ var Template = (function() {
             "<h3><%=obj.name%></h3>" +
             "<span style='position: absolute; top: 5px; left: 10px;'></span>" +
             "<div class='voteBtns'>" +
-              "<a href='' class='btn voteBtn upVote btn-success'>Yes <i class='upVote icon-thumbs-up'></i></a>" +
-              "<a href='' class='btn voteBtn downVote btn-danger'>No <i class='downVote icon-thumbs-down'></i></a>" +
+              "<a href='' class='btn voteBtn upVote <%= obj.tone == App.POSITIVE ? 'btn-success' : 'btn-inverse' %>'>Yes <i class='upVote icon-thumbs-up'></i></a>" +
+              "<a href='' class='btn voteBtn downVote <%= obj.tone == App.POSITIVE ? 'btn-danger' : 'btn-white' %>'>No <i class='downVote icon-thumbs-down'></i></a>" +
             "</div>" +
             "<div class='hidden rating <%=ratingType%>'>" +
             "</div>" +
            "</td>",
+        attributeSimple = "" +
+          "<h3>" +
+            "<i title='<%=tone%>' class='icon-heart <%=TONE_ICON%>'>" +
+            "<%=obj.name%>" +
+          "</h3>" +
+          "<span style='position: absolute; top: 5px; left: 10px;'></span>" +
+          "<div class='voteBtns'>" +
+            "<a href='' class='btn voteBtn upVote <%= obj.tone == App.POSITIVE ? 'btn-success' : 'btn-inverse' %>'>Yes <i class='upVote icon-thumbs-up'></i></a>" +
+            "<a href='' class='btn voteBtn downVote <%= obj.tone == App.POSITIVE ? 'btn-danger' : 'btn-white' %>'>No <i class='downVote icon-thumbs-down'></i></a>" +
+          "</div>" +
+          "<div class='hidden rating <%=ratingType%>'>" +
+          "</div>",
         rankingRow = "" +
           "<td class='ranking tdDivider'>" +
             "<input type='text' value='<%=obj.summary.avgScore%>' class='pull-left idial span1'>" +  //
@@ -231,9 +224,9 @@ var Template = (function() {
         "<span class='absCenter' style='height:35px;font-size:32px;color:white;'><%=rank%></span>";
 
   return {
-    attributeTemplate: attributeTemplate,
     attributeRowTemplate: attributeRow,
     attributeRowEditTemplate: attributeRowEdit,
+    attributeSimpleTemplate: attributeSimple,
 
     commentTemplate: commentTemplate,
     commentRowTemplate: commentRowTemplate,
