@@ -1,5 +1,8 @@
  /* MARKETING CONTENT
     -------------------------------------------------- */
+    .container-narrow {
+      max-width: 1200px !important;
+    }
 
     /* Center align the text within the three columns below the carousel */
     .marketing .span4 {
@@ -21,7 +24,8 @@
       margin: 80px 0; /* Space out the Bootstrap <hr> more */
     }
     .featurette {
-      padding-top: 120px; /* Vertically center images part 1: add padding above and below text. */
+      text-align: left;
+      padding-top: 250px; /* Vertically center images part 1: add padding above and below text. */
       overflow: hidden; /* Vertically center images part 2: clear their floats. */
     }
     .featurette-image {
@@ -38,7 +42,7 @@
 
     /* Thin out the marketing headings */
     .featurette-heading {
-      font-size: 50px;
+      font-size: 42px;
       font-weight: 300;
       line-height: 1;
       letter-spacing: -1px;
