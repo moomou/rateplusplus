@@ -226,12 +226,13 @@ App.AttributeView = Backbone.View.extend({
         console.log('AttributeView Render');
 
         var model = this.model;
-        this.$el.html(this.template(model.toJSON()));
 
         if (model.isNew()) {
+            this.$el.html(this.editTemplate(model.toJSON()));
             this.$el.addClass('editHighlight focusOnHover');
         }
         else {
+            this.$el.html(this.template(model.toJSON()));
             this.$el.removeClass('editHighlight focusOnHover');
         }
 
@@ -919,8 +920,7 @@ App.TitleRowView = Backbone.View.extend({
 
 App.RankBadgeView = Backbone.View.extend({
     template: _.template(Template.rankBadgetTemplate),
-    tagName: 'span',
-    className: 'rankContainer',
+    className: 'rankContainer moz-rankContainer',
     initialize: function(settings) {
         var color = settings.color || '';
 

@@ -174,8 +174,9 @@ var Template = (function() {
             "<span class='pull-left sdial'><%=obj.summary.avgScore%> %</span>" +
           "</td>" +
           "<td class='head' style='width:25%;background: url(<%=obj.imgURL ? obj.imgURL : '/static/img/blank.png'%>)'>" +
-            "<h4><%=obj.name%></h4>" +
-            "<a class='brick' href='<%=window.location.origin%>/entity/<%=obj.id%>'></a>" +
+            "<a class='' href='<%=window.location.origin%>/entity/<%=obj.id%>'>" +
+              "<h4><%=obj.name%></h4>" +
+            "</a>" +
             /*"<div style='max-height: 75px;' class='hashTag bottom'>" +
               "<i class='tagBullet icon-ellipsis-vertical'></i>" +
               "<ul class='tagit tagitRow' id='hashtags-<%=obj.domId%>'>" +
@@ -220,8 +221,8 @@ var Template = (function() {
            "<span class='rankingNo'> <%=rank%> </span>" +
         "</a>",
         rankBadge = "" +
-        "<i class='<%=icon%> rankIcon absCenter' style='font-size:72px; height: 85px; color: <%=color%>'></i>" +
-        "<span class='absCenter' style='height:35px;font-size:32px;color:white;'><%=rank%></span>";
+        "<i class='<%=icon%> rankIcon' style='font-size:72px; height: 85px; color: <%=color%>'></i>" +
+        "<span class='rankingNo moz-rankingNo' style='height:35px;font-size:32px;color:white;'><%=rank%></span>";
 
   return {
     attributeRowTemplate: attributeRow,

@@ -1,5 +1,6 @@
 .rankContainer {
   display: block;
+  position: relative;
   }
   .rankIcon {
     font-size: 72px;

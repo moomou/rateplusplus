@@ -312,6 +312,10 @@ ul {
   top: 20% !important;
 }
 
+.rankContainer {
+  position: relative;
+  margin-top: 50%;
+}
 .rankbar {
   margin-top: -19px;
   max-height: 45px;
@@ -334,6 +338,15 @@ ul {
     float: left;
   }
 
+@-moz-document url-prefix() {
+  .moz-rankingNo {
+    margin-top: 22px !important;
+  }
+  .moz-rankContainer {
+    margin-top: 35% !important;
+  }
+}
+
 .rankingContainer {
   display: block;
   position: relative;
@@ -341,14 +354,14 @@ ul {
   .rankingNo.shadow {
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.18);
   }
-  .rankingNo {
+  .rankingNo, .rankIcon {
     font-size: 10px;
     color: white;
     position: absolute;
     width: 50%;
     height: 50%;
-    overflow: hidden;   margin: auto;   position: absolute;
-    top: -6px; left: 0; bottom: 0; right: 5px;
+    margin: auto;   position: absolute;
+    top: -20px; left: 0; bottom: 0; right: 5px;
   }
 
 .navbar-inner {
