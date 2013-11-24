@@ -8,7 +8,6 @@
 <body>
 
   <div class="container-narrow">
-    <a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}" class="pull-right btn btn-success">Sign in</a>
     <div class="jumbotron">
       <a class="home-btn muted" style="padding:0;" href="/"><h1>Cloverite</h1></a>
         <p class="lead"> The best place for rating and ranking. </p>
@@ -30,6 +29,7 @@
       </div>
 
       {% if DISABLED %}
+    <a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}" class="pull-right btn btn-success">Sign in</a>
       <div id="rankingRow" class="row-fluid">
         <div class="span12" id="top1">
         </div>
