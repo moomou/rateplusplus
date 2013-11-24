@@ -24,7 +24,7 @@
         <ul id="navBtns" class="hidden-phone nav pull-right head-nav">
           {% if authenticated %}
           <li title="Create New Entity"><a href="{% url 'default.views.NewEntityHandler' %}"><i class="icon-plus-sign"> </i></a></li>
-          <li title="Rankings"><a href="{% url 'default.views.ProfileHandler' %}"><i class="icon-reorder"> </i></a></li>
+          <li title="Rankings"><a href="{% url 'default.views.ProfileHandler' %}self"><i class="icon-reorder"> </i></a></li>
           <li title="Sign Out"><a href="{% url 'default.views.SignoutHandler' %}" role="menuitem"><i class="icon-signout"></i></a></li>
 
           {% else %}

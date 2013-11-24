@@ -2,7 +2,7 @@
       <button type="button" class="close" data-dismiss="alert">&times;</button>
       <h4> Help Cloverite </h4>
       <br>
-      Oops. We didn't find anything on <span id="searchTerm"></span>. Don't worry though, because you can add it right now.
+      Oops. We didn't find anything on <span id="searchTerm"></span>. Please help Cloverite expand by adding it!
     </div>
 
 

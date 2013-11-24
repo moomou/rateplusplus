@@ -97,6 +97,7 @@ def SigninHandler(request, redirected = False):
 
             res = {'redirect': request.session.get('next', '/')}
             response = HttpResponse(json.dumps(res), mimetype="application/json")
+            response.set_cookie("username", user.username)
             response.set_cookie("userid", user.clover.neo4jId)
             response.set_cookie("usertoken", usertoken)
             return response
@@ -173,7 +174,7 @@ def GraphHandler(request):
 
     return HttpResponse(t.render(c))
 
-def ProfileHandler(request):
+def ProfileHandler(request, profileId):
     renderCxt = ContextSetup(request)
 
     if not renderCxt['authenticated']:

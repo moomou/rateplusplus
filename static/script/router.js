@@ -5,8 +5,9 @@ App.AppRouter = Backbone.Router.extend({
         "graph" : "graphPageInit",
         "profile" : "profilePageInit",
         "entity/new" : "newEntityPageInit",
-        "ranking/:id" : "rankingViewInit",
+        "ranking/:shareToken" : "rankingViewInit",
         "entity/:id" : "detailEntityPageInit",
+        "profile/:id" : "profilePageInit",
         "" : "defaultPageInit", //handles query
     },
     graphPageInit: function() {
@@ -38,18 +39,14 @@ App.AppRouter = Backbone.Router.extend({
             var graphView = new App.GraphView({domContainer: domContainer});
         });
     },
-    profilePageInit: function() {
+    profilePageInit: function(id) {
         console.log("Profile Page Init");
+
         $.ajax({
             type: "GET",
             url: App.API_SERVER + App.API_VERSION + 'user/' + getCookie('userid') + "/ranked"
         })
         .done(function(res) {
-            if (res) { // clear local session
-                // do something
-                console.log("Error Loading Ranking on Profile Page"); 
-            }
-                
             var allRankings = res,
                 rowViews = [],
                 tableView = new App.TableView(),
@@ -73,12 +70,12 @@ App.AppRouter = Backbone.Router.extend({
 
                 _(ranking.ranks).each(function(entityId) {
                     var link = window.location.origin + "/entity/" + entityId;
-                    rankListIcon = 
+                    rankListIcons = 
                         new App.RankListIconView(
                             {rank: rank, link: link, sessionStorageInd: sessionStorageInd});
 
                     rank += 1;
-                    rankingRow.$('.rankingList').append(rankListIcon.render().el);
+                    rankingRow.$('.rankingList').append(rankListIcons.render().el);
                 });
 
                 tableView.el.appendChild(rankingRow.el);
@@ -146,8 +143,15 @@ App.AppRouter = Backbone.Router.extend({
             }
         });
     },
-    rankingViewInit: function(id) {
-        pageView = new App.PageView({rankingId: id});
+    rankingViewInit: function(shareToken) {
+        var rawRankingView = sessionStorage.getItem("rankingView"),
+            rankingView = rawRankingView && JSON.parse(rawRankingView);
+
+        if (rankingView && rankingView.shareToken != shareToken) {
+            sessionStorage.removeItem("rankingView");
+        }
+
+        pageView = new App.PageView({rankingId: shareToken});
     },
     detailEntityPageInit: function(id) {
         console.log("detail Entity");

@@ -116,33 +116,17 @@ var Template = (function() {
         attributeRowEdit = "" +
           "<td style='width:17%;' class='tdDivider text-h-center text-v-center noSelect'>" +
             "<div data-toggle='tooltip' title='Save' class='close saveBtn'><i class='icon-ok-sign icon-large'></i></div>" +
-            "<i style='font-size: 3em;' data-toggle='tooltip' title='<%=tone%>' class='cursor-pointer tone icon-heart <%=TONE_ICON%>'>" +
+            "<i style='font-size: 3em; <%=tone==App.POSITIVE ? 'color:red':''%>' data-toggle='tooltip' title='<%=tone%>' class='cursor-pointer tone icon-heart'>" +
               "<span class='noSelect toneText'> <%=tone%><span>" +
             "</i></div>" +
           "</td>" +
           "<td class='head'>" +
             "<div data-toggle='tooltip' title='Close' class='close closeBtn'><i class='icon-remove-sign icon-large'></i></div>" +
-            /*
-            "<div class='dropdown' style='position:absolute;'>" +
-              "<span class='typeIcon'> <i class='icon-group'></i></span> " +
-              "<a style='color: black;' class='dropdown-toggle cursor-pointer' data-toggle='dropdown' data-target='#'> <i class='icon-collapse'></i></a>" +
-              "<ul class='dropdown-menu' role='menu' aria-labelledby='dLabel'>" +
-                "<li><a data='group' href='#'><i data='group' class='icon-group'></i> Vote</a></li>" +
-                "<li><a data='cloud-download' href='#'><i data='cloud-download' class='icon-cloud-download'></i> Auto</a></li>" +
-              "</ul>"+
-            "</div>" +
-            */
             "<h3 class='attrName' contenteditable='true' ><%=obj.name%></h3>" +
-            /*
-            "<div class='input-prepend' style='display: block;'>" +
-              "<span class='add-on'><i class='icon-link'> Source</i></span>" +
-              "<input style='width: 75%;' class='srcURL' type='text' placeholder='http://'>" +
-            "</div>" +
-            */
           "</td>",
         attributeRow = "" +
           "<td style='width:17%;' class='tdDivider text-h-center text-v-center noSelect'>" +
-            "<i style='font-size: 3em;' data-toggle='tooltip' title='<%=tone%>' class='icon-heart <%=TONE_ICON%>'>" +
+            "<i style='font-size: 3em; <%=tone==App.POSITIVE ? 'color:red':''%>' data-toggle='tooltip' title='<%=tone%>' class='icon-heart'>" +
               "<span class='noSelect toneText'> <%=tone%><span>" +
             "</i></div>" +
           "</td>" +
@@ -195,7 +179,7 @@ var Template = (function() {
             "</ul>"+
           "</td>",
         titleRow = "" +
-          "<th style='font-size:20px;' colspan='4'>" +
+          "<th style='font-size:15px;' colspan='4'>" +
             "<%=title%>" +
             "<div class='pull-right cursor-pointer'>" +
               "<div>" +
@@ -206,8 +190,8 @@ var Template = (function() {
               "</div>" +
           "</th>",
         profileRow = "" +
-        "<td class='tdDivider text-v-center noSelect'>" +
-          "<span class='viewRanking cursor-pointer'> <%=name%></span>" +
+        "<td class='tdDivider text-v-center noSelect' style='width: 25%'>" +
+          "<a href='#'><span class='viewRanking cursor-pointer'> <%=name%></span></a>" +
           "<i class='btn pull-right icon-share'></i>" +
         "</td>" +
         "<td class='head'>" +

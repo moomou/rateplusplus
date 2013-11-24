@@ -12,6 +12,7 @@
     <div class="jumbotron">
       <a class="home-btn muted" style="padding:0;" href="/"><h1>Cloverite</h1></a>
         <p class="lead"> The best place for rating and ranking. </p>
+
       <form method="GET" id="searchForm" action="{% url 'default.views.PageHandler' %}">
         <div class="input-append">
           <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="{{DEFAULT_QUERY}}">
@@ -19,6 +20,16 @@
         </div>
       </form>
 
+      <div style="display:inline-block">
+        <ul id="sampleRanking">
+          <li>Popular Rankings</li>
+          <li><a href="#"></a></li>
+          <li><a href="#"></a></li>
+          <li><a href="#"></a></li>
+        </ul>
+      </div>
+
+      {% if DISABLED %}
       <div id="rankingRow" class="row-fluid">
         <div class="span12" id="top1">
         </div>
@@ -33,6 +44,7 @@
           <div id="col4" class="span4"></div>
         </div>
       </div>
+      {% endif %}
 
       <hr>
 

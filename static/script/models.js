@@ -368,7 +368,9 @@ App.SummaryCardCollection = Backbone.Collection.extend({
 	url: function() {
         return App.API_SERVER + App.API_VERSION + this.urlStub;
     },
+    model: App.SummaryCardModel,
     initialize: function(cardType, data) {
+        this.cardType = cardType;
         if (cardType == App.SPECIFIC_RANKING) {
             this.urlStub = 'ranking/share/' + data;
             this.fetch();
@@ -382,19 +384,28 @@ App.SummaryCardCollection = Backbone.Collection.extend({
             this.fetch({data: $.param({q: data})});
         }
     },
-    model: App.SummaryCardModel,
+    parse: function(data) {
+        // write the ranking data to the local sessionStorage
+        // and pass the 
+        if (this.cardType == App.SPECIFIC_RANKING) {
+            var ranksDetail = _.clone(data.ranksDetail);
+            delete data.ranksDetail;
+            sessionStorage.setItem("rankingView", JSON.stringify(data));
+            return ranksDetail;
+        }
+        else {
+            return data;
+        }
+    },
     comparator: function(m) {
-        var currentRankingInd = parseInt(sessionStorage.getItem("currentRankingInd")),
-            allRankings = sessionStorage.getItem("allRankings") &&
-            JSON.parse(sessionStorage.getItem("allRankings"));
+        var rawRankingView = sessionStorage.getItem('rankingView'),
+            rankingView = rawRankingView && JSON.parse(rawRankingView);
 
-        if (currentRankingInd >= 0 && allRankings && m.get('id')) {
-            var currentRanking =
-                currentRankingInd < allRankings.length && allRankings[currentRankingInd],
-                rank = currentRanking.ranks.indexOf(m.get('id').toString());
-
-            if (rank >= 0)
+        if (rankingView && m.id) {
+            var rank = rankingView.ranks.indexOf(m.get('id').toString());
+            if (rank >= 0) {
                 return rank;
+            }
         }
 
         return -m.get('summary').totalVote + 999;

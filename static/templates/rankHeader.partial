@@ -1,11 +1,7 @@
 <div id="rankingHeader" style="display:none;" class="navbar">
   <div class="navbar-inner rankbar">
     <div class="container-narrow">
-      <i id="rankingPrivacy" class="icon-globe icon-2x" style="
-        float: left;
-        margin-right: 0.5em;
-        margin-top: -0.25em;">
-      </i>
+      <i data-toggle="tooltip" title="Private Ranking" id="rankingPrivacy" class="icon-lock icon-2x"> </i>
       <span contenteditable="true" id="rankingName"> </span>
       <span id="rankInstruction" style="float:left;"> Click on rating to assign rank </span>
       <ul id="rankingList" class='rankingList'>
@@ -14,7 +10,10 @@
         <button id="rankingCancelBtn" class="btn" style="float: right; margin-top: -7px;"> Cancel</button>
         <button id="rankingSaveBtn" class="btn btn-success" style=" float: right; margin-top: -7px; margin-right: 5px; "> Save</button>
       </div>
-      <div id="rank-viewButtons"><i id="rankingViewCancelBtn" style="float: right; margin-top: -7px;" class="icon-remove-sign icon-2x"></i></div>
+      <div class="cursor-pointer" id="rank-viewButtons">
+        <i id="rankingViewCancelBtn" style="float: right; margin-top: -7px;" class="icon-remove-sign icon-2x"></i>
+        <a target="_blank" id="rankingHeaderShareTwitterBtn" href="#"><i style="float: right; margin: -7px 5px 0 0;" class="icon-twitter-sign icon-2x"></i></a>
+      </div>
     </div>
   </div>
 </div>

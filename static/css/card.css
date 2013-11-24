@@ -47,7 +47,6 @@ td h4 {
 .rankingTable td {
   background-size: cover !important;
   background-repeat: no-repeat;
-  padding-left: 1em;
   position: relative;
 }
 .rankingTable tr {
@@ -371,9 +370,6 @@ td h4 {
 .toneText {
   font-size: 14px;
   display: block;
-}
-.red-heart {
-  color: red;
 }
 
 /**

@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     url(r'^entity/(?P<pk>[0-9]+)/?$', views.EntityHandler),
     url(r'^entity/new/?$', views.NewEntityHandler),
     url(r'^graph$', views.GraphHandler),
-    url(r'^profile$', views.ProfileHandler),
+    url(r'^profile/(.+)?/?$', views.ProfileHandler),
 
     url(r'^signup$', views.SignupHandler, name="signout-page"),
     url(r'^signin$', views.SigninHandler, {'redirected': False}, name="signin-page"),
