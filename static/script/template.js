@@ -190,7 +190,7 @@ var Template = (function() {
               "</div>" +
           "</th>",
         profileRow = "" +
-        "<td class='tdDivider text-v-center noSelect' style='width: 25%'>" +
+        "<td class='tdDivider text-v-center noSelect' style='width: 30%;'>" +
           "<a href='#'><span class='viewRanking cursor-pointer'> <%=name%></span></a>" +
           "<i class='btn pull-right icon-share'></i>" +
         "</td>" +

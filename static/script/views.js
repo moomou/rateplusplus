@@ -1187,11 +1187,13 @@ App.RankingController = function() {
         $("#rankingHeader").hide();
     });
 
-    $('#rankingHeaderShareTwitterBtn')
-        .attr('href', App.TWITTER_LINK + $.param({
-            'url': window.location.origin + '/ranking/' + rankingView.shareToken,
-            'text': rankingView.name
-        }));
+    if (rankingView) {
+        $('#rankingHeaderShareTwitterBtn')
+            .attr('href', App.TWITTER_LINK + $.param({
+                'url': window.location.origin + '/ranking/' + rankingView.shareToken,
+                'text': rankingView.name
+            }));
+    }
 };
 
 /* Composite View Component */
