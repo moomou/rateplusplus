@@ -1,10 +1,9 @@
 var App = App || {};
 
-/*
-    Constants for App
-*/
+/**
+ * Constants for App */
 App.TWITTER_LINK= "https://twitter.com/share?";
-App.API_SERVER = 'http://api.cloverite.com/';
+App.API_SERVER = 'http://api.cloverite.com:9000/';
 App.API_VERSION = 'v0/';
 
 App.AE_H_URL = App.API_VERSION + 'ae/tag';
@@ -17,22 +16,50 @@ App.SEARCH_ENTITY  = 'entitySearch';
 App.SPECIFIC_ENTITY = 'specificEntity';
 App.SPECIFIC_RANKING = 'specificRanking';
 
-/*
-    Individual Component
-*/
-App.AdModel = Backbone.Model.extend({
-	urlRoot: App.API_VERSION + 'ad/',
-    defaults: {
-        redirectURL: '',
-        imageURL: '',
+App.CloverModel = Backbone.Model.extend({
+    initialize: function() {
+        console.log("this is clovermodel");
     },
     parse: function(response) {
-        console.log('Get Ad');
-        return response;
-    },
+        console.log("CloverModel parse");
+        if ("success" in response) {
+            if (response.success) {
+                return response.payload;
+            }
+            else {
+                console.log("server responded with error");
+            }
+        }
+        else {
+            return response;
+        }
+    }
 });
 
-App.EntityModel = Backbone.Model.extend({
+App.CloverCollection = Backbone.Collection.extend({
+    initialize: function() {
+        console.log("this is clovercollection");
+    },
+    parse: function(response) {
+        console.log("CloverModel parse");
+
+        if ("success" in response) {
+            if (response.success) {
+                return response.payload;
+            }
+            else {
+                console.log("server responded with error");
+            }
+        }
+        else {
+            return response;
+        }
+    }
+});
+
+/**
+ * Individual Component */
+App.EntityModel = App.CloverModel.extend({
 	urlRoot: App.API_SERVER + App.API_VERSION + 'entity/',
     defaults: {
         //DOM
@@ -47,10 +74,10 @@ App.EntityModel = Backbone.Model.extend({
     },
     initialize: function() {
         this.set('domId', _.uniqueId('domId'));
-    },
+    }
 });
 
-App.EntityAttributeModel = Backbone.Model.extend({
+App.EntityAttributeModel = App.CloverModel.extend({
     urlRoot: function() {
         return [App.API_SERVER,
             App.API_VERSION,
@@ -103,9 +130,6 @@ App.EntityAttributeModel = Backbone.Model.extend({
         this.on('change:tone', function(e) {
             this.set('TONE_ICON', getToneIcon(this.get('tone')));
         });
-    },
-    parse: function(response) {
-        return response;
     },
     //Custom Func
     getRating: function() {
@@ -162,74 +186,9 @@ App.EntityAttributeModel = Backbone.Model.extend({
     },
 });
 
-App.CommentModel = Backbone.Model.extend({
-    urlRoot: function() {
-        return [App.API_SERVER,
-            App.API_VERSION,
-            'entity/',
-            this.get('entity') + '/',
-            'comment/'].join("");
-    },
-    defaults: {
-        // required
-    	id: undefined,
-        // Required
-        entity: undefined,
-        username: 'Anonymous',
-        // Server side
-        comment: '',
-        location: '',
-        createdAt: '',
-        modifiedAt: '',
-        private: false
-    },
-    //Builtin Function
-    initialize: function() {
-    },
-    parse: function(response) {
-        return response;
-    },
-});
-
-App.ProfileRowModel = Backbone.Model.extend({
-    urlRoot: function() {
-        return [App.API_SERVER,
-            App.API_VERSION,
-            'user/',
-            this.get('user') + '/',
-            this.get('resourceType')].join("");
-    },
-    defaults: {
-        // required
-    	id: undefined,
-        to: undefined,
-        from: undefined,
-
-        // Required
-        user: undefined,
-        resourceType: undefined
-    }
-});
-
-App.LinkModel = Backbone.Model.extend({
-    urlRoot: App.API_VERSION + 'relation/',
-    defaults: {
-        editable: true,
-        LtoR: "-> New Link",
-        RtoL: "New Link <-",
-    },
-    initialize: function() {
-    },
-    parse: function(response) {
-        console.log(response);
-    },
-});
-
-
-/*
-    Summary Model: EntityModel + Summary Stats + Attr; there is no SummaryModel in the server
-*/
-App.SummaryCardModel = Backbone.Model.extend({
+/**
+ * Summary Model: EntityModel + Summary Stats + Attr; there is no SummaryModel in the server */
+App.SummaryCardModel = App.CloverModel.extend({
 	defaults: {
         editable: false,
         domId: undefined,
@@ -255,20 +214,18 @@ App.SummaryCardModel = Backbone.Model.extend({
         this.on('entityModelUpdated', this.updateSummaryCard);
     },
     parse: function(response) {
+        response = App.CloverModel.prototype.parse.apply(this, arguments);
         console.log("SummaryCardModel Parse");
-        
-        response['hashTags'] =
-            this.cleanTags(response['tags']);
-        response['summary'] =
-            this.getEntityStats(response['attributes']);
-        response['entityModel'] =
-            new App.EntityModel(response);
+        console.log(response);
+        response.hashTags = this.cleanTags(response.tags);
+        response.summary = this.getEntityStats(response.attributes);
+        response['entityModel'] = new App.EntityModel(response);
         response['attributeCollection'] =
             new App.AttributeCollection(response['attributes'], response['id']);
 
         return response;
     },
-    //event handler
+    // Event handler
     updateSummaryCard: function() {
         console.log('Calling SummaryModel update');
         var entityModel = this;
@@ -277,7 +234,7 @@ App.SummaryCardModel = Backbone.Model.extend({
         this.set('hashTags', tags['hashTags']);
         this.set('summary', this.getEntityStats(entityModel.get('attributes')));
     },
-    //Custom Functions
+    // Custom Functions
     cleanTags: function(tags) {
         var hashTags = '';
 
@@ -341,18 +298,9 @@ App.SummaryCardModel = Backbone.Model.extend({
     },
 });
 
-/*
-    Collections
-*/
-App.LinkCollection = Backbone.Collection.extend({
-    url: App.API_VERSION + 'relationlist/',
-    model: App.LinkModel,
-    parse: function(response) {
-        return response.results;
-    },
-});
-
-App.AttributeCollection = Backbone.Collection.extend({
+/**
+ * Collections */
+App.AttributeCollection = App.CloverCollection.extend({
     model: App.EntityAttributeModel,
     initialize: function(models, entity) {
         if (entity) {
@@ -361,10 +309,10 @@ App.AttributeCollection = Backbone.Collection.extend({
     },
     comparator: function(m) {
         return -m.get('voteCount');
-    },
+    }
 });
 
-App.SummaryCardCollection = Backbone.Collection.extend({
+App.SummaryCardCollection = App.CloverCollection.extend({
 	url: function() {
         return App.API_SERVER + App.API_VERSION + this.urlStub;
     },
@@ -384,17 +332,18 @@ App.SummaryCardCollection = Backbone.Collection.extend({
             this.fetch({data: $.param({q: data})});
         }
     },
-    parse: function(data) {
+    parse: function(response) {
+        response = App.CloverCollection.prototype.parse.apply(this, arguments);
+
         // write the ranking data to the local sessionStorage
-        // and pass the 
         if (this.cardType == App.SPECIFIC_RANKING) {
-            var ranksDetail = _.clone(data.ranksDetail);
-            delete data.ranksDetail;
-            sessionStorage.setItem("rankingView", JSON.stringify(data));
+            var ranksDetail = _.clone(response.ranksDetail);
+            delete response.ranksDetail;
+            sessionStorage.setItem("rankingView", JSON.stringify(response));
             return ranksDetail;
         }
         else {
-            return data;
+            return response;
         }
     },
     comparator: function(m) {
@@ -431,23 +380,8 @@ App.SummaryCardCollection = Backbone.Collection.extend({
     },
 });
 
-App.CommentCollection = Backbone.Collection.extend({
-    url: function() {
-        return [App.API_SERVER,
-            App.API_VERSION,
-            'entity/',
-            this.entity + '/',
-            'comment/'].join("");
-    },
-    model: App.CommentModel,
-    initialize: function(settings) {
-        this.entity = settings.entity;
-    },
-});
-
-/*
-    Utility Functions
-*/
+/**
+ * Utility Functions */
 App.Utility = (function() {
     //private
     var toWords = function(text) {

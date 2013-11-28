@@ -11,7 +11,12 @@ $(function() {
         url: App.API_SERVER + App.API_VERSION + 'user/public/ranked'
     })
     .done(function(res) {
-        var allRankings = res;
+        if (!res.success) {
+            // notify user
+            return;
+        }
+
+        var allRankings = res.payload;
         sessionStorage.setItem("allRankings", JSON.stringify(allRankings));
 
         var sampleRanking = [];

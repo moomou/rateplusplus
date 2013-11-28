@@ -28,7 +28,6 @@ App.ProfilePage = {
 };
 
 App.CommentContainer = $('#commentContainer');
-
 App.GlobalWidget.rankingPrivacy.tooltip();
 
 /**
@@ -52,13 +51,6 @@ var updateSessionStorageRankingView = function(currentRankingInd) {
     sessionStorage.setItem("currentRankingInd", currentRankingInd);
 }
 
-$.fn.hasOverflow = function() {
-    var _elem = $(this)[0];
-    return _elem.clientHeight > _elem.scrollHeight ||
-        _elem.clientWidth > _elem.scrollWidth;
-}
-
-
 /**
  * Individual Model Views
  */
@@ -77,24 +69,6 @@ App.TableView = Backbone.View.extend({
     addNew: function() {
         console.log('Not implemented');
     }
-});
-
-App.AdView = Backbone.View.extend({
-    tagName: 'div',
-    className: 'card',
-    template: _.template(Template.sponsoredTemplate),
-    initialize: function() {
-       var that = this;
-
-       this.model.on('sync', function(e) {
-           that.render();
-       });
-    },
-    render: function() {
-        this.$el.html(this.template(this.model.toJSON()));
-        App.Cols[2].prepend(this.el);
-        return this;
-    },
 });
 
 App.EntityView = Backbone.View.extend({
@@ -320,127 +294,12 @@ App.AttributeView = Backbone.View.extend({
 },
 });
 
-App.CommentView = Backbone.View.extend({
-    template: _.template(Template.commentTemplate),
-    tagName: 'div',
-    className: 'card comment',
-    initialize: function(settings) {
-        this.voted = false;
-    },
-    events: {
-        'mouseover': 'toggleCommentVoteMenu',
-        'mouseout': 'toggleCommentVoteMenu',
-        'click .btn': 'commentVote'
-    },
-    render: function() {
-        console.log('Commentview Render');
-        this.$el.html(this.template(this.model.toJSON()));
-        return this;
-    },
-    //Event Handler
-    toggleCommentVoteMenu: function(e) {
-        var eventType = e.type,
-            $btns = this.$('.btn');
-            state = $btns.css('display');
-
-        if (this.voted) {
-            $btns.hide();
-            return;
-        }
-
-        if (eventType === "mouseover" && state === "none") {
-            $btns.show();
-        }
-        else if (eventType === "mouseout") {
-            $btns.hide();
-        }
-    },
-    commentVote: function(e) {
-        var btn = $(e.target),
-            voteType = "pos",
-            that = this;
-
-        if (this.voted) {
-            return;
-        }
-
-        this.voted = true;
-
-        if (btn.hasClass('cmtDownVote')) {
-            voteType = "neg";
-        }
-
-        $.ajax({
-            type: "POST",
-            url: this.model.url() + "/vote/",
-            data: {voteType: voteType},
-        })
-        .done(function(res) {
-            if (!res.error) {
-                that.$('.btn').fadeOut('fast');
-            }
-        })
-        .fail(function(msg) {
-            this.voted = false;
-        });
-    },
-});
-
-App.LinkView = Backbone.View.extend({
-    template: _.template(Template.linkTemplate),
-    tagName: 'div',
-    className: 'page-curl outer',
-    initialize: function() {
-    },
-    events: {
-        'click .close': 'saveCloseHandler',
-        'click .link': 'updateLink',
-    },
-    render: function() {
-        this.$el.html(this.template(this.model.toJSON()));
-        return this;
-    },
-    //Event Handler
-    updateLink: function(e) {
-        if (this.model.get('editable')) {
-            var domRef = $(e.target);
-            var that = this;
-
-            domRef.attr('contenteditable', true);
-            domRef.focus();
-
-            console.log(domRef.text());
-
-            domRef.focusout(function() {
-                that.model.set(domRef.data('link'), domRef.text());
-                console.log(that.model.get('LtoR'));
-                console.log(that.model.get('RtoL'));
-            });
-        }
-    },
-    saveCloseHandler: function(e) {
-        var target = $(e.target);
-
-        if (target.hasClass('icon-remove-sign')) {
-            this.remove();
-            this.model.destroy();
-        }
-        else { //save
-            var relationship = this.$('.pull-left').text() + ":" + this.$('.pull-right').text();
-            this.model.set("leftId", App.leftId);
-            this.model.set("rightId", App.rightId);
-            this.model.set("relationship", relationship);
-            console.log(this.model.get('relationship'));
-            this.model.save();
-        }
-    }
-});
-
 App.SummaryCardView = Backbone.View.extend({
     className: 'card',
 	template: _.template(Template.summaryCardTemplate, null, {variable: 'obj'}),
     summaryTemplate: _.template(Template.summaryTemplate, null, {variable: 'obj'}),
     saveCancelTemplate: _.template(Template.summaryTemplate, null, {variable: 'obj'}),
+    model: App.SummaryCardModel,
 	events: {
         'click .card-header-left': 'leftCardHeaderBtnHandler',
         'click .card-header-right': 'rightCardHeaderBtnHandler',
@@ -590,20 +449,24 @@ App.SummaryCardView = Backbone.View.extend({
 
         this.entityView.model.save({}, {
             success: function(model, response) {
-                //update summary
-                $.extend(that.model.attributes, response);
+                if (response.success) {
+                    //update summary
+                    $.extend(that.model.attributes, response.payload);
 
-                that.model.trigger('entityModelUpdated');
-                that.attributeCollectionView.entityId = model.get('id');
+                    that.model.trigger('entityModelUpdated');
+                    that.attributeCollectionView.entityId = model.get('id');
 
-                //UI update
-                that.model.set('editable', false);
-                that.render();
+                    //UI update
+                    that.model.set('editable', false);
+                    that.render();
 
-                if (cb) cb();
+                    if (cb) cb();
+                }
+                else {
+                    // error, notify user
+                }
             },
             error: function(m, y) {
-                debugger;
             }
         });
     },
@@ -756,7 +619,6 @@ App.SummaryCardView = Backbone.View.extend({
 /**
  * Table Row View
  */
-
 App.ProfileRowView = Backbone.View.extend({
     template: _.template(Template.profileRowTemplate),
     tagName: 'tr',
@@ -936,8 +798,9 @@ App.TitleRowView = Backbone.View.extend({
 });
 
 
-/* Ranking Related Views */
-
+/**
+ * Ranking Related Views
+ */
 App.RankBadgeView = Backbone.View.extend({
     template: _.template(Template.rankBadgetTemplate),
     className: 'rankContainer moz-rankContainer',
@@ -1420,94 +1283,6 @@ App.TableAttributeCollectionView = App.TableView.extend({
 
 // TODO: Implement
 App.SimpleAttributeCollectionView = Backbone.View.extend({
-});
-
-App.LinkCollectionView = Backbone.View.extend({
-    initialize: function(settings) {
-        console.log('Link Collection View');
-
-        if (settings.collection) {
-            this.collection = settings.collection;
-        }
-        else {
-            this.collection = new App.LinkCollection();
-        }
-
-        this.renderMode = this["render" + capFirstLetter(settings.renderMode || 'default')];
-    },
-    render: function(domContainer) {
-        this.domContainer = domContainer;
-        this.renderMode();
-    },
-    renderLink: function(item) {
-        var linkView = new App.LinkView({
-            model: item
-        });
-        return linkView.render();
-    },
-    renderDefault: function() {
-        var that = this;
-        _.each(this.collection.models, function(item) {
-            that.domContainer.append(that.renderLink(item).el);}, this);
-    },
-});
-
-App.CommentCollectionView = Backbone.View.extend({
-    _commentBox: Backbone.View.extend({
-        template: _.template(Template.commentRowTemplate),
-        className: 'row-fluid',
-        initialize: function(settings) {
-            this.commentView = settings.commentView;
-        },
-        render: function(side) {
-            console.log('CommentRowView Render');
-            this.$el.html(this.template());
-            this.$('.' + side).append(this.commentView.render().el);
-            return this;
-        },
-    }),
-
-    initialize: function(data) {
-        console.log(data);
-        this.collection = new App.CommentCollection({entity: data.entityId});
-        this.data = data;
-        this.side = 'left';
-        this.collection.fetch();
-        this.collection.on('reset', this.render, this);
-    },
-    update: function(newCmt) {
-        $('#commentContainer').append(
-            this.renderComment(newCmt, this.side).el);
-        this.collection.add(newCmt);
-    },
-    render: function() {
-        var that = this,
-            prev = null,
-            side = this.side;
-        this.cmtViews = [];
-
-        _.each(this.collection.models, function(cmt) {
-            if (prev != cmt.get('username')) {
-                side = (side == 'left') ? 'right' : 'left';
-                prev = cmt.get('username');
-            }
-            var result = that.renderComment(cmt, side);
-            that.cmtViews.push(result);
-            $('#commentContainer').append(result.el);
-        }, this);
-
-        return this;
-    },
-    renderComment: function(item, side) {
-        var cmtView = new App.CommentView({
-                model: item
-            }),
-            rowCmtView = new this._commentBox({
-                commentView: cmtView
-            });
-        var result = rowCmtView.render(side);
-        return result;
-    }
 });
 
 // High level page

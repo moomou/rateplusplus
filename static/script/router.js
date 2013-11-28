@@ -47,7 +47,12 @@ App.AppRouter = Backbone.Router.extend({
             url: App.API_SERVER + App.API_VERSION + 'user/' + getCookie('userid') + "/ranked"
         })
         .done(function(res) {
-            var allRankings = res,
+            if (!res.success) {
+                // notify user
+                return;
+            }
+
+            var allRankings = res.payload,
                 rowViews = [],
                 tableView = new App.TableView(),
                 titleRow = new App.TitleRowView({hide: ['.addNew', '.addNewRanking']}),
@@ -159,7 +164,6 @@ App.AppRouter = Backbone.Router.extend({
         App.RankingController();
 
         pageView = new App.PageView({id: parseInt(id)}); //search for particular id
-        entityCommentsView = new App.CommentCollectionView({entityId: parseInt(id)});
 
         $('#submitComment').click(function(e) {
             var comment = $('#commentForm'),
@@ -179,7 +183,6 @@ App.AppRouter = Backbone.Router.extend({
             newComment.save({}, {
                 success: function(response) {
                     btn.button('reset');
-                    entityCommentsView.update(response);
                 },
                 error: function(response) {
                 },
