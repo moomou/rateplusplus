@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- saved from url=(0066)http://twitter.github.com/bootstrap/examples/marketing-narrow.html -->
 <html lang="en">
 <head>
   {% include "stdHead.partial" %}
@@ -9,13 +8,16 @@
 
   <div class="container-narrow">
     <div class="jumbotron">
-      <a class="home-btn muted" style="padding:0;" href="/"><h1>Cloverite</h1></a>
+      <a href="{% url 'default.views.SignupHandler' %}" class="btn btn-success" style=" margin-top: 2em; float: right; margin-left: 1em; "> Sign up</a>
+      <span class="muted" style=" float: right; margin-top: 2.25em; margin-left: 0.5em; "> or</span>
+      <a href="{% url 'default.views.SigninHandler' %}" style=" margin-top: 2.25em; float: right; "> Sign In</a> 
+      <h1 class="muted">Cloverite</h1>
         <p class="lead"> The best place for rating and ranking. </p>
 
       <form method="GET" id="searchForm" action="{% url 'default.views.PageHandler' %}">
         <div class="input-append">
           <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="{{DEFAULT_QUERY}}">
-          <button id="searchBtn" class="btn btn-success" type="button" ><i class="icon-search"> Search </i></button>
+          <button id="searchBtn" class="btn btn-success" type="button" ><i class="icon-search"> <span class="visible-desktop">Search </span></i></button>
         </div>
       </form>
 
@@ -29,7 +31,6 @@
       </div>
 
       {% if DISABLED %}
-    <a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}" class="pull-right btn btn-success">Sign in</a>
       <div id="rankingRow" class="row-fluid">
         <div class="span12" id="top1">
         </div>

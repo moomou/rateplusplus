@@ -8,6 +8,7 @@ App.GlobalWidget = {
     searchMessageBox: $('#message-box'),
     searchInput: $('#searchInput'),
 
+    rankingFork: $('#rankingFork'),
     rankingPrivacy: $('#rankingPrivacy'),
     rankingHeader: $('#rankingHeader'),
     rankingName: $('#rankingName'),
@@ -896,12 +897,16 @@ App.RankListToolbarView = (function() {
     viewMode = function() {
         App.GlobalWidget.rankEditButtons.hide();
         App.GlobalWidget.rankViewButtons.show();
+        App.GlobalWidget.rankingPrivacy.hide();
+        App.GlobalWidget.rankingFork.tooltip();
         App.GlobalWidget.rankingName
             .attr('contenteditable', false)
             .attr('style', '');
         return this;
     },
     interacMode = function() {
+        App.GlobalWidget.rankingPrivacy.show().tooltip();
+        App.GlobalWidget.rankingFork.hide();
         App.GlobalWidget.rankInstruction.show();
         App.GlobalWidget.rankEditButtons.show();
         App.GlobalWidget.rankViewButtons.hide();
@@ -912,7 +917,13 @@ App.RankListToolbarView = (function() {
         return this;
     },
     setName = function(name) {
-        App.GlobalWidget.rankingName.text(name);
+        if (name && name.indexOf("#") >= 0) {
+            App.GlobalWidget.rankingName.html(
+                    "<a href='" + '#' +"'>" + name + "</a>");
+        }
+        else {
+            App.GlobalWidget.rankingName.text(name);
+        }
         return this;
     },
     setPrivacyIcon = function(isPrivate) {

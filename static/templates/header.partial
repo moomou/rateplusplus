@@ -27,7 +27,7 @@
           <li title="Rankings"><a href="{% url 'default.views.ProfileHandler' %}self"><i class="icon-reorder"> </i></a></li>
           <li title="Sign Out"><a href="{% url 'default.views.SignoutHandler' %}" role="menuitem"><i class="icon-signout"></i></a></li>
 
-          {% else %}
+          {% elif not SIGN_IN_DISABLED %}
           <li><a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}"><i class="icon-signin"></i> Sign in</a></li>
           {% endif %}
 
