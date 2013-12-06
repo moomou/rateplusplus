@@ -183,8 +183,8 @@ var Template = (function() {
             "<%=title%>" +
             "<div class='pull-right cursor-pointer'>" +
               "<div>" +
-                "<a class='addNew' href='#' style='color:black;'><i title='Add New' class='icon-plus'> </i></a>" +
-                "<i title='Create New Ranking' class='addNewRanking icon-list'> </i>" +
+                "<a class='addNew' href='#' style='color:black;'><i title='Add New' class='icon-plus'> Add New</i></a>" +
+                "<i title='Create New Ranking' class='addNewRanking icon-list'> Rank Items</i>" +
                 //"<i title='Filter' class='filter icon-filter'> </i>" +
                 //"<i title='Rearrange' class='rearrange icon-sort-by-attributes'> </i>" +
               "</div>" +

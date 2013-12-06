@@ -785,15 +785,21 @@ App.TitleRowView = Backbone.View.extend({
     initialize: function(settings) {
         this.settings = settings;
     },
-    render: function(title) {
-        this.$el.html(this.template({"title": title}));
-
+    render: function(title, hideNewRankingBtn) {
         var that = this;
+
+        that.$el.html(that.template({"title": title}));
+
+        if (hideNewRankingBtn) {
+            that.settings.hide.push(".addNewRanking");
+        }
+
         if (that.settings) {
             _(that.settings.hide).each(function(className) {
                 that.$el.find(className).hide();
             });
         }
+
         return this;
     }
 });
@@ -899,6 +905,7 @@ App.RankListToolbarView = (function() {
         App.GlobalWidget.rankViewButtons.show();
         App.GlobalWidget.rankingPrivacy.hide();
         App.GlobalWidget.rankingFork.tooltip();
+        
         App.GlobalWidget.rankingName
             .attr('contenteditable', false)
             .attr('style', '');
@@ -926,6 +933,10 @@ App.RankListToolbarView = (function() {
         }
         return this;
     },
+    setForkLink = function(shareToken) {
+        App.GlobalWidget.rankingFork.parent().attr("href", 
+            window.location.origin + "/ranking/" + shareToken + "?forking=true");
+    },
     setPrivacyIcon = function(isPrivate) {
         App.GlobalWidget.rankingPrivacy
             .tooltip('hide')
@@ -944,18 +955,17 @@ App.RankListToolbarView = (function() {
     };
 
     App.GlobalWidget.rankingPrivacy.click(function(e) {
-        // Do not allow edit during viewing mode
-        if (App.GlobalWidget.rankViewButtons.is(':visible')) {
+        // Do not allow edit during viewing mode or fork mode
+        if (getQueryVariable("forking") || App.GlobalWidget.rankViewButtons.is(':visible')) {
             return;
         }
-
         setPrivacyIcon(!$(e.target).hasClass('icon-lock'));
     });
 
     // public
     return {
-        mode: function(modeType) {
-            if (modeType == "rankingSession") {
+        mode: function(modeType, isForking) {
+            if (isForking || modeType === "rankingSession") {
                 interacMode();
             }
             else {
@@ -965,6 +975,7 @@ App.RankListToolbarView = (function() {
         },
         init: function(rankingObj) {
             setName(rankingObj.name);
+            setForkLink(rankingObj.shareToken);
             addNewRanks(rankingObj.ranks);
             setPrivacyIcon(rankingObj.private === "true");
         },
@@ -975,7 +986,7 @@ App.RankListToolbarView = (function() {
     };
 })();
 
-App.RankingController = function() {
+App.RankingController = function(isForking) {
     var getRankingFromStorage = function(rankingType) {
         var ranking = sessionStorage.getItem(rankingType);
         ranking = (ranking && JSON.parse(ranking)) || null;
@@ -985,25 +996,26 @@ App.RankingController = function() {
         App.GlobalWidget.rankingHeader.show();
         App.RankListToolbarView
             .clear()
-            .mode(rankingType)
+            .mode(rankingType, isForking)
             .init(rankingObj);
     },
-    rankingSession = getRankingFromStorage("rankingSession"),
-    rankingView = getRankingFromStorage("rankingView");
-
-    if (!_.isEmpty(rankingSession)) {
-        initRankingListToolbarView("rankingSession", rankingSession);
-    }
-    else if (!_.isEmpty(rankingView)) {
-        initRankingListToolbarView("rankingView", rankingView);
-    }
-
-    $('.addNewRanking').click(function(e) {
+    startNewRanking = function(forking) {
         var inUse = App.GlobalWidget.rankingHeader.is(':visible'),
             existingRankingSession = getRankingFromStorage("rankingSession"),
+            existingRankingView = getRankingFromStorage("rankingView"),
             forceClear = false;
 
-        if (inUse) {
+        if (forking) {
+            // if forking, must have an existing rankingView
+            if (!existingRankingView) {
+                console.log("Error: rankingView should exist for forking to work");
+                return;
+            } 
+            // clear the existing ranks
+            existingRankingSession = {};
+            inUse = false;
+        }
+        else if (inUse) {
             forceClear = confirm("Start a new ranking?");
         }
         else {
@@ -1018,7 +1030,19 @@ App.RankingController = function() {
 
             sessionStorage.setItem('rankingSession', JSON.stringify(newRankingSession));
             initRankingListToolbarView("rankingSession", newRankingSession.ranks);
+
+            if (forking) {
+                // set the name to the forked hash tag
+                App.GlobalWidget.rankingName.text(existingRankingView.name);
+            }
         }
+    },
+    rankingSession = getRankingFromStorage("rankingSession"),
+    rankingView = getRankingFromStorage("rankingView");
+
+    
+    $('.addNewRanking').click(function(e) {
+        startNewRanking(false);
     });
 
     $('#rankingSaveBtn').click(function(e) {
@@ -1044,6 +1068,11 @@ App.RankingController = function() {
             if (!res.error) { // clear local session
                 $('#rankingHeader').hide();
                 sessionStorage.removeItem('rankingSession');
+                var newRankingShareToken = res.payload.shareToken;
+            
+                // redirect the user to new rankingView
+                document.location.href = 
+                    window.location.origin + "/ranking/" + newRankingShareToken;
             }
         })
         .fail(function(msg) {
@@ -1061,12 +1090,22 @@ App.RankingController = function() {
         $("#rankingHeader").hide();
     });
 
-    if (rankingView) {
+    if (!_.isEmpty(rankingSession)) {
+        initRankingListToolbarView("rankingSession", rankingSession);
+    }
+    else if (!_.isEmpty(rankingView)) {
+        initRankingListToolbarView("rankingView", rankingView);
+    }
+
+    if (!isForking && rankingView) {
         $('#rankingHeaderShareTwitterBtn')
             .attr('href', App.TWITTER_LINK + $.param({
                 'url': window.location.origin + '/ranking/' + rankingView.shareToken,
                 'text': rankingView.name
             }));
+    }
+    else if (isForking) {
+        startNewRanking(true);
     }
 };
 
@@ -1133,14 +1172,14 @@ App.TableCardCollectionView = Backbone.View.extend({
             this.pageType = {'type': "search", 'value': settings.query};
         }
 
+        this.isForking = settings.forking || false;
         this.collection.on('reset', this.render, this);
     },
     render: function() {
         if (this.pageType.type == "ranking") {
             var rankingView = JSON.parse(sessionStorage.getItem("rankingView")),
                 profileUrl = window.location.origin + "/profile/",
-                displayTitle =
-                    "Top " + rankingView.ranks.length + " " + rankingView.name,
+                displayTitle = "Top " + rankingView.ranks.length + " " + rankingView.name,
                 postFixRanking = displayTitle.toLowerCase().indexOf('ranking') < 0;
 
             this.title = postFixRanking ? displayTitle + " Ranking" : displayTitle;
@@ -1157,7 +1196,7 @@ App.TableCardCollectionView = Backbone.View.extend({
         }
 
         if (this.collection.models.length == 0) {
-            // Didn't fina anything
+            // Didn't find anything
             document.location.href = window.location.origin +
                 "/entity/new?empty=true&searchterm=" +
                 encodeURIComponent(App.GlobalWidget.searchInput.val());
@@ -1171,7 +1210,7 @@ App.TableCardCollectionView = Backbone.View.extend({
                 'hide': ['.addNew']
             });
 
-        tableView.el.appendChild(titleRow.render(this.title).el);
+        tableView.el.appendChild(titleRow.render(this.title, rankingView).el);
 
         _.each(this.collection.models, function(row) {
             rowViews.push(that.renderRow(row, tableView));
@@ -1186,7 +1225,8 @@ App.TableCardCollectionView = Backbone.View.extend({
             referenceRanking = rankingSession || rankingView;
 
         _.each(rowViews, function(rowView) {
-            if (!referenceRanking || referenceRanking.ranks.indexOf(rowView.model.id.toString()) < 0) {
+            if (that.isForking || !referenceRanking || 
+                referenceRanking.ranks.indexOf(rowView.model.id.toString()) < 0) {
                 rowView.renderKonb();
             }
             else {
@@ -1194,7 +1234,7 @@ App.TableCardCollectionView = Backbone.View.extend({
             }
         });
 
-        App.RankingController();
+        App.RankingController(that.isForking);
     },
     renderRow: function(mRow, tableView) {
         var that = this;

@@ -5,7 +5,6 @@ App.AppRouter = Backbone.Router.extend({
         "graph" : "graphPageInit",
         "profile" : "profilePageInit",
         "entity/new" : "newEntityPageInit",
-        "ranking/fork/:shareToken" : "rankingForkInit",
         "ranking/:shareToken" : "rankingViewInit",
         "entity/:id" : "detailEntityPageInit",
         "profile/:id" : "profilePageInit",
@@ -149,19 +148,16 @@ App.AppRouter = Backbone.Router.extend({
             }
         });
     },
-    rankingForkInit: function(shareToken) {
-        var forking = getQueryVariable("forking");
-        console.log("Fork");
-    },
     rankingViewInit: function(shareToken) {
-        var rawRankingView = sessionStorage.getItem("rankingView"),
+        var forking = getQueryVariable("forking") == "true",
+            rawRankingView = sessionStorage.getItem("rankingView"),
             rankingView = rawRankingView && JSON.parse(rawRankingView);
 
         if (rankingView && rankingView.shareToken != shareToken) {
             sessionStorage.removeItem("rankingView");
         }
 
-        pageView = new App.PageView({rankingId: shareToken});
+        pageView = new App.PageView({rankingId: shareToken, forking: forking});
     },
     detailEntityPageInit: function(id) {
         console.log("detail Entity");
