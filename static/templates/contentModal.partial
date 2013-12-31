@@ -1,0 +1,40 @@
+<div id="contentModal" class="addContentContainer modal hide fade">
+  <div class="addContentBox tab-content">
+    <div id="write" class="tab-pane active">
+      <textarea id="" name="" cols="30" rows="5"></textarea>
+    </div>
+    <div id="pictureframe" class="tab-pane">
+      <div class="dragdrop"></div>
+    </div>
+    <div id="movieTheatre" class="tab-pane">
+      <div class="dragdrop"></div>
+    </div>
+    <div id="linkChain" class="tab-pane">
+      <div class="dragdrop"></div>
+    </div>
+    <div id="fileBucket" class="tab-pane">
+      <div class="dragdrop"></div>
+    </div>
+  </div>
+  <div class="downTriangleBorder"></div>
+  <div class="downTriangle"></div>
+  <ul class="addContentType tab" id="addContent">
+    <li class="contentType cursor-pointer" data-target='#pictureframe'>
+    <i class="icon-picture icon-2x block"></i>
+    <span>Picture</span>
+    </li>
+    <li class="contentType cursor-pointer" data-target='#movieTheatre'>
+    <i class="icon-youtube-play icon-2x block"></i>
+    <span> Video</span>
+    </li>
+    <li class="contentType cursor-pointer" data-target='#linkChain'>
+    <i class="icon-link icon-2x block"></i>
+    <span> Link</span>
+    </li>
+    <li class="contentType cursor-pointer"data-target='fileBucket'>
+    <i class="icon-file icon-2x block"></i>
+    <span> File</span>
+    </li>
+  </ul>
+</div>
+
