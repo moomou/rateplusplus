@@ -56,14 +56,13 @@ var updateSessionStorageRankingView = function(currentRankingInd) {
  * Individual Model Views
  */
 App.TableView = Backbone.View.extend({
-    template: _.template(Template.tableTemplate),
     tagName: 'table',
     className: 'rankingTable table',
     events: {
         'click .addNew': 'addNew'
     },
     render: function() {
-        this.$el.html(this.template({}));
+        this.$el.html();
         return this;
     },
     // Event handler
@@ -73,12 +72,12 @@ App.TableView = Backbone.View.extend({
 });
 
 App.EntityView = Backbone.View.extend({
+    template: Handlebars.templates.entityDescription,
     tagName: 'div',
     className: 'inner',
     events: {
         'click .editProfileBtn': 'editProfile',
     },
-    template: _.template(Template.entityTemplate),
     render: function() {
         console.log('EntityView render');
         this.$el.html(this.template(this.model.toJSON()));
@@ -124,7 +123,7 @@ App.EntityView = Backbone.View.extend({
 });
 
 App.AttributeSimpleView = Backbone.View.extend({
-    template: _.template(Template.attributeSimpleTemplate),
+    template: Handlebars.templates.attributeRow_simple,
     initialize: function() {
        var that = this,
             updateStarRatingType = function() {
@@ -172,8 +171,8 @@ App.AttributeSimpleView = Backbone.View.extend({
 });
 
 App.AttributeView = Backbone.View.extend({
-    template: _.template(Template.attributeRowTemplate),
-    editTemplate: _.template(Template.attributeRowEditTemplate),
+    template: Handlebars.templates.attributeRow,
+    editTemplate: Handlebars.templates.attributeRow_edit,
     tagName: 'tr',
     className: 'row',
     events: {
@@ -297,9 +296,8 @@ App.AttributeView = Backbone.View.extend({
 
 App.SummaryCardView = Backbone.View.extend({
     className: 'card',
-	template: _.template(Template.summaryCardTemplate, null, {variable: 'obj'}),
-    summaryTemplate: _.template(Template.summaryTemplate, null, {variable: 'obj'}),
-    saveCancelTemplate: _.template(Template.summaryTemplate, null, {variable: 'obj'}),
+	template: Handlebars.templates.summaryCard,
+    summaryTemplate: Handlebars.templates.contentSummary,
     model: App.SummaryCardModel,
 	events: {
         'click .card-header-left': 'leftCardHeaderBtnHandler',
@@ -621,7 +619,7 @@ App.SummaryCardView = Backbone.View.extend({
  * Table Row View
  */
 App.ProfileRowView = Backbone.View.extend({
-    template: _.template(Template.profileRowTemplate),
+    template: Handlebars.templates.profileRow,
     tagName: 'tr',
     className: 'row',
     events: {
@@ -680,7 +678,7 @@ App.ProfileRowView = Backbone.View.extend({
 });
 
 App.RankingRowView = App.SummaryCardView.extend({
-    template: _.template(Template.rankingRowTemplate),
+    template: Handlebars.templates.rankingRow,
     tagName: 'tr',
     className: 'row',
     events: {
@@ -779,7 +777,7 @@ App.RankingRowView = App.SummaryCardView.extend({
 });
 
 App.TitleRowView = Backbone.View.extend({
-    template: _.template(Template.titleRowTemplate),
+    template: Handlebars.templates.titleRow,
     tagName: 'tr',
     className: 'row title',
     initialize: function(settings) {
@@ -809,7 +807,7 @@ App.TitleRowView = Backbone.View.extend({
  * Ranking Related Views
  */
 App.RankBadgeView = Backbone.View.extend({
-    template: _.template(Template.rankBadgetTemplate),
+    template: Handlebars.templates.rankBadge,
     className: 'rankContainer moz-rankContainer',
     initialize: function(settings) {
         var color = settings.color || '';
@@ -840,7 +838,7 @@ App.RankBadgeView = Backbone.View.extend({
 });
 
 App.RankListIconView = Backbone.View.extend({
-    template: _.template(Template.rankingListIconTemplate),
+    template: Handlebars.templates.rankingListIcon,
     tagName: 'li',
     events: {
         'click .rankContainer': 'updateSessionStorage',

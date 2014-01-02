@@ -1,0 +1,43 @@
+<div class='card-header'>
+  <legend contenteditable='{{obj.editable}}' class='card-title'>{{obj.name}}</legend>
+  <div class='card-header-btn card-header-left'>
+    <div class='card-status'>
+    </div>
+  </div>
+  <div class='card-header-btn card-header-right'>
+    <div class='xbtn-group'>
+      <button class='btn btn-mini headBtn btn-warning linkBtn hide'><i class='icon-paper-clip icon-large'></i></button>
+      <button class='btn btn-mini headBtn btn-success editBtn '><i class='icon-edit icon-large'></i></button>
+    </div>
+  </div>
+  <div data-toggle='tooltip' title='Close' class='close closeBtn'><i class='icon-remove-sign icon-large'></i></div>
+  <div data-toggle='tooltip' title='Save' class='close saveBtn'><i class='icon-ok-sign icon-large'></i></div>
+</div>
+<div class='photo'>
+  <a data-toggle='modal' data-target='#imageChangeModal' id='editImgBtn-{{obj.domId}}' class='editImgBtn btn btn-small btn-success' href='#'>
+    Change Image
+  </a>
+  {{#if obj.id }}
+  <a href='/entity/{{obj.id}}'>
+    <img class='profileimg' id='img-{{obj.domId}}' src='{{#if obj.imgURL}} {{obj.imgURL}} {{else}} /static/img/blank.png {{/if}}'/>
+  </a>
+  {{/if}}
+</div>
+<div class='contentContainer outer'>
+  <div class='summary'>
+    summaryTemplate
+  </div>
+  <div class='entityDetail'>
+    <div class='profileContent outer'>
+    </div>
+    <div class='tagsContent outer'>
+      <div class='hashTag cardView'>
+        <i class='tagBullet cardView icon-ellipsis-vertical'></i>
+        <ul class='tags' id='hashtags-{{obj.domId}}'>
+          {{obj.hashTags}}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class='break break-mini'></div>
+</div>
