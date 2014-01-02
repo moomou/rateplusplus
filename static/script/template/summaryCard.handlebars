@@ -1,5 +1,5 @@
 <div class='card-header'>
-  <legend contenteditable='{{obj.editable}}' class='card-title'>{{obj.name}}</legend>
+  <legend contenteditable='{{editable}}' class='card-title'>{{name}}</legend>
   <div class='card-header-btn card-header-left'>
     <div class='card-status'>
     </div>
@@ -14,12 +14,12 @@
   <div data-toggle='tooltip' title='Save' class='close saveBtn'><i class='icon-ok-sign icon-large'></i></div>
 </div>
 <div class='photo'>
-  <a data-toggle='modal' data-target='#imageChangeModal' id='editImgBtn-{{obj.domId}}' class='editImgBtn btn btn-small btn-success' href='#'>
+  <a data-toggle='modal' data-target='#imageChangeModal' id='editImgBtn-{{domId}}' class='editImgBtn btn btn-small btn-success' href='#'>
     Change Image
   </a>
-  {{#if obj.id }}
-  <a href='/entity/{{obj.id}}'>
-    <img class='profileimg' id='img-{{obj.domId}}' src='{{#if obj.imgURL}} {{obj.imgURL}} {{else}} /static/img/blank.png {{/if}}'/>
+  {{#if id }}
+  <a href='/entity/{{id}}'>
+    <img class='profileimg' id='img-{{domId}}' src='{{#if imgURL}} {{imgURL}} {{else}} /static/img/blank.png {{/if}}'/>
   </a>
   {{/if}}
 </div>
@@ -33,8 +33,8 @@
     <div class='tagsContent outer'>
       <div class='hashTag cardView'>
         <i class='tagBullet cardView icon-ellipsis-vertical'></i>
-        <ul class='tags' id='hashtags-{{obj.domId}}'>
-          {{obj.hashTags}}
+        <ul class='tags' id='hashtags-{{domId}}'>
+          {{hashTags}}
         </ul>
       </div>
     </div>

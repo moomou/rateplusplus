@@ -10,7 +10,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.title); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
-    + " \n  <div class='pull-right cursor-pointer'> \n    <div> \n      <a class='addNew' href='#' style='color:black;'><i title='Add New' class='icon-plus'> Add New</i></a> \n      <i title='Create New Ranking' class='addNewRanking icon-list'> Rank Items</i> \n      <i title='Filter' class='filter icon-filter'> </i> \n      <i title='Rearrange' class='rearrange icon-sort-by-attributes'> </i> \n    </div> \n  </th>\n";
+    + " \n  <div class='pull-right cursor-pointer'> \n    <div> \n      <a class='addNew' href='#' style='color:black;'><i title='Add New' class='icon-plus'> Add New</i></a> \n      <i title='Create New Ranking' class='addNewRanking icon-list'> Rank Items</i> \n    </div> \n  </th>\n";
   return buffer;
   });
 })();
