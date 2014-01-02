@@ -56,6 +56,7 @@ var updateSessionStorageRankingView = function(currentRankingInd) {
  * Individual Model Views
  */
 App.TableView = Backbone.View.extend({
+    template: function() { return "";},
     tagName: 'table',
     className: 'rankingTable table',
     events: {
@@ -283,7 +284,7 @@ App.AttributeView = Backbone.View.extend({
 
         if (this.model.get('tone') == App.NEGATIVE) {
             this.model.set('tone', App.POSITIVE);
-            $i.attr('style', 'font-size:3em;color:red');
+            $i.attr('style', 'font-size:3em;color:red;');
             this.$('.toneText').html('positive');
         }
         else {
@@ -291,7 +292,7 @@ App.AttributeView = Backbone.View.extend({
             $i.attr('style', 'font-size:3em;');
             this.$('.toneText').html('negative');
         }
-},
+    },
 });
 
 App.SummaryCardView = Backbone.View.extend({
@@ -330,8 +331,9 @@ App.SummaryCardView = Backbone.View.extend({
         //TODO change name
         this.side = settings.side;
 
-        if (!this.skipAttribute)
+        if (!this.skipAttribute) {
             this.listenTo(this.model.get('attributeCollection'), 'change', this.attrChange);
+        }
     },
     // Render Functions
 	render: function(editing, renderMode) {
@@ -688,7 +690,7 @@ App.RankingRowView = App.SummaryCardView.extend({
     },
     render: function() {
         var that = this;
-
+        debugger;
         this.$el.html(this.template(this.model.toJSON()));
 
         this.el.addEventListener('dragover', function(ev) {
