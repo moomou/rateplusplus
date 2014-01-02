@@ -103,7 +103,7 @@ App.AppRouter = Backbone.Router.extend({
 
         var stateVar = 0,
             cardRef  = App.CreateNewCard(),
-            saveCancelBtn = _.template(Template.saveCancelBtnTemplate);
+            saveCancelBtn = Handlebars.templates.saveCancelBtn;
 
         $('#dr1').append(saveCancelBtn({
             'id': 'saveCancelContainer',
