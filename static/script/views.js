@@ -407,8 +407,10 @@ App.SummaryCardView = Backbone.View.extend({
     },
     renderDetail: function(editing) {
         console.log("renderDetail");
-        if (!this.skipAttribute)
+        if (!this.skipAttribute) {
+            this.$el.find('.summary').html(this.summaryTemplate(this.model.toJSON()));
             this.attributeCollectionView.render(this.$('.attrContent'));
+        }
     },
     renderGraph: function(editing) {
         console.log("renderDetail");
