@@ -189,6 +189,10 @@ App.AppRouter = Backbone.Router.extend({
                 },
             });
         });
+
+        $('#addContentBtn').click(function(e) {
+            $('#contentModal').modal();
+        });
     },
     defaultPageInit: function() {
         console.log("Default Route");
