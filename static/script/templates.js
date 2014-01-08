@@ -135,13 +135,13 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.dataId) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.dataId); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\">\n   <div class=\"ribbon\">  \n      <a href='#'><i class='fa fa-star'></i></a>\n   </div>\n    <span>";
+    + "\">\n   <div class=\"ribbon\">  \n      <a href='#'><i class='fa fa-star'></i></a>\n   </div>\n   <span>";
   if (stack1 = helpers.caption) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.caption); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</span>\n   <img class=\"img-thumbnail\" src=\"";
-  if (stack1 = helpers.imgSrc) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = (depth0 && depth0.imgSrc); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+    + "</span>\n   <img class=\"img-polaroid\" src=\"";
+  if (stack1 = helpers.srcUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.srcUrl); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
     + "\">\n </div>\n";
   return buffer;
@@ -161,16 +161,16 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   else { stack1 = (depth0 && depth0.dataId); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
     + "\">\n  <div class=\"ribbon\">\n    <a href='#'><i class='fa fa-star'></i></a>\n  </div>\n  <div class=\"info\">\n    <span class=\"fieldName\"> ";
-  if (stack1 = helpers.fieldName) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = (depth0 && depth0.fieldName); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  if (stack1 = helpers.name) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.name); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
     + "</span>\n    <span class=\"value\"> ";
   if (stack1 = helpers.value) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.value); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
     + "</span>\n  </div>\n  <hr>\n  <div class=\"source\">\n    <a href=\"";
-  if (stack1 = helpers.sourceLink) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = (depth0 && depth0.sourceLink); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  if (stack1 = helpers.srcUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.srcUrl); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
     + "\"><i class=\"fa-info-circle\"></i></a>\n  </div>\n</div>\n";
   return buffer;
