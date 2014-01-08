@@ -23,12 +23,13 @@
         {% if NAV_ENABLED %}
         <ul id="navBtns" class="hidden-phone nav pull-right head-nav">
           {% if authenticated %}
-          <li title="Create New Entity"><a href="{% url 'default.views.NewEntityHandler' %}"><i class="icon-plus-sign"> </i></a></li>
-          <li title="Rankings"><a href="{% url 'default.views.ProfileHandler' %}self"><i class="icon-reorder"> </i></a></li>
-          <li title="Sign Out"><a href="{% url 'default.views.SignoutHandler' %}" role="menuitem"><i class="icon-signout"></i></a></li>
+          <li title="Inbox"><a href="#"><i class="fa fa-inbox "> </i></a></li>
+          <li title="Create New Entity"><a href="{% url 'default.views.NewEntityHandler' %}"><i class="fa fa-plus-circle "> </i></a></li>
+          <li title="Rankings"><a href="{% url 'default.views.ProfileHandler' %}self"><i class="fa fa-bars "> </i></a></li>
+          <li title="Sign Out"><a href="{% url 'default.views.SignoutHandler' %}" role="menuitem"><i class="fa fa-sign-out "></i></a></li>
 
           {% elif not SIGN_IN_DISABLED %}
-          <li><a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}"><i class="icon-signin"></i> Sign in</a></li>
+          <li><a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}"><i class="fa fa-sign-in"></i> Sign in</a></li>
           {% endif %}
 
           {% if FEEDBACK_ENABLED %}
