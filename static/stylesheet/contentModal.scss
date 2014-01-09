@@ -38,22 +38,46 @@
   }
 }
 
-.downTriangle {
-  margin-top: -25px;
-  margin-left: 100px;
+.triangle {
+  border-right: 15px solid transparent;
+  border-left: 15px solid transparent;
   position: absolute;
   width: 0;
   height: 0;
-  border-top: 15px solid white;
-  border-right: 15px solid transparent;
-  border-left: 15px solid transparent;
+  margin-top: -25px;
+  margin-left: 100px;
 }
-
-.downTriangleBorder {
+.triangleBorder {
   position: absolute;
   margin-top: -25px;
   margin-left: 98px;
   border-left: 17px solid transparent;
   border-right: 17px solid transparent;
+}
+
+.downTriangle {
+  @extend .triangle;
+  border-top: 15px solid white;
+}
+
+.downTriangleBorder {
+  @extend .triangleBorder;
   border-top: 17px solid hsl(0, 0%, 89%);
+}
+
+.upTriangle {
+  @extend .triangle;
+  @include transition('margin-left', '1s', 'ease-in-out');
+  margin-top: -15px;
+  margin-left: 115px;
+  border-bottom: 15px solid white;
+}
+
+.upTriangleBorder {
+  @extend .triangleBorder;
+  @include transition('margin-left', '1s', 'ease-in-out');
+  margin-top: -17px;
+  margin-left: 113px;
+  border-bottom: 17px solid #e3e3e3;
+
 }
