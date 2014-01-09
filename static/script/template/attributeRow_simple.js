@@ -10,7 +10,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.tone) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.tone); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
-    + "' class='icon-heart ";
+    + "' class='fa fa-heart ";
   if (stack1 = helpers.TONE_ICON) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.TONE_ICON); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
@@ -20,11 +20,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack2 = helpers.upVoteBtnClass) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = (depth0 && depth0.upVoteBtnClass); stack2 = typeof stack2 === functionType ? stack2.call(depth0, {hash:{},data:data}) : stack2; }
   buffer += escapeExpression(stack2)
-    + "'>Yes <i class='upVote icon-thumbs-up'> </i></a>\n  <a href='#' class='btn voteBtn downVote ";
+    + "'>Yes <i class='upVote fa fa-thumbs-up'> </i></a>\n  <a href='#' class='btn voteBtn downVote ";
   if (stack2 = helpers.downVoteBtnClass) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = (depth0 && depth0.downVoteBtnClass); stack2 = typeof stack2 === functionType ? stack2.call(depth0, {hash:{},data:data}) : stack2; }
   buffer += escapeExpression(stack2)
-    + "'>No <i class='downVote icon-thumbs-down'> </i></a>\n</div>\n<div class='hidden rating ";
+    + "'>No <i class='downVote fa fa-thumbs-down'> </i></a>\n</div>\n<div class='hidden rating ";
   if (stack2 = helpers.ratingType) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = (depth0 && depth0.ratingType); stack2 = typeof stack2 === functionType ? stack2.call(depth0, {hash:{},data:data}) : stack2; }
   buffer += escapeExpression(stack2)

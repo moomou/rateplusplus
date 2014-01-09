@@ -43,9 +43,9 @@ function program3(depth0,data) {
   if (stack2 = helpers.description) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = (depth0 && depth0.description); stack2 = typeof stack2 === functionType ? stack2.call(depth0, {hash:{},data:data}) : stack2; }
   buffer += escapeExpression(stack2)
-    + "</div>\n</td>\n<td class='stat'>\n  <ul class='statList'>\n    <li><i class='icon-check'></i> "
+    + "</div>\n</td>\n<td class='stat'>\n  <ul class='statList'>\n    <li><i class='fa fa-tasks'></i> "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.summary)),stack1 == null || stack1 === false ? stack1 : stack1.totalVote)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " Votes</li>\n    <li><i class='icon-tags'></i> "
+    + " Votes</li>\n    <li><i class='fa fa-cloud'></i> "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.summary)),stack1 == null || stack1 === false ? stack1 : stack1.totalAttribute)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + " Attributes</li>\n  </ul>\n</td>\n";
   return buffer;
