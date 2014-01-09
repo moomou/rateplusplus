@@ -74,6 +74,12 @@
   padding: 1em; }
   .addContentBox textarea {
     width: 100%; }
+  .addContentBox .add-on {
+    width: 100px; }
+  .addContentBox .field {
+    float: left;
+    width: 100px;
+    margin-top: 5px; }
 
 .downTriangle {
   margin-top: -25px;
