@@ -29,7 +29,7 @@ function program3(depth0,data) {
     + " %</span>\n</td>\n<td class='head' style=\"width:25%; background: url(";
   stack2 = helpers['if'].call(depth0, (depth0 && depth0.imgURL), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += ")\">\n  <h4>\n    <a class='btn-like' href='"
+  buffer += ")\">\n  <h4>\n    <a class='btn-like' style='color: white;' href='"
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.window)),stack1 == null || stack1 === false ? stack1 : stack1.location)),stack1 == null || stack1 === false ? stack1 : stack1.origin)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "/entity/";
   if (stack2 = helpers.id) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
