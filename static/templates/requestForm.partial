@@ -1,7 +1,7 @@
 <div id="requestModal" class="modal hide fade">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3><i class="icon-envelope-alt"></i> Request</h3>
+    <h3><i class="fa fa-envelope-o"></i> Request</h3>
   </div>
   <div class="modal-body" style="height: 10em;">
     <span style="margin-top:-1em;" class="help-inline"> Receiver </span>

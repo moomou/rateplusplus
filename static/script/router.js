@@ -1,4 +1,3 @@
-
 // Router File
 App.AppRouter = Backbone.Router.extend({
     routes: {
@@ -192,6 +191,24 @@ App.AppRouter = Backbone.Router.extend({
 
         $('#addContentBtn').click(function(e) {
             $('#contentModal').modal();
+        });
+
+        $('#contentSubmit').click(function(e) {
+            var activePanel = $('.addContentBox>div.active'),
+                postData = {},
+                ajaxUrl = App.API_SERVER + App.API_VERSION + 'entity/' + id + '/data';
+
+            postData.dataType = activePanel.find('.dataType').val().toLowerCase();
+            postData.srcType = activePanel.find('.srcType').val().toLowerCase();
+            postData.name = activePanel.find('.fieldname').val();
+            postData.selector =  activePanel.find('.selector').val() || "";
+            postData.srcUrl = activePanel.find('.srcUrl').val();
+
+            $.post(ajaxUrl, postData)
+            .done(function(res) {
+                console.log(res);
+                $('#contentModal').modal('hide');
+            });
         });
     },
     defaultPageInit: function() {

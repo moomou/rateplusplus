@@ -29,6 +29,7 @@ App.ProfilePage = {
 };
 
 App.CommentContainer = $('#commentContainer');
+
 App.GlobalWidget.rankingPrivacy.tooltip();
 
 /**
@@ -144,7 +145,7 @@ App.AttributeSimpleView = Backbone.View.extend({
     renderStarRating: function(canvas, upVote, downVote) {
         var starGen = function(stars) {
             var starDOM = function(className) {
-                return "<i class='icon-" + className + "'></i>";
+                return "<i class='fa-" + className + "'></i>";
             },
             result = '';
 
@@ -204,14 +205,25 @@ App.AttributeView = Backbone.View.extend({
     render: function() {
         console.log('AttributeView Render');
 
-        var model = this.model;
+        var model = this.model, 
+            renderData = model.toJSON();
+        
+        if (renderData.tone == App.POSITIVE) {
+            renderData.color = "red";
+            renderData.upVoteBtnType = "btn-success";
+            renderData.downVoteBtnType = "btn-danger";
+        }
+        else {
+            renderData.upVoteBtnType = "btn-white";
+            renderData.downVoteBtnType = "btn-inverse";
+        }
 
         if (model.isNew()) {
-            this.$el.html(this.editTemplate(model.toJSON()));
+            this.$el.html(this.editTemplate(renderData));
             this.$el.addClass('editHighlight focusOnHover');
         }
         else {
-            this.$el.html(this.template(model.toJSON()));
+            this.$el.html(this.template(renderData));
             this.$el.removeClass('editHighlight focusOnHover');
         }
 
@@ -228,7 +240,7 @@ App.AttributeView = Backbone.View.extend({
     renderStarRating: function(canvas, upVote, downVote) {
         var starGen = function(stars) {
             var starDOM = function(className) {
-                return "<i class='icon-" + className + "'></i>";
+                return "<i class='fa fa-" + className + "'></i>";
             },
             result = '';
 
@@ -293,6 +305,33 @@ App.AttributeView = Backbone.View.extend({
             this.$('.toneText').html('negative');
         }
     },
+});
+
+App.DataView = Backbone.View.extend({
+    numberTemplate: Handlebars.templates.data_num,
+    imageTemplate: Handlebars.templates.data_img,
+    tagName: 'li',
+    initialize: function(settings) {
+        var renderData = settings 
+
+        if (settings.dataType == "number") {
+            this.template = this.numberTemplate;
+        }
+        else if (settings.dataType == "image") {
+            this.template = this.imageTemplate;
+        }
+
+        this.model = {
+            toJSON: function() {
+                return renderData;
+            }
+        };
+    },
+    render: function() {
+        console.log('DataView render');
+        this.$el.html(this.template(this.model.toJSON()));
+        return this;
+    }
 });
 
 App.SummaryCardView = Backbone.View.extend({
@@ -411,6 +450,20 @@ App.SummaryCardView = Backbone.View.extend({
             this.$el.find('.summary').html(this.summaryTemplate(this.model.toJSON()));
             this.attributeCollectionView.render(this.$('.attrContent'));
         }
+        if (!this.skipData) {
+            var allData = this.model.get('data'),
+                content = $('#content .row-fluid');
+
+            _(allData).each(function(data) {
+                var dataView = new App.DataView(data);
+                if (data.dataType == "number") {
+                    content.find('.numData').append(dataView.render().el);
+                }
+                else {
+                    content.find('.mediaData').append(dataView.render().el);
+                }
+            });
+        }
     },
     renderGraph: function(editing) {
         console.log("renderDetail");
@@ -423,7 +476,7 @@ App.SummaryCardView = Backbone.View.extend({
     //Event Handler
     rightCardHeaderBtnHandler: function(e) {
         var target = $(e.target);
-        if (target.hasClass('icon-paper-clip') || target.hasClass('linkBtn')) {
+        if (target.hasClass('fa-paper-clip') || target.hasClass('linkBtn')) {
             console.log(this.side);
             if (this.side === "left") {
                 App.leftId = this.model.get('id');
@@ -447,7 +500,7 @@ App.SummaryCardView = Backbone.View.extend({
     saveCreation: function(e, cb) {
         var that = this;
 
-        this.$('.card-status').html('<i class="icon-spinner icon-spin icon-2x pull-left"></i>');
+        this.$('.card-status').html('<i class="fa fa-spinner fa-spin fa-2x pull-left"></i>');
         this.entityView.editProfile('save'); //save the description
 
         this.entityView.model.save({}, {
@@ -627,7 +680,7 @@ App.ProfileRowView = Backbone.View.extend({
     tagName: 'tr',
     className: 'row',
     events: {
-        'click .icon-share': 'shareRanking',
+        'click .fa-share': 'shareRanking',
         'click .viewRanking': 'viewRanking'
     },
     initialize: function(settings) {
@@ -822,7 +875,7 @@ App.RankBadgeView = Backbone.View.extend({
 
         this.model = {
             rank: settings.rank || 1,
-            icon: settings.icon || 'icon-circle',
+            icon: settings.icon || 'fa fa-circle',
             color: color
         }
     },
@@ -860,7 +913,7 @@ App.RankListIconView = Backbone.View.extend({
         this.model = {
             domId: domId,
             rank: settings.rank || 1,
-            icon: settings.icon || 'icon-circle',
+            icon: settings.icon || 'fa fa-circle',
             color: color,
             link: settings.link || '#',
             sessionStorageInd: sessionStorageInd
@@ -942,7 +995,7 @@ App.RankListToolbarView = (function() {
     setPrivacyIcon = function(isPrivate) {
         App.GlobalWidget.rankingPrivacy
             .tooltip('hide')
-            .attr('class', (isPrivate ? "icon-lock" : "icon-globe") + " icon-2x cursor-pointer")
+            .attr('class', (isPrivate ? "fa-lock" : "fa-globe") + " fa-2x cursor-pointer")
             .attr('title', isPrivate ? "Private Ranking" : "Public Ranking")
             .tooltip('fixTitle')
             .tooltip();
@@ -961,7 +1014,7 @@ App.RankListToolbarView = (function() {
         if (getQueryVariable("forking") || App.GlobalWidget.rankViewButtons.is(':visible')) {
             return;
         }
-        setPrivacyIcon(!$(e.target).hasClass('icon-lock'));
+        setPrivacyIcon(!$(e.target).hasClass('fa-lock'));
     });
 
     // public
@@ -1054,7 +1107,7 @@ App.RankingController = function(isForking) {
         existingRankingSession.name =
             App.GlobalWidget.rankingName.text();
         existingRankingSession.private =
-            App.GlobalWidget.rankingPrivacy.hasClass('icon-lock');
+            App.GlobalWidget.rankingPrivacy.hasClass('fa-lock');
 
         if (!existingRankingSession.name || !existingRankingSession.ranks) {
             alert("Please provide a name");
@@ -1339,7 +1392,6 @@ App.SimpleAttributeCollectionView = Backbone.View.extend({
 });
 
 // High level page
-//
 App.DetailEntityPageView = Backbone.View.extend({
     initialize: function(settings) {
         settings = settings || {};
@@ -1362,7 +1414,7 @@ App.DetailEntityPageView = Backbone.View.extend({
             title = item.get('name');
 
         App.DetailPage.privacyIcon
-            .attr('class', isPrivate ? "icon-lock" : "icon-globe")
+            .attr('class', isPrivate ? "fa fa-lock" : "fa fa-globe")
             .attr('title', isPrivate ? "Private" : "Public")
             .tooltip();
         App.DetailPage.title
@@ -1376,9 +1428,8 @@ App.DetailEntityPageView = Backbone.View.extend({
         });
 
         document.getElementById('dr1').appendChild(cardView.render().el);
-    },
+    }
 });
-
 
 App.PageView = Backbone.View.extend({
     initialize: function(settings) {
