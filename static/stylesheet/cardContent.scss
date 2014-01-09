@@ -19,6 +19,9 @@
   .ribbon {
     top: -5px !important;
   }
+  .data-point {
+    position: relative;
+  }
 }
 
 .data {
@@ -26,7 +29,6 @@
     display: block;
     min-height: 10px;
   }
-
   .source {
     display: block;
     height: 10px;
@@ -36,7 +38,6 @@
       margin-top: -15px;
     }
   }
-
   .data-point {
     position: relative;
   }
