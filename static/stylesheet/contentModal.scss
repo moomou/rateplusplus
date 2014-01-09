@@ -67,7 +67,7 @@
 
 .upTriangle {
   @extend .triangle;
-  @include transition('margin-left', '1s', 'ease-in-out');
+  @include transition(margin-left, 1s, ease-in-out);
   margin-top: -15px;
   margin-left: 115px;
   border-bottom: 15px solid white;
@@ -75,7 +75,7 @@
 
 .upTriangleBorder {
   @extend .triangleBorder;
-  @include transition('margin-left', '1s', 'ease-in-out');
+  @include transition(margin-left, 1s, ease-in-out);
   margin-top: -17px;
   margin-left: 113px;
   border-bottom: 17px solid #e3e3e3;
