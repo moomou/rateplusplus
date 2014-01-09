@@ -5,7 +5,6 @@
 }
 
 // Single side border-radius
-
 @mixin border-top-radius($radius) {
   -webkit-border-top-right-radius: $radius;
   border-top-right-radius: $radius;
@@ -39,4 +38,13 @@
     -webkit-box-shadow:$top $left $blur $color #{$inset};
     -moz-box-shadow:$top $left $blur $color #{$inset};
     box-shadow:$top $left $blur $color #{$inset};
+}
+
+@mixin abs-center-container($width: 50%, $height: 50%) {
+  width: $width;
+  height: $height;
+  overflow: auto;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
 }
