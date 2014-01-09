@@ -22,6 +22,9 @@
   .data-point {
     position: relative;
   }
+  li {
+    margin-bottom: 10px;
+  }
 }
 
 .data {
@@ -48,6 +51,7 @@
     padding: 10px 10px 0px;
     margin: 10px;
   }
+
   .fieldName {
     float: left;
   }

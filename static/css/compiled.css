@@ -24,6 +24,8 @@
     top: -5px !important; }
   .mediaData .data-point {
     position: relative; }
+  .mediaData li {
+    margin-bottom: 10px; }
 
 .data .info {
   display: block;
