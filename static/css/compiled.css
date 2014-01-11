@@ -54,6 +54,12 @@
   text-decoration: none !important;
   color: black !important; }
 
+.highlight {
+  opacity: 1; }
+
+.unhighlight {
+  opacity: 0.5; }
+
 .addContentContainer {
   border: 1px solid rgba(0, 0, 0, 0.15);
   -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2) ;
