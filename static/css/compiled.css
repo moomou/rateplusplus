@@ -168,6 +168,7 @@ ul {
     border-radius: 10px;
     background-clip: padding-box;
     /* stops bg color from leaking outside the border: */
+    position: relative;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.18);
     padding: 10px;
     margin-bottom: 25px;
@@ -177,6 +178,16 @@ ul {
       float: right;
       color: gray;
       font-size: 12px; }
+    .info-card .content .instruction {
+      padding-top: 25px;
+      text-align: center;
+      display: block;
+      margin: 0 auto;
+      font-size: 25px;
+      color: gray; }
+  .info-card .content.editing {
+    border: 5px dashed whitesmoke;
+    height: 150px; }
   .info-card .footer {
     margin-left: -16px;
     position: absolute;
