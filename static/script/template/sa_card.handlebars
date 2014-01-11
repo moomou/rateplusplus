@@ -1,0 +1,27 @@
+<div class="info-card">
+  <div class="header">
+    <div class="profile pull-left" style="background-image: url('{{profilePictureSrc}}');"></div>
+    <ul class="meta pull-left">
+      <li class="name"> {{title}}</li>
+      <li class="hash"> {{hash}}</li>  
+    </ul>
+    <ul class="action">
+      <li><i class="glyphicon glyphicon-star"></i></li>
+      <li><i class="glyphicon glyphicon-star"></i></li>
+    </ul>
+  </div>
+  <hr>
+  <div class="content" id="{{contentId}}">
+    {{{content}}}
+    <hr>
+    <ul class="meta">
+      <li class="src">
+        <a href="{{src}}">{{srcTitle}}</a>
+      </li>
+    </ul>
+  </div>
+  <div class="footer">
+    <div class="by pull-right">By <a href="{{profileLink}}" class="">{{profileName}}</a>
+    </div>
+  </div>
+</div>
