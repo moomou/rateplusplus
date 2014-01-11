@@ -382,8 +382,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   else { stack1 = (depth0 && depth0.title); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
     + "</li>\n      <li class=\"hash\"> ";
-  if (stack1 = helpers.hash) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = (depth0 && depth0.hash); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  if (stack1 = helpers.hashTag) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.hashTag); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
     + "</li>  \n    </ul>\n    <ul class=\"action\">\n      <li><i class=\"glyphicon glyphicon-star\"></i></li>\n      <li><i class=\"glyphicon glyphicon-star\"></i></li>\n    </ul>\n  </div>\n  <hr>\n <div id=\"sa-instruction\" class=\"content editing\">\n    <div class=\"instruction\">\n      <div class=\"inner\">\n        <i class=\"fa fa-arrow-circle-o-down\"></i>\n        <br>\n        <span class=\"\">Drag Content Here</span>\n      </div>\n    </div>\n  </div>\n  <div class=\"footer\">\n    <div class=\"by pull-right\">By <a href=\"";
   if (stack1 = helpers.profileLink) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
