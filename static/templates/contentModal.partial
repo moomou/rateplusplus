@@ -1,58 +1,87 @@
 <div id="contentModal" class="addContentContainer modal hide fade">
   <div class="modal-header">
     <ul class="addContentType tab" id="addContent">
+      <li class="contentType cursor-pointer" data-target='#write'>
+        <a href="#write" data-toggle="tab">
+          <i class="fa fa-code fa-2x block"></i>
+          <span style='display: block'>Code</span>
+        </a>
+      </li>
       <li class="contentType cursor-pointer" data-target='#pictureframe'>
         <a href="#pictureframe" data-toggle="tab">
-          <i class="icon-picture icon-2x block"></i>
+          <i class="fa fa-picture-o fa-2x block"></i>
           <span style='display: block'>Picture</span>
         </a>
       </li>
       <li class="contentType cursor-pointer" data-target='#movieTheatre'>
         <a href="#movieTheatre" data-toggle="tab">
-          <i class="icon-youtube-play icon-2x block"></i>
+          <i class="fa fa-youtube-play fa-2x block"></i>
           <span style='display: block'> Video</span>
         </a>
       </li>
       <li class="contentType cursor-pointer" data-target='#linkChain'>
         <a href="#linkChain" data-toggle="tab">
-          <i class="icon-link icon-2x block"></i>
+          <i class="fa fa-dot-circle-o fa-2x block"></i>
           <span style='display: block'> Info</span>
         </a>
       </li>
     </ul>
   </div>
+  <div class="upTriangleBorder"></div>
+  <div class="upTriangle"></div>
   <div class="addContentBox tab-content">
-    <div id="write" class="tab-pane">
+    <div id="write" class="tab-pane active">
       <textarea id="" name="" cols="30" rows="5"></textarea>
     </div>
     <div id="pictureframe" class="tab-pane">
+      <input class="hidden srcType" type="text" value="binary">
+      <input class="hidden dataType" type="text" value="image">
+      <div class="input-prepend" style="display: block;">
+        <span class="add-on">Picture Caption</i></span>
+        <input style="width: 75%;" class="fieldname" type="text" placeholder="">
+      </div>
       <div class="input-prepend" style="display: block;">
         <span class="add-on"> Source URL</i></span>
-        <input style="width: 75%;" id="srcUrlInput" class="srcURL" type="text" placeholder="http://">
+        <input style="width: 75%;" class="srcUrl" type="text" placeholder="http://">
       </div>
     </div>
     <div id="movieTheatre" class="tab-pane">
+      <input class="hidden srcType" type="text" value="binary">
+      <input class="hidden dataType" type="text" value="video">
+      <div class="input-prepend" style="display: block;">
+        <span class="add-on">Video Title</i></span>
+        <input style="width: 75%;" class="fieldname" type="text">
+      </div>
       <div class="input-prepend" style="display: block;">
         <span class="add-on"> Source URL</i></span>
-        <input style="width: 75%;" id="srcUrlInput" class="srcURL" type="text" placeholder="http://">
+        <input style="width: 75%;" class="srcUrl" type="text" placeholder="http://">
       </div>
     </div>
-    <div id="linkChain" class="tab-pane active">
-      <select>
+    <div id="linkChain" class="tab-pane">
+      <div class="field"> Source Type</div>
+      <select class="srcType">
         <option>JSON</option>
         <option>DOM</option>
+        <option>Binary</option>
+      </select>
+      <br>
+      <div class="field"> Data Type</div>
+      <select class="dataType">
+        <option>Text</option>
+        <option>Number</option>
+        <option>Timseries</option>
       </select>
       <div class="input-prepend" style="display: block;">
         <span class="add-on">Field Name</i></span>
-        <input style="width: 75%;" id="fieldNameInput" class="srcURL" type="text" placeholder="Ex. Networth, Position">
+        <input style="width: 75%;" class="fieldname" type="text" placeholder="Ex. Networth, Position">
       </div>
       <div class="input-prepend" style="display: block;">
         <span class="add-on"> Source URL</i></span>
-        <input style="width: 75%;" id="srcUrlInput" class="srcURL" type="text" placeholder="http://">
+        <input style="width: 75%;" class="srcUrl" type="text" placeholder="http://">
       </div>
       <div class="input-prepend" style="display: block;">
         <span class="add-on"> CSS Selector</i></span>
-        <input style="width: 75%;" id="selectorInput" class="srcURL" type="text" placeholder="Ex. #content>li text()">
+        <input style="width: 75%;" class="selector" type="text" placeholder="Ex. #content>li text()">
       </div>
     </div>
   </div>

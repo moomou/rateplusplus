@@ -24,7 +24,7 @@
             <ul id="myTab" class="nav nav-tabs">
               <li class="">
                 <span href="#home" class="entityTitle">
-                  <i title="Private" class="icon-lock" id="privacy-setting"> </i> 
+                  <i title="Private" class="fa fa-lock" id="privacy-setting"> </i> 
                   <span id="entityTitle"></span>
                 </span>
               </li>
@@ -32,14 +32,6 @@
               <li class="noSelect"><a href="#content" data-toggle="tab"> Content</a></li> 
               <li class="pull-right">
                 <ul class="entityStats">
-                  <!--
-                  <li>
-                    12 <i class="icon-bookmark icon-large"></i>
-                  </li>
-                  <li>
-                    12 <i class="icon-heart icon-large"></i>
-                  </li>
-                  -->
                 </ul>
               </li> 
             </ul>
@@ -62,8 +54,8 @@
                 {% include "comment.partial" %}
               </div>
               <div class="tab-pane" id="content">
-                <a style="font-size: 15px; margin-top: -15px;" id="addContentBtn" href="#" class="pull-right btn-like">
-                  <span class="fa-stack fa-lg">
+                <a style="font-size: 15px;" id="addContentBtn" href="#" class="pull-right btn-like">
+                  <span class="fa-stack fa-lg" style="font-size:12px;">
                     <i class="fa fa-circle-o fa-stack-2x"></i>
                     <i class="fa fa-plus fa-stack-1x"></i>
                   </span>
@@ -71,6 +63,14 @@
                 </a>
                 <br>
                 <hr>
+                <div class="row-fluid">
+                  <div class="span6">
+                    <ul class="data numData"></ul>
+                  </div>
+                  <div class="span6">
+                    <ul class="mediaData"></ul>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
