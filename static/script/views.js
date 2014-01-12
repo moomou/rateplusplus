@@ -317,31 +317,29 @@ App.DataView = Backbone.View.extend({
         'dragstart': 'dragStart',
         'dragend': 'dragEnd'
     },
+    getTemplate: function(data) {
+       if (data.dataType == "number") {
+            return this.numberTemplate;
+        }
+        else if (data.dataType == "image") {
+            return this.imageTemplate;
+        }
+    },
     initialize: function(settings) {
-        var renderData = settings
-
-        if (settings.dataType == "number") {
-            this.template = this.numberTemplate;
-        }
-        else if (settings.dataType == "image") {
-            this.template = this.imageTemplate;
-        }
-
+        this.template = this.getTemplate(settings);
         this.model = {
             toJSON: function() {
-                return renderData;
+                return settings;
             }
         };
     },
     render: function() {
-        console.log('DataView render');
         this.$el.html(this.template(this.model.toJSON()));
         this.$el.attr('draggable', 'true');
         return this;
     },
     // Events
     dragStart: function(e) {
-        console.log('drag start');
         var dt = e.originalEvent.dataTransfer;
         if (this.model.dataType == "image") {
             dt.setData("text/uri-list", e.originalEvent.target.src);
@@ -1406,12 +1404,7 @@ App.TableAttributeCollectionView = App.TableView.extend({
     },
 });
 
-// TODO: Implement
-App.SimpleAttributeCollectionView = Backbone.View.extend({
-});
-
-// Content Card
-App.StandaloneCardView = Backbone.View.extend({
+App.ContentDataCollectionView = Backbone.View.extend({
     contentTemplate: Handlebars.templates.sa_card_content,
     contentTemplateFields: {
         content: "",
@@ -1419,13 +1412,51 @@ App.StandaloneCardView = Backbone.View.extend({
         srcTtitle: "",
         src: ""
     },
+    renderNumber: function() {
+    },
+    renderTimeSeries: function() {
+    },
+    renderFile: function() {
+    },
+    renderYoutubeLink: function() {
+    },
+    renderImage: function() {
+    },
+    renderText: function() {
+    },
+    renderFunc: function(renderType) {
+        var renderMap = {
+            number: this.renderNumber,
+            timeseries: this.renderTimeSeries,
+            file: this.renderFile,
+            image: this.renderImage,
+            video: this.renderVideo,
+            link: this.renderLink
+        }
+        return renderMap[renderType];
+    },
+    initialize: function(settings) {
+        this.dataList = settings.dataList;
+    },
+    render: function() {
+        var rendered = [],
+            that = this;
+        _(this.dataList).each(function(data) {
+            var renderFunc = that.renderFunc(data.dataType);
+            rendered.push(renderFunc);
+        });
+    },
+});
+
+// Content Card
+App.StandaloneCardView = Backbone.View.extend({
     saCardTemplate: Handlebars.templates.sa_card,
     standaloneCardTemplateFields: {
-        profilePictureSrc: '/static/img/blank.png',
+        profileIconUrl: '/static/img/blank.png',
         title: 'Title',
         hashTag: '#hashtag',
-        profileLink: '',
-        profileName: ''
+        authorName: '',
+        authorProfileUrl: ''
     },
     events: {
         'dragenter .editzone': 'highlightDropZone',
@@ -1442,7 +1473,7 @@ App.StandaloneCardView = Backbone.View.extend({
     },
     render: function() {
         var renderData = _.clone(this.standaloneCardTemplateFields);
-        renderData.profileName = getCookie("username");
+        renderData.authorName = getCookie("username");
         this.$el.html(this.saCardTemplate(renderData));
         return this;
     },
