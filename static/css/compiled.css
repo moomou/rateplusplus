@@ -162,13 +162,11 @@ ul {
     overflow: auto; }
     .info-card .header .action {
       float: right; }
-    .info-card .header .meta {
-      margin-left: -15px; }
-      .info-card .header .meta .name {
-        font-size: 25px; }
-      .info-card .header .meta .hash {
-        font-size: 12px;
-        color: gray; }
+    .info-card .header .meta .name {
+      font-size: 25px; }
+    .info-card .header .meta .hash {
+      font-size: 12px;
+      color: gray; }
   .info-card .content {
     -webkit-border-radius: 10px;
     border-radius: 10px;
