@@ -163,6 +163,9 @@ ul {
     overflow: auto; }
     .info-card .header .action {
       float: right; }
+      .info-card .header .action li {
+        float: left;
+        margin: 0 5px; }
     .info-card .header .meta .name {
       font-size: 25px; }
     .info-card .header .meta .hash {
@@ -207,12 +210,12 @@ ul {
     width: 512px;
     padding: 10px 15px 5px 5px; }
     .info-card .footer .edit-tool {
-      margin-left: 2px; }
+      margin: -3px 2px 0 2px; }
 
 .sa-editor {
   position: fixed;
   background-color: white;
   display: block;
   right: 15px;
-  bottom: -25px;
+  bottom: 25px;
   z-index: 9999; }
