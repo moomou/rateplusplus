@@ -201,3 +201,11 @@ ul {
     height: 30px;
     width: 502px;
     padding: 5px 15px 5px 5px; }
+
+.sa-editor {
+  position: fixed;
+  background-color: white;
+  display: block;
+  right: 0px;
+  bottom: 0px;
+  border: 1px solid gray; }
