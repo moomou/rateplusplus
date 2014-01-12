@@ -17,6 +17,8 @@ App.GlobalWidget = {
     rankEditButtons: $('#rank-sessionButtons'),
     rankViewButtons: $('#rank-viewButtons'),
     shareModal: $('#shareModal'),
+
+    saEditor: $('.sa-editor')
 };
 
 App.DetailPage = {
@@ -205,9 +207,9 @@ App.AttributeView = Backbone.View.extend({
     render: function() {
         console.log('AttributeView Render');
 
-        var model = this.model, 
+        var model = this.model,
             renderData = model.toJSON();
-        
+
         if (renderData.tone == App.POSITIVE) {
             renderData.color = "red";
             renderData.upVoteBtnType = "btn-success";
@@ -311,8 +313,12 @@ App.DataView = Backbone.View.extend({
     numberTemplate: Handlebars.templates.data_num,
     imageTemplate: Handlebars.templates.data_img,
     tagName: 'li',
+    events: {
+        'dragstart': 'dragStart',
+        'dragend': 'dragEnd'
+    },
     initialize: function(settings) {
-        var renderData = settings 
+        var renderData = settings
 
         if (settings.dataType == "number") {
             this.template = this.numberTemplate;
@@ -330,7 +336,22 @@ App.DataView = Backbone.View.extend({
     render: function() {
         console.log('DataView render');
         this.$el.html(this.template(this.model.toJSON()));
+        this.$el.attr('draggable', 'true');
         return this;
+    },
+    // Events
+    dragStart: function(e) {
+        console.log('drag start');
+        var dt = e.originalEvent.dataTransfer;
+        if (this.model.dataType == "image") {
+            dt.setData("text/uri-list", e.originalEvent.target.src);
+            dt.setData("text/plain", e.originalEvent.target.src);
+        }
+        else {
+        }
+    },
+    dragEnd: function(e) {
+        console.log('drag end');
     }
 });
 
@@ -381,9 +402,8 @@ App.SummaryCardView = Backbone.View.extend({
 
         var editable = this.model.get('editable'),
             domId = this.model.get('domId'),
-            entityModel = this.model.toJSON(),
-            isNew = this.entityView.model.isNew();
-
+            isNew = this.entityView.model.isNew(),
+            entityModel = _.extend(this.model.toJSON(), {editable: isNew.toString()});
         this.$el.html(this.template(entityModel));
         this.$('.profileContent').empty().append(this.entityView.render().el);
 
@@ -960,7 +980,7 @@ App.RankListToolbarView = (function() {
         App.GlobalWidget.rankViewButtons.show();
         App.GlobalWidget.rankingPrivacy.hide();
         App.GlobalWidget.rankingFork.tooltip();
-        
+
         App.GlobalWidget.rankingName
             .attr('contenteditable', false)
             .attr('style', '');
@@ -989,7 +1009,7 @@ App.RankListToolbarView = (function() {
         return this;
     },
     setForkLink = function(shareToken) {
-        App.GlobalWidget.rankingFork.parent().attr("href", 
+        App.GlobalWidget.rankingFork.parent().attr("href",
             window.location.origin + "/ranking/" + shareToken + "?forking=true");
     },
     setPrivacyIcon = function(isPrivate) {
@@ -1065,7 +1085,7 @@ App.RankingController = function(isForking) {
             if (!existingRankingView) {
                 console.log("Error: rankingView should exist for forking to work");
                 return;
-            } 
+            }
             // clear the existing ranks
             existingRankingSession = {};
             inUse = false;
@@ -1095,7 +1115,7 @@ App.RankingController = function(isForking) {
     rankingSession = getRankingFromStorage("rankingSession"),
     rankingView = getRankingFromStorage("rankingView");
 
-    
+
     $('.addNewRanking').click(function(e) {
         startNewRanking(false);
     });
@@ -1124,9 +1144,9 @@ App.RankingController = function(isForking) {
                 $('#rankingHeader').hide();
                 sessionStorage.removeItem('rankingSession');
                 var newRankingShareToken = res.payload.shareToken;
-            
+
                 // redirect the user to new rankingView
-                document.location.href = 
+                document.location.href =
                     window.location.origin + "/ranking/" + newRankingShareToken;
             }
         })
@@ -1165,7 +1185,6 @@ App.RankingController = function(isForking) {
 };
 
 /* Composite View Component */
-
 // CardView is for column view of card collections
 App.PinCardCollectionView = Backbone.View.extend({
     initialize: function(settings) {
@@ -1280,7 +1299,7 @@ App.TableCardCollectionView = Backbone.View.extend({
             referenceRanking = rankingSession || rankingView;
 
         _.each(rowViews, function(rowView) {
-            if (that.isForking || !referenceRanking || 
+            if (that.isForking || !referenceRanking ||
                 referenceRanking.ranks.indexOf(rowView.model.id.toString()) < 0) {
                 rowView.renderKonb();
             }
@@ -1391,7 +1410,61 @@ App.TableAttributeCollectionView = App.TableView.extend({
 App.SimpleAttributeCollectionView = Backbone.View.extend({
 });
 
-// High level page
+// Content Card
+App.StandaloneCardView = Backbone.View.extend({
+    contentTemplate: Handlebars.templates.sa_card_content,
+    contentTemplateFields: {
+        content: "",
+        contentId: "",
+        srcTtitle: "",
+        src: ""
+    },
+    saCardTemplate: Handlebars.templates.sa_card,
+    standaloneCardTemplateFields: {
+        profilePictureSrc: '/static/img/blank.png',
+        title: 'Title',
+        hashTag: '#hashtag',
+        profileLink: '',
+        profileName: ''
+    },
+    events: {
+        'dragenter .editzone': 'highlightDropZone',
+        'dragleave .editzone': 'unhighlightDropZone',
+        'dragover .editzone': 'highlightDropZone',
+        'dragenter .profile': 'highlightDropZone',
+        'dragleave .profile': 'unhighlightDropZone',
+        'dragover .profile': 'highlightDropZone',
+        'drop .editzone': 'addNewContent',
+        'drop .profile': 'changeProfilePicture',
+    },
+    initialize: function() {
+        // should get profile information
+    },
+    render: function() {
+        var renderData = _.clone(this.standaloneCardTemplateFields);
+        renderData.profileName = getCookie("username");
+        this.$el.html(this.saCardTemplate(renderData));
+        return this;
+    },
+    // Events
+    highlightDropZone: function(e) {
+        e.preventDefault();
+        this.$('.editzone').addClass('content-highlight');
+    },
+    unhighlightDropZone: function(e) {
+        this.$('.editzone').removeClass('content-highlight');
+    },
+    addNewContent: function(e) {
+        console.log("dropped");
+    },
+    changeProfilePicture: function(e) {
+        console.log("dropped");
+        var profilePictureSrc = e.originalEvent.dataTransfer.getData('url');
+        this.$('.profile').attr('style', "background-image: url('"+profilePictureSrc+"');");
+    }
+});
+
+// Page level views
 App.DetailEntityPageView = Backbone.View.extend({
     initialize: function(settings) {
         settings = settings || {};

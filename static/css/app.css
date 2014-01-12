@@ -231,12 +231,6 @@ ul {
   left: 92%;
 }
 
-.footer, .footer a {
-  padding: 15px 0 60px;
-  color: #a7a9aa;
-  text-shadow: 0 1px 0 #fff;
-}
-
 .stats {
   position: absolute;
   left: 50%;

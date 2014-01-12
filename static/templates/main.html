@@ -10,7 +10,8 @@
 
     <div class="container-narrow">
       {% include "messageBox.partial" %}
-
+    </div>
+    <div class="container-narrow pull-left">
       <div id="colRow" class="row-fluid hidden">
         <div class="span3" id="col1"></div>
         <div class="span3" id="col2"></div>
@@ -32,6 +33,11 @@
               <li class="noSelect"><a href="#content" data-toggle="tab"> Content</a></li> 
               <li class="pull-right">
                 <ul class="entityStats">
+                  <li>
+                  <a class="js-startEditor" href="#">
+                    <i class="fa fa-file-o"></i>
+                  </a>
+                  </li>
                 </ul>
               </li> 
             </ul>
@@ -91,6 +97,7 @@
 
     {% include "imageChangeModal.partial" %}
     {% include "contentModal.partial" %}
+    {% include "saEditor.partial" %}
 
     {% if FEEDBACK_ENABLED %} 
       {% include "feedbackForm.partial" %}

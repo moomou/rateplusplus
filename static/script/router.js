@@ -210,6 +210,12 @@ App.AppRouter = Backbone.Router.extend({
                 $('#contentModal').modal('hide');
             });
         });
+
+        $('.js-startEditor').click(function(e) {
+            console.log('js-startEditor');
+            var newSACard = new App.StandaloneCardView();
+            App.GlobalWidget.saEditor.append(newSACard.render().el);
+        });
     },
     defaultPageInit: function() {
         console.log("Default Route");
