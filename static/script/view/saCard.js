@@ -16,7 +16,6 @@ App.ContentDataView = (function() {
                     content: content,
                     src: data.srcUrl,
                     contentId: "",
-                    srcTtitle: "",
                 });
             return renderedContent;
         }

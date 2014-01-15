@@ -1403,7 +1403,7 @@ App.TableAttributeCollectionView = App.TableView.extend({
 // Stand Alone Content Card
 App.ContentDataView = (function() {
     var templates = {
-        numberTemplate: Handlebars.templates.sa_content_number,
+        numberTemplate: Handlebars.templates.sa_content_field,
         timeseriesTemplate: Handlebars.templates.sa_content_timeseries,
         imageTemplate: Handlebars.templates.sa_content_image,
         videoTemplate: Handlebars.templates.sa_content_video,
@@ -1418,7 +1418,6 @@ App.ContentDataView = (function() {
                     content: content,
                     src: data.srcUrl,
                     contentId: "",
-                    srcTtitle: "",
                 });
             return renderedContent;
         }
