@@ -60,14 +60,14 @@ App.StandaloneCardView = Backbone.View.extend({
         authorProfileUrl: ''
     },
     events: {
-        'dragenter .editzone': 'highlightDropZone',
-        'dragleave .editzone': 'unhighlightDropZone',
-        'dragover .editzone': 'highlightDropZone',
-        'dragenter .profile': 'highlightDropZone',
-        'dragleave .profile': 'unhighlightDropZone',
-        'dragover .profile': 'highlightDropZone',
-        'drop .editzone': 'addNewContent',
-        'drop .profile': 'changeProfilePicture',
+        'dragenter .js-editzone': 'highlightDropZone',
+        'dragleave .js-editzone': 'unhighlightDropZone',
+        'dragover .js-editzone': 'highlightDropZone',
+        'dragenter .js-profile': 'highlightDropZone',
+        'dragleave .js-profile': 'unhighlightDropZone',
+        'dragover .js-profile': 'highlightDropZone',
+        'drop .js-editzone': 'addNewContent',
+        'drop .js-profile': 'changeProfilePicture',
     },
     initialize: function() {
         // should get profile information
@@ -81,17 +81,18 @@ App.StandaloneCardView = Backbone.View.extend({
     // Events
     highlightDropZone: function(e) {
         e.preventDefault();
-        this.$('.editzone').addClass('content-highlight');
+        this.$('.js-editzone').addClass('content-highlight');
     },
     unhighlightDropZone: function(e) {
-        this.$('.editzone').removeClass('content-highlight');
+        this.$('.js-editzone').removeClass('content-highlight');
     },
     addNewContent: function(e) {
         console.log("dropped");
+        
     },
     changeProfilePicture: function(e) {
         console.log("dropped");
         var profilePictureSrc = e.originalEvent.dataTransfer.getData('url');
-        this.$('.profile').attr('style', "background-image: url('"+profilePictureSrc+"');");
+        this.$('.js-profile').attr('style', "background-image: url('"+profilePictureSrc+"');");
     }
 });

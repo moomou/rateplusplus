@@ -373,7 +373,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"info-card\">\n  <div class=\"header\">\n    <div class=\"profile pull-left\" style=\"background-image: url('";
+  buffer += "<div class=\"info-card\">\n  <div class=\"header\">\n    <div class=\"profile pull-left js-profile\" style=\"background-image: url('";
   if (stack1 = helpers.profileIconUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.profileIconUrl); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
@@ -385,7 +385,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.hashTag) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.hashTag); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</li>  \n    </ul>\n    <ul class=\"action\">\n      <li><i class=\"fa fa-code-fork fa-2x\"></i></li>\n      <li><i class=\"fa fa-envelope-o fa-2x\"></i></li>\n    </ul>\n  </div>\n  <hr>\n <div class=\"content editing editzone\">\n    <div class=\"instruction\">\n      <div class=\"inner\">\n        <i class=\"fa fa-arrow-circle-o-down fa-2x\"></i>\n        <br>\n        <span class=\"\">Drag Content Here</span>\n      </div>\n    </div>\n  </div>\n  <div class=\"footer\">\n    <div class=\"edit-tool pull-left hide\">\n      <button class=\"btn btn-small btn-success\">Save</button>\n    </div>\n    <div class=\"by pull-right\">By <a href=\"";
+    + "</li>\n    </ul>\n    <ul class=\"action\">\n      <li><i class=\"fa fa-code-fork fa-2x\"></i></li>\n      <li><i class=\"fa fa-envelope-o fa-2x\"></i></li>\n    </ul>\n  </div>\n  <hr>\n <div class=\"content editing editzone js-editzone\">\n    <div class=\"instruction\">\n      <div class=\"inner\">\n        <i class=\"fa fa-arrow-circle-o-down fa-2x\"></i>\n        <br>\n        <span class=\"\">Drag Content Here</span>\n      </div>\n    </div>\n  </div>\n  <div class=\"footer\">\n    <div class=\"edit-tool pull-left hide\">\n      <button class=\"btn btn-small btn-success\">Save</button>\n    </div>\n    <div class=\"by pull-right\">By <a href=\"";
   if (stack1 = helpers.authorProfileUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.authorProfileUrl); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
