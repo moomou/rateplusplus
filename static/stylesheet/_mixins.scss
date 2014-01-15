@@ -40,6 +40,12 @@
     box-shadow:$top $left $blur $color #{$inset};
 }
 
+@mixin box-shadow-none() {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
 @mixin abs-center-container($width: 50%, $height: 50%) {
   width: $width;
   height: $height;

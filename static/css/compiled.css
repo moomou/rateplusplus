@@ -134,6 +134,15 @@
   margin-left: 113px;
   border-bottom: 17px solid #e3e3e3; }
 
+.navbar-inner {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  background-color: white;
+  min-height: 40px;
+  background-image: none;
+  border: none; }
+
 body {
   margin: 1em; }
 

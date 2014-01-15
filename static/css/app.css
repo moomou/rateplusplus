@@ -363,12 +363,7 @@ ul {
     top: -20px; left: 0; bottom: 0; right: 5px;
   }
 
-.navbar-inner {
-  background-color:white;
-  min-height: 40px;
-  background-image:none;
-  border: none;
-}
+
 .plain-btn {
   background: none;
 }
