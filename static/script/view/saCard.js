@@ -1,6 +1,5 @@
 // Stand Alone Content Card
-
-App.ContentDataCollectionView = Backbone.View.extend({
+App.ContentDataView = Backbone.View.extend({
     numberTemplate: Handlebars.templates.sa_card_content_number,
     timeseriesTemplate: Handlebars.templates.sa_card_content_timeseries,
     imageTemplate: Handlebars.templates.sa_card_content_image,

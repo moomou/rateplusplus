@@ -333,17 +333,20 @@ App.DataView = Backbone.View.extend({
     },
     render: function() {
         this.$el.html(this.template(this.model.toJSON()));
+        this.$el.attr('id', 'data-' + _.uniqueId());
         this.$el.attr('draggable', 'true');
         return this;
     },
     // Events
     dragStart: function(e) {
         var dt = e.originalEvent.dataTransfer;
+        debugger;
         if (this.model.dataType == "image") {
             dt.setData("text/uri-list", e.originalEvent.target.src);
             dt.setData("text/plain", e.originalEvent.target.src);
         }
         else {
+            dt.setTime(
         }
     },
     dragEnd: function(e) {
