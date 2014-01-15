@@ -1,53 +1,27 @@
 // Stand Alone Content Card
-App.ContentDataView = Backbone.View.extend({
-    numberTemplate: Handlebars.templates.sa_card_content_number,
-    timeseriesTemplate: Handlebars.templates.sa_card_content_timeseries,
-    imageTemplate: Handlebars.templates.sa_card_content_image,
-    videoTemplate: Handlebars.templates.sa_card_content_video,
-    numberTemplate: Handlebars.templates.sa_card_content_number,
-    contentTemplate: Handlebars.templates.sa_card_content,
-    contentTemplateFields: {
-        content: "",
-        contentId: "",
-        srcTtitle: "",
-        src: ""
-    },
-    renderNumber: function() {
-    },
-    renderTimeSeries: function() {
-    },
-    renderFile: function() {
-    },
-    renderYoutubeLink: function() {
-    },
-    renderImage: function() {
-    },
-    renderText: function() {
-    },
-    renderFunc: function(renderType) {
-        var renderMap = {
-            number: this.renderNumber,
-            timeseries: this.renderTimeSeries,
-            file: this.renderFile,
-            image: this.renderImage,
-            video: this.renderVideo,
-            link: this.renderLink
+App.ContentDataView = (function() {
+    var templates = {
+        numberTemplate: Handlebars.templates.sa_content_field,
+        timeseriesTemplate: Handlebars.templates.sa_content_timeseries,
+        imageTemplate: Handlebars.templates.sa_content_image,
+        videoTemplate: Handlebars.templates.sa_content_video,
+        contentTemplate: Handlebars.templates.sa_card_content
+    };
+
+    return {
+        render: function(data) {
+            var templateName = data.dataType + "Template",
+                content = templates[templateName](data);
+                renderedContent = templates.contentTemplate({
+                    content: content,
+                    src: data.srcUrl,
+                    contentId: "",
+                    srcTtitle: "",
+                });
+            return renderedContent;
         }
-        return renderMap[renderType];
-    },
-    initialize: function(settings) {
-        this.dataList = settings.dataList;
-    },
-    render: function() {
-        var rendered = [],
-            that = this;
-        _(this.dataList).each(function(data) {
-            var renderFunc = that.renderFunc(data.dataType);
-            rendered.push(renderFunc());
-        });
-        return rendered;
     }
-});
+})();
 
 // Content Card
 App.StandaloneCardView = Backbone.View.extend({
@@ -88,11 +62,19 @@ App.StandaloneCardView = Backbone.View.extend({
     },
     addNewContent: function(e) {
         console.log("dropped");
-        
+        var tfData = JSON.parse(
+            e.originalEvent.dataTransfer.getData('text')),
+            renderedContent = App.ContentDataView.render(tfData);
+        this.$('.js-editzone').after(renderedContent);
     },
     changeProfilePicture: function(e) {
         console.log("dropped");
-        var profilePictureSrc = e.originalEvent.dataTransfer.getData('url');
-        this.$('.js-profile').attr('style', "background-image: url('"+profilePictureSrc+"');");
+        var tfData = JSON.parse(
+            e.originalEvent.dataTransfer.getData('text'));
+        if (tfData.dataType == "image") {
+            var profilePictureSrc = tfData.srcUrl;
+            this.$('.js-profile')
+                .attr('style', "background-image: url('"+profilePictureSrc+"');");
+        }
     }
 });

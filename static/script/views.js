@@ -328,7 +328,7 @@ App.DataView = Backbone.View.extend({
         this.template = this.getTemplate(settings);
         this.model = {
             toJSON: function() {
-                return settings;
+                return _.clone(settings);
             }
         };
     },
@@ -340,15 +340,9 @@ App.DataView = Backbone.View.extend({
     },
     // Events
     dragStart: function(e) {
-        var dt = e.originalEvent.dataTransfer;
-        debugger;
-        if (this.model.dataType == "image") {
-            dt.setData("text/uri-list", e.originalEvent.target.src);
-            dt.setData("text/plain", e.originalEvent.target.src);
-        }
-        else {
-            dt.setTime(
-        }
+        var dt = e.originalEvent.dataTransfer,
+            transferData = this.model.toJSON(); 
+        dt.setData("text/plain", JSON.stringify(transferData));
     },
     dragEnd: function(e) {
         console.log('drag end');
@@ -1407,55 +1401,29 @@ App.TableAttributeCollectionView = App.TableView.extend({
 });
 
 // Stand Alone Content Card
-App.ContentDataView = Backbone.View.extend({
-    numberTemplate: Handlebars.templates.sa_card_content_number,
-    timeseriesTemplate: Handlebars.templates.sa_card_content_timeseries,
-    imageTemplate: Handlebars.templates.sa_card_content_image,
-    videoTemplate: Handlebars.templates.sa_card_content_video,
-    numberTemplate: Handlebars.templates.sa_card_content_number,
-    contentTemplate: Handlebars.templates.sa_card_content,
-    contentTemplateFields: {
-        content: "",
-        contentId: "",
-        srcTtitle: "",
-        src: ""
-    },
-    renderNumber: function() {
-    },
-    renderTimeSeries: function() {
-    },
-    renderFile: function() {
-    },
-    renderYoutubeLink: function() {
-    },
-    renderImage: function() {
-    },
-    renderText: function() {
-    },
-    renderFunc: function(renderType) {
-        var renderMap = {
-            number: this.renderNumber,
-            timeseries: this.renderTimeSeries,
-            file: this.renderFile,
-            image: this.renderImage,
-            video: this.renderVideo,
-            link: this.renderLink
+App.ContentDataView = (function() {
+    var templates = {
+        numberTemplate: Handlebars.templates.sa_content_number,
+        timeseriesTemplate: Handlebars.templates.sa_content_timeseries,
+        imageTemplate: Handlebars.templates.sa_content_image,
+        videoTemplate: Handlebars.templates.sa_content_video,
+        contentTemplate: Handlebars.templates.sa_card_content
+    };
+
+    return {
+        render: function(data) {
+            var templateName = data.dataType + "Template",
+                content = templates[templateName](data);
+                renderedContent = templates.contentTemplate({
+                    content: content,
+                    src: data.srcUrl,
+                    contentId: "",
+                    srcTtitle: "",
+                });
+            return renderedContent;
         }
-        return renderMap[renderType];
-    },
-    initialize: function(settings) {
-        this.dataList = settings.dataList;
-    },
-    render: function() {
-        var rendered = [],
-            that = this;
-        _(this.dataList).each(function(data) {
-            var renderFunc = that.renderFunc(data.dataType);
-            rendered.push(renderFunc());
-        });
-        return rendered;
     }
-});
+})();
 
 // Content Card
 App.StandaloneCardView = Backbone.View.extend({
@@ -1496,12 +1464,20 @@ App.StandaloneCardView = Backbone.View.extend({
     },
     addNewContent: function(e) {
         console.log("dropped");
-        
+        var tfData = JSON.parse(
+            e.originalEvent.dataTransfer.getData('text')),
+            renderedContent = App.ContentDataView.render(tfData);
+        this.$('.js-editzone').after(renderedContent);
     },
     changeProfilePicture: function(e) {
         console.log("dropped");
-        var profilePictureSrc = e.originalEvent.dataTransfer.getData('url');
-        this.$('.js-profile').attr('style', "background-image: url('"+profilePictureSrc+"');");
+        var tfData = JSON.parse(
+            e.originalEvent.dataTransfer.getData('text'));
+        if (tfData.dataType == "image") {
+            var profilePictureSrc = tfData.srcUrl;
+            this.$('.js-profile')
+                .attr('style', "background-image: url('"+profilePictureSrc+"');");
+        }
     }
 });
 

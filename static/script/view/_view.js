@@ -327,7 +327,7 @@ App.DataView = Backbone.View.extend({
         this.template = this.getTemplate(settings);
         this.model = {
             toJSON: function() {
-                return settings;
+                return _.clone(settings);
             }
         };
     },
@@ -339,15 +339,9 @@ App.DataView = Backbone.View.extend({
     },
     // Events
     dragStart: function(e) {
-        var dt = e.originalEvent.dataTransfer;
-        debugger;
-        if (this.model.dataType == "image") {
-            dt.setData("text/uri-list", e.originalEvent.target.src);
-            dt.setData("text/plain", e.originalEvent.target.src);
-        }
-        else {
-            dt.setTime(
-        }
+        var dt = e.originalEvent.dataTransfer,
+            transferData = this.model.toJSON(); 
+        dt.setData("text/plain", JSON.stringify(transferData));
     },
     dragEnd: function(e) {
         console.log('drag end');
