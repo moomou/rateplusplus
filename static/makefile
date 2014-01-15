@@ -19,6 +19,19 @@ $(VENDOROUT): $(VENDORSRC)
 .PHONY: vendor
 vendor: $(VENDOROUT)
 
+# Build views script
+VIEWSRC = script/view/_view.js \
+	      script/view/saCard.js \
+		  script/view/page_.js
+
+VIEWOUT = ./script/views.js
+
+$(VIEWOUT): $(VIEWSRC)
+	awk 'FNR==1{print ""}1' $^ > $@
+
+.PHONY: view
+view: $(VIEWOUT)
+
 # Build templates javascript
 TEMPLATESRC = $(wildcard script/template/*.handlebars)
 TEMPLATEOBJ = ${TEMPLATESRC:.handlebars=.js}
@@ -48,11 +61,14 @@ $(STYLEOUT): $(STYLEOBJ)
 style: $(STYLEOUT)
 
 .PHONY: all
-all: vendor template style
+all: vendor template style view
+
+.DEFAULT_GOAL := all
 
 .PHONY: clean
 clean:
 	-rm $(VENDOROUT)
+	-rm $(VIEWOUT)
 	-rm $(TEMPLATEOBJ)
 	-rm $(TEMPLATEOUT)
 	-rm $(STYLEOBJ)
