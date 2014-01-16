@@ -1,4 +1,24 @@
 // Stand Alone Content Card
+App.ContentRatingView = (function() {
+    var template = Handlebars.templates.sa_content_rating,
+        contentTemplate = Handlebars.templates.sa_card_content;
+
+    return {
+        renderStarRating: App.renderStarRating,
+        render: function(data) {
+            var upVote = data.upVote,
+                downVote = data.downVote;
+                data.stars = this.renderStarRating(upVote, downVote),
+                renderedContent = contentTemplate({
+                    content: template(data),
+                    src: '',
+                    contentId: "",
+                });
+            return renderedContent;
+        }
+    };
+})();
+
 App.ContentDataView = (function() {
     var templates = {
         numberTemplate: Handlebars.templates.sa_content_field,
@@ -33,6 +53,7 @@ App.StandaloneCardView = Backbone.View.extend({
         authorProfileUrl: ''
     },
     events: {
+        'click .js-full-screen': 'toggleFullscreen',
         'dragenter .js-editzone': 'highlightDropZone',
         'dragleave .js-editzone': 'unhighlightDropZone',
         'dragover .js-editzone': 'highlightDropZone',
@@ -45,13 +66,26 @@ App.StandaloneCardView = Backbone.View.extend({
     initialize: function() {
         // should get profile information
     },
-    render: function() {
+    render: function(presentationMode) {
         var renderData = _.clone(this.standaloneCardTemplateFields);
         renderData.authorName = getCookie("username");
+        renderData.editing = !presentationMode;
+
         this.$el.html(this.saCardTemplate(renderData));
+        this.$el.attr('style', 'background: white;');
         return this;
     },
     // Events
+    toggleFullscreen: function(e) {
+        if (this.$el.hasClass('widearea-overlayLayer')) {
+            this.$el.removeClass('widearea-overlayLayer');
+            this.$el.find('.info-card').removeClass('presentation');
+        }
+        else {
+            this.$el.addClass('widearea-overlayLayer');
+            this.$el.find('.info-card').addClass('presentation');
+        }
+    },
     highlightDropZone: function(e) {
         e.preventDefault();
         this.$('.js-editzone').addClass('content-highlight');
@@ -63,7 +97,15 @@ App.StandaloneCardView = Backbone.View.extend({
         console.log("dropped");
         var tfData = JSON.parse(
             e.originalEvent.dataTransfer.getData('text')),
+            renderedContent = null;
+
+        if (tfData.dataType) {
             renderedContent = App.ContentDataView.render(tfData);
+        }
+        else {
+            renderedContent = App.ContentRatingView.render(tfData);
+        }
+
         this.$('.js-editzone').after(renderedContent);
     },
     changeProfilePicture: function(e) {

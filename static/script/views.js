@@ -38,7 +38,7 @@ App.GlobalWidget.rankingPrivacy.tooltip();
  * Common Utility Function
  */
 // Used completely for its side effect
-var updateSessionStorageRankingView = function(currentRankingInd) {
+App.updateSessionStorageRankingView = function(currentRankingInd) {
     currentRankingInd = parseInt(currentRankingInd);
 
     var allRankings = sessionStorage.getItem("allRankings") &&
@@ -52,7 +52,36 @@ var updateSessionStorageRankingView = function(currentRankingInd) {
 
     sessionStorage.setItem("rankingView", JSON.stringify(currentRanking));
     sessionStorage.setItem("currentRankingInd", currentRankingInd);
-}
+};
+
+App.renderStarRating = function(upVote, downVote) {
+    var starGen = function(stars) {
+        var starDOM = function(className) {
+            return "<i class='fa fa-" + className + "'></i>";
+        },
+        result = '';
+
+        for (var i = 0; i < 5; i++) {
+            if (stars >= 1) {
+                result += starDOM('star');
+            }
+            else if (stars >= 0.5) {
+                result += starDOM('star-half-full');
+            }
+            else {
+                result += starDOM('star-o');
+            }
+            stars -= 1;
+        }
+
+        return result;
+    },
+    score = upVote / (upVote + downVote),
+    stars = score * 5,
+    starDOM = starGen(stars);
+    
+    return starDOM;
+};
 
 /**
  * Individual Model Views
@@ -125,54 +154,6 @@ App.EntityView = Backbone.View.extend({
     },
 });
 
-App.AttributeSimpleView = Backbone.View.extend({
-    template: Handlebars.templates.attributeRow_simple,
-    initialize: function() {
-       var that = this,
-            updateStarRatingType = function() {
-                that.model.set('ratingType',
-                    that.model.get('tone') == App.POSITIVE ? "goldStar" : 'blackStar');
-            };
-
-        updateStarRatingType();
-    },
-    render: function() {
-        console.log('AttributeView Render');
-
-        var model = this.model;
-        this.$el.html(this.template(model.toJSON()));
-        this.renderStarRating(model.get('upVote'), model.get('downVote'));
-    },
-    renderStarRating: function(canvas, upVote, downVote) {
-        var starGen = function(stars) {
-            var starDOM = function(className) {
-                return "<i class='fa-" + className + "'></i>";
-            },
-            result = '';
-
-            for (var i = 0; i < 5; i++) {
-                if (stars >= 1) {
-                    result += starDOM('star');
-                }
-                else if (stars >= 0.5) {
-                    result += starDOM('star-half-full');
-                }
-                else {
-                    result += starDOM('star-empty');
-                }
-                stars -= 1;
-            }
-
-            return result;
-        },
-        score = upVote / (upVote + downVote),
-        stars = score * 5,
-        starDOM = starGen(stars);
-
-        canvas.removeClass('hidden').html(starDOM);
-    },
-});
-
 App.AttributeView = Backbone.View.extend({
     template: Handlebars.templates.attributeRow,
     editTemplate: Handlebars.templates.attributeRow_edit,
@@ -184,6 +165,9 @@ App.AttributeView = Backbone.View.extend({
         'click .voteBtn': 'attrVote',
         'click .tone': 'toneChange',
         'focusout .attrName': 'editName',
+        // drag events
+        'dragstart': 'dragStart',
+        'dragend': 'dragEnd'
     },
     initialize: function(inactive) {
         console.log("AttrView init")
@@ -232,40 +216,16 @@ App.AttributeView = Backbone.View.extend({
             this.$('.voteBtns').hide();
             this.$('.progress').fadeToggle();
             this.$('.rating').removeClass('hidden');
-            this.renderStarRating(this.$('.rating'),
-                model.get('upVote'), model.get('downVote'));
+            this.$('.rating')
+                .removeClass('hidden')
+                .append(this.renderStarRating(
+                    model.get('upVote'), model.get('downVote')));
         }
 
+        this.$el.attr('draggable', 'true');
         return this;
     },
-    renderStarRating: function(canvas, upVote, downVote) {
-        var starGen = function(stars) {
-            var starDOM = function(className) {
-                return "<i class='fa fa-" + className + "'></i>";
-            },
-            result = '';
-
-            for (var i = 0; i < 5; i++) {
-                if (stars >= 1) {
-                    result += starDOM('star');
-                }
-                else if (stars >= 0.5) {
-                    result += starDOM('star-half-full');
-                }
-                else {
-                    result += starDOM('star-empty');
-                }
-                stars -= 1;
-            }
-
-            return result;
-        },
-        score = upVote / (upVote + downVote),
-        stars = score * 5,
-        starDOM = starGen(stars);
-
-        canvas.removeClass('hidden').html(starDOM);
-    },
+    renderStarRating: App.renderStarRating,
     // Event Handler
     attrVote: function(e) {
         e.preventDefault();
@@ -306,6 +266,14 @@ App.AttributeView = Backbone.View.extend({
             this.$('.toneText').html('negative');
         }
     },
+    dragStart: function(e) {
+        var dt = e.originalEvent.dataTransfer,
+            transferData = this.model.toJSON();
+        dt.setData("text/plain", JSON.stringify(transferData));
+    },
+    dragEnd: function(e) {
+        console.log('drag end');
+    }
 });
 
 App.DataView = Backbone.View.extend({
@@ -341,7 +309,7 @@ App.DataView = Backbone.View.extend({
     // Events
     dragStart: function(e) {
         var dt = e.originalEvent.dataTransfer,
-            transferData = this.model.toJSON(); 
+            transferData = this.model.toJSON();
         dt.setData("text/plain", JSON.stringify(transferData));
     },
     dragEnd: function(e) {
@@ -739,7 +707,7 @@ App.ProfileRowView = Backbone.View.extend({
         var currentRankingInd = this.model.sessionStorageInd;
 
         if (_.isNumber(currentRankingInd)) {
-            updateSessionStorageRankingView(currentRankingInd);
+            App.updateSessionStorageRankingView(currentRankingInd);
         }
 
         // Remove ranking session if any
@@ -941,7 +909,7 @@ App.RankListIconView = Backbone.View.extend({
     updateSessionStorage: function(e) {
         var currentRankingInd = this.model.sessionStorageInd;
         if (_.isNumber(currentRankingInd)) {
-            updateSessionStorageRankingView(currentRankingInd);
+            App.updateSessionStorageRankingView(currentRankingInd);
         }
     }
 });
@@ -1401,6 +1369,26 @@ App.TableAttributeCollectionView = App.TableView.extend({
 });
 
 // Stand Alone Content Card
+App.ContentRatingView = (function() {
+    var template = Handlebars.templates.sa_content_rating,
+        contentTemplate = Handlebars.templates.sa_card_content;
+
+    return {
+        renderStarRating: App.renderStarRating,
+        render: function(data) {
+            var upVote = data.upVote,
+                downVote = data.downVote;
+                data.stars = this.renderStarRating(upVote, downVote),
+                renderedContent = contentTemplate({
+                    content: template(data),
+                    src: '',
+                    contentId: "",
+                });
+            return renderedContent;
+        }
+    };
+})();
+
 App.ContentDataView = (function() {
     var templates = {
         numberTemplate: Handlebars.templates.sa_content_field,
@@ -1435,6 +1423,7 @@ App.StandaloneCardView = Backbone.View.extend({
         authorProfileUrl: ''
     },
     events: {
+        'click .js-full-screen': 'toggleFullscreen',
         'dragenter .js-editzone': 'highlightDropZone',
         'dragleave .js-editzone': 'unhighlightDropZone',
         'dragover .js-editzone': 'highlightDropZone',
@@ -1447,13 +1436,26 @@ App.StandaloneCardView = Backbone.View.extend({
     initialize: function() {
         // should get profile information
     },
-    render: function() {
+    render: function(presentationMode) {
         var renderData = _.clone(this.standaloneCardTemplateFields);
         renderData.authorName = getCookie("username");
+        renderData.editing = !presentationMode;
+
         this.$el.html(this.saCardTemplate(renderData));
+        this.$el.attr('style', 'background: white;');
         return this;
     },
     // Events
+    toggleFullscreen: function(e) {
+        if (this.$el.hasClass('widearea-overlayLayer')) {
+            this.$el.removeClass('widearea-overlayLayer');
+            this.$el.find('.info-card').removeClass('presentation');
+        }
+        else {
+            this.$el.addClass('widearea-overlayLayer');
+            this.$el.find('.info-card').addClass('presentation');
+        }
+    },
     highlightDropZone: function(e) {
         e.preventDefault();
         this.$('.js-editzone').addClass('content-highlight');
@@ -1465,7 +1467,15 @@ App.StandaloneCardView = Backbone.View.extend({
         console.log("dropped");
         var tfData = JSON.parse(
             e.originalEvent.dataTransfer.getData('text')),
+            renderedContent = null;
+
+        if (tfData.dataType) {
             renderedContent = App.ContentDataView.render(tfData);
+        }
+        else {
+            renderedContent = App.ContentRatingView.render(tfData);
+        }
+
         this.$('.js-editzone').after(renderedContent);
     },
     changeProfilePicture: function(e) {
