@@ -1,4 +1,5 @@
 @import "mixins";
+@import "common";
 
 body {
   margin: 1em;
@@ -86,3 +87,8 @@ ul {
     }
   }
 }
+.info-card.presentation {
+  @include box-shadow-none();
+  @extend .absCenter;
+}
+
