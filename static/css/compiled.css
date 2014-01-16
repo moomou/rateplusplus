@@ -304,6 +304,8 @@ ul {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none; }
+  .info-card.presentation .content.editing {
+    display: none; }
 
 .sa-editor {
   position: fixed;

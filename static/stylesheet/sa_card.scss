@@ -90,5 +90,8 @@ ul {
 .info-card.presentation {
   @include box-shadow-none();
   @extend .absCenter;
+  .content.editing {
+    display: none;
+  }
 }
 
