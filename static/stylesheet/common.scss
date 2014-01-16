@@ -1,7 +1,13 @@
+@import "mixins";
+
 // remove link highliht
 .btn-like {
   text-decoration: none !important;
   color: black !important;
+}
+
+.noOutline {
+  outline: 0px solid transparent;
 }
 
 .highlight {
@@ -13,5 +19,30 @@
 }
 
 .webkit-layer {
-  -webkit-transform: translateZ(0);
+  @include transform(translateZ(0));
+}
+
+.noSelect {
+  @include no-select();
+}
+.noSelect:focus {
+  outline: 0px solid transparent;
+}
+
+.absCenter {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.center {
+  display: block;
+  margin: 0 auto;
+}
+
+.cursor-pointer {
+  cursor:pointer;
 }

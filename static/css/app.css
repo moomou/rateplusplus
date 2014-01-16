@@ -161,32 +161,6 @@ ul {
   list-style-type: none;
 }
 
-.noSelect {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.noSelect:focus {
-  outline: 0;
-}
-
-.absCenter {
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-}
-
-.center {
-  display: block;
-  margin: 0 auto;
-}
 .text-h-center {
   text-align: center !important;
 }
@@ -363,13 +337,6 @@ ul {
     top: -20px; left: 0; bottom: 0; right: 5px;
   }
 
-
-.plain-btn {
-  background: none;
-}
-.cursor-pointer {
-  cursor:pointer;
-}
 .progress {
   height: 2px;
   margin: 0;
