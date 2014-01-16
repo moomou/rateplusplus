@@ -47,8 +47,6 @@ ul {
     }
   }
   .content {
-    @include border-radius(10px);
-    @include box-shadow(0, 0, 2px, rgba(0, 0, 0, 0.18));
     position: relative;
     padding: 10px;
     margin-bottom: 10px;
