@@ -394,7 +394,7 @@ function program5(depth0,data) {
   if (stack1 = helpers.profileIconUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.profileIconUrl); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
-    + "');\"></div>\n    <ul class=\"meta pull-left\">\n      <li class=\"name\" contenteditable='";
+    + "');\"></div>\n    <ul class=\"meta pull-left\">\n      <li class=\"name noOutline\" contenteditable='";
   if (stack1 = helpers.editing) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.editing); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
@@ -402,7 +402,7 @@ function program5(depth0,data) {
   if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.title); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</li>\n      <li class=\"hash\" contenteditable='";
+    + "</li>\n      <li class=\"hash noOutline\" contenteditable='";
   if (stack1 = helpers.editing) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.editing); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
