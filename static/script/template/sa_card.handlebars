@@ -2,12 +2,17 @@
   <div class="header">
     <div class="profile pull-left js-profile" style="background-image: url('{{profileIconUrl}}');"></div>
     <ul class="meta pull-left">
-      <li class="name"> {{title}}</li>
-      <li class="hash"> {{hashTag}}</li>
+      <li class="name" contenteditable='{{editing}}'> {{title}}</li>
+      <li class="hash" contenteditable='{{editing}}'> {{hashTag}}</li>
     </ul>
     <ul class="action">
-      <li><i class="fa fa-arrows-alt fa-lg js-full-screen"></i></li>
+      {{#if editing}}
       <li><i class="fa fa-minus fa-lg js-hide-screen"></i></li>
+      <li><i class="fa fa-arrows-alt fa-lg js-full-screen"></i></li>
+      {{else}}
+      <li><i class="fa fa-code-fork fa-lg js-fork"></i></li>
+      <li><i class="fa fa-envelope-o fa-lg js-send"></i></li>
+      {{/if}}
     </ul>
   </div>
   <hr>
@@ -21,7 +26,7 @@
     </div>
   </div>
   <div class="footer">
-    <div class="edit-tool pull-left">
+    <div class="edit-tool pull-left {{#if editing}} hide {{/if}}">
       <button class="btn btn-small btn-success">Save</button>
     </div>
     <div class="by pull-right">By <a href="{{authorProfileUrl}}" class="">{{authorName}}</a>
