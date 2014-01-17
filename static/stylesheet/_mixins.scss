@@ -73,5 +73,7 @@
 }
 
 @mixin transform($transform) {
+  transform: $transform;
+  -ms-transform: $transform;
   -webkit-transform: $transform;
 }

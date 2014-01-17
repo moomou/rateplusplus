@@ -334,6 +334,8 @@ ul {
   opacity: 0.5; }
 
 .webkit-layer, .sa-editor {
+  transform: translateZ(0);
+  -ms-transform: translateZ(0);
   -webkit-transform: translateZ(0); }
 
 .noSelect {
@@ -368,9 +370,10 @@ ul {
   box-shadow: none; }
 
 .sa-editor {
+  transform: translate(-150%, 10%);
+  -ms-transform: translate(-150%, 10%);
+  -webkit-transform: translate(-150%, 10%);
   position: fixed;
-  background-color: white;
   display: block;
-  right: 15px;
-  bottom: 40px;
+  background-color: white;
   z-index: 9999; }

@@ -1,14 +1,13 @@
 @import "common";
+@import "mixins";
 
 .sa-editor {
   @extend .webkit-layer;
+  @include transform(translate(-150%, 10%));
   position: fixed;
-  background-color: white;
   display: block;
-  right: 15px;
-  bottom: 40px;
+  background-color: white;
   z-index: 9999;
-
   .body {
   }
 }
