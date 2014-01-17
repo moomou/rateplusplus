@@ -390,7 +390,7 @@ function program5(depth0,data) {
   return " hide ";
   }
 
-  buffer += "<div class=\"js-scroll-container\">\n  <div class=\"info-card\">\n    <div class=\"header\">\n      <div class=\"profile pull-left js-profile\" style=\"background-image: url('";
+  buffer += "<div class=\"scroll-container js-scroll-container\">\n  <div class=\"info-card\">\n    <div class=\"header\">\n      <div class=\"profile pull-left js-profile\" style=\"background-image: url('";
   if (stack1 = helpers.profileIconUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.profileIconUrl); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)

@@ -54,6 +54,9 @@
   text-decoration: none !important;
   color: black !important; }
 
+.scroll-container {
+  overflow: hidden; }
+
 .noOutline {
   outline: 0px solid transparent; }
 
@@ -180,6 +183,9 @@
 .btn-like {
   text-decoration: none !important;
   color: black !important; }
+
+.scroll-container {
+  overflow: hidden; }
 
 .noOutline {
   outline: 0px solid transparent; }
