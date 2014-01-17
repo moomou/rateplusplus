@@ -196,7 +196,9 @@
 .unhighlight {
   opacity: 0.5; }
 
-.webkit-layer {
+.webkit-layer, .info-card {
+  transform: translateZ(0);
+  -ms-transform: translateZ(0);
   -webkit-transform: translateZ(0); }
 
 .noSelect {
@@ -333,7 +335,7 @@ ul {
 .unhighlight {
   opacity: 0.5; }
 
-.webkit-layer, .sa-editor {
+.webkit-layer {
   transform: translateZ(0);
   -ms-transform: translateZ(0);
   -webkit-transform: translateZ(0); }
