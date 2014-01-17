@@ -95,8 +95,8 @@ ul {
 .info-card.presentation {
   @include box-shadow-none();
   @extend .absCenter;
+  overflow-y: scroll;
   .content.editing {
     display: none;
   }
 }
-
