@@ -3,7 +3,7 @@
 
 .sa-editor {
   @extend .webkit-layer;
-  @include transform(translate(-150%, 10%));
+  @include transform(translate(150%, 10%));
   position: fixed;
   display: block;
   background-color: white;
