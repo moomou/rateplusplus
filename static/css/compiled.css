@@ -370,10 +370,9 @@ ul {
   box-shadow: none; }
 
 .sa-editor {
-  transform: translate(150%, 10%);
-  -ms-transform: translate(150%, 10%);
-  -webkit-transform: translate(150%, 10%);
   position: fixed;
-  display: block;
   background-color: white;
+  display: block;
+  right: 15px;
+  bottom: 40px;
   z-index: 9999; }
