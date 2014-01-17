@@ -35,6 +35,10 @@ ul {
       li { 
         float: left;
         margin: 0 5px;
+        opacity: 0.5;
+      }
+      li:hover {
+        opacity: 0.75;
       }
     }
     .meta {
@@ -87,6 +91,7 @@ ul {
     }
   }
 }
+
 .info-card.presentation {
   @include box-shadow-none();
   @extend .absCenter;

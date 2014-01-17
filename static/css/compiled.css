@@ -258,7 +258,10 @@ ul {
       float: right; }
       .info-card .header .action li {
         float: left;
-        margin: 0 5px; }
+        margin: 0 5px;
+        opacity: 0.5; }
+      .info-card .header .action li:hover {
+        opacity: 0.75; }
     .info-card .header .meta .name {
       font-size: 25px; }
     .info-card .header .meta .hash {
