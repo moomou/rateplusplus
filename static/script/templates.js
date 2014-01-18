@@ -375,7 +375,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   
-  return "\n        <li><i class=\"fa fa-minus fa-lg cursor-pointer js-hide-screen\"></i></li>\n        <li><i class=\"fa fa-arrows-alt fa-lg cursor-pointer js-full-screen\"></i></li>\n        ";
+  return "\n        <li><i class=\"fa fa-minus fa-lg cursor-pointer js-hide-screen\"></i></li>\n        <li><i class=\"fa fa-globe fa-lg cursor-pointer js-full-screen\"></i></li>\n        ";
   }
 
 function program3(depth0,data) {
