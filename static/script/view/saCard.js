@@ -77,13 +77,25 @@ App.StandaloneCardView = Backbone.View.extend({
     },
     // Events
     toggleFullscreen: function(e) {
+
         if (this.$el.hasClass('widearea-overlayLayer')) {
             this.$el.removeClass('widearea-overlayLayer');
-            this.$el.find('.info-card').removeClass('presentation');
+            this.$('.js-scroll-container')
+                .removeClass('scroll-container absCenter')
+                .attr('style', '');
+            this.$el.find('.info-card')
+                .removeClass('presentation')
+                .attr('style', '');
         }
         else {
+            var halfWidth = Math.floor(window.screen.width/2);
             this.$el.addClass('widearea-overlayLayer');
-            this.$el.find('.info-card').addClass('presentation');
+            this.$('.js-scroll-container')
+                .addClass('scroll-container absCenter')
+                .attr('style', 'width: '+halfWidth+'px;');
+            this.$el.find('.info-card')
+                .addClass('presentation')
+                .attr('style', 'width: '+(halfWidth-25)+'px;');
         }
     },
     highlightDropZone: function(e) {
@@ -91,10 +103,12 @@ App.StandaloneCardView = Backbone.View.extend({
         this.$('.js-editzone').addClass('content-highlight');
     },
     unhighlightDropZone: function(e) {
+        e.preventDefault();
         this.$('.js-editzone').removeClass('content-highlight');
     },
     addNewContent: function(e) {
         console.log("dropped");
+        e.preventDefault();
         var tfData = JSON.parse(
             e.originalEvent.dataTransfer.getData('text')),
             renderedContent = null;
@@ -110,6 +124,7 @@ App.StandaloneCardView = Backbone.View.extend({
     },
     changeProfilePicture: function(e) {
         console.log("dropped");
+        e.preventDefault();
         var tfData = JSON.parse(
             e.originalEvent.dataTransfer.getData('text'));
         if (tfData.dataType == "image") {
