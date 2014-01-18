@@ -22,7 +22,7 @@ function program3(depth0,data) {
   return " /static/img/blank.png ";
   }
 
-  buffer += "<td class='ranking tdDivider'>\n  <input type='text' value='"
+  buffer += "<td style=\"width: 15%; text-align: center !important;\" class='tdDivider'>\n  <input type='text' value='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.summary)),stack1 == null || stack1 === false ? stack1 : stack1.avgScore)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' class='pull-left idial span1'>\n  <span class='pull-left sdial'>"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.summary)),stack1 == null || stack1 === false ? stack1 : stack1.avgScore)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
