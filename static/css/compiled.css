@@ -180,6 +180,51 @@
   background-image: none;
   border: none; }
 
+.rankContainer {
+  margin-top: 25px; }
+
+.rankbar {
+  margin-top: -19px;
+  max-height: 45px;
+  padding-top: 5px; }
+  .rankbar #rankingName {
+    float: left !important;
+    margin-right: 25px; }
+  .rankbar .rankingList li {
+    position: relative;
+    margin: -5px 5px 0 0;
+    width: 35px;
+    float: left; }
+  .rankbar .rankingListProfile li {
+    position: relative;
+    margin: 0px 5px 0 0;
+    width: 35px;
+    float: left; }
+
+#rankingPrivacy, #rankingFork {
+  float: left;
+  cursor: pointer;
+  margin-right: 0.5em;
+  margin-top: -0.25em; }
+
+.rankingContainer {
+  display: block;
+  position: relative; }
+  .rankingContainer .rankingNo.shadow {
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.18); }
+  .rankingContainer .rankingNo, .rankingContainer .rankIcon {
+    font-size: 10px;
+    color: white;
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    margin: auto;
+    position: absolute;
+    top: -20px;
+    left: 0;
+    bottom: 0;
+    right: 5px; }
+
 .btn-like {
   text-decoration: none !important;
   color: black !important; }
