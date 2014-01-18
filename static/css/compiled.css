@@ -374,6 +374,7 @@ ul {
       margin: -3px 2px 0 2px; }
 
 .info-card.presentation {
+  margin-top: 35px;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;

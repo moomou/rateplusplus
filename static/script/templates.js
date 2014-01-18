@@ -179,6 +179,35 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 (function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['detail_ranking'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div class=\"container\" style=\"margin: 10px 10px 5px 0; width: 100%;\">\n  <div class=\"pull-right\" style=\"font-size: 25px; line-height: 50px;\">\n    ";
+  if (stack1 = helpers.name) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.name); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n    <a href=\"";
+  if (stack1 = helpers.srcUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.srcUrl); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"><i class=\"fa fa-info-circle\"></i></a>\n  </div>\n  <div class=\"pull-left\" style=\" position: relative;\">\n    <svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" style=\"width: 60px; height: 60px;\">\n    <circle cx=\"50%\" cy=\"50%\" r=\"50%\" fill=\"";
+  if (stack1 = helpers.color) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.color); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"></circle>\n    <text x=\"50%\" dy=\"50%\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"white\" style=\"font-size: 25px;\">No. ";
+  if (stack1 = helpers.rank) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.rank); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</text>\n    </svg>\n  </div>\n</div>\n";
+  return buffer;
+  });
+})();
+
+(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['entityDescription'] = template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
@@ -311,27 +340,6 @@ function program3(depth0,data) {
     + " Votes</li>\n    <li><i class='fa fa-cloud'></i> "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.summary)),stack1 == null || stack1 === false ? stack1 : stack1.totalAttribute)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + " Attributes</li>\n  </ul>\n</td>\n";
-  return buffer;
-  });
-})();
-
-(function() {
-  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
-templates['ranking_li'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<li><span class='attrName'> ";
-  if (stack1 = helpers.rank) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = (depth0 && depth0.rank); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</span> in ";
-  if (stack1 = helpers.rankingTag) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = (depth0 && depth0.rankingTag); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</li>\n";
   return buffer;
   });
 })();
@@ -471,6 +479,31 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   else { stack1 = (depth0 && depth0.srcUrl); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
     + "\">\n";
+  return buffer;
+  });
+})();
+
+(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['sa_content_ranking'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div class=\"container\" style=\"margin: 10px 10px 5px 0; width: 100%;\">\n  <div class=\"pull-right\" style=\"font-size: 25px; line-height: 50px;\">\n    ";
+  if (stack1 = helpers.name) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.name); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n  </div>\n  <div class=\"pull-left\" style=\" position: relative;\">\n    <svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" style=\"width: 60px; height: 60px;\">\n    <circle cx=\"50%\" cy=\"50%\" r=\"50%\" fill=\"";
+  if (stack1 = helpers.color) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.color); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\"></circle>\n    <text x=\"50%\" dy=\"50%\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"white\" style=\"font-size: 25px;\">No. ";
+  if (stack1 = helpers.rank) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.rank); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</text>\n    </svg>\n  </div>\n</div>\n";
   return buffer;
   });
 })();

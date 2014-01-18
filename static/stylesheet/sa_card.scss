@@ -93,6 +93,7 @@ ul {
 }
 
 .info-card.presentation {
+  margin-top: 35px;
   @include box-shadow-none();
   @extend .absCenter;
   overflow-y: scroll;
