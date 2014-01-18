@@ -225,6 +225,26 @@
     bottom: 0;
     right: 5px; }
 
+.rankingTable tr {
+  -webkit-transition: border-color;
+  -webkit-transition-duration: 0.2s;
+  -webkit-transition-timing-function: linear;
+  -webkit-transition-delay: 0s;
+  -moz-transition: border-color;
+  -moz-transition-duration: 0.2s;
+  -moz-transition-timing-function: linear;
+  -moz-transition-delay: 0s; }
+
+.rankingTable tr:hover {
+  border-color: gray; }
+
+.rankingTable tr th {
+  font-size: 21px; }
+
+.ranking {
+  margin: 5px;
+  float: left; }
+
 .btn-like {
   text-decoration: none !important;
   color: black !important; }

@@ -77,3 +77,15 @@
   -ms-transform: $transform;
   -webkit-transform: $transform;
 }
+
+@mixin transition($property, $duration, $function, $delay) {
+  -webkit-transition:$property;
+  -webkit-transition-duration:$duration;
+  -webkit-transition-timing-function:$function;
+  -webkit-transition-delay:$delay;
+
+  -moz-transition:$property;
+  -moz-transition-duration:$duration;
+  -moz-transition-timing-function:$function;
+  -moz-transition-delay:$delay;
+}
