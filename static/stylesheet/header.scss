@@ -1,0 +1,40 @@
+@import "mixins";
+
+#searchForm {
+  margin: 1em 0 1em 0;
+  .searchBar {
+    @include box-shadow-none();
+    @include border-radius(0px);
+    @include transition(width, 0.20s, linear, 0s);
+    border: none;
+    border-bottom: 1px solid rgb(219, 219, 219);
+    font-family: FontAwesome;
+    opacity: 0.5;
+  }
+  .searchBar:hover {
+    opacity: 1;
+  }
+  .searchBar:focus {
+    opacity: 1;
+    width: 275px;
+  }
+}
+
+#message-box {
+  margin: 2em 5em 0 5em;
+  #searchTerm {
+    color: #EE796C;
+    font-weight: bold;
+  }
+}
+
+.home-btn {
+  font-size: 32px;
+  margin: 15px 0px 10px 0px;
+  padding-right: 1em;
+}
+
+.head-nav {
+  margin-top: 8px !important;
+  font-size: 17px;
+}

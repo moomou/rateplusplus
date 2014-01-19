@@ -6,33 +6,6 @@ textarea {
   resize: none;
 }
 
-/*Searchform*/
-#searchForm {
-  margin: 1em 0 1em 0;
-}
-.searchBar {
-  background: rgb(105, 213, 71);
-}
-.searchBar:hover {
-  opacity: 0.98;
-}
-.searchBar:focus {
-  width: 275px;
-  transition: width 0.25s;
-  -webkit-transition: width 0.25s;
-  transition-property: width;
-  transition-duration: 0.25s;
-  transition-timing-function: linear;
-}
-
-#message-box {
-  margin: 2em 5em 0 5em;
-  }
-  #searchTerm {
-    color: #EE796C;
-    font-weight: bold;
-}
-
 /*signup form*/
 .signup-form {
   max-width: 700px;
@@ -56,34 +29,6 @@ textarea {
   padding: 19px 29px 29px;
 }
 
-/* Header */
-.logo {
-  content: ' 2006';
-  position: relative;
-  height: 0.095em;
-  box-shadow: 0.35em 0.35em 0 0.25em rgb(0, 187, 22), 1.05em 0.35em 0 0.25em rgb(173, 255, 0), 0.35em 0.97em 0 0.25em rgb(98, 244, 0), 1.05em 0.97em 0 0.25em rgb(27, 206, 3);
-  border-radius: 1px;
-  display: block;
-  width: 7px;
-  left: 4.5em;
-  top: -10px;
-}
-.subtle {
-  opacity: 0.25;
-}
-.subtle:hover {
-  opacity: 0.75;
-}
-.home-btn {
-  font-size: 32px;
-  margin: 15px 0px 10px 0px;
-  padding-right: 1em;
-}
-.head-nav {
-  margin-top: 8px !important;
-  font-size: 17px;
-}
-
 /* Custom container */
 .container-narrow, .container-footer {
   margin: 0 auto;
@@ -95,24 +40,6 @@ textarea {
   }
   .container-landing {
     margin: 0 auto;
-}
-.sideMenuContainer {
-  margin: 1em 0 0 1em;
-  display: none;
-  }
-  .sideMenuHomeBtn {
-    padding-top: 0.4em;
-    display: block;
-    color: gray;
-    margin-bottom: 0.5em;
-    font-size: 32px;
-  }
-  .item {
-    color: gray;
-    cursor: pointer;
-  }
-  .item>i {
-    margin-right: 1em;
 }
 
 /* Main marketing message and sign up button */

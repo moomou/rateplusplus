@@ -54,3 +54,10 @@
 .no-shadow {
   @include box-shadow-none();
 }
+
+.subtle {
+  opacity: 0.25;
+}
+.subtle:hover {
+  opacity: 0.75;
+}
