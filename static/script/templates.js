@@ -431,7 +431,7 @@ function program11(depth0,data) {
   buffer += "\n        </li>\n      </ul>\n      <ul class=\"action\">\n        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.editing), {hash:{},inverse:self.program(11, program11, data),fn:self.program(9, program9, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n      </ul>\n    </div>\n    <hr>\n   <div class=\"content editing editzone js-editzone\">\n      <div class=\"instruction\">\n        <div class=\"inner\">\n          <i class=\"fa fa-arrow-circle-o-down fa-2x\"></i>\n          <br>\n          <span class=\"\">Drag Content Here</span>\n        </div>\n      </div>\n    </div>\n    <div class=\"footer\">\n      <div class=\"edit-tool pull-left\">\n        <button class=\"btn btn-small btn-success\">Save</button>\n      </div>\n      <div class=\"by pull-right\">By <a href=\"";
+  buffer += "\n      </ul>\n    </div>\n    <hr>\n   <div class=\"content editing editzone js-editzone\">\n      <div class=\"instruction\">\n        <div class=\"inner\">\n          <i class=\"fa fa-arrow-circle-o-down fa-2x\"></i>\n          <br>\n          <span class=\"\">Drop Content Here</span>\n        </div>\n      </div>\n    </div>\n    <div class=\"footer\">\n      <div class=\"edit-tool pull-left\">\n        <button class=\"btn btn-small btn-success\">Save</button>\n      </div>\n      <div class=\"by pull-right\">By <a href=\"";
   if (stack1 = helpers.authorProfileUrl) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.authorProfileUrl); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
@@ -456,7 +456,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.contentId) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.contentId); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\">\n  <span style=\"margin-left: -15px;\" class=\"close pull-left\"></span>\n  ";
+    + "\">\n  <span style=\"margin-left: -15px;\" class=\"close pull-left\">&times;</span>\n  ";
   if (stack1 = helpers.content) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.content); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   if(stack1 || stack1 === 0) { buffer += stack1; }

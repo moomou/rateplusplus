@@ -95,7 +95,7 @@ ul {
   }
   .content.editing {
     .close {
-      display: static;
+      display: block !important;
     }
   }
   .content {

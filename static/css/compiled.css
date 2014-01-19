@@ -432,7 +432,7 @@ ul {
     border: 5px dashed whitesmoke;
     height: 150px; }
   .info-card .content.editing .close {
-    display: static; }
+    display: block !important; }
   .info-card .content .close {
     display: none; }
   .info-card .content-highlight {
