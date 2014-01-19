@@ -5,7 +5,7 @@
 
         {% if SEARCH_ENABLED %}
         <form method="GET" id="searchForm" class="navbar-search" action="{% url 'default.views.PageHandler' %}">
-          <input type="search" class="span2 searchBar" name='q' id="searchInput" type="text" placeholder="Search" value="{{QUERY}}">
+          <input type="search" class="span2 searchBar" name='q' id="searchInput" type="text" placeholder="&#xf002 Search" value="{{QUERY}}">
         </form>
         {% endif %}
 
