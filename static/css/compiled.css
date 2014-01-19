@@ -404,7 +404,9 @@ ul {
       border: none; }
     .info-card .header .meta .title-input {
       font-size: 25px;
-      line-height: 30px; }
+      line-height: 30px;
+      height: 30px;
+      margin-bottom: -5px; }
     .info-card .header .meta .tag-input {
       font-size: 15px;
       line-height: 20px; }
