@@ -3,8 +3,20 @@
     <div class="header">
       <div class="profile pull-left js-profile" style="background-image: url('{{profileIconUrl}}');"></div>
       <ul class="meta pull-left">
-        <li class="name noOutline" contenteditable='{{editing}}'> {{title}}</li>
-        <li class="hash noOutline" contenteditable='{{editing}}'> {{hashTag}}</li>
+        <li class="name">
+          {{#if editing}}
+          <input class="title-input" placeholder="Title" type="text">
+          {{else}}
+            {{title}}
+          {{/if}}
+        </li>
+        <li class="hash noOutline" contenteditable='{{editing}}'> 
+          {{#if editing}}
+          <input class="tag-input" placeholder="#hashTag" type="text">
+          {{else}}
+            {{hashTag}}
+          {{/if}}
+        </li>
       </ul>
       <ul class="action">
         {{#if editing}}
