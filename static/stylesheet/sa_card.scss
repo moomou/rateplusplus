@@ -23,6 +23,10 @@ ul {
 }
 
 .info-card {
+  .minimize {
+    display: none;
+  }
+
   @extend .webkit-layer;
   @include box-shadow(0, 0, 1px, rgba(0, 0, 0, 0.35));
   position: relative;

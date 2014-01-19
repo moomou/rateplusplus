@@ -425,11 +425,7 @@ function program11(depth0,data) {
     + "');\"></div>\n      <ul class=\"meta pull-left\">\n        <li class=\"name\">\n          ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.editing), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n        </li>\n        <li class=\"hash noOutline\" contenteditable='";
-  if (stack1 = helpers.editing) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = (depth0 && depth0.editing); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "'> \n          ";
+  buffer += "\n        </li>\n        <li class=\"hash noOutline\">\n          ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.editing), {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n        </li>\n      </ul>\n      <ul class=\"action\">\n        ";

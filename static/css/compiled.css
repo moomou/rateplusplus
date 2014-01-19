@@ -382,6 +382,8 @@ ul {
   position: relative;
   padding: 15px 15px 0 15px;
   width: 500px; }
+  .info-card .minimize {
+    display: none; }
   .info-card .header {
     overflow: auto; }
     .info-card .header .action {
