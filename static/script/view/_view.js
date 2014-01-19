@@ -268,6 +268,7 @@ App.AttributeView = Backbone.View.extend({
     dragStart: function(e) {
         var dt = e.originalEvent.dataTransfer,
             transferData = this.model.toJSON();
+        transferData.contentType = Constants.contentType.attribute;
         dt.setData("text/plain", JSON.stringify(transferData));
     },
     dragEnd: function(e) {
@@ -309,6 +310,7 @@ App.DataView = Backbone.View.extend({
     dragStart: function(e) {
         var dt = e.originalEvent.dataTransfer,
             transferData = this.model.toJSON();
+        transferData.contentType = Constants.contentType.data;
         dt.setData("text/plain", JSON.stringify(transferData));
     },
     dragEnd: function(e) {
@@ -443,6 +445,14 @@ App.SummaryCardView = Backbone.View.extend({
                 else {
                     content.find('.mediaData').append(dataView.render().el);
                 }
+            });
+        }
+        if (!this.skipRanking) {
+            var allRanking = this.model.get('ranking'),
+                rankingCanvas = $('#ranking .row-fluid');
+            _(allRanking).each(function(ranking) {
+                var rankingView = new App.RankingView(data);
+                rankingCanvas.append(rankingView.render().el);
             });
         }
     },
@@ -720,7 +730,7 @@ App.RankingRowView = App.SummaryCardView.extend({
     tagName: 'tr',
     className: 'row',
     events: {
-        'click .ranking': 'assignRanking'
+        'click .js-ranking': 'assignRanking'
     },
     initialize: function() {
     },
@@ -739,7 +749,7 @@ App.RankingRowView = App.SummaryCardView.extend({
             var badgeId = ev.dataTransfer.getData('exchangeId'),
                 otherRankBadge = $('#' + badgeId),
                 otherTdHead = $('#' + badgeId).parent(),
-                tdHead = that.$('.ranking'),
+                tdHead = that.$('.js-ranking'),
                 rankBadge = tdHead.find('.rankContainer'),
                 rankingSession = JSON.parse(sessionStorage.getItem('rankingSession')),
                 rankInd = ev.dataTransfer.getData('exchangeRank'),
@@ -809,7 +819,7 @@ App.RankingRowView = App.SummaryCardView.extend({
             }
 
             var rankBadgeView = new App.RankBadgeView({rank: rank});
-            this.$('.ranking').empty().append(rankBadgeView.render().el);
+            this.$('.js-ranking').empty().append(rankBadgeView.render().el);
         }
     }
 });
@@ -844,6 +854,35 @@ App.TitleRowView = Backbone.View.extend({
 /**
  * Ranking Related Views
  */
+App.RankingView =  Backbone.View.extend({
+    template: Handlebars.templates.detail_ranking,
+    events: {
+        'dragstart': 'dragStart',
+        'dragend': 'dragEnd'
+    },
+    initialize: function(settings) {
+        this.model = {
+            toJSON: function() {
+                return _.clone(settings);
+            }
+        };
+    },
+    render: function() {
+        this.$el.attr('draggable', true);
+        this.$el.html(this.template(this.model.toJSON()));
+        return this;
+    },
+    // Event code
+    dragStart: function(e) {
+        var dt = e.originalEvent.dataTransfer,
+            transferData = this.model.toJSON();
+        transferData.contentType = Constants.contentType.ranking;
+        dt.setData("text/plain", JSON.stringify(transferData));
+    },
+    dragEnd: function(e) {
+    }
+});
+
 App.RankBadgeView = Backbone.View.extend({
     template: Handlebars.templates.rankBadge,
     className: 'rankContainer moz-rankContainer',

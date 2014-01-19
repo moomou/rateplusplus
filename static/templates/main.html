@@ -11,7 +11,7 @@
     <div class="container-narrow">
       {% include "messageBox.partial" %}
     </div>
-    <div class="container-narrow pull-left">
+    <div class="container-narrow">
       <div id="colRow" class="row-fluid hidden">
         <div class="span3" id="col1"></div>
         <div class="span3" id="col2"></div>
@@ -29,8 +29,10 @@
                   <span id="entityTitle"></span>
                 </span>
               </li>
-              <li class="noSelect active"><a href="#attribute" data-toggle="tab"> Attribute</a></li>
-              <li class="noSelect"><a href="#content" data-toggle="tab"> Content</a></li> 
+              <li class="noSelect active"><a href="#content" data-toggle="tab"> Content</a></li> 
+              <li class="noSelect"><a href="#attribute" data-toggle="tab"> Attribute</a></li>
+              <li class="noSelect"><a href="#ranking" data-toggle="tab"> Ranking</a></li>
+              <li class="noSelect"><a href="#comment" data-toggle="tab"> Comment</a></li> 
               <li class="pull-right">
                 <ul class="entityStats">
                   <li>
@@ -47,19 +49,19 @@
           <div class="span4" id="dr1"></div>
           <div class="span8" id="dr2">
             <div id="myTabContent" class="tab-content" style='overflow: visible;'>
-              <div class="tab-pane active" id="attribute">
+              <div class="tab-pane" id="attribute">
                 <div class="hidden row-fluid">
                   <div id="col1" class="span6"></div>
                   <div id="col2" class="span6"></div>
                 </div>
               </div>
-              <div class="tab-pane" id="data">
+              <div class="tab-pane" id="comment">
                 <div id="commentContainer" class="commentContainer">
                   <div class="timeline hidden-phone"></div>
                 </div>
                 {% include "comment.partial" %}
               </div>
-              <div class="tab-pane" id="content">
+              <div class="tab-pane active" id="content">
                 <a style="font-size: 15px;" id="addContentBtn" href="#" class="pull-right btn-like">
                   <span class="fa-stack fa-lg" style="font-size:12px;">
                     <i class="fa fa-circle-o fa-stack-2x"></i>
@@ -77,6 +79,8 @@
                     <ul class="mediaData"></ul>
                   </div>
                 </div>
+              </div>
+              <div class="tab-pane" id="ranking">
               </div>
             </div>
           </div>
