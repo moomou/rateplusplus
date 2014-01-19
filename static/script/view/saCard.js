@@ -70,6 +70,7 @@ App.StandaloneCardView = Backbone.View.extend({
     events: {
         'click .js-full-screen': 'toggleFullscreen',
         'click .js-hide-screen': 'toggleHidescreen',
+        'click .js-save-btn': 'save',
         'dragenter .js-editzone': 'highlightDropZone',
         'dragleave .js-editzone': 'unhighlightDropZone',
         'dragover .js-editzone': 'highlightDropZone',
@@ -97,6 +98,7 @@ App.StandaloneCardView = Backbone.View.extend({
         this.$('.footer').removeClass('minimize');
 
         if (this.$el.hasClass('widearea-overlayLayer')) {
+            this.$('.view-toolbar').addClass('hide');
             this.$el.removeClass('widearea-overlayLayer');
             this.$('.js-scroll-container')
                 .removeClass('scroll-container absCenter')
@@ -107,6 +109,7 @@ App.StandaloneCardView = Backbone.View.extend({
         }
         else {
             var halfWidth = Math.floor(window.screen.width/2);
+            this.$('.view-toolbar').removeClass('hide');
             this.$el.addClass('widearea-overlayLayer');
             this.$('.js-scroll-container')
                 .addClass('scroll-container absCenter')
@@ -171,5 +174,7 @@ App.StandaloneCardView = Backbone.View.extend({
             this.$('.js-profile')
                 .attr('style', "background-image: url('"+profilePictureSrc+"');");
         }
-    }
+    },
+    save: function(e) {
+    },
 });
