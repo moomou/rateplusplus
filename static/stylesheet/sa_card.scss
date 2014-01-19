@@ -9,6 +9,19 @@ ul {
   list-style-type: none;
 }
 
+.view-toolbar {
+  margin-top: 10px;
+  margin-left: -15px;
+  border-bottom: 1px solid whitesmoke;
+  text-align: center;
+  li {
+    margin: 5px 50px 10px 50px;
+    i {
+      margin-left: 10px;
+    }
+  }
+}
+
 .profile {
   display: inline-block;
   width: 75px;
