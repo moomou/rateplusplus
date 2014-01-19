@@ -415,8 +415,7 @@ ul {
   .info-card .content {
     position: relative;
     padding: 10px;
-    margin-bottom: 10px;
-    overflow: auto; }
+    margin-bottom: 10px; }
     .info-card .content .meta {
       margin: -15px 5px;
       float: right;
@@ -429,9 +428,13 @@ ul {
       margin: 0 auto;
       font-size: 25px;
       color: gray; }
-  .info-card .content.editing {
+  .info-card .content.editzone {
     border: 5px dashed whitesmoke;
     height: 150px; }
+  .info-card .content.editing .close {
+    display: static; }
+  .info-card .content .close {
+    display: none; }
   .info-card .content-highlight {
     -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) inset;
     -moz-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) inset;

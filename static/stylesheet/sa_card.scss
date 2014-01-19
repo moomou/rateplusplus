@@ -74,7 +74,6 @@ ul {
     position: relative;
     padding: 10px;
     margin-bottom: 10px;
-    overflow: auto;
     .meta {
       margin: -15px 5px;
       float: right;
@@ -90,9 +89,19 @@ ul {
       color: gray;
     }
   }
-  .content.editing {
+  .content.editzone{
     border: 5px dashed whitesmoke;
     height: 150px;
+  }
+  .content.editing {
+    .close {
+      display: static;
+    }
+  }
+  .content {
+    .close {
+      display: none;
+    }
   }
   .content-highlight {
     @include box-shadow(0, 2px, 6px,rgba(0,0,0,0.2),inset);
