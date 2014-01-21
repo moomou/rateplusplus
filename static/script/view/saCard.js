@@ -77,11 +77,20 @@ App.StandaloneCardView = Backbone.View.extend({
         'dragenter .js-profile': 'highlightDropZone',
         'dragleave .js-profile': 'unhighlightDropZone',
         'dragover .js-profile': 'highlightDropZone',
-        'drop .js-editzone': 'addNewContent',
+        'drop .js-editzone': 'addContent',
         'drop .js-profile': 'changeProfilePicture',
     },
     initialize: function() {
         // should get profile information
+        this.postData = {
+            dataChain: [],
+            hashTag: [],
+            entityId: [],
+            authorName: [],
+            authorProfileUrl: [],
+            title: '',
+            profileIconUrl: ''
+        };
     },
     render: function(presentationMode) {
         var renderData = _.clone(this.standaloneCardTemplateFields);
@@ -137,9 +146,21 @@ App.StandaloneCardView = Backbone.View.extend({
         e.preventDefault();
         this.$('.js-editzone').removeClass('content-highlight');
     },
-    addNewContent: function(e) {
-        console.log("dropped");
+    changeProfilePicture: function(e) {
         e.preventDefault();
+
+        var tfData = JSON.parse(
+            e.originalEvent.dataTransfer.getData('text'));
+
+        if (tfData.dataType == "image") {
+            this.postData.profileIconUrl = tfData.srcUrl;
+            this.$('.js-profile')
+                .attr('style', "background-image: url('"+tfData.srcUrl+"');");
+        }
+    },
+    addContent: function(e) {
+        e.preventDefault();
+
         var tfData = JSON.parse(
             e.originalEvent.dataTransfer.getData('text')),
             renderedContent = null;
@@ -160,21 +181,34 @@ App.StandaloneCardView = Backbone.View.extend({
             case Constants.contentType.rating: {
                 // not implemented
             }
+            default: {
+                // should not accept
+            }
         }
-
+        
+        this.postData.dataChain.push(tfData.id);
         this.$('.js-editzone').after(renderedContent);
     },
-    changeProfilePicture: function(e) {
-        console.log("dropped");
-        e.preventDefault();
-        var tfData = JSON.parse(
-            e.originalEvent.dataTransfer.getData('text'));
-        if (tfData.dataType == "image") {
-            var profilePictureSrc = tfData.srcUrl;
-            this.$('.js-profile')
-                .attr('style', "background-image: url('"+profilePictureSrc+"');");
-        }
+    removeContent: function(e) {
     },
     save: function(e) {
+        this.postData.title = this.$('js-title').val();
+        this.postData.hashTag = _(this.$('js-tag').val().split(",")).map(function(e) {
+            return e.trim();
+        });
+
+        $.ajax({
+            type: "POST",
+            url: App.API_SERVER + App.API_VERSION + 'composed/',
+            data: this.postData
+        })
+        .done(function(res) {
+            if (!res.error) { // clear local session
+            }
+        })
+        .fail(function(msg) {
+            // Tell the user
+        });
+
     },
 });
