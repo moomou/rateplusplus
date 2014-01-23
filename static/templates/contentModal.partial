@@ -1,12 +1,14 @@
 <div id="contentModal" class="addContentContainer modal hide fade">
   <div class="modal-header">
     <ul class="addContentType tab" id="addContent">
+      <!--
       <li class="contentType cursor-pointer" data-target='#write'>
         <a href="#write" data-toggle="tab">
           <i class="fa fa-code fa-2x block"></i>
           <span style='display: block'>Code</span>
         </a>
       </li>
+      -->
       <li class="contentType cursor-pointer" data-target='#pictureframe'>
         <a href="#pictureframe" data-toggle="tab">
           <i class="fa fa-picture-o fa-2x block"></i>
