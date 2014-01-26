@@ -557,3 +557,7 @@ ul {
   right: 15px;
   bottom: -5px;
   z-index: 9999; }
+
+.addNewBtn {
+  font-size: 15px;
+  padding: 25px; }
