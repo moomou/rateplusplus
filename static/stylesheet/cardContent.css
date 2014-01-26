@@ -48,3 +48,28 @@
 .data .value {
   float: right;
   margin-right: 35px; }
+
+.textbox {
+  -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18) ;
+  -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18) ;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18) ;
+  padding: 15px;
+  overflow: auto; }
+  .textbox .title, .textbox span {
+    border: 1px solid transparent;
+    box-shadow: none;
+    font-size: 27px;
+    height: 40px;
+    line-height: 35px;
+    border-bottom: 1px solid gray;
+    border-radius: 0; }
+  .textbox textarea, .textbox p {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border: 1px solid transparent;
+    width: 97%;
+    font-size: 15px;
+    line-height: 27px;
+    margin: 0px -14px 10px 0px;
+    resize: none; }

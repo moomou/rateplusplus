@@ -13,14 +13,14 @@
       <ul class="meta pull-left">
         <li class="name">
           {{#if editing}}
-          <input class="title-input" placeholder="Title" type="text">
+          <input class="title-input js-title" placeholder="Title" type="text">
           {{else}}
             {{title}}
           {{/if}}
         </li>
-        <li class="hash noOutline">
+        <li class="hash">
           {{#if editing}}
-          <input class="tag-input" placeholder="#hashTag" type="text">
+          <input class="tag-input js-tag" placeholder="#hashTag" type="text">
           {{else}}
             {{hashTag}}
           {{/if}}
@@ -50,7 +50,7 @@
       <div class="edit-tool pull-left">
         <button class="btn btn-small btn-success js-save-btn">Save</button>
       </div>
-      <div class="by pull-right">By <a href="{{authorProfileUrl}}" class="">{{authorName}}</a>
+      <div class="by pull-right hide">By <a href="{{authorProfileUrl}}" class="">{{authorName}}</a>
       </div>
     </div>
   </div>
