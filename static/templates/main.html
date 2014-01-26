@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
   <head>
     {% include "stdHead.partial" %}
@@ -29,10 +30,11 @@
                   <span id="entityTitle"></span>
                 </span>
               </li>
-              <li class="noSelect active"><a href="#content" data-toggle="tab"> Content</a></li> 
+              <li class="noSelect active"><a href="#writing" data-toggle="tab"> Writing</a></li> 
+              <li class="noSelect"><a href="#content" data-toggle="tab"> Data</a></li> 
               <li class="noSelect"><a href="#attribute" data-toggle="tab"> Attribute</a></li>
               <li class="noSelect"><a href="#ranking" data-toggle="tab"> Ranking</a></li>
-              <li class="noSelect"><a href="#comment" data-toggle="tab"> Comment</a></li> 
+              <!--<li class="noSelect"><a href="#comment" data-toggle="tab"> Comment</a></li> -->
               <li class="pull-right">
                 <ul class="entityStats">
                   <li>
@@ -49,27 +51,31 @@
           <div class="span4" id="dr1"></div>
           <div class="span8" id="dr2">
             <div id="myTabContent" class="tab-content" style='overflow: visible;'>
+              <div class="tab-pane active" id="writing">
+                <ul class="breadcrumb" style="background:white;">
+                  <li><a href="#">Description</a> <span class="divider">|</span></li>
+                  <li><a href="#">Media</a> <span class="divider">|</span></li>
+                  <li><a href="#">Data</a> <span class="divider">|</span></li>
+                </ul>
+                <div id="commentContainer" class="commentContainer">
+                  <div class="timeline hidden-phone"></div>
+                </div>
+                {% include "comment.partial" %}
+              </div>
               <div class="tab-pane" id="attribute">
                 <div class="hidden row-fluid">
                   <div id="col1" class="span6"></div>
                   <div id="col2" class="span6"></div>
                 </div>
               </div>
-              <div class="tab-pane" id="comment">
-                <div id="commentContainer" class="commentContainer">
-                  <div class="timeline hidden-phone"></div>
-                </div>
-                {% include "comment.partial" %}
-              </div>
-              <div class="tab-pane active" id="content">
-                <a style="font-size: 15px;" id="addContentBtn" href="#" class="pull-right btn-like">
+              <div class="tab-pane" id="content">
+                <a style="font-size: 15px; margin-top: -50px;" id="addContentBtn" href="#" class="pull-right btn-like">
                   <span class="fa-stack fa-lg" style="font-size:12px;">
                     <i class="fa fa-circle-o fa-stack-2x"></i>
                     <i class="fa fa-plus fa-stack-1x"></i>
                   </span>
                   Add New
                 </a>
-                <br>
                 <hr>
                 <div class="row-fluid">
                   <div class="span6">
@@ -117,5 +123,4 @@
     <script src="{{STATIC_URL}}script/app.js"></script> 
 
   </body>
-
 </html>
