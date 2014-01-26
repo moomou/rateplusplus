@@ -67,8 +67,9 @@
   overflow: auto;
 
   .title, span {
+    outline-width: 0;
     outline: none;
-    border: none;
+    border: 1px solid transparent;
     @include box-shadow-none();
     font-size: 27px;
     height: 40px;
