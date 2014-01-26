@@ -57,7 +57,10 @@
   padding: 15px;
   overflow: auto; }
   .textbox .title, .textbox span {
-    border: 1px solid transparent;
+    outline: none;
+    border: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
     box-shadow: none;
     font-size: 27px;
     height: 40px;
