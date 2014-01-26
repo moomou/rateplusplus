@@ -551,9 +551,14 @@ ul {
   -moz-box-shadow: none;
   box-shadow: none; }
 
+.subtle {
+  opacity: 0.25; }
+
+.subtle:hover {
+  opacity: 0.75; }
+
 .sa-editor {
   position: fixed;
-  background-color: white;
   display: block;
   right: 15px;
   bottom: -5px;
@@ -562,3 +567,10 @@ ul {
 .addNewBtn {
   font-size: 15px;
   padding: 25px; }
+
+.entity-actions {
+  margin-top: 0.5em; }
+  .entity-actions li {
+    float: left;
+    margin-left: 5px;
+    font-size: 15px; }

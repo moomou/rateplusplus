@@ -346,22 +346,3 @@ td h4 {
   font-size: 14px;
   display: block;
 }
-
-/**
-  Detail
-*/
-.entityStats {
-  margin-top: 0.5em;
-}
-.entityStats li {
-  float: left;
-  margin: 5px 0 0 1em;
-  font-size: 15px;
-}
-.attribute-simple {
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
-  display: block;
-  padding: 5px;
-  margin-bottom: 1em;
-  border: 1px solid rgba(0, 0, 0, 0.150);
-}
