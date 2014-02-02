@@ -1,14 +1,6 @@
-<div id="contentModal" class="addContentContainer modal hide fade">
+<div id="contentModal" class="hide">
   <div class="modal-header">
     <ul class="addContentType tab" id="addContent">
-      <!--
-      <li class="contentType cursor-pointer" data-target='#write'>
-        <a href="#write" data-toggle="tab">
-          <i class="fa fa-code fa-2x block"></i>
-          <span style='display: block'>Code</span>
-        </a>
-      </li>
-      -->
       <li class="contentType cursor-pointer" data-target='#pictureframe'>
         <a href="#pictureframe" data-toggle="tab">
           <i class="fa fa-picture-o fa-2x block"></i>
@@ -32,10 +24,7 @@
   <div class="upTriangleBorder"></div>
   <div class="upTriangle"></div>
   <div class="addContentBox tab-content">
-    <div id="write" class="tab-pane active">
-      <textarea id="" name="" cols="30" rows="5"></textarea>
-    </div>
-    <div id="pictureframe" class="tab-pane">
+    <div id="pictureframe" class="tab-pane active">
       <input class="hidden srcType" type="text" value="binary">
       <input class="hidden dataType" type="text" value="image">
       <div class="input-prepend" style="display: block;">
@@ -87,8 +76,7 @@
       </div>
     </div>
   </div>
-  <div class="modal-footer">
-    <button class="btn btn-success" id="contentSubmit">Submit</button>
-  </div>
+  <a style="font-size: 15px;width: 75px;margin: 0 auto;display: block;height: 25px;z-index: 99999;" id="saveContentBtn" href="#" class="btn btn-small btn-success">Save</a>
+  <hr>
 </div>
 

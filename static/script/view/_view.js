@@ -279,6 +279,7 @@ App.AttributeView = Backbone.View.extend({
 App.DataView = Backbone.View.extend({
     numberTemplate: Handlebars.templates.data_num,
     imageTemplate: Handlebars.templates.data_img,
+    textTemplate: Handlebars.templates.sa_content_textbox,
     tagName: 'li',
     events: {
         'dragstart': 'dragStart',
@@ -291,6 +292,9 @@ App.DataView = Backbone.View.extend({
         else if (data.dataType == "image") {
             return this.imageTemplate;
         }
+       else if (data.dataType == "text") {
+            return this.textTemplate;
+       }
     },
     initialize: function(settings) {
         this.template = this.getTemplate(settings);
@@ -435,15 +439,20 @@ App.SummaryCardView = Backbone.View.extend({
         }
         if (!this.skipData) {
             var allData = this.model.get('data'),
-                content = $('#content .row-fluid');
+                content = $('#content .content'),
+                writing = $('#writing .writing');
 
             _(allData).each(function(data) {
                 var dataView = new App.DataView(data);
+
                 if (data.dataType == "number") {
                     content.find('.numData').append(dataView.render().el);
                 }
-                else {
+                else if (data.dataType == "image") {
                     content.find('.mediaData').append(dataView.render().el);
+                }
+                else if (data.dataType == "text") {
+                    writing.append(dataView.render().el);
                 }
             });
         }
@@ -1015,7 +1024,7 @@ App.RankListToolbarView = (function() {
     setPrivacyIcon = function(isPrivate) {
         App.GlobalWidget.rankingPrivacy
             .tooltip('hide')
-            .attr('class', (isPrivate ? "fa-lock" : "fa-globe") + " fa-2x cursor-pointer")
+            .attr('class', (isPrivate ? "fa-lock" : "fa-globe") + "fa fa-2x cursor-pointer")
             .attr('title', isPrivate ? "Private Ranking" : "Public Ranking")
             .tooltip('fixTitle')
             .tooltip();

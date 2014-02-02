@@ -280,6 +280,7 @@ App.AttributeView = Backbone.View.extend({
 App.DataView = Backbone.View.extend({
     numberTemplate: Handlebars.templates.data_num,
     imageTemplate: Handlebars.templates.data_img,
+    textTemplate: Handlebars.templates.sa_content_textbox,
     tagName: 'li',
     events: {
         'dragstart': 'dragStart',
@@ -292,6 +293,9 @@ App.DataView = Backbone.View.extend({
         else if (data.dataType == "image") {
             return this.imageTemplate;
         }
+       else if (data.dataType == "text") {
+            return this.textTemplate;
+       }
     },
     initialize: function(settings) {
         this.template = this.getTemplate(settings);
@@ -436,15 +440,20 @@ App.SummaryCardView = Backbone.View.extend({
         }
         if (!this.skipData) {
             var allData = this.model.get('data'),
-                content = $('#content .row-fluid');
+                content = $('#content .content'),
+                writing = $('#writing .writing');
 
             _(allData).each(function(data) {
                 var dataView = new App.DataView(data);
+
                 if (data.dataType == "number") {
                     content.find('.numData').append(dataView.render().el);
                 }
-                else {
+                else if (data.dataType == "image") {
                     content.find('.mediaData').append(dataView.render().el);
+                }
+                else if (data.dataType == "text") {
+                    writing.append(dataView.render().el);
                 }
             });
         }
@@ -1016,7 +1025,7 @@ App.RankListToolbarView = (function() {
     setPrivacyIcon = function(isPrivate) {
         App.GlobalWidget.rankingPrivacy
             .tooltip('hide')
-            .attr('class', (isPrivate ? "fa-lock" : "fa-globe") + " fa-2x cursor-pointer")
+            .attr('class', (isPrivate ? "fa-lock" : "fa-globe") + "fa fa-2x cursor-pointer")
             .attr('title', isPrivate ? "Private Ranking" : "Public Ranking")
             .tooltip('fixTitle')
             .tooltip();
@@ -1449,7 +1458,8 @@ App.ContentDataView = (function() {
         timeseriesTemplate: Handlebars.templates.sa_content_timeseries,
         imageTemplate: Handlebars.templates.sa_content_image,
         videoTemplate: Handlebars.templates.sa_content_video,
-        contentTemplate: Handlebars.templates.sa_card_content
+        contentTemplate: Handlebars.templates.sa_card_content,
+        textTemplate: Handlebars.templates.sa_content_textbox
     };
 
     return {
@@ -1479,17 +1489,27 @@ App.StandaloneCardView = Backbone.View.extend({
     events: {
         'click .js-full-screen': 'toggleFullscreen',
         'click .js-hide-screen': 'toggleHidescreen',
+        'click .js-save-btn': 'save',
         'dragenter .js-editzone': 'highlightDropZone',
         'dragleave .js-editzone': 'unhighlightDropZone',
         'dragover .js-editzone': 'highlightDropZone',
         'dragenter .js-profile': 'highlightDropZone',
         'dragleave .js-profile': 'unhighlightDropZone',
         'dragover .js-profile': 'highlightDropZone',
-        'drop .js-editzone': 'addNewContent',
+        'drop .js-editzone': 'addContent',
         'drop .js-profile': 'changeProfilePicture',
     },
     initialize: function() {
         // should get profile information
+        this.postData = {
+            dataChain: [],
+            hashTag: [],
+            entityId: [],
+            authorName: [],
+            authorProfileUrl: [],
+            title: '',
+            profileIconUrl: ''
+        };
     },
     render: function(presentationMode) {
         var renderData = _.clone(this.standaloneCardTemplateFields);
@@ -1545,9 +1565,21 @@ App.StandaloneCardView = Backbone.View.extend({
         e.preventDefault();
         this.$('.js-editzone').removeClass('content-highlight');
     },
-    addNewContent: function(e) {
-        console.log("dropped");
+    changeProfilePicture: function(e) {
         e.preventDefault();
+
+        var tfData = JSON.parse(
+            e.originalEvent.dataTransfer.getData('text'));
+
+        if (tfData.dataType == "image") {
+            this.postData.profileIconUrl = tfData.srcUrl;
+            this.$('.js-profile')
+                .attr('style', "background-image: url('"+tfData.srcUrl+"');");
+        }
+    },
+    addContent: function(e) {
+        e.preventDefault();
+
         var tfData = JSON.parse(
             e.originalEvent.dataTransfer.getData('text')),
             renderedContent = null;
@@ -1568,21 +1600,36 @@ App.StandaloneCardView = Backbone.View.extend({
             case Constants.contentType.rating: {
                 // not implemented
             }
+            default: {
+                // should not accept
+            }
         }
-
+        
+        this.postData.dataChain.push(tfData.id);
         this.$('.js-editzone').after(renderedContent);
     },
-    changeProfilePicture: function(e) {
-        console.log("dropped");
-        e.preventDefault();
-        var tfData = JSON.parse(
-            e.originalEvent.dataTransfer.getData('text'));
-        if (tfData.dataType == "image") {
-            var profilePictureSrc = tfData.srcUrl;
-            this.$('.js-profile')
-                .attr('style', "background-image: url('"+profilePictureSrc+"');");
-        }
-    }
+    removeContent: function(e) {
+    },
+    save: function(e) {
+        this.postData.title = this.$('js-title').val();
+        this.postData.hashTag = _(this.$('js-tag').val().split(",")).map(function(e) {
+            return e.trim();
+        });
+
+        $.ajax({
+            type: "POST",
+            url: App.API_SERVER + App.API_VERSION + 'composed/',
+            data: this.postData
+        })
+        .done(function(res) {
+            if (!res.error) { // clear local session
+            }
+        })
+        .fail(function(msg) {
+            // Tell the user
+        });
+
+    },
 });
 
 // Page level views

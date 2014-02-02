@@ -189,8 +189,9 @@ App.AppRouter = Backbone.Router.extend({
             });
         });
 
-        $('#addContentBtn').click(function(e) {
-            $('#contentModal').modal();
+        $('#addNew').click(function(e) {
+            var selectedTab = $('#myTab').find('.active a').attr('href');
+            $(selectedTab+'Modal').toggle();
         });
 
         $('#contentSubmit').click(function(e) {
@@ -203,12 +204,31 @@ App.AppRouter = Backbone.Router.extend({
             postData.name = activePanel.find('.fieldname').val();
             postData.selector =  activePanel.find('.selector').val() || "";
             postData.srcUrl = activePanel.find('.srcUrl').val();
+            postData.value = '';
 
             $.post(ajaxUrl, postData)
-            .done(function(res) {
-                console.log(res);
-                $('#contentModal').modal('hide');
-            });
+                .done(function(res) {
+                    console.log(res);
+                    $('#contentModal').hide();
+                });
+        });
+
+        $('#writingSubmit').click(function(e) {
+            var postData = {},
+                ajaxUrl = App.API_SERVER + App.API_VERSION + 'entity/' + id + '/data';
+
+            postData.dataType = 'text';
+            postData.srcType = '';
+            postData.selector = '';
+            postData.srcUrl = '';
+            postData.name = $('#writingModal').find('.title').val() || "";
+            postData.value = $('#writingModal').find('textarea').val() || "";
+
+            $.post(ajaxUrl, postData)
+                .done(function(res) {
+                    console.log(res);
+                    $('#writingModal').hide();
+                });
         });
 
         $('.js-startEditor').click(function(e) {

@@ -30,16 +30,23 @@
                   <span id="entityTitle"></span>
                 </span>
               </li>
-              <li class="noSelect active"><a href="#writing" data-toggle="tab"> Writing</a></li> 
+              <li class="noSelect active"><a href="#writing" data-toggle="tab"> About </a></li> 
               <li class="noSelect"><a href="#content" data-toggle="tab"> Data</a></li> 
               <li class="noSelect"><a href="#attribute" data-toggle="tab"> Attribute</a></li>
               <li class="noSelect"><a href="#ranking" data-toggle="tab"> Ranking</a></li>
-              <!--<li class="noSelect"><a href="#comment" data-toggle="tab"> Comment</a></li> -->
               <li class="pull-right">
-                <ul class="entityStats">
+                <ul class="entity-actions">
+                  <li>
+                    <a style="font-size:15px;" id="addNew" href="#" class="btn-like">
+                      <span class="fa-stack fa-lg" style="font-size:12px;">
+                        <i class="fa fa-circle-o fa-stack-2x"></i>
+                        <i class="fa fa-plus fa-stack-1x"></i>
+                      </span>
+                    </a>
+                  </li>
                   <li>
                   <a class="js-startEditor" href="#">
-                    <i class="fa fa-file-o"></i>
+                    <i class="fa fa-list-ul fa-lg btn-like"></i>
                   </a>
                   </li>
                 </ul>
@@ -52,32 +59,19 @@
           <div class="span8" id="dr2">
             <div id="myTabContent" class="tab-content" style='overflow: visible;'>
               <div class="tab-pane active" id="writing">
-                <ul class="breadcrumb" style="background:white;">
-                  <li><a href="#">Description</a> <span class="divider">|</span></li>
-                  <li><a href="#">Media</a> <span class="divider">|</span></li>
-                  <li><a href="#">Data</a> <span class="divider">|</span></li>
-                </ul>
-                <div id="commentContainer" class="commentContainer">
-                  <div class="timeline hidden-phone"></div>
+                <div id="writingModal" class="textbox hide"> 
+                  <input class="title" placeholder="Title" type="text">
+                  <textarea placeholder="Start here"></textarea>
+                  <button id="writingSubmit" class="btn btn-success noSelect pull-right js-save" data-loading-text="Saving...">Save</button>
+                  <hr>
                 </div>
-                {% include "comment.partial" %}
+                <ul class="writing"></ul>
               </div>
               <div class="tab-pane" id="attribute">
-                <div class="hidden row-fluid">
-                  <div id="col1" class="span6"></div>
-                  <div id="col2" class="span6"></div>
-                </div>
               </div>
               <div class="tab-pane" id="content">
-                <a style="font-size: 15px; margin-top: -50px;" id="addContentBtn" href="#" class="pull-right btn-like">
-                  <span class="fa-stack fa-lg" style="font-size:12px;">
-                    <i class="fa fa-circle-o fa-stack-2x"></i>
-                    <i class="fa fa-plus fa-stack-1x"></i>
-                  </span>
-                  Add New
-                </a>
-                <hr>
-                <div class="row-fluid">
+                {% include "contentModal.partial" %}
+                <div class="row-fluid content">
                   <div class="span6">
                     <ul class="data numData"></ul>
                   </div>
@@ -106,7 +100,6 @@
     {% csrf_token %}
 
     {% include "imageChangeModal.partial" %}
-    {% include "contentModal.partial" %}
     {% include "saEditor.partial" %}
 
     {% if FEEDBACK_ENABLED %} 
