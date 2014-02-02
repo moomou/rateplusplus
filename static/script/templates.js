@@ -637,6 +637,39 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 (function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['simple_card'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div class=\"card micro\">\n  <div class=\"card-header\">\n  </div>\n  <div class=\"photo\">\n    <a class=\"btn-like\" href=\"";
+  if (stack1 = helpers.coverLink) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.coverLink); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\">\n      <img src=\"";
+  if (stack1 = helpers.cover) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.cover); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" id=\"";
+  if (stack1 = helpers.coverId) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.coverId); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"profileimg\">\n    </a>\n  </div>\n  <div class=\"contentContainer outer\">\n    <div class=\"entityDetail\">\n      ";
+  if (stack1 = helpers.content) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.content); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n    </div>\n    <div class=\"tagsContent outer\">\n      <div class=\"hashTag cardView\">\n        <ul class=\"view-toolbar\" style=\"\">\n          <li>\n            <i class=\"fa fa-heart-o fa-lg\"></i>\n            <i class=\"fa fa-twitter fa-lg\"></i>\n            <i class=\"fa fa-code-fork fa-lg\"></i>\n            <i class=\"fa fa-share-square-o fa-lg\"></i>\n          </li>\n        </ul>\n        <ul class=\"tags tagit\">\n          ";
+  if (stack1 = helpers.tag) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.tag); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n        </ul>\n      </div>\n    </div>\n  </div>\n</div>\n";
+  return buffer;
+  });
+})();
+
+(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['summaryCard'] = template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
