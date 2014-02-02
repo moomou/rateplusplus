@@ -1,0 +1,48 @@
+@import "mixins";
+@import "common";
+
+/*
+  Table CSS
+*/
+@-moz-document url-prefix() {
+  td h4 {
+    position: static !important;
+  }
+}
+
+td h4 {
+  display: block;
+  margin-top: -5px;
+  line-height: 32px;
+  color: #fff;
+  orphans: 2;
+  vertical-align: top;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  margin-top: -9px;
+}
+
+.brick {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.tdDivider {
+  box-shadow: 1px 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+.rankingTable td {
+  background-size: cover !important;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.head {
+  text-align: center !important;
+  position: relative;
+}

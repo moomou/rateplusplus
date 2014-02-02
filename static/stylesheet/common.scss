@@ -1,5 +1,24 @@
 @import "mixins";
 
+.table {
+  display: table;   /* Allow the centering to work */
+  margin: 0 auto;
+}
+.vote > li {
+  float: right;
+}
+
+// For centering
+.outer {
+  width: 100%;
+  text-align: center;
+}
+.inner {
+  display: inline-block;
+  max-width: 40em;
+  width: 95%;
+}
+
 // remove link highliht
 .btn-like {
   text-decoration: none !important;
