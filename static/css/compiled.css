@@ -848,6 +848,11 @@ td h4 {
   background-size: cover !important;
   background-repeat: no-repeat;
   position: relative; }
+.rankingTable .body {
+  overflow: hidden;
+  width: 80%; }
+.rankingTable .stat {
+  width: 20%; }
 
 .head {
   text-align: center !important;
