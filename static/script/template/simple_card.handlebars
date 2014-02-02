@@ -1,29 +1,27 @@
-<div class="card micro">
-  <div class="card-header">
+<div class="card-header">
+</div>
+<div class="photo">
+  <a class="btn-like" href="{{coverLink}}">
+    <img src="{{cover}}" id="{{coverId}}" class="profileimg">
+  </a>
+</div>
+<div class="contentContainer outer">
+  <div class="entityDetail">
+    {{{content}}}
   </div>
-  <div class="photo">
-    <a class="btn-like" href="{{coverLink}}">
-      <img src="{{cover}}" id="{{coverId}}" class="profileimg">
-    </a>
-  </div>
-  <div class="contentContainer outer">
-    <div class="entityDetail">
-      {{{content}}}
-    </div>
-    <div class="tagsContent outer">
-      <div class="hashTag cardView">
-        <ul class="view-toolbar" style="">
-          <li>
-            <i class="fa fa-heart-o fa-lg"></i>
-            <i class="fa fa-twitter fa-lg"></i>
-            <i class="fa fa-code-fork fa-lg"></i>
-            <i class="fa fa-share-square-o fa-lg"></i>
-          </li>
-        </ul>
-        <ul class="tags tagit">
-          {{tag}}
-        </ul>
-      </div>
+  <div class="tagsContent outer">
+    <div class="hashTag cardView">
+      <ul class="view-toolbar" style="">
+        <li>
+        <i class="fa fa-heart-o fa-lg"></i>
+        <i class="fa fa-twitter fa-lg"></i>
+        <i class="fa fa-code-fork fa-lg"></i>
+        <i class="fa fa-share-square-o fa-lg"></i>
+        </li>
+      </ul>
+      <ul class="tags tagit">
+        {{tag}}
+      </ul>
     </div>
   </div>
 </div>
