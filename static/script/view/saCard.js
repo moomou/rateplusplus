@@ -40,7 +40,8 @@ App.ContentDataView = (function() {
         timeseriesTemplate: Handlebars.templates.sa_content_timeseries,
         imageTemplate: Handlebars.templates.sa_content_image,
         videoTemplate: Handlebars.templates.sa_content_video,
-        contentTemplate: Handlebars.templates.sa_card_content
+        contentTemplate: Handlebars.templates.sa_card_content,
+        textTemplate: Handlebars.templates.sa_content_textbox
     };
 
     return {
