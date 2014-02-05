@@ -561,15 +561,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"rating goldStar pull-right\">\n  ";
-  if (stack1 = helpers.stars) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = (depth0 && depth0.stars); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n</div>\n<span class=\"fieldName\">";
+  buffer += "<div class=\"info\">\n  <span class=\"fieldName\">";
   if (stack1 = helpers.name) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = (depth0 && depth0.name); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</span>\n";
+    + "</span>\n  <div class=\"rating goldStar pull-right\">\n    ";
+  if (stack1 = helpers.stars) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = (depth0 && depth0.stars); stack1 = typeof stack1 === functionType ? stack1.call(depth0, {hash:{},data:data}) : stack1; }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n  </div>\n</div>\n";
   return buffer;
   });
 })();
