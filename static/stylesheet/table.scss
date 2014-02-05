@@ -43,8 +43,11 @@ td h4 {
     position: relative;
   }
   .body {
+    .rowDescription {
+      max-height: 120px;    
+    }
     overflow: hidden;
-    width: 80%;
+    max-height: 75px;
   }
   .stat {
     width: 20%;

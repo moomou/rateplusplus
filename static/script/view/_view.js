@@ -30,7 +30,6 @@ App.ProfilePage = {
 };
 
 App.CommentContainer = $('#commentContainer');
-
 App.GlobalWidget.rankingPrivacy.tooltip();
 
 /**
@@ -78,9 +77,80 @@ App.renderStarRating = function(upVote, downVote) {
     score = upVote / (upVote + downVote),
     stars = score * 5,
     starDOM = starGen(stars);
-    
+
     return starDOM;
 };
+
+
+// Content Data
+App.ContentAttributeView = (function() {
+    var template = Handlebars.templates.sa_content_rating,
+        contentTemplate = Handlebars.templates.sa_card_content;
+
+    return {
+        renderStarRating: App.renderStarRating,
+        render: function(data, noWrap) {
+            var upVote = data.upVote,
+                downVote = data.downVote;
+                data.stars = this.renderStarRating(upVote, downVote),
+                renderedContent = contentTemplate({
+                    content: template(data),
+                    src: '',
+                    contentId: "",
+                });
+
+            if (noWrap) {
+                return template(data);
+            }
+            return renderedContent;
+        }
+    };
+})();
+
+App.ContentRankingView = (function() {
+    var template = Handlebars.templates.sa_content_ranking,
+        contentTemplate = Handlebars.templates.sa_card_content;
+    return {
+        render: function(data) {
+            renderedContent = contentTemplate({
+                content: template(data),
+                src: '',
+                contentId: "",
+            });
+            return renderedContent;
+        }
+    };
+})();
+
+App.ContentDataView = (function() {
+    var templates = {
+        numberTemplate: Handlebars.templates.sa_content_field,
+        timeseriesTemplate: Handlebars.templates.sa_content_timeseries,
+        imageTemplate: Handlebars.templates.sa_content_image,
+        videoTemplate: Handlebars.templates.sa_content_video,
+        contentTemplate: Handlebars.templates.sa_card_content,
+        textTemplate: Handlebars.templates.sa_content_textbox
+    };
+
+    return {
+        render: function(data, noWrap) {
+            var templateName = data.dataType + "Template",
+                content = templates[templateName](data);
+                renderedContent = templates.contentTemplate({
+                    content: content,
+                    src: data.srcUrl,
+                    contentId: "",
+                });
+
+            if (noWrap) {
+                return content;
+            }
+            else {
+                return renderedContent;
+            }
+        }
+    }
+})();
 
 /**
  * Individual Model Views
@@ -671,6 +741,45 @@ App.SummaryCardView = Backbone.View.extend({
     },
 });
 
+App.SimpleCard = Backbone.View.extend({
+    className: 'card micro',
+    template: Handlebars.templates.simple_card,
+    model: App.EntityModel,
+    events: {
+        'mouseover': 'toggleToolbar',
+        'mouseout': 'toggleToolbar',
+	},
+    toggleToolbar: function(e) {
+        return;
+        var eventType = e.type,
+            $toolbar = this.$('.view-toolbar'),
+            state = $toolbar.css('visibility');
+
+        if (eventType === "mouseover" && state === "hidden") {
+            $toolbar.css('visibility', 'visible');
+        }
+        else if (eventType === "mouseout") {
+            $toolbar.css('visibility', 'hidden');
+        }
+    },
+    initialize: function(settings) {
+        var data = this.model.get(settings.renderType)[settings.renderIndex];
+
+        if (settings.renderType === "attributes") {
+            this.content = App.ContentAttributeView.render(data, true);
+        }
+        else {
+            this.content = App.ContentDataView.render(data, true);
+        }
+    },
+    render: function() {
+        var templateValues = this.model.toJSON();
+        this.$el.html(this.template(templateValues));
+        this.$('.entityDetail').html(this.content);
+
+        return this;
+    },
+});
 
 /**
  * Table Row View
@@ -1237,7 +1346,6 @@ App.PinCardCollectionView = Backbone.View.extend({
                 renderMode: 'detail',
                 skipAttribute: true
             });
-
         this.colManager.getNext().append(cardView.render().el);
     }
 });

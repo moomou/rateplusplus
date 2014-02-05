@@ -1,5 +1,4 @@
 // Page level views
-
 App.DetailEntityPageView = Backbone.View.extend({
     initialize: function(settings) {
         settings = settings || {};
@@ -9,7 +8,8 @@ App.DetailEntityPageView = Backbone.View.extend({
             return;
         }
 
-        this.collection = new App.SummaryCardCollection(App.SPECIFIC_ENTITY, settings.id);
+        this.collection = 
+            new App.SummaryCardCollection(App.SPECIFIC_ENTITY, settings.id);
         this.collection.on('reset', this.render, this);
     },
     render: function() {
@@ -35,7 +35,20 @@ App.DetailEntityPageView = Backbone.View.extend({
             renderMode: "detail"
         });
 
-        document.getElementById('dr1').appendChild(cardView.render().el);
+        var simpleCard1 = new App.SimpleCard({
+            model: item,
+            renderType: 'data',
+            renderIndex: 2
+        });
+        var simpleCard2 = new App.SimpleCard({
+            model: item,
+            renderType: 'attributes',
+            renderIndex: 1
+        });
+
+        document.getElementById('dr1').appendChild(simpleCard1.render().el);
+        document.getElementById('dr1').appendChild(simpleCard2.render().el);
+        //document.getElementById('dr1').appendChild(cardView.render().el);
     }
 });
 

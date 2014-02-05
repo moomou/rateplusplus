@@ -1,63 +1,3 @@
-// Stand Alone Content Card
-App.ContentAttributeView = (function() {
-    var template = Handlebars.templates.sa_content_rating,
-        contentTemplate = Handlebars.templates.sa_card_content;
-
-    return {
-        renderStarRating: App.renderStarRating,
-        render: function(data) {
-            var upVote = data.upVote,
-                downVote = data.downVote;
-                data.stars = this.renderStarRating(upVote, downVote),
-                renderedContent = contentTemplate({
-                    content: template(data),
-                    src: '',
-                    contentId: "",
-                });
-            return renderedContent;
-        }
-    };
-})();
-
-App.ContentRankingView = (function() {
-    var template = Handlebars.templates.sa_content_ranking,
-        contentTemplate = Handlebars.templates.sa_card_content;
-    return {
-        render: function(data) {
-            renderedContent = contentTemplate({
-                content: template(data),
-                src: '',
-                contentId: "",
-            });
-            return renderedContent;
-        }
-    };
-})();
-
-App.ContentDataView = (function() {
-    var templates = {
-        numberTemplate: Handlebars.templates.sa_content_field,
-        timeseriesTemplate: Handlebars.templates.sa_content_timeseries,
-        imageTemplate: Handlebars.templates.sa_content_image,
-        videoTemplate: Handlebars.templates.sa_content_video,
-        contentTemplate: Handlebars.templates.sa_card_content,
-        textTemplate: Handlebars.templates.sa_content_textbox
-    };
-
-    return {
-        render: function(data) {
-            var templateName = data.dataType + "Template",
-                content = templates[templateName](data);
-                renderedContent = templates.contentTemplate({
-                    content: content,
-                    src: data.srcUrl,
-                    contentId: "",
-                });
-            return renderedContent;
-        }
-    }
-})();
-
 // Content Card
 App.StandaloneCardView = Backbone.View.extend({
     saCardTemplate: Handlebars.templates.sa_card,
@@ -123,7 +63,7 @@ App.StandaloneCardView = Backbone.View.extend({
             this.$el.addClass('widearea-overlayLayer');
             this.$('.js-scroll-container')
                 .addClass('scroll-container absCenter')
-                .attr('style', 'width: '+halfWidth+'px;');
+                .attr('style', 'width: '+halfWidth+'px; margin-top: 50px;');
             this.$el.find('.info-card')
                 .addClass('presentation')
                 .attr('style', 'width: '+(halfWidth-25)+'px;');
@@ -210,6 +150,5 @@ App.StandaloneCardView = Backbone.View.extend({
         .fail(function(msg) {
             // Tell the user
         });
-
     },
 });

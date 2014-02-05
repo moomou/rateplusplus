@@ -10,15 +10,28 @@ ul {
 }
 
 .view-toolbar {
-  margin-top: 10px;
-  margin-left: -15px;
+  margin: 10px auto;
   border-bottom: 1px solid whitesmoke;
   text-align: center;
+  width: 100%;
   li {
     margin: 5px 50px 10px 50px;
     i {
       margin-left: 10px;
+      cursor: pointer;
     }
+  }
+  .fa-heart-o:hover {
+    color: pink;
+  }
+  .fa-twitter:hover {
+    color: cyan;
+  }
+  .fa-code-fork:hover {
+    color: gray;
+  }
+  .fa-share-square-o:hover {
+    color: green;
   }
 }
 
@@ -133,7 +146,6 @@ ul {
 }
 
 .info-card.presentation {
-  margin-top: 50px;
   @include box-shadow-none();
   @extend .absCenter;
   overflow-y: scroll;
