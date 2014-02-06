@@ -531,6 +531,17 @@
   margin: 5px;
   float: left; }
 
+/*Fix for Chrome slow scroll*/
+.navbar-fixed-top {
+  -webkit-transform: translateZ(0); }
+
+@-moz-document url-prefix() {
+  .moz-rankingNo {
+    margin-top: 22px !important; }
+
+  .moz-rankContainer {
+    margin-top: 35% !important; } }
+
 .table {
   display: table;
   /* Allow the centering to work */
@@ -605,6 +616,36 @@
 
 .subtle:hover {
   opacity: 0.75; }
+
+.btn-success {
+  background: #2ecc71; }
+
+.btn-inverse {
+  background: black; }
+
+.btn-danger {
+  background: #e74c3c; }
+
+.btn-white {
+  background: white; }
+
+.btn-success:hover {
+  background-color: #66EBA0; }
+
+.btn-danger:hover {
+  background-color: #EE796C; }
+
+.btn-inverse:hover {
+  background-color: #636363; }
+
+.btn-white:hover {
+  background-color: #FCFCFC; }
+
+.goldStar {
+  color: gold; }
+
+.blackStar {
+  color: black; }
 
 body {
   margin: 1em; }
@@ -728,6 +769,13 @@ ul {
     display: none; }
   .info-card.presentation .footer {
     display: none; }
+
+.info-card.detail {
+  border: none;
+  width: auto;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none; }
 
 .table {
   display: table;
