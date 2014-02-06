@@ -20,6 +20,23 @@
   }
 }
 
+#local-header {
+  
+  border: none;
+  #localSearch {
+    @extend #searchForm;
+    margin: -7px 0 0 25px;
+    input {
+      width: 120px;
+    }
+  }
+  .entityTitle {
+    font-size: 24px;
+    float: left;
+  }
+}
+
+
 #message-box {
   margin: 2em 5em 0 5em;
   #searchTerm {
@@ -38,3 +55,5 @@
   margin-top: 8px !important;
   font-size: 17px;
 }
+
+

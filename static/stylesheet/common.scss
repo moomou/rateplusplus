@@ -1,5 +1,19 @@
 @import "mixins";
 
+/*Fix for Chrome slow scroll*/
+.navbar-fixed-top {
+  -webkit-transform: translateZ(0);
+}
+
+@-moz-document url-prefix() {
+  .moz-rankingNo {
+    margin-top: 22px !important;
+  }
+  .moz-rankContainer {
+    margin-top: 35% !important;
+  }
+}
+
 .table {
   display: table;   /* Allow the centering to work */
   margin: 0 auto;
@@ -79,4 +93,39 @@
 }
 .subtle:hover {
   opacity: 0.75;
+}
+
+// Buttons
+.btn-success {
+  background:#2ecc71;
+}
+.btn-inverse {
+  background:black;
+}
+.btn-danger {
+  background: #e74c3c;
+}
+.btn-white {
+  background: white;
+}
+.btn-success:hover {
+  background-color: #66EBA0;
+}
+.btn-danger:hover {
+  background-color: #EE796C;
+}
+.btn-inverse:hover {
+  background-color: #636363;
+}
+.btn-white:hover {
+  background-color: #FCFCFC;
+}
+
+// Stars
+.goldStar {
+  color: gold;
+}
+
+.blackStar {
+  color: black;
 }

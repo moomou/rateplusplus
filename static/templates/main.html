@@ -13,77 +13,16 @@
       {% include "messageBox.partial" %}
     </div>
     <div class="container-narrow">
-      <div id="colRow" class="row-fluid hidden">
-        <div class="span3" id="col1"></div>
-        <div class="span3" id="col2"></div>
-        <div class="span3" id="col3"></div>
-        <div class="span3" id="col4"></div>
-      </div>
-
       {% if specific_entity %}
-        <div id="" class="row-fluid">
+        <div class="row-fluid">
           <div class="span12">
-            <ul id="myTab" class="nav nav-tabs">
-              <li class="">
-                <span href="#home" class="entityTitle">
-                  <i title="Private" class="fa fa-lock" id="privacy-setting"> </i> 
-                  <span id="entityTitle"></span>
-                </span>
-              </li>
-              <li class="noSelect active"><a href="#writing" data-toggle="tab"> About </a></li> 
-              <li class="noSelect"><a href="#content" data-toggle="tab"> Data</a></li> 
-              <li class="noSelect"><a href="#attribute" data-toggle="tab"> Attribute</a></li>
-              <li class="noSelect"><a href="#ranking" data-toggle="tab"> Ranking</a></li>
-              <li class="pull-right">
-                <ul class="entity-actions">
-                  <li>
-                    <a style="font-size:15px;" id="addNew" href="#" class="btn-like">
-                      <span class="fa-stack fa-lg" style="font-size:12px;">
-                        <i class="fa fa-circle-o fa-stack-2x"></i>
-                        <i class="fa fa-plus fa-stack-1x"></i>
-                      </span>
-                    </a>
-                  </li>
-                  <li>
-                  <a class="js-startEditor" href="#">
-                    <i class="fa fa-list-ul fa-lg btn-like"></i>
-                  </a>
-                  </li>
-                </ul>
-              </li> 
-            </ul>
-          </div> 
-        </div> 
-        <div id="detailRow" class="row-fluid">
-          <div class="span4" id="dr1"></div>
-          <div class="span8" id="dr2">
-            <div id="myTabContent" class="tab-content" style='overflow: visible;'>
-              <div class="tab-pane active" id="writing">
-                <div id="writingModal" class="textbox hide"> 
-                  <input class="title" placeholder="Title" type="text">
-                  <textarea placeholder="Start here"></textarea>
-                  <button id="writingSubmit" class="btn btn-success noSelect pull-right js-save" data-loading-text="Saving...">Save</button>
-                  <hr>
-                </div>
-                <ul class="writing"></ul>
-              </div>
-              <div class="tab-pane" id="attribute">
-              </div>
-              <div class="tab-pane" id="content">
-                {% include "contentModal.partial" %}
-                <div class="row-fluid content">
-                  <div class="span6">
-                    <ul class="data numData"></ul>
-                  </div>
-                  <div class="span6">
-                    <ul class="mediaData"></ul>
-                  </div>
-                </div>
-              </div>
-              <div class="tab-pane" id="ranking">
-              </div>
-            </div>
           </div>
+        </div>
+        <div id="detailRow" class="row-fluid">
+          <div class="span3" id="dr1"></div>
+          <div class="span3" id=""></div>
+          <div class="span3" id=""></div>
+          <div class="span3" id=""></div>
         </div>
       {% else %}
         <div id="rankingRow" class="row-fluid">
@@ -96,24 +35,25 @@
       {% endif %}
       <div id="mediaQuery" class="hidden-desktop" style="position:absolute;left:-1200px;"></div>
     </div>
-      
+
     {% csrf_token %}
 
+    {% include "contentModal.partial" %}
     {% include "imageChangeModal.partial" %}
     {% include "saEditor.partial" %}
 
-    {% if FEEDBACK_ENABLED %} 
+    {% if FEEDBACK_ENABLED %}
       {% include "feedbackForm.partial" %}
     {% endif %}
 
-    {% if REQUEST_ENABLED %} 
+    {% if REQUEST_ENABLED %}
       {% include "requestForm.partial" %}
     {% endif %}
 
     {% include "stdScript.partial" %}
     {% include "modelScript.partial" %}
 
-    <script src="{{STATIC_URL}}script/app.js"></script> 
+    <script src="{{STATIC_URL}}script/app.js"></script>
 
   </body>
 </html>

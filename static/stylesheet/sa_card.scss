@@ -156,3 +156,8 @@ ul {
     display: none;
   }
 }
+.info-card.detail {
+  border: none;
+  width: auto;
+  @include box-shadow-none();
+}

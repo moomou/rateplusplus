@@ -67,14 +67,14 @@ App.AppRouter = Backbone.Router.extend({
             _(allRankings).each(function(ranking) {
                 var rankListIcons = [],
                     rankingRow = new App.ProfileRowView({
-                        model: ranking, 
+                        model: ranking,
                         sessionStorageInd: sessionStorageInd
                     }).render(),
                     rank = 1;
 
                 _(ranking.ranks).each(function(entityId) {
                     var link = window.location.origin + "/entity/" + entityId;
-                    rankListIcons = 
+                    rankListIcons =
                         new App.RankListIconView(
                             {rank: rank, link: link, sessionStorageInd: sessionStorageInd});
 
@@ -140,7 +140,7 @@ App.AppRouter = Backbone.Router.extend({
                     break;
                 // step 3
                 case 2:
-                    document.location.href = 
+                    document.location.href =
                         window.location.origin + "/entity/" + cardRef.model.get('id');
                     console.log("Finished");
                     break;
@@ -190,8 +190,7 @@ App.AppRouter = Backbone.Router.extend({
         });
 
         $('#addNew').click(function(e) {
-            var selectedTab = $('#myTab').find('.active a').attr('href');
-            $(selectedTab+'Modal').toggle();
+            $('#contentModal').modal();
         });
 
         $('#contentSubmit').click(function(e) {

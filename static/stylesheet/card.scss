@@ -94,6 +94,19 @@
   img {
       @include border-radius(5px 5px 0 0);
   }
+  .profileHeading {
+    height: 156px;
+    text-align: center;
+    font-size: 24px;
+    border-bottom: 1px solid whitesmoke;
+
+    span {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 156px;
+      text-align: center;
+    }
+  }
   .info {
     margin: 10px;
     padding: 25px 10px 50px 10px;

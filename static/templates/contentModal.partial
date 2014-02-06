@@ -1,4 +1,4 @@
-<div id="contentModal" class="hide">
+<div id="contentModal" class="hide modal fade-in">
   <div class="modal-header">
     <ul class="addContentType tab" id="addContent">
       <li class="contentType cursor-pointer" data-target='#pictureframe'>
@@ -76,7 +76,8 @@
       </div>
     </div>
   </div>
-  <a style="font-size: 15px;width: 75px;margin: 0 auto;display: block;height: 25px;z-index: 99999;" id="saveContentBtn" href="#" class="btn btn-small btn-success">Save</a>
-  <hr>
+  <div class="modal-footer">
+    <a style="font-size: 15px;width: 75px;margin: 0 auto;display: block;height: 25px;z-index: 99999;" id="saveContentBtn" href="#" class="btn btn-small btn-success">Save</a>
+  </div>
 </div>
 

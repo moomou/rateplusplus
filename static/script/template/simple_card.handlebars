@@ -1,8 +1,14 @@
 <div class="card-header">
 </div>
 <div class="photo">
-  <a class="btn-like" href="entity/{{id}}">
-    <img src="{{imgURL}}" class="profileimg">
+  <a class="btn-like" href="{{entityUrl}}">
+    {{#if imgURL}}
+    <img class="profileimg" src="{{imgURL}}">
+    {{else}}
+    <div class="profileHeading">
+      <span>{{title}}</span>
+    </div>
+    {{/if}}
   </a>
 </div>
 <div class="contentContainer outer">
@@ -16,11 +22,7 @@
     <i class="fa fa-share-square-o fa-lg"></i>
     </li>
   </ul>
-  <div class="tagsContent outer">
-    <div class="hashTag cardView">
-      <ul class="tags tagit">
-        {{tag}}
-      </ul>
-    </div>
-  </div>
+  <ul class="tags tagit">
+    {{tag}}
+  </ul>
 </div>
