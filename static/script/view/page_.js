@@ -1,54 +1,64 @@
 // Page level views
 App.DetailEntityPageView = Backbone.View.extend({
+    detailTemplate: Handlebars.templates.detail_summary,
     initialize: function(settings) {
         settings = settings || {};
 
         if (!settings.id) {
-            console.log("Must specify a single entity for detail");
+            debugger;
+            this.collection = null;
+            this.editing = true;
+            this.render();
+        } else {
+            this.collection =
+                new App.SummaryCardCollection(App.SPECIFIC_ENTITY, settings.id);
+            this.collection.on('reset', this.render, this);
+        }
+
+        this.colManager = App.ColManager;
+    },
+    render: function() {
+        if (this.collection) {
+            var item = _(this.collection.models).first();
+        } else {
+            var item = new App.SummaryCardModel();
+        }
+
+        this.renderMain(item);
+        this.renderData(item);
+    },
+    renderMain: function(item) {
+        var isPrivate = item.get('private'),
+            templateValues = item.toJSON();
+
+        templateValues.editing = this.editing;
+        $('#main-summary').html(this.detailTemplate(templateValues));
+
+        //App.DetailPage.privacyIcon
+        //    .attr('class', isPrivate ? "fa fa-lock" : "fa fa-globe")
+        //    .attr('title', isPrivate ? "Private" : "Public")
+        //    .tooltip();
+    },
+    renderData: function(item) {
+        if (this.editing) {
             return;
         }
 
-        this.collection = 
-            new App.SummaryCardCollection(App.SPECIFIC_ENTITY, settings.id);
-        this.collection.on('reset', this.render, this);
-    },
-    render: function() {
-        var item = _(this.collection.models).first();
-        this.renderPage(item);
-        this.renderEntity(item);
-    },
-    renderPage: function(item) {
-        var isPrivate = item.get('private'),
-            title = item.get('name');
+        var colManager = this.colManager;
+        var renderSimpleCard = function(renderType, list) {
+            _(list).each(function(__, ind) {
+                var simpleCard = new App.SimpleCard({
+                    model: item,
+                    renderType: renderType,
+                    renderIndex: ind
+                });
 
-        App.DetailPage.privacyIcon
-            .attr('class', isPrivate ? "fa fa-lock" : "fa fa-globe")
-            .attr('title', isPrivate ? "Private" : "Public")
-            .tooltip();
-        App.DetailPage.title
-            .text(title);
-        App.CommentContainer.show();
-    },
-    renderEntity: function(item) {
-        var cardView = new App.SummaryCardView({
-            model: item,
-            renderMode: "detail"
-        });
+                colManager.CardCol.getNext().append(simpleCard.render().el);
+            });
+        };
 
-        var simpleCard1 = new App.SimpleCard({
-            model: item,
-            renderType: 'data',
-            renderIndex: 2
-        });
-        var simpleCard2 = new App.SimpleCard({
-            model: item,
-            renderType: 'attributes',
-            renderIndex: 1
-        });
-
-        document.getElementById('dr1').appendChild(simpleCard1.render().el);
-        document.getElementById('dr1').appendChild(simpleCard2.render().el);
-        //document.getElementById('dr1').appendChild(cardView.render().el);
+        renderSimpleCard('data', item.get('data'));
+        renderSimpleCard('attributes', item.get('attributes'));
     }
 });
 
@@ -63,8 +73,7 @@ App.PageView = Backbone.View.extend({
 
         if (settings.renderMode != "card" && settings.id) { //specific entity
             new App.DetailEntityPageView(settings);
-        }
-        else {
+        } else {
             if (settings.renderMode == "card") {
                 new App.PinCardCollectionView(settings);
             }

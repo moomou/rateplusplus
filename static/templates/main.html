@@ -11,18 +11,19 @@
 
     <div class="container-narrow">
       {% include "messageBox.partial" %}
-    </div>
-    <div class="container-narrow">
+
       {% if specific_entity %}
         <div class="row-fluid">
-          <div class="span12">
+          <div id="main-summary" class="span12">
           </div>
         </div>
+        {% if not_new %}
+          {% include "localHeader.partial" %}
+        {% endif %}
         <div id="detailRow" class="row-fluid">
-          <div class="span3" id="dr1"></div>
-          <div class="span3" id=""></div>
-          <div class="span3" id=""></div>
-          <div class="span3" id=""></div>
+          <div class="span4" id="col1"></div>
+          <div class="span4" id="col2"></div>
+          <div class="span4" id="col3"></div>
         </div>
       {% else %}
         <div id="rankingRow" class="row-fluid">

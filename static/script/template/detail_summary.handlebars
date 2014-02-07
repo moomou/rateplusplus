@@ -1,29 +1,35 @@
 <div class="info-card detail">
   <div class="header">
-    <div class="profile pull-left js-profile" style="background-image: url('{{imgURL}}')">
-      <ul class="meta pull-left">
-        {{#if editing}}
-        <li class="name">
-        <span class="title-input js-title">{{title}}</span>
-        </li>
-        <li class="hash">
-        <span class="tag-input js-tag">{{tags}}</span>
-        </li>
-        {{else}}
-        <li class="name">
+    {{#if editing}}
+    <div class="profile pull-left js-profile" style="background-image: url('//cloverite.com/static/img/blank.png')"></div>
+    <ul class="meta pull-left">
+      <li class="name">
         <input class="title-input js-title" placeholder="Title" type="text">
-        </li>
-        <li class="hash">
+      </li>
+      <li class="hash">
         <input class="tag-input js-tag" placeholder="#hashTag" type="text">
-        </li>
-        {{/if}}
-      </ul>
-      <ul class="contributor pull-right">
-      </ul>
-      <span>Contributed by</span>
-      <div class="pull-left">
-        <p>{{description}}</p>
-      </div>
+      </li>
+    </ul>
+    <div>
+      <textarea placeholder="Enter description here."></textarea>
     </div>
+    {{else}}
+    <div class="profile pull-left js-profile" style="background-image: url('{{imgURL}}')"></div>
+    <ul class="meta pull-left">
+      <li class="name">
+        <span class="title-input js-title">{{name}}</span>
+      </li>
+      <li class="hash">
+        <span class="tag-input js-tag">{{tags}}</span>
+      </li>
+    </ul>
+    <ul class="contributor pull-right">
+      {{contributors}}
+    </ul>
+    <span class="pull-right"> Contributed by</span>
+    <div class="pull-left">
+      <p>{{description}}</p>
+    </div>
+    {{/if}}
   </div>
 </div>
