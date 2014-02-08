@@ -114,9 +114,9 @@
   border: 1px solid rgba(0, 0, 0, 0.15); }
 
 .card {
-  -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18) ;
-  -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18) ;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18) ;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
   -webkit-transition: border-color 0.2s linear 0s;
   -moz-transition: border-color 0.2s linear 0s;
   -ms-transition: border-color 0.2s linear 0s;
@@ -132,8 +132,7 @@
     width: 100%; }
   .card .contentContainer {
     min-height: 10em;
-    min-width: 100%;
-    overflow: auto; }
+    min-width: 100%; }
   .card .header-btn {
     cursor: pointer;
     position: absolute;

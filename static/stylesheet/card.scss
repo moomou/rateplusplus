@@ -38,7 +38,7 @@
 
 .card {
   @extend .rankingTable;
-  @include box-shadow(1px, 1px, 2px, rgba(0, 0, 0, 0.18));
+  @include box-shadow-none(); //(1px, 1px, 2px, rgba(0, 0, 0, 0.18));
   @include transition(border-color, 0.2s, linear);
   width: 250px;
   margin: 0 auto;
@@ -50,7 +50,6 @@
   .contentContainer {
     min-height: 10em;
     min-width: 100%;
-    overflow: auto;
   }
 
   .header-btn {
