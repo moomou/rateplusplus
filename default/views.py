@@ -153,6 +153,7 @@ def AdHandler(request):
 def EntityHandler(request, pk):
     renderCxt = ContextSetup(request)
     renderCxt['specific_entity'] = True
+    renderCxt['not_new'] = True
     t = loader.get_template('main.html')
     c = RequestContext(request, renderCxt)
 
@@ -160,7 +161,8 @@ def EntityHandler(request, pk):
 
 def NewEntityHandler(request):
     renderCxt = ContextSetup(request)
-    t = loader.get_template('new.html')
+    renderCxt['specific_entity'] = True
+    t = loader.get_template('main.html')
     c = RequestContext(request, renderCxt)
 
     return HttpResponse(t.render(c))

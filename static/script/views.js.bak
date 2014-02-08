@@ -36,6 +36,7 @@ App.GlobalWidget.rankingPrivacy.tooltip();
 /**
  * Common Utility Function
  */
+
 // Used completely for its side effect
 App.updateSessionStorageRankingView = function(currentRankingInd) {
     currentRankingInd = parseInt(currentRankingInd);
@@ -777,7 +778,6 @@ App.SimpleCard = Backbone.View.extend({
         var templateValues = this.model.toJSON();
         this.$el.html(this.template(templateValues));
         this.$('.entityDetail').html(this.content);
-
         return this;
     },
 });
@@ -1681,6 +1681,7 @@ App.StandaloneCardView = Backbone.View.extend({
 
 // Page level views
 App.DetailEntityPageView = Backbone.View.extend({
+    detailTemplate: Handlebars.templates.detail_summary,
     initialize: function(settings) {
         settings = settings || {};
 
@@ -1689,47 +1690,44 @@ App.DetailEntityPageView = Backbone.View.extend({
             return;
         }
 
-        this.collection = 
+        this.collection =
             new App.SummaryCardCollection(App.SPECIFIC_ENTITY, settings.id);
         this.collection.on('reset', this.render, this);
     },
     render: function() {
         var item = _(this.collection.models).first();
-        this.renderPage(item);
-        this.renderEntity(item);
+        this.renderMain(item);
+        this.renderData(item);
     },
-    renderPage: function(item) {
+    renderMain: function(item) {
         var isPrivate = item.get('private'),
-            title = item.get('name');
+            title = item.get('name'),
+            rendered = this.detailTemplate(item.toJSON());
 
-        App.DetailPage.privacyIcon
-            .attr('class', isPrivate ? "fa fa-lock" : "fa fa-globe")
-            .attr('title', isPrivate ? "Private" : "Public")
-            .tooltip();
-        App.DetailPage.title
-            .text(title);
-        App.CommentContainer.show();
+        $('#main-summary').html(rendered);
+
+        //App.DetailPage.privacyIcon
+        //    .attr('class', isPrivate ? "fa fa-lock" : "fa fa-globe")
+        //    .attr('title', isPrivate ? "Private" : "Public")
+        //    .tooltip();
     },
-    renderEntity: function(item) {
-        var cardView = new App.SummaryCardView({
-            model: item,
-            renderMode: "detail"
-        });
+    renderData: function(item) {
 
-        var simpleCard1 = new App.SimpleCard({
-            model: item,
-            renderType: 'data',
-            renderIndex: 2
-        });
-        var simpleCard2 = new App.SimpleCard({
-            model: item,
-            renderType: 'attributes',
-            renderIndex: 1
-        });
+        var renderSimpleCard = function(renderType, list) {
+            _(list).each(function(__, ind) {
+                var simpleCard = new App.SimpleCard({
+                    model: item,
+                    renderType: renderType,
+                    renderIndex: ind
+                });
 
-        document.getElementById('dr1').appendChild(simpleCard1.render().el);
-        document.getElementById('dr1').appendChild(simpleCard2.render().el);
-        //document.getElementById('dr1').appendChild(cardView.render().el);
+                document.getElementById('dr1')
+                    .appendChild(simpleCard.render().el);
+            });
+        };
+
+        renderSimpleCard('data', item.get('data'));
+        renderSimpleCard('attributes', item.get('attributes'));
     }
 });
 

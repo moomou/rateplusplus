@@ -35,6 +35,7 @@ App.GlobalWidget.rankingPrivacy.tooltip();
 /**
  * Common Utility Function
  */
+
 // Used completely for its side effect
 App.updateSessionStorageRankingView = function(currentRankingInd) {
     currentRankingInd = parseInt(currentRankingInd);
@@ -771,12 +772,14 @@ App.SimpleCard = Backbone.View.extend({
         else {
             this.content = App.ContentDataView.render(data, true);
         }
+        this.title = data.name;
     },
     render: function() {
         var templateValues = this.model.toJSON();
+        templateValues.title = this.title;
+
         this.$el.html(this.template(templateValues));
         this.$('.entityDetail').html(this.content);
-
         return this;
     },
 });
@@ -1320,7 +1323,7 @@ App.PinCardCollectionView = Backbone.View.extend({
             this.collection =
                 new App.SummaryCardCollection(App.SPECIFIC_ENTITY, settings.id);
         }
-        this.colManager = App.ColManager.getCardCol();
+        this.colManager = App.ColManager.CardCol;
         this.collection.on('reset', this.render, this);
     },
     filter: function(func) {

@@ -251,7 +251,7 @@ App.SummaryCardModel = App.CloverModel.extend({
                 hashTags += '<li>' + tag +'</li>';
             }
         });
-    
+
         return hashTags;
     },
     updateEntityStats: function(attrs) {
@@ -275,7 +275,7 @@ App.SummaryCardModel = App.CloverModel.extend({
 
         if (totalVote !== 0) {
             _.each(attrs, function(attr) {
-                var attrScore = attr.upVote / (attr.voteCount || 1); //divide by totalCount unless 0 
+                var attrScore = attr.upVote / (attr.voteCount || 1); //divide by totalCount unless 0
                 if (attr.tone == App.POSITIVE) {
                     posAttr += 1;
                 }
@@ -319,6 +319,7 @@ App.SummaryCardCollection = App.CloverCollection.extend({
     model: App.SummaryCardModel,
     initialize: function(cardType, data) {
         this.cardType = cardType;
+
         if (cardType == App.SPECIFIC_RANKING) {
             this.urlStub = 'ranking/share/' + data;
             this.fetch();
@@ -424,27 +425,24 @@ App.Utility = (function() {
 App.ColManager = (function() {
     //private
     var configCol = function(colRef) {
-        return function() {
-            return {
-                ind: 0,
-                cols: colRef,
-                getNext: function () {
-                    var curInd = this.ind;
-                    this.ind = (this.ind + 1) % colRef.length;
-                    return colRef[curInd];
-                },
-            };
+        var ind = 0,
+            cols = colRef;
+
+        return {
+            getNext: function () {
+                var curInd = ind;
+                ind = (ind + 1) % cols.length;
+                return cols[curInd];
+            }
         };
     };
 
-    var cardCols = [$('#col1'), $('#col2'), $('#col3'), $('#col4')],
-        cmtCols = [$('#cmt1'), $('#cmt2'), $('#cmt3')],
-        getCardCol = configCol(cardCols),
-        getCmtCol = configCol(cmtCols);
+    var cardCols = [$('#col1'), $('#col2'), $('#col3')],
+        cmtCols = [$('#cmt1'), $('#cmt2'), $('#cmt3')];
 
     return {
-        getCardCol: getCardCol,
-        getCmtCol: getCmtCol
+        CardCol: configCol(cardCols),
+        CmtCol: configCol(cmtCols)
     };
 })();
 

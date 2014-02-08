@@ -159,5 +159,19 @@ ul {
 .info-card.detail {
   border: none;
   width: auto;
+  margin-bottom: 25px;
+
   @include box-shadow-none();
+
+  textarea {
+    @include box-shadow-none();
+    width: 95%;
+    font-size: 17px;
+    border: none;
+  }
+  p {
+    clear: both;
+    text-align: justify;
+    margin-top: 10px;
+  }
 }

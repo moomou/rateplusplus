@@ -1,42 +1,12 @@
 // Router File
 App.AppRouter = Backbone.Router.extend({
     routes: {
-        "graph" : "graphPageInit",
         "profile" : "profilePageInit",
-        "entity/new" : "newEntityPageInit",
-        "ranking/:shareToken" : "rankingViewInit",
-        "entity/:id" : "detailEntityPageInit",
         "profile/:id" : "profilePageInit",
-        "" : "defaultPageInit", //handles query
-    },
-    graphPageInit: function() {
-        var that = this;
-
-        this.leftSearch = new App.CardColView({col:0});
-        $('#leftSearchBtn').click(function() {
-            var q = {};
-            q.query = $('#leftSearchForm input').val();
-            that.leftSearch.search(q);
-        });
-
-        this.rightSearch = new App.CardColView({col:2});
-        $('#rightSearchBtn').click(function() {
-            var q = {};
-            q.query = $('#rightSearchForm input').val();
-            that.rightSearch.search(q);
-        });
-
-        $('#linkBtn').click(function(e) {
-            var newRelation = new App.LinkView({
-                model: new App.LinkModel(),
-            });
-            App.ColManager.getCol("card").cols[1].append(newRelation.render().el);
-        });
-
-        $(document).on('graphLinkSet', function(e) {
-            var domContainer = App.ColManager.getCol('card').cols[1];
-            var graphView = new App.GraphView({domContainer: domContainer});
-        });
+        "entity/new" : "newEntityPageInit",
+        "ranking/:shareToken" : "rankingPage",
+        "entity/:id" : "detailPageInit",
+        "" : "defaultPageInit",
     },
     profilePageInit: function(id) {
         console.log("Profile Page Init");
@@ -92,6 +62,7 @@ App.AppRouter = Backbone.Router.extend({
     },
     newEntityPageInit: function(queryString) {
         console.log("New Entity");
+
         var empty = getQueryVariable("empty"),
             searchTerm = getQueryVariable("searchterm");
 
@@ -100,54 +71,10 @@ App.AppRouter = Backbone.Router.extend({
             App.GlobalWidget.searchMessageBox.show();
         }
 
-        var stateVar = 0,
-            cardRef  = App.CreateNewCard(),
-            saveCancelBtn = Handlebars.templates.saveCancelBtn;
-
-        $('#dr1').append(saveCancelBtn({
-            'id': 'saveCancelContainer',
-            'saveId': 'saveAndNext',
-            'cancelId': 'cancelAndNext'
-        }));
-
-        $("#saveAndNext").click(function(e) {
-            switch (stateVar) {
-                // step 1
-                case 0:
-                    stateVar = -1; // hacky way to disabel btn
-
-                    cardRef.setPrivacy($('#publicCheckBox').is(':checked'));
-                    cardRef.saveCreation(null, function() {
-                        cardRef.addNewAttribute();
-                        $('#attribute').removeClass('hidden');
-                        var dom = $('#saveCancelContainer').detach();
-                        $('#attribute').append(dom);
-                        stateVar = 1;
-                    });
-                    break;
-                // step 2
-                case 1:
-                    stateVar = -1;
-
-                    cardRef.saveAllAttributes();
-                    $('#dr3').removeClass('hidden');
-
-                    var dom = $('#saveCancelContainer').detach();
-                    dom.find('#saveAndNext').html('Go to the new card');
-                    $('#dr3').append(dom);
-
-                    stateVar = 2;
-                    break;
-                // step 3
-                case 2:
-                    document.location.href =
-                        window.location.origin + "/entity/" + cardRef.model.get('id');
-                    console.log("Finished");
-                    break;
-            }
-        });
+        // empty card view
+        new App.DetailEntityPageView();
     },
-    rankingViewInit: function(shareToken) {
+    rankingPageInit: function(shareToken) {
         var forking = getQueryVariable("forking") == "true",
             rawRankingView = sessionStorage.getItem("rankingView"),
             rankingView = rawRankingView && JSON.parse(rawRankingView);
@@ -158,36 +85,11 @@ App.AppRouter = Backbone.Router.extend({
 
         pageView = new App.PageView({rankingId: shareToken, forking: forking});
     },
-    detailEntityPageInit: function(id) {
-        console.log("detail Entity");
+    detailPageInit: function(id) {
+        console.log("detail");
 
         App.RankingController();
-
-        pageView = new App.PageView({id: parseInt(id)}); //search for particular id
-
-        $('#submitComment').click(function(e) {
-            var comment = $('#commentForm'),
-                btn = $(this);
-
-            if (!comment.val()) {
-                return;
-            }
-
-            btn.button('loading');
-
-            var newComment = new App.CommentModel({});
-
-            newComment.set('comment', comment.val());
-            newComment.set('entity', id);
-
-            newComment.save({}, {
-                success: function(response) {
-                    btn.button('reset');
-                },
-                error: function(response) {
-                },
-            });
-        });
+        new App.DetailEntityPageView({id: parseInt(id)});
 
         $('#addNew').click(function(e) {
             $('#contentModal').modal();
@@ -241,7 +143,7 @@ App.AppRouter = Backbone.Router.extend({
         var query = $('#searchInput').val();
 
         if (query) {
-            pageView = new App.PageView({query:query});
+            pageView = new App.PageView({query:query, renderMode: 'card'});
         }
 
         $('#filterBtn').click(function(e) {
