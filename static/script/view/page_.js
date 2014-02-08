@@ -5,7 +5,6 @@ App.DetailEntityPageView = Backbone.View.extend({
         settings = settings || {};
 
         if (!settings.id) {
-            debugger;
             this.collection = null;
             this.editing = true;
             this.render();

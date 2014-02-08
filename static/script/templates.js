@@ -237,7 +237,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   
-  return "\n    <div class=\"profile pull-left js-profile\" style=\"background-image: url('//cloverite.com/static/img/blank.png')\"></div>\n    <ul class=\"meta pull-left\">\n      <li class=\"name\">\n        <input class=\"title-input js-title\" placeholder=\"Title\" type=\"text\">\n      </li>\n      <li class=\"hash\">\n        <input class=\"tag-input js-tag\" placeholder=\"#hashTag\" type=\"text\">\n      </li>\n    </ul>\n    <div>\n      <textarea placeholder=\"Enter description here.\"></textarea>\n    </div>\n    ";
+  return "\n    <div class=\"profile pull-left js-profile\" style=\"background-image: url('//cloverite.com/static/img/blank.png')\">\n      <button class=\"btn-mini btn btn-success hide\" id=\"save-btn\" style=\"margin: 0 auto;display: block; margin-top: 80%;\">Change</button>\n    </div>\n    <ul class=\"meta pull-left\">\n      <li class=\"name\">\n        <input class=\"title-input js-title\" placeholder=\"Title\" type=\"text\">\n      </li>\n      <li class=\"hash\">\n        <input class=\"tag-input js-tag\" placeholder=\"#hashTag\" type=\"text\">\n      </li>\n    </ul>\n    <div>\n      <textarea placeholder=\"Enter description here.\"></textarea>\n    </div>\n    ";
   }
 
 function program3(depth0,data) {
@@ -292,6 +292,23 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   else { helper = (depth0 && depth0.domId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "' class='hide'> \n  <textarea class='editBox' placeholder='Add Description' data-widearea='enable'></textarea> \n</div>\n";
+  return buffer;
+  });
+})();
+
+(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['partial_hashtags'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function";
+
+
+  buffer += "<ul class=\"hash\">\n  ";
+  if (helper = helpers.hashTags) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.hashTags); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n</ul>\n";
   return buffer;
   });
 })();
@@ -542,8 +559,8 @@ function program11(depth0,data) {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['sa_card_row'] = template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 
   buffer += "<div class=\"info-card\" style=\"width: auto;\">\n  <div class=\"header\">\n    <a href=\"";
@@ -562,11 +579,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span>\n        </a>\n      </li>\n      <li> \n        <ul class=\"hash\">\n          ";
-  if (helper = helpers.hashTags) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.hashTags); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+    + "</span>\n        </a>\n      </li>\n      <li> \n        ";
+  stack1 = self.invokePartial(partials.partial_hashtags, 'partial_hashtags', depth0, helpers, partials, data);
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n        </ul>\n      </li>\n    </ul>\n  </div>\n  <hr style=\"visibility: hidden;\">\n</div>\n";
+  buffer += "\n      </li>\n    </ul>\n  </div>\n  <hr style=\"visibility: hidden;\">\n</div>\n";
   return buffer;
   });
 })();
@@ -575,8 +591,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['sa_card_summary'] = template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 
   buffer += "<div class=\"info-card\" style=\"width: auto;\">\n  <div class=\"header\">\n    <a href=\"";
@@ -595,11 +611,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span>\n        </a>\n      </li>\n      <li>\n        <ul class=\"hash\">\n          ";
-  if (helper = helpers.hashTags) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.hashTags); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+    + "</span>\n        </a>\n      </li>\n      <li>\n        ";
+  stack1 = self.invokePartial(partials.partial_hashtags, 'partial_hashtags', depth0, helpers, partials, data);
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n        </ul>\n    </ul>\n    <ul class=\"action\">\n    </ul>\n  </div>\n  <div class=\"textbox\">\n    <p>";
+  buffer += "\n    </ul>\n    <ul class=\"action\">\n    </ul>\n  </div>\n  <div class=\"textbox\">\n    <p>";
   if (helper = helpers.description) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.description); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

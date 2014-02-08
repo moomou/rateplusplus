@@ -73,6 +73,14 @@ App.AppRouter = Backbone.Router.extend({
 
         // empty card view
         new App.DetailEntityPageView();
+
+        /*
+        $("#main-summary input, textarea").focus(function(e) {
+            $("#top-menu").animate({opacity: 0}, 300);
+        });
+        $("#main-summary input, textarea").focusout(function(e) {
+            $("#top-menu").animate({opacity: 1}, 300);
+        });*/
     },
     rankingPageInit: function(shareToken) {
         var forking = getQueryVariable("forking") == "true",

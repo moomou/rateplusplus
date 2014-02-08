@@ -857,7 +857,6 @@ App.RankingRowView = App.SummaryCardView.extend({
     },
     render: function() {
         var that = this;
-        debugger;
         this.$el.html(this.template(this.model.toJSON()));
 
         this.el.addEventListener('dragover', function(ev) {

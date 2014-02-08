@@ -1,4 +1,11 @@
 /* Support Functions */
+function textAreaAdjust(e) {
+    debugger;
+    var o = e.target;
+    o.style.height = "1px";
+    o.style.height = (25+o.scrollHeight)+"px";
+}
+
 function guidGenerator() {
     var S4 = function() {
        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
@@ -72,9 +79,6 @@ function getQueryVariable(variable) {
         }
     }
     return false;
-}
-
-function sessionStorageGetter() {
 }
 
 //Configuring Ajax to include CSRF

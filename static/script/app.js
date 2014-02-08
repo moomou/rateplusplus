@@ -47,6 +47,13 @@ $(function() {
 
     $('#navBtns li').tooltip({placement: 'bottom'});
 
+    Handlebars.partials = Handlebars.templates;
+
+    $('textarea')
+        .keyup(textAreaAdjust)
+        .on('input propertychange', textAreaAdjust)
+        .on('paste', function(e) {setTimeout(textAreaAdjust(e), 500);});
+
     window.addEventListener('scroll', function() {
       var localHeader = $('#local-header');
 

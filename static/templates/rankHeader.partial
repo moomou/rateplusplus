@@ -1,4 +1,4 @@
-<div id="rankingHeader" style="display:none;" class="navbar">
+<div id="rankingHeader" style="display:none; margin-top: 20px;" class="navbar">
   <div class="navbar-inner rankbar">
     <div class="container-narrow">
       <a href="#"><i data-toggle="tooltip" title="Fork Ranking" id="rankingFork" class="fa fa-code-fork fa-2x btn-like"> </i></a>
