@@ -1,25 +1,29 @@
-<div class="info-card">
+<div class="info-card" style="width: auto;">
   <div class="header">
-    <div class="profile pull-left js-profile" style="background-image: url('{{imgURL}}')"></div>
+    <a href="{{srcUrl}}">
+      <div class="profile pull-left js-profile" style="background-image: url('{{imgURL}}')"></div>
+    </a>
     <ul class="meta pull-left">
       <li class="name">
-        <span class="title-input js-title">{{name}}</span>
+        <a class="muted" href="{{srcUrl}}">
+          <span class="title-input js-title">{{name}}</span>
+        </a>
       </li>
-      <li class="hash">
-        <span class="tag-input js-tag">{{tags}}</span> </li>
+      <li>
+        <ul class="hash">
+          {{{hashTags}}}
+        </ul>
     </ul>
     <ul class="action">
-      <li><i class="fa fa-minus fa-lg cursor-pointer js-hide-screen"></i></li>
-      <li><i class="fa fa-arrows-alt fa-lg cursor-pointer js-full-screen"></i></li>
     </ul>
   </div>
-  <div class="content" style="margin-top: 25px;">
-    {{description}}
+  <div class="textbox">
+    <p>{{description}}</p>
   </div>
   <div class="content" style="margin-top: 25px;">
     {{{summary}}}
   </div>
-  <div class="footer">
+  <div class="footer" style="width: auto;">
     <div class="by pull-right">Contributed by <span>{{{authors}}}</span></div>
   </div>
 </div>

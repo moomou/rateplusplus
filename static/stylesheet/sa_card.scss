@@ -79,6 +79,15 @@ ul {
       .hash {
         font-size: 12px;
         color: gray;
+        margin: 0;
+
+        li {
+          float: left;
+          margin-left: 10px;
+        }
+        li:first-child {
+          margin-left: 0px;
+        }
       }
       input {
         @include box-shadow-none();

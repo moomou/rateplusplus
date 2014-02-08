@@ -143,7 +143,7 @@ App.AppRouter = Backbone.Router.extend({
         var query = $('#searchInput').val();
 
         if (query) {
-            pageView = new App.PageView({query:query, renderMode: 'card'});
+            pageView = new App.SearchPageView({query:query});
         }
 
         $('#filterBtn').click(function(e) {

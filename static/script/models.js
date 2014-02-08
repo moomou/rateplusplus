@@ -216,12 +216,15 @@ App.SummaryCardModel = App.CloverModel.extend({
     parse: function(response) {
         response = App.CloverModel.prototype.parse.apply(this, arguments);
         console.log("SummaryCardModel Parse");
-        console.log(response);
+
         response.hashTags = this.cleanTags(response.tags);
         response.summary = this.getEntityStats(response.attributes);
+        
+        response['srcUrl'] = window.location.origin + '/entity/' + response.id;
+
         response['entityModel'] = new App.EntityModel(response);
         response['attributeCollection'] =
-            new App.AttributeCollection(response['attributes'], response['id']);
+            new App.AttributeCollection(response.attributes, response.id);
 
         return response;
     },

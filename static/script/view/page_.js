@@ -62,63 +62,51 @@ App.DetailEntityPageView = Backbone.View.extend({
     }
 });
 
-App.PageView = Backbone.View.extend({
+App.SearchPageView = Backbone.View.extend({
+    summaryTemplate: Handlebars.templates.sa_card_summary,
+    rowTemplate: Handlebars.templates.sa_card_row,
     initialize: function(settings) {
         settings = settings || {};
 
-        this.renderMode = settings.renderMode || 'default';
-        this._filter = function(e) {
-            return true;
-        };
+        this.collection =
+            new App.SummaryCardCollection(App.SEARCH_ENTITY, settings.query)
 
-        if (settings.renderMode != "card" && settings.id) { //specific entity
-            new App.DetailEntityPageView(settings);
-        } else {
-            if (settings.renderMode == "card") {
-                new App.PinCardCollectionView(settings);
-            }
-            else { // default is tabular
-                new App.TableCardCollectionView(settings);
-            }
-        }
-    },
-});
-
-App.GraphView = Backbone.View.extend({
-    initialize: function(settings) {
-        this.collection = new App.LinkCollection();
-        this._filter = function(e) {
-            return true;
-        };
-
-        this.domContainer = settings.domContainer;
-        this.collection.fetch({data: $.param({leftId: App.leftId, rightId: App.rightId})});
+        this.pageType = {'type': "search", 'value': settings.query};
         this.collection.on('reset', this.render, this);
+
+        this.parentDOM = $('#top');
+        this.quickSummaryCavnas = $('#quick-summary');
+        this.searchResultCanvas = $('#search-result');
     },
-    filter: function(func) {
-        if (!func) {
-            this._filter = function(e) {
-                return true;
-            }
+    _renderToPage: function(parentDOM) {
+        parentDOM.hide();
+        while (arguments > 2) {
+            var _parent = arguments[0],
+                _child = arguments[1],
+                arguments = arguments.splice(2);
+            _parent.addChild(_child);
         }
-        else {
-            this._filter = func;
-        }
+        parentDOM.show();
     },
     render: function() {
-        var that = this,
-            filteredList = _.filter(this.collection.models, this._filter);
+        // Didn't find anything
+        if (this.collection.models.length == 0) {
+            document.location.href = window.location.origin +
+                "/entity/new?empty=true&searchterm=" +
+                encodeURIComponent(App.GlobalWidget.searchInput.val());
+        } else {
+            var that = this,
+                searchResults = [],
+                quickSummary = this.summaryTemplate(
+                    _(this.collection.models).first().toJSON());
 
-        console.log('In LinkCollectionView');
-        _.each(filteredList, function(item) {
-            that.renderLink(item);
-        }, this);
-    },
-    renderLink: function(item) {
-        var linkView = new App.LinkView({
-            model: item
-        });
+            _(this.collection.models).each(function(model) {
+                var row = that.rowTemplate(model.toJSON());
+                searchResults.push(row);
+            });
 
-        this.domContainer.append(linkView.render().el);
+            this.searchResultCanvas.html(searchResults.join("\n"));
+            this.quickSummaryCavnas.html(quickSummary);
+        }
     },
 });

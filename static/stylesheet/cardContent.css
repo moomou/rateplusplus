@@ -67,10 +67,11 @@
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
+    text-align: justify;
     border: 1px solid transparent;
     width: 97%;
     font-size: 15px;
-    line-height: 27px;
+    line-height: 24px;
     margin: 0px -14px 10px 0px;
     resize: none; }
 
