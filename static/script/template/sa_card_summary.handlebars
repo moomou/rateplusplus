@@ -1,0 +1,25 @@
+<div class="info-card">
+  <div class="header">
+    <div class="profile pull-left js-profile" style="background-image: url('{{imgURL}}')"></div>
+    <ul class="meta pull-left">
+      <li class="name">
+        <span class="title-input js-title">{{name}}</span>
+      </li>
+      <li class="hash">
+        <span class="tag-input js-tag">{{tags}}</span> </li>
+    </ul>
+    <ul class="action">
+      <li><i class="fa fa-minus fa-lg cursor-pointer js-hide-screen"></i></li>
+      <li><i class="fa fa-arrows-alt fa-lg cursor-pointer js-full-screen"></i></li>
+    </ul>
+  </div>
+  <div class="content" style="margin-top: 25px;">
+    {{description}}
+  </div>
+  <div class="content" style="margin-top: 25px;">
+    {{{summary}}}
+  </div>
+  <div class="footer">
+    <div class="by pull-right">Contributed by <span>{{{authors}}}</span></div>
+  </div>
+</div>
