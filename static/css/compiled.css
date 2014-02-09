@@ -410,21 +410,11 @@
   border-top: 17px solid #e3e3e3; }
 
 .upTriangle {
-  -webkit-transition: margin-left 1s ease-in-out 0s;
-  -moz-transition: margin-left 1s ease-in-out 0s;
-  -ms-transition: margin-left 1s ease-in-out 0s;
-  -o-transition: margin-left 1s ease-in-out 0s;
-  transition: margin-left 1s ease-in-out 0s;
   margin-top: -15px;
   margin-left: 115px;
   border-bottom: 15px solid white; }
 
 .upTriangleBorder {
-  -webkit-transition: margin-left 1s ease-in-out 0s;
-  -moz-transition: margin-left 1s ease-in-out 0s;
-  -ms-transition: margin-left 1s ease-in-out 0s;
-  -o-transition: margin-left 1s ease-in-out 0s;
-  transition: margin-left 1s ease-in-out 0s;
   margin-top: -17px;
   margin-left: 113px;
   border-bottom: 17px solid #e3e3e3; }

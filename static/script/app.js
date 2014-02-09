@@ -49,7 +49,7 @@ $(function() {
 
     Handlebars.partials = Handlebars.templates;
 
-    $('textarea')
+    $('textarea:not([data-widearea])')
         .keyup(textAreaAdjust)
         .on('input propertychange', textAreaAdjust)
         .on('paste', function(e) {setTimeout(textAreaAdjust(e), 500);});

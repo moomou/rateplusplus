@@ -145,6 +145,18 @@ App.AppRouter = Backbone.Router.extend({
             var newSACard = new App.StandaloneCardView();
             App.GlobalWidget.saEditor.append(newSACard.render().el);
         });
+
+        $("#addContent li").click(function(e) {
+            var triBorder = $('.upTriangleBorder'),
+                tri = $('.upTriangle'),
+                clickedInd = $(this).index(),
+                newPosition = 110 + clickedInd * 110;
+            triBorder.css({'margin-left': newPosition + 'px'});
+            tri.css({'margin-left': newPosition + 2 + 'px'});
+        });
+
+        // activate jquery plugin
+        wideArea();
     },
     defaultPageInit: function() {
         console.log("Default Route");

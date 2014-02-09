@@ -1,6 +1,13 @@
 <div id="contentModal" class="hide modal fade-in">
   <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <ul class="addContentType tab" id="addContent">
+      <li class="contentType cursor-pointer" data-target='#writing'>
+        <a href="#writing" data-toggle="tab">
+          <i class="fa fa-pencil fa-2x block"></i>
+          <span style='display: block'>Text</span>
+        </a>
+      </li>
       <li class="contentType cursor-pointer" data-target='#pictureframe'>
         <a href="#pictureframe" data-toggle="tab">
           <i class="fa fa-picture-o fa-2x block"></i>
@@ -24,7 +31,14 @@
   <div class="upTriangleBorder"></div>
   <div class="upTriangle"></div>
   <div class="addContentBox tab-content">
-    <div id="pictureframe" class="tab-pane active">
+    <div id="writing" class="tab-pane active">
+      <div id="writingModal" class="textbox"> 
+        <input style="border-bottom: 1px solid #eee;" class="title" placeholder="Title" type="text">
+        <textarea style="min-height: 200px;" data-widearea='enable' placeholder="Start here"></textarea>
+      </div>
+      <ul class="writing"></ul>
+    </div>
+    <div id="pictureframe" class="tab-pane">
       <input class="hidden srcType" type="text" value="binary">
       <input class="hidden dataType" type="text" value="image">
       <div class="input-prepend" style="display: block;">
@@ -77,7 +91,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <a style="font-size: 15px;width: 75px;margin: 0 auto;display: block;height: 25px;z-index: 99999;" id="saveContentBtn" href="#" class="btn btn-small btn-success">Save</a>
+    <a id="saveContentBtn" href="#" class="btn btn-success">Save</a>
   </div>
 </div>
 

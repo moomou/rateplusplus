@@ -40,7 +40,10 @@
 
     {% include "contentModal.partial" %}
     {% include "imageChangeModal.partial" %}
-    {% include "saEditor.partial" %}
+
+    {% if SA_EDITOR_ENABLED %}
+      {% include "saEditor.partial" %}
+    {% endif %}
 
     {% if FEEDBACK_ENABLED %}
       {% include "feedbackForm.partial" %}

@@ -702,7 +702,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"info\">\n  <span class=\"fieldName\">";
+  buffer += "<div class='voteBtns' style=\"margin-top: -15px;\">\n  <a href='#' class='btn btn-success voteBtn upVote ";
+  if (helper = helpers.upVoteBtnType) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.upVoteBtnType); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>Yes <i class='upVote fa fa-thumbs-up'></i></a>\n  <a href='#' class='btn btn-danger voteBtn downVote ";
+  if (helper = helpers.downVoteBtnType) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.downVoteBtnType); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>No <i class='downVote fa fa-thumbs-down'></i></a>\n</div>\n<div class=\"info\">\n  <span class=\"fieldName\">";
   if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
