@@ -113,7 +113,7 @@ App.AppRouter = Backbone.Router.extend({
             postData.name = activePanel.find('.fieldname').val();
             postData.selector =  activePanel.find('.selector').val() || "";
             postData.srcUrl = activePanel.find('.srcUrl').val();
-            postData.value = '';
+            postData.value = activePanel.find('.value').val() || "";
 
             $.post(ajaxUrl, postData)
                 .done(function(res) {
@@ -150,7 +150,7 @@ App.AppRouter = Backbone.Router.extend({
             var triBorder = $('.upTriangleBorder'),
                 tri = $('.upTriangle'),
                 clickedInd = $(this).index(),
-                newPosition = 110 + clickedInd * 110;
+                newPosition = 110 + clickedInd * 109;
             triBorder.css({'margin-left': newPosition + 'px'});
             tri.css({'margin-left': newPosition + 2 + 'px'});
         });

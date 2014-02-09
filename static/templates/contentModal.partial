@@ -8,6 +8,12 @@
           <span style='display: block'>Text</span>
         </a>
       </li>
+      <li class="contentType cursor-pointer" data-target='#attribute'>
+        <a href="#attribute" data-toggle="tab">
+          <i class="fa fa-star-half-o fa-2x block"></i>
+          <span style='display: block'>Text</span>
+        </a>
+      </li>
       <li class="contentType cursor-pointer" data-target='#pictureframe'>
         <a href="#pictureframe" data-toggle="tab">
           <i class="fa fa-picture-o fa-2x block"></i>
@@ -32,11 +38,31 @@
   <div class="upTriangle"></div>
   <div class="addContentBox tab-content">
     <div id="writing" class="tab-pane active">
+      <input class="hidden srcType" type="text" value="text">
+      <input class="hidden dataType" type="text" value="text">
       <div id="writingModal" class="textbox"> 
-        <input style="border-bottom: 1px solid #eee;" class="title" placeholder="Title" type="text">
-        <textarea style="min-height: 200px;" data-widearea='enable' placeholder="Start here"></textarea>
+        <input style="border-bottom: 1px solid #eee;" class="title fieldname" placeholder="Title" type="text">
+        <textarea style="min-height: 200px;" data-widearea='enable' placeholder="Start here" class="value"></textarea>
       </div>
-      <ul class="writing"></ul>
+    </div>
+    <div id="attribute" class="tab-pane">
+      <input class="hidden srcType" type="text" value="text">
+      <input class="hidden dataType" type="text" value="attribute">
+      <div class="input-prepend" style="display: block;">
+        <span class="add-on">Attribute Name</i></span>
+        <input style="width: 75%;" class="fieldname" type="text" placeholder="">
+      </div>
+      <div class="input-prepend" style="display: block;">
+        <span class="add-on">Tone</i></span>
+        <label class="radio">
+          <i class="fa fa-heart redHeart"></i>
+          <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+        </label>
+        <label class="radio">
+          <i class="fa fa-heart blackHeart"></i>
+          <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+        </label>
+      </div>
     </div>
     <div id="pictureframe" class="tab-pane">
       <input class="hidden srcType" type="text" value="binary">
