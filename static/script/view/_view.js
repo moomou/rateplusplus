@@ -240,13 +240,7 @@ App.AttributeView = Backbone.View.extend({
     },
     // Rendering functions
     render: function() {
-        this.$('.voteBtns').hide();
-        this.$('.progress').fadeToggle();
-        this.$('.rating').removeClass('hidden');
-        this.$('.rating')
-            .removeClass('hidden')
-            .append(this.renderStarRating(
-                model.get('upVote'), model.get('downVote')));
+        this.$('.voteBtn').hide();
         return this;
     },
     // Event Handler
@@ -710,11 +704,14 @@ App.SimpleCard = Backbone.View.extend({
 
         // initialize controller
         var that = this;
-        new this.controller({
-            el: that.el,
-            $el: that.$el,
-            model: that.model
-        });
+
+        if (this.controller) {
+            new this.controller({
+                el: that.el,
+                $el: that.$el,
+                model: that.model
+            });
+        }
 
         return this;
     },

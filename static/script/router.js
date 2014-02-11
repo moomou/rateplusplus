@@ -66,7 +66,7 @@ App.AppRouter = Backbone.Router.extend({
         var empty = getQueryVariable("empty"),
             searchTerm = getQueryVariable("searchterm"),
             $profileImg = $('#profile-img'),
-            imageUrl = '',
+            imgUrl = '',
             model = new App.EntityModel();
 
         if (empty){
@@ -78,11 +78,15 @@ App.AppRouter = Backbone.Router.extend({
         new App.DetailEntityPageView();
 
         $('#save-btn').click(function() {
+            var tags = _($('#tags').split('#')).map(function(tag) {
+                return tag.replace(',', '').trim();
+            });
+
             model.set('name', $('#name').val() || '');
             model.set('description', $('#description').val() || '');
             model.set('private', false);
             model.set('imgURL', imgUrl);
-            model.set('tags', $('#tags').split('#'));
+            model.set('tags',
             model.save();
         });
 
