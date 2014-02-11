@@ -1,4 +1,86 @@
 
+.ribbon {
+  position: absolute;
+  background: #e7ebf0;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
+  height: 30px;
+  width: 25px;
+  top: -15px;
+  right: 0px; }
+  .ribbon i {
+    width: 50%;
+    height: 50%;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0; }
+
+.mediaData {
+  padding-top: 5px; }
+  .mediaData .ribbon {
+    top: -5px !important; }
+  .mediaData .data-point {
+    position: relative; }
+  .mediaData li {
+    margin-bottom: 10px; }
+
+.data .info {
+  display: block;
+  min-height: 10px; }
+.data .source {
+  display: block;
+  height: 10px;
+  margin: 0px; }
+  .data .source a {
+    float: right;
+    margin-top: -15px; }
+.data .data-point {
+  position: relative; }
+.data li {
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
+  display: block;
+  padding: 10px 10px 0px;
+  margin: 10px; }
+.data .fieldName {
+  float: left; }
+.data .value {
+  float: right;
+  margin-right: 35px; }
+
+.textbox {
+  padding: 15px;
+  overflow: auto; }
+  .textbox .title, .textbox span, .textbox .title:focus {
+    outline-width: 0;
+    outline: none;
+    border: 1px solid transparent;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    font-size: 27px;
+    height: 40px;
+    line-height: 35px;
+    border-radius: 0; }
+  .textbox textarea, .textbox p {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    text-align: justify;
+    border: 1px solid transparent;
+    width: 97%;
+    font-size: 15px;
+    line-height: 24px;
+    margin: 0px -14px 10px 0px;
+    resize: none; }
+
+.textbox.shadow {
+  -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18) ;
+  -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18) ;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18) ; }
+
 .closeBtn {
   position: absolute;
   top: -12px;
@@ -151,88 +233,6 @@
   transform: rotate(359deg);
   -ms-transform: rotate(359deg);
   -webkit-transform: rotate(359deg); }
-
-.ribbon {
-  position: absolute;
-  background: #e7ebf0;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
-  height: 30px;
-  width: 25px;
-  top: -15px;
-  right: 0px; }
-  .ribbon i {
-    width: 50%;
-    height: 50%;
-    overflow: auto;
-    margin: auto;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0; }
-
-.mediaData {
-  padding-top: 5px; }
-  .mediaData .ribbon {
-    top: -5px !important; }
-  .mediaData .data-point {
-    position: relative; }
-  .mediaData li {
-    margin-bottom: 10px; }
-
-.data .info {
-  display: block;
-  min-height: 10px; }
-.data .source {
-  display: block;
-  height: 10px;
-  margin: 0px; }
-  .data .source a {
-    float: right;
-    margin-top: -15px; }
-.data .data-point {
-  position: relative; }
-.data li {
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
-  display: block;
-  padding: 10px 10px 0px;
-  margin: 10px; }
-.data .fieldName {
-  float: left; }
-.data .value {
-  float: right;
-  margin-right: 35px; }
-
-.textbox {
-  padding: 15px;
-  overflow: auto; }
-  .textbox .title, .textbox span, .textbox .title:focus {
-    outline-width: 0;
-    outline: none;
-    border: 1px solid transparent;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    font-size: 27px;
-    height: 40px;
-    line-height: 35px;
-    border-radius: 0; }
-  .textbox textarea, .textbox p {
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    text-align: justify;
-    border: 1px solid transparent;
-    width: 97%;
-    font-size: 15px;
-    line-height: 24px;
-    margin: 0px -14px 10px 0px;
-    resize: none; }
-
-.textbox.shadow {
-  -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18) ;
-  -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18) ;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18) ; }
 
 /*Fix for Chrome slow scroll*/
 .navbar-fixed-top {
@@ -531,14 +531,11 @@
     right: 5px; }
 
 .rankingTable tr {
-  -webkit-transition: border-color;
-  -webkit-transition-duration: 0.2s;
-  -webkit-transition-timing-function: linear;
-  -webkit-transition-delay: 0s;
-  -moz-transition: border-color;
-  -moz-transition-duration: 0.2s;
-  -moz-transition-timing-function: linear;
-  -moz-transition-delay: 0s; }
+  -webkit-transition: border-color 0.2s linear 0s;
+  -moz-transition: border-color 0.2s linear 0s;
+  -ms-transition: border-color 0.2s linear 0s;
+  -o-transition: border-color 0.2s linear 0s;
+  transition: border-color 0.2s linear 0s; }
 
 .rankingTable tr:hover {
   border-color: gray; }
@@ -817,6 +814,13 @@ ul {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none; }
+  .info-card.detail .contributor {
+    margin-left: 0px; }
+    .info-card.detail .contributor li {
+      margin-left: 10px; }
+      .info-card.detail .contributor li .profile {
+        width: 25px;
+        height: 25px; }
   .info-card.detail textarea {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
@@ -911,33 +915,6 @@ ul {
   bottom: -5px;
   z-index: 9999; }
 
-.addNewBtn {
-  font-size: 15px;
-  padding: 25px; }
-
-.entity-actions {
-  margin-top: 0.5em; }
-  .entity-actions li {
-    float: left;
-    margin-left: 5px;
-    font-size: 15px; }
-
-/*Fix for Chrome slow scroll*/
-.navbar-fixed-top {
-  -webkit-transform: translateZ(0); }
-
-/* Fix scroll event */
-.disable-hover,
-.disable-hover * {
-  pointer-events: none !important; }
-
-@-moz-document url-prefix() {
-  .moz-rankingNo {
-    margin-top: 22px !important; }
-
-  .moz-rankContainer {
-    margin-top: 35% !important; } }
-
 .table {
   display: table;
   /* Allow the centering to work */
@@ -1013,36 +990,6 @@ ul {
 .subtle:hover {
   opacity: 0.75; }
 
-.btn-success {
-  background: #2ecc71; }
-
-.btn-inverse {
-  background: black; }
-
-.btn-danger {
-  background: #e74c3c; }
-
-.btn-white {
-  background: white; }
-
-.btn-success:hover {
-  background-color: #66EBA0; }
-
-.btn-danger:hover {
-  background-color: #EE796C; }
-
-.btn-inverse:hover {
-  background-color: #636363; }
-
-.btn-white:hover {
-  background-color: #FCFCFC; }
-
-.goldStar {
-  color: gold; }
-
-.blackStar {
-  color: black; }
-
 /*
   Table CSS
 */
@@ -1088,3 +1035,14 @@ td h4 {
 .head {
   text-align: center !important;
   position: relative; }
+
+.addNewBtn {
+  font-size: 15px;
+  padding: 25px; }
+
+.entity-actions {
+  margin-top: 0.5em; }
+  .entity-actions li {
+    float: left;
+    margin-left: 5px;
+    font-size: 15px; }

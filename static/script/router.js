@@ -65,7 +65,7 @@ App.AppRouter = Backbone.Router.extend({
 
         var empty = getQueryVariable("empty"),
             searchTerm = getQueryVariable("searchterm"),
-            $profileImg = $('#profile-img'),
+            $profileImg = 
             imgUrl = '',
             model = new App.EntityModel();
 
@@ -78,14 +78,14 @@ App.AppRouter = Backbone.Router.extend({
         new App.DetailEntityPageView();
 
         $('#save-btn').click(function() {
-            var tags = _($('#tags').split('#')).map(function(tag) {
+            var tags = _($('#tag').val().split('#')).map(function(tag) {
                 return tag.replace(',', '').trim();
             });
 
             model.set('name', $('#name').val() || '');
             model.set('description', $('#description').val() || '');
             model.set('private', false);
-            model.set('imgURL', imgUrl);
+            model.set('imgURL', $('#imageURLInput').val());
             model.set('tags', tags);
             model.save();
         });
@@ -94,7 +94,7 @@ App.AppRouter = Backbone.Router.extend({
             $('#imageChangeModal').modal();
             $('#imageURLSaveBtn').click(function() {
                 imgUrl = $('#imageURLInput').val();
-                $profileImg.css('background-image', 'url("' + imgUrl + '")');
+                $('#profile-img').attr('style', 'background-image: url("' + imgUrl + '")');
             });
         });
 
