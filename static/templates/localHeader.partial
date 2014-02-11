@@ -1,7 +1,7 @@
 <ul id="local-header" class="nav nav-tabs">
   <li>
   <span href="#home" class="entityTitle">
-    Details <span id="entityTitle"></span>
+    Content <span id="entityTitle"></span>
   </span>
   </li>
   <li>
@@ -13,7 +13,7 @@
   <ul class="entity-actions">
     <li>
     <a style="font-size:15px;" id="addNew" href="#" class="btn-like">
-      <i class="fa fa-plus-square fa-lg btn-like"></i>
+      <i class="fa fa-plus-square fa-lg btn-like"> New Content</i>
     </a>
     </li>
     <li>

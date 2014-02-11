@@ -225,36 +225,18 @@ App.EntityView = Backbone.View.extend({
 });
 
 App.AttributeView = Backbone.View.extend({
-    template: Handlebars.templates.attributeRow,
-    editTemplate: Handlebars.templates.attributeRow_edit,
-    tagName: 'tr',
-    className: 'row',
+    renderStarRating: App.renderStarRating,
     events: {
-        'click .closeBtn': 'removeAttr',
-        'click .saveBtn': 'saveAttr',
         'click .voteBtn': 'attrVote',
-        'click .tone': 'toneChange',
-        'focusout .attrName': 'editName',
-        // drag events
         'dragstart': 'dragStart',
         'dragend': 'dragEnd'
     },
-    initialize: function(inactive) {
-        console.log("AttrView init")
-        var that = this,
-            updateStarRatingType = function() {
-                that.model.set('ratingType',
-                    that.model.get('tone') == App.POSITIVE ? "goldStar" : 'blackStar');
-            };
-
-        updateStarRatingType();
-
-        that.model.on('change', function(e) {
-            updateStarRatingType();
-        });
-        that.model.on('sync', function(e) {
-            that.render();
-        });
+    initialize: function(settings) {
+        console.log("AttrController init")
+        this.el = settings.el;
+        this.$el = settings.$el;
+        this.model = settings.model;
+        this.$el.attr('draggable', 'true');
     },
     // Rendering functions
     render: function() {
@@ -267,8 +249,7 @@ App.AttributeView = Backbone.View.extend({
             renderData.color = "red";
             renderData.upVoteBtnType = "btn-success";
             renderData.downVoteBtnType = "btn-danger";
-        }
-        else {
+        } else {
             renderData.upVoteBtnType = "btn-white";
             renderData.downVoteBtnType = "btn-inverse";
         }
@@ -276,8 +257,7 @@ App.AttributeView = Backbone.View.extend({
         if (model.isNew()) {
             this.$el.html(this.editTemplate(renderData));
             this.$el.addClass('editHighlight focusOnHover');
-        }
-        else {
+        } else {
             this.$el.html(this.template(renderData));
             this.$el.removeClass('editHighlight focusOnHover');
         }
@@ -292,13 +272,10 @@ App.AttributeView = Backbone.View.extend({
                     model.get('upVote'), model.get('downVote')));
         }
 
-        this.$el.attr('draggable', 'true');
         return this;
     },
-    renderStarRating: App.renderStarRating,
     // Event Handler
     attrVote: function(e) {
-        e.preventDefault();
         console.log('attrVote called:');
 
         if ($(e.target).hasClass('upVote')) {
@@ -308,37 +285,10 @@ App.AttributeView = Backbone.View.extend({
             this.model.enqueuVote(App.NEGATIVE, this);
         }
     },
-    editName: function(e) {
-        console.log('editName called');
-        var domRef = this.$('.attrName');
-        this.model.set('name', domRef.text());
-        console.log(this.model.get('name'));
-    },
-    removeAttr: function(e) {
-        this.model.destroy();
-        this.remove();
-    },
-    saveAttr: function(e) {
-        console.log("save on AttributeView called");
-        this.model.save();
-    },
-    toneChange: function(e) {
-        var $i = this.$('.tone');
-
-        if (this.model.get('tone') == App.NEGATIVE) {
-            this.model.set('tone', App.POSITIVE);
-            $i.attr('style', 'font-size:3em;color:red;');
-            this.$('.toneText').html('positive');
-        }
-        else {
-            this.model.set('tone', App.NEGATIVE);
-            $i.attr('style', 'font-size:3em;');
-            this.$('.toneText').html('negative');
-        }
-    },
     dragStart: function(e) {
         var dt = e.originalEvent.dataTransfer,
             transferData = this.model.toJSON();
+
         transferData.contentType = Constants.contentType.attribute;
         dt.setData("text/plain", JSON.stringify(transferData));
     },
@@ -768,6 +718,8 @@ App.SimpleCard = Backbone.View.extend({
 
         if (settings.renderType === "attributes") {
             this.content = App.ContentAttributeView.render(data, true);
+            this.model = new App.EntityAttributeModel(data);
+            this.controller = App.AttributeView;
         }
         else {
             this.content = App.ContentDataView.render(data, true);
@@ -780,6 +732,15 @@ App.SimpleCard = Backbone.View.extend({
 
         this.$el.html(this.template(templateValues));
         this.$('.entityDetail').html(this.content);
+
+        // initialize controller
+        var that = this;
+        new this.controller({
+            el: that.el,
+            $el: that.$el,
+            model: that.model
+        });
+
         return this;
     },
 });
