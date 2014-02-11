@@ -64,7 +64,9 @@ App.AppRouter = Backbone.Router.extend({
         console.log("New Entity");
 
         var empty = getQueryVariable("empty"),
-            searchTerm = getQueryVariable("searchterm");
+            searchTerm = getQueryVariable("searchterm"),
+            $profileImg = $('#profile-img'),
+            imageUrl = '';
 
         if (empty){
             App.GlobalWidget.searchMessageBox.find('#searchTerm').html(searchTerm);
@@ -73,6 +75,17 @@ App.AppRouter = Backbone.Router.extend({
 
         // empty card view
         new App.DetailEntityPageView();
+
+        $('#save-btn').click(function() {
+        });
+
+        $('#change-img-btn').click(function() {
+            $('#imageURLInput').val(imgUrl);
+            $('#imageURLSaveBtn').off('click.appspace');
+            $('#imageURLSaveBtn').on('click.appspace', function() {
+                $profileImg.css('background-image', 'url(' + $('#imageURLInput').val() + ')');
+            });
+        });
 
         /*
         $("#main-summary input, textarea").focus(function(e) {
@@ -150,7 +163,7 @@ App.AppRouter = Backbone.Router.extend({
             var triBorder = $('.upTriangleBorder'),
                 tri = $('.upTriangle'),
                 clickedInd = $(this).index(),
-                newPosition = 105 + clickedInd * 85;
+                newPosition = 105 + clickedInd * 83;
             triBorder.css({'margin-left': newPosition + 'px'});
             tri.css({'margin-left': newPosition + 2 + 'px'});
         });

@@ -52,17 +52,6 @@
         <span class="add-on">Attribute Name</i></span>
         <input style="width: 75%;" class="fieldname" type="text" placeholder="">
       </div>
-      <div class="input-prepend" style="display: block;">
-        <span class="add-on">Tone</i></span>
-        <label class="radio">
-          <i class="fa fa-heart redHeart"></i>
-          <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-        </label>
-        <label class="radio">
-          <i class="fa fa-heart blackHeart"></i>
-          <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-        </label>
-      </div>
     </div>
     <div id="pictureframe" class="tab-pane">
       <input class="hidden srcType" type="text" value="binary">

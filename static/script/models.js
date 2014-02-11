@@ -171,8 +171,7 @@ App.EntityAttributeModel = App.CloverModel.extend({
     updateVoteCount: function(voteType, view) {
         if (voteType === App.POSITIVE) {
             this.set('upVote', this.get('upVote') + 1);
-        }
-        else {
+        } else {
             this.set('downVote', this.get('downVote') + 1);
         }
 

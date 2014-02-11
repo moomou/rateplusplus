@@ -240,28 +240,6 @@ App.AttributeView = Backbone.View.extend({
     },
     // Rendering functions
     render: function() {
-        console.log('AttributeView Render');
-
-        var model = this.model,
-            renderData = model.toJSON();
-
-        if (renderData.tone == App.POSITIVE) {
-            renderData.color = "red";
-            renderData.upVoteBtnType = "btn-success";
-            renderData.downVoteBtnType = "btn-danger";
-        } else {
-            renderData.upVoteBtnType = "btn-white";
-            renderData.downVoteBtnType = "btn-inverse";
-        }
-
-        if (model.isNew()) {
-            this.$el.html(this.editTemplate(renderData));
-            this.$el.addClass('editHighlight focusOnHover');
-        } else {
-            this.$el.html(this.template(renderData));
-            this.$el.removeClass('editHighlight focusOnHover');
-        }
-
         if (model.get('voted')) {
             this.$('.voteBtns').hide();
             this.$('.progress').fadeToggle();
@@ -271,7 +249,6 @@ App.AttributeView = Backbone.View.extend({
                 .append(this.renderStarRating(
                     model.get('upVote'), model.get('downVote')));
         }
-
         return this;
     },
     // Event Handler
