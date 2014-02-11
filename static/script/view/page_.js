@@ -1,4 +1,5 @@
 // Page level views
+
 App.DetailEntityPageView = Backbone.View.extend({
     detailTemplate: Handlebars.templates.detail_summary,
     initialize: function(settings) {
@@ -31,6 +32,9 @@ App.DetailEntityPageView = Backbone.View.extend({
             templateValues = item.toJSON();
 
         templateValues.editing = this.editing;
+        templateValues.contributors =
+            App.ContributorView.render(item.get('contributors'));
+
         $('#main-summary').html(this.detailTemplate(templateValues));
     },
     renderData: function(item) {

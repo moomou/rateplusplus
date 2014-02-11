@@ -92,10 +92,10 @@ App.AppRouter = Backbone.Router.extend({
 
         $('#change-image-btn').click(function() {
             $('#imageChangeModal').modal();
-            $('#imageURLInput').val(imgUrl);
-            $('#imageURLSaveBtn').off('click.appspace');
-            $('#imageURLSaveBtn').on('click.appspace', function() {
-                $profileImg.css('background-image', 'url(' + $('#imageURLInput').val() + ')');
+            $('#imageURLSaveBtn').click(function() {
+                debugger;
+                imgUrl = $('#imageURLInput').val();
+                $profileImg.css('background-image', 'url(' + imgUrl + ')');
             });
         });
 
@@ -175,7 +175,7 @@ App.AppRouter = Backbone.Router.extend({
             var triBorder = $('.upTriangleBorder'),
                 tri = $('.upTriangle'),
                 clickedInd = $(this).index(),
-                newPosition = 105 + clickedInd * 83;
+                newPosition = 105 + clickedInd * 82;
             triBorder.css({'margin-left': newPosition + 'px'});
             tri.css({'margin-left': newPosition + 2 + 'px'});
         });

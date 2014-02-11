@@ -717,6 +717,29 @@ App.SimpleCard = Backbone.View.extend({
     },
 });
 
+App.ContributorView = {
+    template: Handlebars.templates.contributor_icon,
+    render: function(contributors) {
+        contributors = contributors || []; 
+
+        var anonymous = this.template(),
+            result = '',
+            that = this;
+        
+        _(contributors).each(function(contributor) {
+            if (contributor) {
+                result += that.template(contributor);
+            }
+        });
+
+        if (result == "") {
+            result += anonymous;
+        }
+
+        return result;
+    }
+};
+
 /**
  * Table Row View
  */
