@@ -86,7 +86,7 @@ App.AppRouter = Backbone.Router.extend({
             model.set('description', $('#description').val() || '');
             model.set('private', false);
             model.set('imgURL', imgUrl);
-            model.set('tags',
+            model.set('tags', tags);
             model.save();
         });
 
