@@ -11,7 +11,7 @@
       <li class="contentType cursor-pointer" data-target='#attribute'>
         <a href="#attribute" data-toggle="tab">
           <i class="fa fa-star-half-o fa-2x block"></i>
-          <span style='display: block'>Text</span>
+          <span style='display: block'>Attribute</span>
         </a>
       </li>
       <li class="contentType cursor-pointer" data-target='#pictureframe'>

@@ -150,7 +150,7 @@ App.AppRouter = Backbone.Router.extend({
             var triBorder = $('.upTriangleBorder'),
                 tri = $('.upTriangle'),
                 clickedInd = $(this).index(),
-                newPosition = 110 + clickedInd * 109;
+                newPosition = 105 + clickedInd * 85;
             triBorder.css({'margin-left': newPosition + 'px'});
             tri.css({'margin-left': newPosition + 2 + 'px'});
         });
