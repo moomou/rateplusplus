@@ -463,10 +463,19 @@ App.ShowTrendyLink = function() {
     });
 };
 
-App.ConfigureTagit = function($dom, model, editable) {
+App.ConfigureTagit = function($dom, model) {
     var sourceURL = App.AE_H_URL;
         prefix = "#",
         tagitOptions = {
+            readOnly: true,
+            onTagClicked: function(event, ui) {
+                $('#searchInput').val(ui.tagLabel);
+                $('#searchForm').submit();
+            }
+        };
+
+    if (model) {
+        _.extend(tagitOptions, {
             autocomplete: {delay: 0, minLength: 2, source: sourceURL},
             afterTagAdded: function(event, ui) {
                 var tags = model.get('tags');
@@ -484,29 +493,9 @@ App.ConfigureTagit = function($dom, model, editable) {
                 var ind = tags.indexOf(label);
                 tags.splice(ind, 1);
             },
-            readOnly: !editable,
-            onTagClicked: function(event, ui) {
-                $('#searchInput').val(ui.tagLabel);
-                $('#searchForm').submit();
-            }
-        };
+            readOnly: false
+        });
+    }
 
-        $dom.tagit(tagitOptions);
-};
-
-App.CreateNewCard = function() {
-    console.log("Creating new card")
-    var newEntityRow = document.getElementById('dr1');
-
-    // intentionally global to keep events
-    newCard = new App.SummaryCardView({
-        model: new App.SummaryCardModel({}),
-        renderMode: "detail"});
-    newEntityRow.appendChild(newCard.render().el);
-
-    // manually activate edit mode
-    newCard.model.set('editable',true);
-    newCard.render(true);
-
-    return newCard;
+    $dom.tagit(tagitOptions);
 };

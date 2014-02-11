@@ -33,6 +33,7 @@ App.DetailEntityPageView = Backbone.View.extend({
         templateValues.editing = this.editing;
         $('#main-summary').html(this.detailTemplate(templateValues));
 
+        App.ConfigureTagit($('.hash'));
         //App.DetailPage.privacyIcon
         //    .attr('class', isPrivate ? "fa fa-lock" : "fa fa-globe")
         //    .attr('title', isPrivate ? "Private" : "Public")
@@ -107,7 +108,7 @@ App.SearchPageView = Backbone.View.extend({
             this.searchResultCanvas.html(searchResults.join("\n"));
             this.quickSummaryCavnas.html(quickSummary);
             
-            App.ConfigureTagit($('.hash'), {}, false);
+            App.ConfigureTagit($('.hash'));
         }
     },
 });
