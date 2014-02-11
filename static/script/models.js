@@ -463,35 +463,35 @@ App.ShowTrendyLink = function() {
     });
 };
 
-App.ConfigureTagit = function(option, that, editable) {
+App.ConfigureTagit = function($dom, model, editable) {
     var sourceURL = App.AE_H_URL;
-        prefix = "#";
+        prefix = "#",
+        tagitOptions = {
+            autocomplete: {delay: 0, minLength: 2, source: sourceURL},
+            afterTagAdded: function(event, ui) {
+                var tags = model.get('tags');
 
-    return {
-        autocomplete: {delay: 0, minLength: 2, source: sourceURL},
-        afterTagAdded: function(event, ui) {
-            var tags = that.entityView.model.get('tags');
-
-            if (ui.tagLabel && tags.indexOf(prefix+ui.tagLabel) < 0) {
+                if (ui.tagLabel && tags.indexOf(prefix+ui.tagLabel) < 0) {
+                    var label = ui.tagLabel[0] == prefix ? ui.tagLabel : prefix + ui.tagLabel;
+                    tags.push(label);
+                    console.log("New Tags");
+                    console.log(tags);
+                }
+            },
+            afterTagRemoved: function(event, ui) {
+                var tags = model.get('tags');
                 var label = ui.tagLabel[0] == prefix ? ui.tagLabel : prefix + ui.tagLabel;
-                tags.push(label);
-                console.log("New Tags");
-                console.log(tags);
+                var ind = tags.indexOf(label);
+                tags.splice(ind, 1);
+            },
+            readOnly: !editable,
+            onTagClicked: function(event, ui) {
+                $('#searchInput').val(ui.tagLabel);
+                $('#searchForm').submit();
             }
-        },
-        afterTagRemoved: function(event, ui) {
-            var tags = that.entityView.model.get('tags');
-            var label = ui.tagLabel[0] == prefix ? ui.tagLabel : prefix + ui.tagLabel;
-            var ind = tags.indexOf(label);
-            tags.splice(ind, 1);
-            console.log(tags);
-        },
-        readOnly: !editable,
-        onTagClicked: function(event, ui) {
-            $('#searchInput').val(ui.tagLabel);
-            $('#searchForm').submit();
-        }
-    }
+        };
+
+        $dom.tagit(tagitOptions);
 };
 
 App.CreateNewCard = function() {

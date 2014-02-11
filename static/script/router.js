@@ -66,7 +66,8 @@ App.AppRouter = Backbone.Router.extend({
         var empty = getQueryVariable("empty"),
             searchTerm = getQueryVariable("searchterm"),
             $profileImg = $('#profile-img'),
-            imageUrl = '';
+            imageUrl = '',
+            model = new App.EntityModel();
 
         if (empty){
             App.GlobalWidget.searchMessageBox.find('#searchTerm').html(searchTerm);
@@ -76,18 +77,13 @@ App.AppRouter = Backbone.Router.extend({
         // empty card view
         new App.DetailEntityPageView();
 
-        $('#save-btn').click(function() {
-            var tags = (function() {
-                var input = $('#hash-tags');
-            )();
+        App.ConfigureTagit($('#tagit'), model, true);
 
-            var model = new App.EntityModel({
-                name: $('#name').val() || '',
-                description: $('#description').val() || '',
-                private: false,
-                imgURL: imgUrl,
-                tags: tags
-            });
+        $('#save-btn').click(function() {
+            model.set('name', $('#name').val() || '');
+            model.set('description', $('#description').val() || '');
+            model.set('private': false);
+            model.set('imgURL': imgUrl);
         });
 
         $('#change-img-btn').click(function() {
