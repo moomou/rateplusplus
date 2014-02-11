@@ -81,7 +81,7 @@ App.AppRouter = Backbone.Router.extend({
 
         $('#tagit input')
             .attr('placeholder', '#hashtags')
-            .css('margin-left', '5px;');
+            .css('margin-left', '-5px;');
 
         $('#save-btn').click(function() {
             model.set('name', $('#name').val() || '');

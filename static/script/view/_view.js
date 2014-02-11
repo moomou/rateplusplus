@@ -240,15 +240,13 @@ App.AttributeView = Backbone.View.extend({
     },
     // Rendering functions
     render: function() {
-        if (model.get('voted')) {
-            this.$('.voteBtns').hide();
-            this.$('.progress').fadeToggle();
-            this.$('.rating').removeClass('hidden');
-            this.$('.rating')
-                .removeClass('hidden')
-                .append(this.renderStarRating(
-                    model.get('upVote'), model.get('downVote')));
-        }
+        this.$('.voteBtns').hide();
+        this.$('.progress').fadeToggle();
+        this.$('.rating').removeClass('hidden');
+        this.$('.rating')
+            .removeClass('hidden')
+            .append(this.renderStarRating(
+                model.get('upVote'), model.get('downVote')));
         return this;
     },
     // Event Handler

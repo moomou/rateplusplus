@@ -498,4 +498,8 @@ App.ConfigureTagit = function($dom, model) {
     }
 
     $dom.tagit(tagitOptions);
+
+    if (!model) {
+        $('.ui-autocomplete-input').hide();
+    }
 };

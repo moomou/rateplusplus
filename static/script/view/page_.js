@@ -34,10 +34,6 @@ App.DetailEntityPageView = Backbone.View.extend({
         $('#main-summary').html(this.detailTemplate(templateValues));
 
         App.ConfigureTagit($('.hash'));
-        //App.DetailPage.privacyIcon
-        //    .attr('class', isPrivate ? "fa fa-lock" : "fa fa-globe")
-        //    .attr('title', isPrivate ? "Private" : "Public")
-        //    .tooltip();
     },
     renderData: function(item) {
         if (this.editing) {
