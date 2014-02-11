@@ -77,9 +77,21 @@ App.AppRouter = Backbone.Router.extend({
         new App.DetailEntityPageView();
 
         $('#save-btn').click(function() {
+            var tags = (function() {
+                var input = $('#hash-tags');
+            )();
+
+            var model = new App.EntityModel({
+                name: $('#name').val() || '',
+                description: $('#description').val() || '',
+                private: false,
+                imgURL: imgUrl,
+                tags: tags
+            });
         });
 
         $('#change-img-btn').click(function() {
+            $('#imageChangeModal').modal();
             $('#imageURLInput').val(imgUrl);
             $('#imageURLSaveBtn').off('click.appspace');
             $('#imageURLSaveBtn').on('click.appspace', function() {

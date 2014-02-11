@@ -2,19 +2,20 @@
   <div class="header">
     {{#if editing}}
     <div id="profile-img" class="profile pull-left js-profile" style="background-image: url('//cloverite.com/static/img/blank.png')">
-      <button id="change-image-btn" class="btn-small btn btn-success" style="margin: 0 auto;display: block; margin-top: 105%;">Change</button>
+      <button id="change-image-btn" class="btn-small btn btn-white" style="margin: 0 auto;display: block; margin-top: 105%;">Change</button>
     </div>
     <ul class="meta pull-left">
       <li class="name">
-        <input class="title-input js-title" placeholder="Title" type="text">
+        <input id="name" class="title-input js-title" placeholder="Title" type="text">
       </li>
       <li class="hash">
-        <input class="tag-input js-tag" placeholder="#hashTag" type="text">
+        <input id="hash-tags" class="tag-input js-tag" placeholder="#hashTag" type="text">
+        <ul id="tagsli" class="tag-input js-tag"></ul>
       </li>
     </ul>
     <button id="save-btn" class="btn btn-success" style="margin: 0 auto;display: block; float: right;">Save</button>
     <div>
-      <textarea placeholder="Enter description here."></textarea>
+      <textarea id="description" placeholder="Enter description here."></textarea>
     </div>
     {{else}}
     <div class="profile pull-left js-profile" style="background-image: url('{{imgURL}}')"></div>

@@ -753,11 +753,15 @@ ul {
       box-shadow: none;
       border: none; }
     .info-card .header .meta .title-input {
+      width: 100%;
+      max-width: 100%;
       font-size: 25px;
       line-height: 30px;
       height: 30px;
       margin-bottom: -5px; }
     .info-card .header .meta .tag-input {
+      width: 100%;
+      max-width: 100%;
       font-size: 15px;
       line-height: 20px; }
   .info-card .content {
