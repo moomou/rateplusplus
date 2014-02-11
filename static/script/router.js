@@ -93,9 +93,8 @@ App.AppRouter = Backbone.Router.extend({
         $('#change-image-btn').click(function() {
             $('#imageChangeModal').modal();
             $('#imageURLSaveBtn').click(function() {
-                debugger;
                 imgUrl = $('#imageURLInput').val();
-                $profileImg.css('background-image', 'url(' + imgUrl + ')');
+                $profileImg.css('background-image', 'url("' + imgUrl + '")');
             });
         });
 
