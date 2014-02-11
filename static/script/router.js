@@ -77,17 +77,12 @@ App.AppRouter = Backbone.Router.extend({
         // empty card view
         new App.DetailEntityPageView();
 
-        App.ConfigureTagit($('#tagit'), model);
-
-        $('#tagit input')
-            .attr('placeholder', '#hashtags')
-            .css('margin-left', '-5px;');
-
         $('#save-btn').click(function() {
             model.set('name', $('#name').val() || '');
             model.set('description', $('#description').val() || '');
             model.set('private', false);
             model.set('imgURL', imgUrl);
+            model.set('tags', $('#tags').split('#'));
             model.save();
         });
 

@@ -32,8 +32,6 @@ App.DetailEntityPageView = Backbone.View.extend({
 
         templateValues.editing = this.editing;
         $('#main-summary').html(this.detailTemplate(templateValues));
-
-        App.ConfigureTagit($('.hash'));
     },
     renderData: function(item) {
         if (this.editing) {
@@ -103,8 +101,6 @@ App.SearchPageView = Backbone.View.extend({
 
             this.searchResultCanvas.html(searchResults.join("\n"));
             this.quickSummaryCavnas.html(quickSummary);
-            
-            App.ConfigureTagit($('.hash'));
         }
     },
 });
