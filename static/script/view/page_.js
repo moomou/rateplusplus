@@ -106,6 +106,8 @@ App.SearchPageView = Backbone.View.extend({
 
             this.searchResultCanvas.html(searchResults.join("\n"));
             this.quickSummaryCavnas.html(quickSummary);
+            
+            App.ConfigureTagit($('.hash'), {}, false);
         }
     },
 });

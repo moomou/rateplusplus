@@ -78,15 +78,17 @@ App.AppRouter = Backbone.Router.extend({
         new App.DetailEntityPageView();
 
         App.ConfigureTagit($('#tagit'), model, true);
+        $('#tagit input').attr('placeholder', '#hashtags');
 
         $('#save-btn').click(function() {
             model.set('name', $('#name').val() || '');
             model.set('description', $('#description').val() || '');
-            model.set('private': false);
-            model.set('imgURL': imgUrl);
+            model.set('private', false);
+            model.set('imgURL', imgUrl);
+            model.save();
         });
 
-        $('#change-img-btn').click(function() {
+        $('#change-image-btn').click(function() {
             $('#imageChangeModal').modal();
             $('#imageURLInput').val(imgUrl);
             $('#imageURLSaveBtn').off('click.appspace');
