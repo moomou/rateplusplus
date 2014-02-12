@@ -65,7 +65,7 @@ App.AppRouter = Backbone.Router.extend({
 
         var empty = getQueryVariable("empty"),
             searchTerm = getQueryVariable("searchterm"),
-            $profileImg = 
+            $profileImg =
             imgUrl = '',
             model = new App.EntityModel();
 
@@ -127,7 +127,7 @@ App.AppRouter = Backbone.Router.extend({
             $('#contentModal').modal();
         });
 
-        $('#contentSubmit').click(function(e) {
+        $('#saveContentBtn').click(function(e) {
             var activePanel = $('.addContentBox>div.active'),
                 postData = {},
                 ajaxUrl = App.API_SERVER + App.API_VERSION + 'entity/' + id + '/data';
@@ -177,6 +177,16 @@ App.AppRouter = Backbone.Router.extend({
                 newPosition = 105 + clickedInd * 82;
             triBorder.css({'margin-left': newPosition + 'px'});
             tri.css({'margin-left': newPosition + 2 + 'px'});
+        });
+
+        $('#filterInput').on('input', function(e) {
+            var searchStyle = document.getElementById('searchStyle');
+            if (!this.value) {
+              searchStyle.innerHTML = "";
+              return;
+            }
+            searchStyle.innerHTML = 
+                ".searchable:not([data-index*=\"" + this.value.toLowerCase() + "\"]) { display: none; }";
         });
 
         // activate jquery plugin

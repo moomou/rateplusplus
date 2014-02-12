@@ -431,6 +431,9 @@ App.ColManager = (function() {
             cols = colRef;
 
         return {
+            allCols: function() {
+                return cols;
+            },
             getNext: function () {
                 var curInd = ind;
                 ind = (ind + 1) % cols.length;

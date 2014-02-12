@@ -814,13 +814,6 @@ ul {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none; }
-  .info-card.detail .contributor {
-    margin-left: 0px; }
-    .info-card.detail .contributor li {
-      margin-left: 10px; }
-      .info-card.detail .contributor li .profile {
-        width: 25px;
-        height: 25px; }
   .info-card.detail textarea {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
@@ -832,6 +825,14 @@ ul {
     clear: both;
     text-align: justify;
     margin-top: 10px; }
+
+.contributor {
+  margin-left: 0px; }
+  .contributor li {
+    margin-left: 10px; }
+    .contributor li .profile {
+      width: 25px;
+      height: 25px; }
 
 .table {
   display: table;

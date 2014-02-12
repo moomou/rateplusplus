@@ -6,7 +6,7 @@
   </li>
   <li>
   <form method="GET" id="localSearch" class="navbar-search" action="#/filter">
-    <input type="search" class="span2 searchBar" name='q' id="searchInput" type="text" placeholder="&#xf0b0 Filter Cards">
+    <input type="search" class="span2 searchBar" name='q' id="filterInput" type="text" placeholder="&#xf0b0 Filter Cards">
   </form>
   </li>
   <li class="pull-right">

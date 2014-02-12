@@ -654,11 +654,11 @@ helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partial
   if (helper = helpers.summary) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.summary); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n  </div>\n  <div class=\"footer\" style=\"width: auto;\">\n    <div class=\"by pull-right\">Contributed by <span>";
-  if (helper = helpers.authors) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.authors); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += "\n  </div>\n  <div class=\"footer\" style=\"width: auto;\">\n    <ul class=\"contributor pull-right\">";
+  if (helper = helpers.contributors) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.contributors); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</span></div>\n  </div>\n</div>\n";
+  buffer += "</ul>\n    <div class=\"by pull-right\">Contributed by </div>\n  </div>\n</div>\n";
   return buffer;
   });
 })();

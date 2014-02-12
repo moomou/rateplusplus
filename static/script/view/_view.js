@@ -135,13 +135,19 @@ App.ContentDataView = (function() {
 
     return {
         render: function(data, noWrap) {
-            var templateName = data.dataType + "Template",
-                content = templates[templateName](data);
-                renderedContent = templates.contentTemplate({
-                    content: content,
-                    src: data.srcUrl,
-                    contentId: "",
-                });
+            var templateName = data.dataType + "Template";
+
+            if (data.dataType == "video") {
+                data.youtubeId = getYoutubeId(data.srcUrl);
+                debugger;
+            }
+
+            var content = templates[templateName](data);
+            renderedContent = templates.contentTemplate({
+                content: content,
+                src: data.srcUrl,
+                contentId: "",
+            });
 
             if (noWrap) {
                 return content;
@@ -245,6 +251,7 @@ App.AttributeView = Backbone.View.extend({
     },
     // Event Handler
     attrVote: function(e) {
+        e.preventDefault();
         console.log('attrVote called:');
 
         if ($(e.target).hasClass('upVote')) {
@@ -662,7 +669,7 @@ App.SummaryCardView = Backbone.View.extend({
 });
 
 App.SimpleCard = Backbone.View.extend({
-    className: 'card micro',
+    className: 'card micro searchable',
     template: Handlebars.templates.simple_card,
     model: App.EntityModel,
     events: {
@@ -696,11 +703,17 @@ App.SimpleCard = Backbone.View.extend({
         this.title = data.name;
     },
     render: function() {
-        var templateValues = this.model.toJSON();
+        var templateValues = this.model.toJSON(),
+            indexTitle = this.title || '',
+            indexValue = this.value || '',
+            dataIndex = indexTitle.toLowerCase() + indexValue.toLowerCase();
+
         templateValues.title = this.title;
 
         this.$el.html(this.template(templateValues));
         this.$('.entityDetail').html(this.content);
+
+        this.$el.attr('data-index', dataIndex);
 
         // initialize controller
         var that = this;

@@ -38,24 +38,24 @@
   <div class="upTriangle"></div>
   <div class="addContentBox tab-content">
     <div id="writing" class="tab-pane active">
-      <input class="hidden srcType" type="text" value="text">
-      <input class="hidden dataType" type="text" value="text">
+      <input class="srcType hidden" type="text" value="text" style="display: none;">
+      <input class="dataType hidden" type="text" value="text" style="display: none;">
       <div id="writingModal" class="textbox"> 
         <input style="border-bottom: 1px solid #eee;" class="title fieldname" placeholder="Title" type="text">
         <textarea style="min-height: 200px;" data-widearea='enable' placeholder="Start here" class="value"></textarea>
       </div>
     </div>
     <div id="attribute" class="tab-pane">
-      <input class="hidden srcType" type="text" value="text">
-      <input class="hidden dataType" type="text" value="attribute">
+      <input class="hidden srcType" type="text" value="text" style="display: none;">
+      <input class="hidden dataType" type="text" value="attribute" style="display: none;">
       <div class="input-prepend" style="display: block;">
         <span class="add-on">Attribute Name</i></span>
         <input style="width: 75%;" class="fieldname" type="text" placeholder="">
       </div>
     </div>
     <div id="pictureframe" class="tab-pane">
-      <input class="hidden srcType" type="text" value="binary">
-      <input class="hidden dataType" type="text" value="image">
+      <input class="hidden srcType" type="text" value="binary" style="display: none;">
+      <input class="hidden dataType" type="text" value="image" style="display: none;">
       <div class="input-prepend" style="display: block;">
         <span class="add-on">Picture Caption</i></span>
         <input style="width: 75%;" class="fieldname" type="text" placeholder="">
@@ -66,8 +66,8 @@
       </div>
     </div>
     <div id="movieTheatre" class="tab-pane">
-      <input class="hidden srcType" type="text" value="binary">
-      <input class="hidden dataType" type="text" value="video">
+      <input class="hidden srcType" type="text" value="binary" style="display: none;">
+      <input class="hidden dataType" type="text" value="video" style="display: none;">
       <div class="input-prepend" style="display: block;">
         <span class="add-on">Video Title</i></span>
         <input style="width: 75%;" class="fieldname" type="text">

@@ -94,9 +94,7 @@ App.SearchPageView = Backbone.View.extend({
                 encodeURIComponent(App.GlobalWidget.searchInput.val());
         } else {
             var that = this,
-                searchResults = [],
-                quickSummary = this.summaryTemplate(
-                    _(this.collection.models).first().toJSON());
+                searchResults = [];
 
             _(this.collection.models).each(function(model) {
                 var row = that.rowTemplate(model.toJSON());
@@ -104,7 +102,18 @@ App.SearchPageView = Backbone.View.extend({
             });
 
             this.searchResultCanvas.html(searchResults.join("\n"));
-            this.quickSummaryCavnas.html(quickSummary);
+
+            this.renderQuickSummary();
         }
+    },
+    renderQuickSummary: function() {
+        var quickSummaryModel = _(this.collection.models).first();
+            templateValues = quickSummaryModel.toJSON();
+
+        templateValues.contributors =
+            App.ContributorView.render(quickSummaryModel.get('contributors'));
+
+        
+        this.quickSummaryCavnas.html(this.summaryTemplate(templateValues));
     },
 });

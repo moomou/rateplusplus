@@ -181,17 +181,6 @@ ul {
 
   @include box-shadow-none();
 
-  .contributor {
-    margin-left: 0px;
-    li {
-      margin-left: 10px;
-      .profile {
-        width: 25px;
-        height: 25px;
-      }
-    }
-  }
-
   textarea {
     @include box-shadow-none();
     width: 95%;
@@ -204,3 +193,15 @@ ul {
     margin-top: 10px;
   }
 }
+
+.contributor {
+  margin-left: 0px;
+  li {
+    margin-left: 10px;
+    .profile {
+      width: 25px;
+      height: 25px;
+    }
+  }
+}
+

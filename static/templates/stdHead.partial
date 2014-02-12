@@ -10,15 +10,13 @@
 <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet" />
 
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/toggle-switch.css"/>
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery.tagit.css"/>
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/widearea.css"/>
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/card.css"/>
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/compiled.css"/>
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/app.css"/>
 
-<style>
-  * {font-family: 'Lato', sans-serif;}
-</style>
+<style> * {font-family: 'Lato', sans-serif;} </style>
+<style id="searchStyle"></style>
 
 <script type="text/javascript">
 

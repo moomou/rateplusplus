@@ -1,4 +1,14 @@
 /* Support Functions */
+
+function getYoutubeId(url) {
+    var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    if (match&&match[2].length==11){
+        return match[2];
+    } else { //error
+    } 
+}
+
 function textAreaAdjust(e) {
     debugger;
     var o = e.target;
@@ -84,7 +94,6 @@ function getQueryVariable(variable) {
 //Configuring Ajax to include CSRF
 var csrftoken = getCookie('csrftoken');
 var accesstoken = getCookie('usertoken');
-
 $.ajaxSetup({
     beforeSend: function(xhr, settings) {
         if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
