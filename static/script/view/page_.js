@@ -63,6 +63,7 @@ App.DetailEntityPageView = Backbone.View.extend({
 App.SearchPageView = Backbone.View.extend({
     summaryTemplate: Handlebars.templates.sa_card_summary,
     rowTemplate: Handlebars.templates.sa_card_row,
+    statTemplate: Handlebars.templates.stat_summary,
     initialize: function(settings) {
         settings = settings || {};
 
@@ -102,18 +103,22 @@ App.SearchPageView = Backbone.View.extend({
             });
 
             this.searchResultCanvas.html(searchResults.join("\n"));
-
             this.renderQuickSummary();
         }
     },
     renderQuickSummary: function() {
         var quickSummaryModel = _(this.collection.models).first();
-            templateValues = quickSummaryModel.toJSON();
+            templateValues = quickSummaryModel.toJSON(),
+            that = this;
 
         templateValues.contributors =
             App.ContributorView.render(quickSummaryModel.get('contributors'));
-
         
+        templateValues.summary = _(quickSummaryModel.get('summary'))
+            .map(function(stat) {
+                return that.statTemplate(stat);
+            }).join("\n");
+
         this.quickSummaryCavnas.html(this.summaryTemplate(templateValues));
     },
 });

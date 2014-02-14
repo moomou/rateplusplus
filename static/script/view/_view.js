@@ -614,8 +614,6 @@ App.SummaryCardView = Backbone.View.extend({
             this.attributeCollectionView.collection.models,
             function(attr) { return !attr.isNew() }), 'toJSON');
 
-        this.model.updateEntityStats(attrs);
-
         this.$el.find('.summary').html(this.summaryTemplate(this.model.toJSON()));
         this.renderKonb();
 

@@ -205,24 +205,23 @@ App.SummaryCardModel = App.CloverModel.extend({
             _.extend(this.attributes, newEntity.toJSON());
 
             this.set('hashTags', '');
-            this.set('summary', this.getEntityStats(this.get('attributes')));
+            this.set('summary', '');
             this.set('entityModel', newEntity);
             this.set('attributeCollection', newAttrCollection);
         }
-
-        this.on('entityModelUpdated', this.updateSummaryCard);
     },
     parse: function(response) {
-        response = App.CloverModel.prototype.parse.apply(this, arguments);
         console.log("SummaryCardModel Parse");
 
-        response.hashTags = this.cleanTags(response.tags);
-        response.summary = this.getEntityStats(response.attributes);
-        
-        response['srcUrl'] = window.location.origin + '/entity/' + response.id;
+        response = App.CloverModel.prototype.parse.apply(this, arguments);
 
-        response['entityModel'] = new App.EntityModel(response);
-        response['attributeCollection'] =
+        response.uniqueId = response.uniqueId ||
+            "#"+Math.floor(Math.random()*999999999).toString(16);
+        response.hashTags = this.generateTags(response.tags);
+        response.summary = this.summarize(response);
+        response.srcUrl = window.location.origin + '/entity/' + response.id;
+        response.entityModel = new App.EntityModel(response);
+        response.attributeCollection =
             new App.AttributeCollection(response.attributes, response.id);
 
         return response;
@@ -230,35 +229,32 @@ App.SummaryCardModel = App.CloverModel.extend({
     // Event handler
     updateSummaryCard: function() {
         console.log('Calling SummaryModel update');
-        var entityModel = this;
-        var tags = this.cleanTags(entityModel.get('tags'));
+        var entityModel = this,
+            tags = this.generateTags(entityModel.get('tags'));
 
         this.set('hashTags', tags['hashTags']);
         this.set('summary', this.getEntityStats(entityModel.get('attributes')));
     },
     // Custom Functions
-    cleanTags: function(tags) {
-        var hashTags = '';
+    summarize: function(data) {
+        var summary = [];
+        summary.push({num: data.attributes.length, category: 'Attributes'});
+        summary.push({num: (data.data && data.data.length) || 0, category: 'Data point'});
+        return summary;
+    },
+    generateTags: function(tags) {
+        var hashTags = '',
+            queryUrl = window.location.origin + '?q=';
 
         _.each(tags, function(tag) {
             if (tag.indexOf("__global__") >= 0) {
                 return;
             }
 
-            if (tag[0] == "#") {
-                hashTags += '<li>'+tag.substr(1)+'</li>';
-            }
-            else {
-                console.log("Tag without hash prefix!");
-                hashTags += '<li>' + tag +'</li>';
-            }
+            hashTags += '<li><a href="' + queryUrl + encodeURIComponent(tag) + '">' + tag + ' </a></li>';
         });
 
         return hashTags;
-    },
-    updateEntityStats: function(attrs) {
-        console.log('updateEntityStats');
-        $.extend(this.get('summary'), this.getEntityStats(attrs));
     },
     getEntityStats: function(attrs) {
         console.log('GetEntityStats Called');

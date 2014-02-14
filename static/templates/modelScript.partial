@@ -1,4 +1,3 @@
-<script src="{{STATIC_URL}}js/tag-it.js"></script>
 <script src="{{STATIC_URL}}script/config.js"></script>
 <script src="{{STATIC_URL}}script/templates.js"></script>
 <script src="{{STATIC_URL}}script/utils.js"></script>

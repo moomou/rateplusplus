@@ -115,12 +115,6 @@ ul {
   left: 92%;
 }
 
-.stats {
-  position: absolute;
-  left: 50%;
-  margin-top: 1em;
-}
-
 #commentContainer {
   overflow-y: visible;
   position: relative;

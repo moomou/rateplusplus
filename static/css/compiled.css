@@ -742,6 +742,8 @@ ul {
       .info-card .header .meta .hash li {
         float: left;
         margin-left: 10px; }
+        .info-card .header .meta .hash li a {
+          color: gray; }
       .info-card .header .meta .hash li:first-child {
         margin-left: 0px; }
     .info-card .header .meta input {
@@ -833,6 +835,20 @@ ul {
     .contributor li .profile {
       width: 25px;
       height: 25px; }
+
+.stats {
+  display: block;
+  padding: 5px;
+  margin: -15px 10px 10px 10px;
+  max-width: 100px;
+  float: left; }
+  .stats .num {
+    float: left;
+    font-size: 20px;
+    margin-right: 10px; }
+  .stats .field {
+    float: right;
+    font-size: 17px; }
 
 .table {
   display: table;

@@ -269,7 +269,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   
-  return "\n    <div id=\"profile-img\" class=\"profile pull-left js-profile\" style=\"background-image: url('//cloverite.com/static/img/blank.png')\">\n      <button id=\"change-image-btn\" class=\"btn-small btn btn-white\" style=\"margin: 0 auto;display: block; margin-top: 105%;\">Change</button>\n    </div>\n    <ul class=\"meta pull-left\">\n      <li class=\"name\">\n        <input id=\"name\" class=\"title-input js-title\" placeholder=\"Title\" type=\"text\">\n      </li>\n      <li class=\"hash\">\n        <input id=\"tag\" class=\"hash-input js-hash\" placeholder=\"#hashtag\" type=\"text\">\n      </li>\n    </ul>\n    <button id=\"save-btn\" class=\"btn btn-success\" style=\"margin: 0 auto;display: block; float: right;\">Save</button>\n    <div>\n      <textarea id=\"description\" placeholder=\"Enter description here.\"></textarea>\n    </div>\n    ";
+  return "\n    <div id=\"profile-img\" class=\"profile pull-left js-profile\" style=\"background-image: url('//cloverite.com/static/img/blank.png')\">\n      <button id=\"change-image-btn\" class=\"btn-small btn btn-white\" style=\"margin: 0 auto;display: block; margin-top: 105%;\">Change</button>\n    </div>\n    <ul class=\"meta pull-left\">\n      <li class=\"name\">\n        <input id=\"name\" class=\"title-input js-title\" placeholder=\"Title\" type=\"text\">\n      </li>\n      <li class=\"hash\">\n        <input id=\"tag\" class=\"hash-input js-hash\" placeholder=\"#hashtag\" type=\"text\">\n      </li>\n    </ul>\n    <button id=\"save-btn\" class=\"btn btn-success\" style=\"margin: 0 auto;display: block; float: right;\">Publish</button>\n    <div>\n      <textarea id=\"description\" placeholder=\"Enter description here.\"></textarea>\n    </div>\n    ";
   }
 
 function program3(depth0,data) {
@@ -869,11 +869,36 @@ function program3(depth0,data) {
     + "\">\n    ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.profileImg), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n  </a>\n</div>\n<div class=\"contentContainer outer\">\n  <div class=\"entityDetail\">\n  </div>\n  <ul class=\"view-toolbar\" style=\"\">\n    <li>\n    <i class=\"fa fa-heart-o fa-lg\"></i>\n    <i class=\"fa fa-twitter fa-lg\"></i>\n    <i class=\"fa fa-code-fork fa-lg\"></i>\n    <i class=\"fa fa-share-square-o fa-lg\"></i>\n    </li>\n  </ul>\n  <ul class=\"tags tagit\">\n    ";
+  buffer += "\n  </a>\n</div>\n<div class=\"contentContainer outer\">\n  <div class=\"entityDetail\">\n  </div>\n  <ul class=\"view-toolbar\" style=\"\">\n    <li>\n      <i class=\"fa fa-heart-o fa-lg\"></i>\n      <i class=\"fa fa-twitter fa-lg\"></i>\n      <i class=\"fa fa-code-fork fa-lg\"></i>\n      <i class=\"fa fa-share-square-o fa-lg\"></i>\n    </li>\n    <li>";
+  if (helper = helpers.uniqueId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.uniqueId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</li>\n  </ul>\n  <ul class=\"tags tagit\">\n    ";
   if (helper = helpers.tag) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.tag); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "\n  </ul>\n</div>\n";
+  return buffer;
+  });
+})();
+
+(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['stat_summary'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div class=\"stats\">\n  <span class=\"num\">";
+  if (helper = helpers.num) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.num); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</span><span class=\"field\">";
+  if (helper = helpers.category) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.category); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n</div>\n";
   return buffer;
   });
 })();

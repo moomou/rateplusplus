@@ -89,6 +89,9 @@ ul {
         li {
           float: left;
           margin-left: 10px;
+          a {
+            color: gray;
+          }
         }
         li:first-child {
           margin-left: 0px;
@@ -205,3 +208,19 @@ ul {
   }
 }
 
+.stats {
+  display: block;
+  padding: 5px;
+  margin: -15px 10px 10px 10px;
+  max-width: 100px;
+  float: left;
+  .num {
+    float: left;
+    font-size: 20px;
+    margin-right: 10px;
+  }
+  .field {
+    float: right;
+    font-size: 17px;
+  }
+}
