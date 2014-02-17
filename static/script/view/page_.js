@@ -1,43 +1,50 @@
 // Page level views
-
 App.DetailEntityPageView = Backbone.View.extend({
     detailTemplate: Handlebars.templates.detail_summary,
+    el: '#main-summary',
+    events: {
+        'click .infoBar li': 'infoBarClickHandler',
+        'click #change-image-btn': 'changeImage',
+    },
     initialize: function(settings) {
         settings = settings || {};
 
         if (!settings.id) {
-            this.collection = null;
+            this.model = new App.SummaryCardModel();
             this.editing = true;
             this.render();
         } else {
-            this.collection =
-                new App.SummaryCardCollection(App.SPECIFIC_ENTITY, settings.id);
-            this.collection.on('reset', this.render, this);
+            this.model = new App.SummaryCardModel({id: settings.id});
+            //new App.SummaryCardCollection(App.SPECIFIC_ENTITY, settings.id);
+            this.model.on('change', this.render, this);
+            this.model.fetch();
         }
 
         this.colManager = App.ColManager;
     },
-    render: function() {
-        if (this.collection) {
-            var item = _(this.collection.models).first();
-        } else {
-            var item = new App.SummaryCardModel();
-        }
+    render: function(settings) {
+        this.renderMain(this.model, settings);
+        this.renderData(this.model, settings);
 
-        this.renderMain(item);
-        this.renderData(item);
+        this.$('.infoBar li').tooltip({placement: 'right'});
+
+        $('textarea:not([data-widearea])')
+            .keyup(textAreaAdjust)
+            .on('input propertychange', textAreaAdjust)
+            .on('paste', function(e) {setTimeout(textAreaAdjust(e), 500);});
     },
-    renderMain: function(item) {
+    renderMain: function(item, settings) {
         var isPrivate = item.get('private'),
             templateValues = item.toJSON();
-
+        
         templateValues.editing = this.editing;
         templateValues.contributors =
             App.ContributorView.render(item.get('contributors'));
 
-        $('#main-summary').html(this.detailTemplate(templateValues));
+        this.$el.html(this.detailTemplate(templateValues));
+        $('#imageURLInput').val(this.model.get('imgURL'));
     },
-    renderData: function(item) {
+    renderData: function(item, settings) {
         if (this.editing) {
             return;
         }
@@ -57,6 +64,41 @@ App.DetailEntityPageView = Backbone.View.extend({
 
         renderSimpleCard('data', item.get('data'));
         renderSimpleCard('attributes', item.get('attributes'));
+    },
+    // event handler
+    infoBarClickHandler: function(e) {
+        var eventSrc = e.target,
+            eOrig = $(e.currentTarget),
+            op = eOrig.attr('data-original-title');
+        switch (op) {
+            case "Edit": {
+                this.editing = true;
+                this.render();
+            }
+        }
+    },
+    changeImage: function(e) {
+        var model = this.model;
+
+        $('#imageChangeModal').modal();
+        $('#imageURLSaveBtn').click(function() {
+            var imgUrl = $('#imageURLInput').val();
+            model.set('imgURL', imgUrl);
+            $('#profile-img').attr('style', 'background-image: url("' + imgUrl + '")');
+        });
+    },
+    saveChange: function(e) {
+        var model = this.model,
+            tags = _($('#tag').val().split('#')).map(function(tag) {
+                return tag.replace(',', '').trim();
+            });
+
+        model.set('name', $('#name').val() || '');
+        model.set('description', $('#description').val() || '');
+        model.set('private', false);
+        model.set('imgURL', $('#imageURLInput').val());
+        model.set('tags', tags);
+        model.save();
     }
 });
 
@@ -113,7 +155,7 @@ App.SearchPageView = Backbone.View.extend({
 
         templateValues.contributors =
             App.ContributorView.render(quickSummaryModel.get('contributors'));
-        
+
         templateValues.summary = _(quickSummaryModel.get('summary'))
             .map(function(stat) {
                 return that.statTemplate(stat);

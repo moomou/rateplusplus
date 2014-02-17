@@ -1,20 +1,31 @@
 <div class="info-card detail">
+  {{#unless editing}}
+  <div class="pull-right sideBar">
+    <ul class="infoBar" style="margin-left: 0;">
+      <li data-original-title="Edit"><a href="#edit" class="btn-like"><i class="fa fa-edit fa-lg"></i></a></li>
+      <li data-original-title="Fork"><a href="#fork" class="btn-like"><i class="fa fa-code-fork fa-lg"></i></a></li>
+      <li data-original-title="Embed"><a href="#embed" class="btn-like"><i class="fa fa-code fa-lg"></i></a></li>
+    </ul>
+  </div>
+  {{/unless}}
   <div class="header">
     {{#if editing}}
-    <div id="profile-img" class="profile pull-left js-profile" style="background-image: url('//cloverite.com/static/img/blank.png')">
+    <div class="profile pull-left js-profile" style="background-image: url('{{#if imgURL}} {{imgURL}} {{else}} //cloverite.com/static/img/blank.png {{/if}}')">
       <button id="change-image-btn" class="btn-small btn btn-white" style="margin: 0 auto;display: block; margin-top: 105%;">Change</button>
     </div>
     <ul class="meta pull-left">
       <li class="name">
-        <input id="name" class="title-input js-title" placeholder="Title" type="text">
+        <input id="name" class="title-input js-title" placeholder="Title" type="text" value="{{#if name}}{{name}}{{/if}}">
       </li>
       <li class="hash">
-        <input id="tag" class="hash-input js-hash" placeholder="#hashtag" type="text">
+        <input id="tag" class="hash-input js-hash" placeholder="#hashtag" type="text" value="{{#if tags}}{{tags}}{{/if}}">
       </li>
     </ul>
     <button id="save-btn" class="btn btn-success" style="margin: 0 auto;display: block; float: right;">Publish</button>
     <div>
-      <textarea id="description" placeholder="Enter description here."></textarea>
+      <textarea id="description" placeholder="Enter description here.">
+        {{#if description}} {{description}} {{/if}}
+      </textarea>
     </div>
     {{else}}
     <div class="profile pull-left js-profile" style="background-image: url('{{imgURL}}')"></div>
@@ -32,7 +43,7 @@
       {{{contributors}}}
     </ul>
     <span class="pull-right"> Contributed by</span>
-    <div class="pull-left">
+    <div class="pull-left" style="clear:both;">
       <p>{{description}}</p>
     </div>
     {{/if}}

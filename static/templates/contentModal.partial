@@ -41,7 +41,7 @@
       <input class="srcType hidden" type="text" value="text" style="display: none;">
       <input class="dataType hidden" type="text" value="text" style="display: none;">
       <div id="writingModal" class="textbox"> 
-        <input style="border-bottom: 1px solid #eee;" class="title fieldname" placeholder="Title" type="text">
+        <input style="overflow: auto; width: 75%; border-bottom: 1px solid #eee;" class="title fieldname" placeholder="Title" type="text">
         <textarea style="min-height: 200px;" data-widearea='enable' placeholder="Start here" class="value"></textarea>
       </div>
     </div>

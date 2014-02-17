@@ -66,6 +66,9 @@ ul {
 
   .header {
     overflow: auto;
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+    padding-right: 25px;
+
     .action {
       float: right;
       li {
@@ -162,6 +165,25 @@ ul {
 
     .edit-tool {
       margin: -3px 2px 0 2px;
+    }
+  }
+
+  .infoBar {
+    margin-left: 0;
+    li {
+      @include border-radius(0px 5px 5px 0);
+      background: white;
+      border-right: 1px solid rgba(0, 0, 0, 0.15);
+      border-left: 0;
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      padding: 3px;
+    }
+    li:first-child, li:last-child {
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-left: 0;
     }
   }
 }

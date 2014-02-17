@@ -469,12 +469,9 @@
   margin-top: 8px !important;
   font-size: 17px; }
 
-#main-summary .info-card.detail {
-  width: 75%;
-  margin: 0 auto; }
-  #main-summary .info-card.detail textarea {
-    margin-top: 50px;
-    font-size: 22px; }
+#main-summary .info-card.detail textarea {
+  margin-top: 50px;
+  font-size: 22px; }
 
 .navbar-inner {
   -webkit-box-shadow: none;
@@ -724,7 +721,9 @@ ul {
   .info-card .minimize {
     display: none; }
   .info-card .header {
-    overflow: auto; }
+    overflow: auto;
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+    padding-right: 25px; }
     .info-card .header .action {
       float: right; }
       .info-card .header .action li {
@@ -798,6 +797,24 @@ ul {
     margin: 10px -15px; }
     .info-card .footer .edit-tool {
       margin: -3px 2px 0 2px; }
+  .info-card .infoBar {
+    margin-left: 0; }
+    .info-card .infoBar li {
+      -webkit-border-radius: 0px 5px 5px 0;
+      border-radius: 0px 5px 5px 0;
+      background-clip: padding-box;
+      /* stops bg color from leaking outside the border: */
+      background: white;
+      border-right: 1px solid rgba(0, 0, 0, 0.15);
+      border-left: 0;
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      padding: 3px; }
+    .info-card .infoBar li:first-child, .info-card .infoBar li:last-child {
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-left: 0; }
 
 .info-card.presentation {
   -webkit-box-shadow: none;

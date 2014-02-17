@@ -59,24 +59,6 @@ App.CloverCollection = Backbone.Collection.extend({
 
 /**
  * Individual Component */
-App.EntityModel = App.CloverModel.extend({
-	urlRoot: App.API_SERVER + App.API_VERSION + 'entity/',
-    defaults: {
-        //DOM
-        editable: true,
-        //Backend
-    	id: undefined,
-        name: 'New Entity',
-        private: false,
-        imgURL: '',
-        description: 'Add Short Description',
-        tags: [''],
-    },
-    initialize: function() {
-        this.set('domId', _.uniqueId('domId'));
-    }
-});
-
 App.EntityAttributeModel = App.CloverModel.extend({
     urlRoot: function() {
         return [App.API_SERVER,
@@ -188,39 +170,42 @@ App.EntityAttributeModel = App.CloverModel.extend({
 /**
  * Summary Model: EntityModel + Summary Stats + Attr; there is no SummaryModel in the server */
 App.SummaryCardModel = App.CloverModel.extend({
+    urlRoot: App.API_SERVER + App.API_VERSION + 'entity/',
 	defaults: {
-        editable: false,
-        domId: undefined,
-	},
-	initialize: function(spec) {
+        //DOM
+        editable: true,
+        //Backend
+    	id: undefined,
+        name: '',
+        private: false,
+        imgURL: '',
+        description: '',
+        tags: [''],
+    },
+	initialize: function(settings) {
         console.log('init SummaryCardModel');
         this.set('domId', _.uniqueId("domId"));
 
         if (this.isNew()) {
             this.set('editable', true);
 
-            var newEntity = new App.EntityModel({editable: this.get('editable')});
             var newAttrCollection = new App.AttributeCollection();
-
-            _.extend(this.attributes, newEntity.toJSON());
 
             this.set('hashTags', '');
             this.set('summary', '');
-            this.set('entityModel', newEntity);
             this.set('attributeCollection', newAttrCollection);
         }
     },
     parse: function(response) {
         console.log("SummaryCardModel Parse");
-
         response = App.CloverModel.prototype.parse.apply(this, arguments);
 
         response.uniqueId = response.uniqueId ||
             "#"+Math.floor(Math.random()*999999999).toString(16);
+
         response.hashTags = this.generateTags(response.tags);
         response.summary = this.summarize(response);
         response.srcUrl = window.location.origin + '/entity/' + response.id;
-        response.entityModel = new App.EntityModel(response);
         response.attributeCollection =
             new App.AttributeCollection(response.attributes, response.id);
 
@@ -229,11 +214,9 @@ App.SummaryCardModel = App.CloverModel.extend({
     // Event handler
     updateSummaryCard: function() {
         console.log('Calling SummaryModel update');
-        var entityModel = this,
-            tags = this.generateTags(entityModel.get('tags'));
-
+        var tags = this.generateTags(this.get('tags'));
         this.set('hashTags', tags['hashTags']);
-        this.set('summary', this.getEntityStats(entityModel.get('attributes')));
+        this.set('summary', this.getEntityStats(this.get('attributes')));
     },
     // Custom Functions
     summarize: function(data) {

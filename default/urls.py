@@ -16,5 +16,7 @@ urlpatterns = patterns('',
     url(r'^signout$', views.SignoutHandler, {'nextPage': '/signin'}),
     url(r'^privacy$', views.PrivacyHandler),
     url(r'^ranking/[.+]?', views.SearchPage, {'query': ''}),
+
+    url(r'^test$', views.TestHandler),
     url(r'^$', views.PageHandler)
 )

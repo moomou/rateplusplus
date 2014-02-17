@@ -201,6 +201,13 @@ def ProfileHandler(request, profileId):
         ''' Handlers User Setting '''
         return HttpResponse(json.dumps("Not Implemented"), mimetype="application/json")
 
+def TestHandler(request):
+    renderCxt = ContextSetup(request)
+    t = loader.get_template('test.html')
+    c = RequestContext(request, renderCxt)
+
+    return HttpResponse(t.render(c))
+
 #Landing Page
 def DefaultPage(request):
     if request.user.is_authenticated():

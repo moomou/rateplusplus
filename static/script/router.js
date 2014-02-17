@@ -67,7 +67,7 @@ App.AppRouter = Backbone.Router.extend({
             searchTerm = getQueryVariable("searchterm"),
             $profileImg =
             imgUrl = '',
-            model = new App.EntityModel();
+            model = new App.SummaryCardModel();
 
         if (empty){
             App.GlobalWidget.searchMessageBox.find('#searchTerm').html(searchTerm);
@@ -76,28 +76,6 @@ App.AppRouter = Backbone.Router.extend({
 
         // empty card view
         new App.DetailEntityPageView();
-
-        $('#save-btn').click(function() {
-            var tags = _($('#tag').val().split('#')).map(function(tag) {
-                return tag.replace(',', '').trim();
-            });
-
-            model.set('name', $('#name').val() || '');
-            model.set('description', $('#description').val() || '');
-            model.set('private', false);
-            model.set('imgURL', $('#imageURLInput').val());
-            model.set('tags', tags);
-            model.save();
-        });
-
-        $('#change-image-btn').click(function() {
-            $('#imageChangeModal').modal();
-            $('#imageURLSaveBtn').click(function() {
-                imgUrl = $('#imageURLInput').val();
-                $('#profile-img').attr('style', 'background-image: url("' + imgUrl + '")');
-            });
-        });
-
         /*
         $("#main-summary input, textarea").focus(function(e) {
             $("#top-menu").animate({opacity: 0}, 300);

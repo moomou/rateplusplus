@@ -269,10 +269,72 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   
-  return "\n    <div id=\"profile-img\" class=\"profile pull-left js-profile\" style=\"background-image: url('//cloverite.com/static/img/blank.png')\">\n      <button id=\"change-image-btn\" class=\"btn-small btn btn-white\" style=\"margin: 0 auto;display: block; margin-top: 105%;\">Change</button>\n    </div>\n    <ul class=\"meta pull-left\">\n      <li class=\"name\">\n        <input id=\"name\" class=\"title-input js-title\" placeholder=\"Title\" type=\"text\">\n      </li>\n      <li class=\"hash\">\n        <input id=\"tag\" class=\"hash-input js-hash\" placeholder=\"#hashtag\" type=\"text\">\n      </li>\n    </ul>\n    <button id=\"save-btn\" class=\"btn btn-success\" style=\"margin: 0 auto;display: block; float: right;\">Publish</button>\n    <div>\n      <textarea id=\"description\" placeholder=\"Enter description here.\"></textarea>\n    </div>\n    ";
+  return "\n  <div class=\"pull-right sideBar\">\n    <ul class=\"infoBar\" style=\"margin-left: 0;\">\n      <li data-original-title=\"Edit\"><a href=\"#edit\" class=\"btn-like\"><i class=\"fa fa-edit fa-lg\"></i></a></li>\n      <li data-original-title=\"Fork\"><a href=\"#fork\" class=\"btn-like\"><i class=\"fa fa-code-fork fa-lg\"></i></a></li>\n      <li data-original-title=\"Embed\"><a href=\"#embed\" class=\"btn-like\"><i class=\"fa fa-code fa-lg\"></i></a></li>\n    </ul>\n  </div>\n  ";
   }
 
 function program3(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n    <div class=\"profile pull-left js-profile\" style=\"background-image: url('";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.imgURL), {hash:{},inverse:self.program(6, program6, data),fn:self.program(4, program4, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "')\">\n      <button id=\"change-image-btn\" class=\"btn-small btn btn-white\" style=\"margin: 0 auto;display: block; margin-top: 105%;\">Change</button>\n    </div>\n    <ul class=\"meta pull-left\">\n      <li class=\"name\">\n        <input id=\"name\" class=\"title-input js-title\" placeholder=\"Title\" type=\"text\" value=\"";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.name), {hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">\n      </li>\n      <li class=\"hash\">\n        <input id=\"tag\" class=\"hash-input js-hash\" placeholder=\"#hashtag\" type=\"text\" value=\"";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.tags), {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">\n      </li>\n    </ul>\n    <button id=\"save-btn\" class=\"btn btn-success\" style=\"margin: 0 auto;display: block; float: right;\">Publish</button>\n    <div>\n      <textarea id=\"description\" placeholder=\"Enter description here.\">\n        ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.description), {hash:{},inverse:self.noop,fn:self.program(12, program12, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n      </textarea>\n    </div>\n    ";
+  return buffer;
+  }
+function program4(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += " ";
+  if (helper = helpers.imgURL) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.imgURL); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + " ";
+  return buffer;
+  }
+
+function program6(depth0,data) {
+  
+  
+  return " //cloverite.com/static/img/blank.png ";
+  }
+
+function program8(depth0,data) {
+  
+  var stack1, helper;
+  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  return escapeExpression(stack1);
+  }
+
+function program10(depth0,data) {
+  
+  var stack1, helper;
+  if (helper = helpers.tags) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.tags); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  return escapeExpression(stack1);
+  }
+
+function program12(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += " ";
+  if (helper = helpers.description) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.description); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + " ";
+  return buffer;
+  }
+
+function program14(depth0,data) {
   
   var buffer = "", stack1, helper;
   buffer += "\n    <div class=\"profile pull-left js-profile\" style=\"background-image: url('";
@@ -291,7 +353,7 @@ function program3(depth0,data) {
   if (helper = helpers.contributors) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.contributors); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    </ul>\n    <span class=\"pull-right\"> Contributed by</span>\n    <div class=\"pull-left\">\n      <p>";
+  buffer += "\n    </ul>\n    <span class=\"pull-right\"> Contributed by</span>\n    <div class=\"pull-left\" style=\"clear:both;\">\n      <p>";
   if (helper = helpers.description) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.description); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -299,8 +361,11 @@ function program3(depth0,data) {
   return buffer;
   }
 
-  buffer += "<div class=\"info-card detail\">\n  <div class=\"header\">\n    ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.editing), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
+  buffer += "<div class=\"info-card detail\">\n  ";
+  stack1 = helpers.unless.call(depth0, (depth0 && depth0.editing), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n  <div class=\"header\">\n    ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.editing), {hash:{},inverse:self.program(14, program14, data),fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n  </div>\n</div>\n";
   return buffer;

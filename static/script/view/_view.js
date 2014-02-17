@@ -669,7 +669,7 @@ App.SummaryCardView = Backbone.View.extend({
 App.SimpleCard = Backbone.View.extend({
     className: 'card micro searchable',
     template: Handlebars.templates.simple_card,
-    model: App.EntityModel,
+    model: App.SummaryCardModel,
     events: {
         'mouseover': 'toggleToolbar',
         'mouseout': 'toggleToolbar',
