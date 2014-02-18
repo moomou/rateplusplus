@@ -5,65 +5,8 @@ App.DetailEntityPageView = Backbone.View.extend({
     events: {
         'click .infoBar li': 'infoBarClickHandler',
         'click #change-image-btn': 'changeImage',
-    },
-    initialize: function(settings) {
-        settings = settings || {};
-
-        if (!settings.id) {
-            this.model = new App.SummaryCardModel();
-            this.editing = true;
-            this.render();
-        } else {
-            this.model = new App.SummaryCardModel({id: settings.id});
-            //new App.SummaryCardCollection(App.SPECIFIC_ENTITY, settings.id);
-            this.model.on('change', this.render, this);
-            this.model.fetch();
-        }
-
-        this.colManager = App.ColManager;
-    },
-    render: function(settings) {
-        this.renderMain(this.model, settings);
-        this.renderData(this.model, settings);
-
-        this.$('.infoBar li').tooltip({placement: 'right'});
-
-        $('textarea:not([data-widearea])')
-            .keyup(textAreaAdjust)
-            .on('input propertychange', textAreaAdjust)
-            .on('paste', function(e) {setTimeout(textAreaAdjust(e), 500);});
-    },
-    renderMain: function(item, settings) {
-        var isPrivate = item.get('private'),
-            templateValues = item.toJSON();
-        
-        templateValues.editing = this.editing;
-        templateValues.contributors =
-            App.ContributorView.render(item.get('contributors'));
-
-        this.$el.html(this.detailTemplate(templateValues));
-        $('#imageURLInput').val(this.model.get('imgURL'));
-    },
-    renderData: function(item, settings) {
-        if (this.editing) {
-            return;
-        }
-
-        var colManager = this.colManager;
-        var renderSimpleCard = function(renderType, list) {
-            _(list).each(function(__, ind) {
-                var simpleCard = new App.SimpleCard({
-                    model: item,
-                    renderType: renderType,
-                    renderIndex: ind
-                });
-
-                colManager.CardCol.getNext().append(simpleCard.render().el);
-            });
-        };
-
-        renderSimpleCard('data', item.get('data'));
-        renderSimpleCard('attributes', item.get('attributes'));
+        'click #save-btn': 'saveEdit',
+        'click #cancel-btn': 'cancelEdit',
     },
     // event handler
     infoBarClickHandler: function(e) {
@@ -87,7 +30,7 @@ App.DetailEntityPageView = Backbone.View.extend({
             $('#profile-img').attr('style', 'background-image: url("' + imgUrl + '")');
         });
     },
-    saveChange: function(e) {
+    saveEdit: function(e) {
         var model = this.model,
             tags = _($('#tag').val().split('#')).map(function(tag) {
                 return tag.replace(',', '').trim();
@@ -98,8 +41,88 @@ App.DetailEntityPageView = Backbone.View.extend({
         model.set('private', false);
         model.set('imgURL', $('#imageURLInput').val());
         model.set('tags', tags);
+
+        this.editing = false;
+        this.model.on('change', this.render, this);
+
         model.save();
-    }
+    },
+    cancelEdit: function(e) {
+        this.editing = false;
+        this.render({changed: {}});
+    },
+    initialize: function(settings) {
+        settings = settings || {};
+
+        if (!settings.id) {
+            this.model = new App.SummaryCardModel();
+            this.editing = true;
+            this.render();
+        } else {
+            this.model = new App.SummaryCardModel({id: settings.id});
+            //new App.SummaryCardCollection(App.SPECIFIC_ENTITY, settings.id);
+            this.model.on('change', this.render, this);
+            this.model.fetch();
+        }
+    },
+    render: function(settings) {
+        settings = settings || {};
+
+        if (settings.changed) {
+            this.renderMain(this.model, settings);
+            if (settings.changed.data || settings.changed.attributes) {
+                this.renderData(this.model, settings);
+            }
+        } else {
+            this.renderMain(this.model, settings);
+            this.renderData(this.model, settings);
+        }
+
+        this.$('.infoBar li').tooltip({placement: 'right'});
+
+        // Manually attach a new event
+        this.$('textarea:not([data-widearea])')
+            .keyup(textAreaAdjust)
+            .on('input propertychange', textAreaAdjust)
+            .on('paste', function(e) {setTimeout(textAreaAdjust(e), 500);})
+            .trigger('keyup');
+    },
+    renderMain: function(item, settings) {
+        var isPrivate = item.get('private'),
+            templateValues = item.toJSON();
+
+        if (templateValues.description.trim() === "") {
+            templateValues.description = "";
+        }
+
+        templateValues.editing = this.editing;
+        templateValues.contributors =
+            App.ContributorView.render(item.get('contributors'));
+
+        this.$el.html(this.detailTemplate(templateValues));
+        $('#imageURLInput').val(this.model.get('imgURL'));
+    },
+    renderData: function(item, settings) {
+        if (this.editing) {
+            return;
+        }
+
+        var dataContainer = App.ColManager.CardCol;
+            renderSimpleCard = function(renderType, list) {
+                _(list).each(function(__, ind) {
+                    var simpleCard = new App.SimpleCard({
+                        model: item,
+                        renderType: renderType,
+                        renderIndex: ind
+                    });
+
+                    dataContainer.next().append(simpleCard.render().el);
+                });
+            };
+
+        renderSimpleCard('data', item.get('data'));
+        renderSimpleCard('attributes', item.get('attributes'));
+    },
 });
 
 App.SearchPageView = Backbone.View.extend({

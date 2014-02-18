@@ -102,19 +102,18 @@ ul {
       }
       input {
         @include box-shadow-none();
+        width: 120%;
+        max-width: 120%;
+        overflow-x: auto;
         border: none;
       }
       .title-input {
-        width: 100%;
-        max-width: 100%;
         font-size: 25px;
         line-height: 30px;
         height: 30px;
         margin-bottom: -5px;
       }
       .tag-input {
-        width: 100%;
-        max-width: 100%;
         font-size: 15px;
         line-height: 20px;
       }
@@ -244,5 +243,15 @@ ul {
   .field {
     float: right;
     font-size: 17px;
+  }
+}
+
+.edit-btns {
+  button {
+    width: 90px;
+    display: block;
+  }
+  button:first-child {
+    margin-bottom: 5px;
   }
 }

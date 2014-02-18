@@ -275,7 +275,7 @@ function program1(depth0,data) {
 function program3(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n    <div class=\"profile pull-left js-profile\" style=\"background-image: url('";
+  buffer += "\n    <div class=\"edit-btns pull-right\">\n      <button id=\"save-btn\" class=\"btn btn-success\">\n        <i class=\"fa fa-cloud-upload\"> Save</i>\n      </button>\n      <button id=\"cancel-btn\" class=\"btn btn-white\">\n        <i class=\"fa fa-minus-circle\"> Cancel</i>\n      </button> \n    </div>\n    <div class=\"profile pull-left js-profile\" style=\"background-image: url('";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.imgURL), {hash:{},inverse:self.program(6, program6, data),fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "')\">\n      <button id=\"change-image-btn\" class=\"btn-small btn btn-white\" style=\"margin: 0 auto;display: block; margin-top: 105%;\">Change</button>\n    </div>\n    <ul class=\"meta pull-left\">\n      <li class=\"name\">\n        <input id=\"name\" class=\"title-input js-title\" placeholder=\"Title\" type=\"text\" value=\"";
@@ -284,10 +284,10 @@ function program3(depth0,data) {
   buffer += "\">\n      </li>\n      <li class=\"hash\">\n        <input id=\"tag\" class=\"hash-input js-hash\" placeholder=\"#hashtag\" type=\"text\" value=\"";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.tags), {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\">\n      </li>\n    </ul>\n    <button id=\"save-btn\" class=\"btn btn-success\" style=\"margin: 0 auto;display: block; float: right;\">Publish</button>\n    <div>\n      <textarea id=\"description\" placeholder=\"Enter description here.\">\n        ";
+  buffer += "\">\n      </li>\n    </ul>\n    <div>\n      <textarea id=\"description\" placeholder=\"Enter description here.\">";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.description), {hash:{},inverse:self.noop,fn:self.program(12, program12, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n      </textarea>\n    </div>\n    ";
+  buffer += "</textarea>\n    </div>\n    ";
   return buffer;
   }
 function program4(depth0,data) {
@@ -325,13 +325,10 @@ function program10(depth0,data) {
 
 function program12(depth0,data) {
   
-  var buffer = "", stack1, helper;
-  buffer += " ";
+  var stack1, helper;
   if (helper = helpers.description) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.description); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + " ";
-  return buffer;
+  return escapeExpression(stack1);
   }
 
 function program14(depth0,data) {
@@ -934,7 +931,7 @@ function program3(depth0,data) {
     + "\">\n    ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.profileImg), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n  </a>\n</div>\n<div class=\"contentContainer outer\">\n  <div class=\"entityDetail\">\n  </div>\n  <ul class=\"view-toolbar\" style=\"\">\n    <li>\n      <i class=\"fa fa-heart-o fa-lg\"></i>\n      <i class=\"fa fa-twitter fa-lg\"></i>\n      <i class=\"fa fa-code-fork fa-lg\"></i>\n      <i class=\"fa fa-share-square-o fa-lg\"></i>\n    </li>\n    <li>";
+  buffer += "\n  </a>\n</div>\n<div class=\"contentContainer outer\">\n  <div class=\"entityDetail\">\n  </div>\n  <ul class=\"view-toolbar\" style=\"\">\n    <li>\n      <i class=\"fa fa-heart-o fa-lg\"></i>\n      <i class=\"fa fa-twitter fa-lg\"></i>\n      <i class=\"fa fa-code fa-lg\"></i>\n      <i class=\"fa fa-share-square-o fa-lg\"></i>\n    </li>\n    <li>";
   if (helper = helpers.uniqueId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.uniqueId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

@@ -10,7 +10,6 @@ function getYoutubeId(url) {
 }
 
 function textAreaAdjust(e) {
-    debugger;
     var o = e.target;
     o.style.height = "1px";
     o.style.height = (25+o.scrollHeight)+"px";

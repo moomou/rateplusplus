@@ -125,6 +125,9 @@
 .btn-white:hover {
   background-color: #FCFCFC;
 }
+.btn:focus {
+  outline: none !important;
+}
 
 // Stars
 .goldStar {

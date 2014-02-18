@@ -349,6 +349,9 @@
 .btn-white:hover {
   background-color: #FCFCFC; }
 
+.btn:focus {
+  outline: none !important; }
+
 .goldStar {
   color: gold; }
 
@@ -659,6 +662,9 @@
 .btn-white:hover {
   background-color: #FCFCFC; }
 
+.btn:focus {
+  outline: none !important; }
+
 .goldStar {
   color: gold; }
 
@@ -749,17 +755,16 @@ ul {
       -webkit-box-shadow: none;
       -moz-box-shadow: none;
       box-shadow: none;
+      width: 120%;
+      max-width: 120%;
+      overflow-x: auto;
       border: none; }
     .info-card .header .meta .title-input {
-      width: 100%;
-      max-width: 100%;
       font-size: 25px;
       line-height: 30px;
       height: 30px;
       margin-bottom: -5px; }
     .info-card .header .meta .tag-input {
-      width: 100%;
-      max-width: 100%;
       font-size: 15px;
       line-height: 20px; }
   .info-card .content {
@@ -866,6 +871,12 @@ ul {
   .stats .field {
     float: right;
     font-size: 17px; }
+
+.edit-btns button {
+  width: 90px;
+  display: block; }
+.edit-btns button:first-child {
+  margin-bottom: 5px; }
 
 .table {
   display: table;

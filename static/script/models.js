@@ -221,8 +221,14 @@ App.SummaryCardModel = App.CloverModel.extend({
     // Custom Functions
     summarize: function(data) {
         var summary = [];
-        summary.push({num: data.attributes.length, category: 'Attributes'});
-        summary.push({num: (data.data && data.data.length) || 0, category: 'Data point'});
+
+        if (data.attributes) {
+            summary.push({num: data.attributes.length, category: 'Attributes'});
+        }
+        if (data.data) {
+            summary.push({num: (data.data && data.data.length) || 0, category: 'Data point'});
+        }
+
         return summary;
     },
     generateTags: function(tags) {
@@ -234,7 +240,8 @@ App.SummaryCardModel = App.CloverModel.extend({
                 return;
             }
 
-            hashTags += '<li><a href="' + queryUrl + encodeURIComponent(tag) + '">' + tag + ' </a></li>';
+            hashTags += '<li><a href="' + queryUrl +
+                encodeURIComponent(tag) + '">' + tag + ' </a></li>';
         });
 
         return hashTags;
@@ -410,10 +417,10 @@ App.ColManager = (function() {
             cols = colRef;
 
         return {
-            allCols: function() {
+            all: function() {
                 return cols;
             },
-            getNext: function () {
+            next: function () {
                 var curInd = ind;
                 ind = (ind + 1) % cols.length;
                 return cols[curInd];

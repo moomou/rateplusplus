@@ -16,13 +16,13 @@
       <i class="fa fa-plus-square fa-lg btn-like"> New Content</i>
     </a>
     </li>
+    {% if 1%}
     <li>
-    {% if SA_EDITOR_ENABLED %}
-    <a class="js-startEditor" href="#">
-      <i class="fa fa-list-ul fa-lg btn-like"></i>
-    </a>
-    {% endif %}
+      <a class="js-startEditor" href="#">
+        <i class="fa fa-list-ul fa-lg btn-like"></i>
+      </a>
     </li>
+    {% endif %}
   </ul>
   </li>
 </ul>
