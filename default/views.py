@@ -70,9 +70,14 @@ def FeedbackHandler(request):
 
 def SigninHandler(request, redirected = False):
     if request.method == "GET":
+        if request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('profile-page') + "self")
+
         renderCxt = ContextSetup(request)
-        renderCxt['SEARCH_ENABLED'] = False
         renderCxt['REDIRECTED'] = redirected
+        renderCxt['SEARCH_ENABLED'] = False
+        renderCxt['SIGN_IN_DISABLED'] = True
+        renderCxt['FEEDBACK_ENABLED'] = False
 
         t = loader.get_template('signin.html')
         c = RequestContext(request, renderCxt) 
@@ -115,6 +120,9 @@ def SignoutHandler(request, nextPage):
 
 def SignupHandler(request):
     if request.method == "GET":
+        if request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('profile-page') + "self")
+
         renderCxt = ContextSetup(request)
         renderCxt['SEARCH_ENABLED'] = False
 
@@ -145,6 +153,7 @@ def AdHandler(request):
 def EntityHandler(request, pk):
     renderCxt = ContextSetup(request)
     renderCxt['specific_entity'] = True
+    renderCxt['not_new'] = True
     t = loader.get_template('main.html')
     c = RequestContext(request, renderCxt)
 
@@ -152,7 +161,8 @@ def EntityHandler(request, pk):
 
 def NewEntityHandler(request):
     renderCxt = ContextSetup(request)
-    t = loader.get_template('new.html')
+    renderCxt['specific_entity'] = True
+    t = loader.get_template('main.html')
     c = RequestContext(request, renderCxt)
 
     return HttpResponse(t.render(c))
@@ -191,13 +201,24 @@ def ProfileHandler(request, profileId):
         ''' Handlers User Setting '''
         return HttpResponse(json.dumps("Not Implemented"), mimetype="application/json")
 
+def TestHandler(request):
+    renderCxt = ContextSetup(request)
+    t = loader.get_template('test.html')
+    c = RequestContext(request, renderCxt)
+
+    return HttpResponse(t.render(c))
+
 #Landing Page
 def DefaultPage(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse('profile-page') + "self")
+
     ipaddr = request.META.get('HTTP_X_REAL_IP', '127.0.0.1')
     geoInfo = gi.record_by_addr(ipaddr)
     #defaultQuery = " ".join([geoInfo['city']]) #,geoInfo['country_name']])
 
     renderCxt = ContextSetup(request)
+
     renderCxt['DEFAULT_QUERY'] = '' #defaultQuery
     renderCxt['SEARCH_ENABLED'] = False
     renderCxt['FEEDBACK_ENABLED'] = False

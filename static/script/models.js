@@ -59,24 +59,6 @@ App.CloverCollection = Backbone.Collection.extend({
 
 /**
  * Individual Component */
-App.EntityModel = App.CloverModel.extend({
-	urlRoot: App.API_SERVER + App.API_VERSION + 'entity/',
-    defaults: {
-        //DOM
-        editable: true,
-        //Backend
-    	id: undefined,
-        name: 'New Entity',
-        private: false,
-        imgURL: '',
-        description: 'Add Short Description',
-        tags: [''],
-    },
-    initialize: function() {
-        this.set('domId', _.uniqueId('domId'));
-    }
-});
-
 App.EntityAttributeModel = App.CloverModel.extend({
     urlRoot: function() {
         return [App.API_SERVER,
@@ -171,8 +153,7 @@ App.EntityAttributeModel = App.CloverModel.extend({
     updateVoteCount: function(voteType, view) {
         if (voteType === App.POSITIVE) {
             this.set('upVote', this.get('upVote') + 1);
-        }
-        else {
+        } else {
             this.set('downVote', this.get('downVote') + 1);
         }
 
@@ -189,74 +170,81 @@ App.EntityAttributeModel = App.CloverModel.extend({
 /**
  * Summary Model: EntityModel + Summary Stats + Attr; there is no SummaryModel in the server */
 App.SummaryCardModel = App.CloverModel.extend({
+    urlRoot: App.API_SERVER + App.API_VERSION + 'entity/',
 	defaults: {
-        editable: false,
-        domId: undefined,
-	},
-	initialize: function(spec) {
+        //DOM
+        editable: true,
+        //Backend
+    	id: undefined,
+        name: '',
+        private: false,
+        imgURL: '',
+        description: '',
+        tags: [''],
+    },
+	initialize: function(settings) {
         console.log('init SummaryCardModel');
         this.set('domId', _.uniqueId("domId"));
 
         if (this.isNew()) {
             this.set('editable', true);
 
-            var newEntity = new App.EntityModel({editable: this.get('editable')});
             var newAttrCollection = new App.AttributeCollection();
 
-            _.extend(this.attributes, newEntity.toJSON());
-
             this.set('hashTags', '');
-            this.set('summary', this.getEntityStats(this.get('attributes')));
-            this.set('entityModel', newEntity);
+            this.set('summary', '');
             this.set('attributeCollection', newAttrCollection);
         }
-
-        this.on('entityModelUpdated', this.updateSummaryCard);
     },
     parse: function(response) {
-        response = App.CloverModel.prototype.parse.apply(this, arguments);
         console.log("SummaryCardModel Parse");
-        console.log(response);
-        response.hashTags = this.cleanTags(response.tags);
-        response.summary = this.getEntityStats(response.attributes);
-        response['entityModel'] = new App.EntityModel(response);
-        response['attributeCollection'] =
-            new App.AttributeCollection(response['attributes'], response['id']);
+        response = App.CloverModel.prototype.parse.apply(this, arguments);
+
+        response.uniqueId = response.uniqueId ||
+            "#"+Math.floor(Math.random()*999999999).toString(16);
+
+        response.hashTags = this.generateTags(response.tags);
+        response.summary = this.summarize(response);
+        response.srcUrl = window.location.origin + '/entity/' + response.id;
+        response.attributeCollection =
+            new App.AttributeCollection(response.attributes, response.id);
 
         return response;
     },
     // Event handler
     updateSummaryCard: function() {
         console.log('Calling SummaryModel update');
-        var entityModel = this;
-        var tags = this.cleanTags(entityModel.get('tags'));
-
+        var tags = this.generateTags(this.get('tags'));
         this.set('hashTags', tags['hashTags']);
-        this.set('summary', this.getEntityStats(entityModel.get('attributes')));
+        this.set('summary', this.getEntityStats(this.get('attributes')));
     },
     // Custom Functions
-    cleanTags: function(tags) {
-        var hashTags = '';
+    summarize: function(data) {
+        var summary = [];
+
+        if (data.attributes) {
+            summary.push({num: data.attributes.length, category: 'Attributes'});
+        }
+        if (data.data) {
+            summary.push({num: (data.data && data.data.length) || 0, category: 'Data point'});
+        }
+
+        return summary;
+    },
+    generateTags: function(tags) {
+        var hashTags = '',
+            queryUrl = window.location.origin + '?q=';
 
         _.each(tags, function(tag) {
             if (tag.indexOf("__global__") >= 0) {
                 return;
             }
 
-            if (tag[0] == "#") {
-                hashTags += '<li>'+tag.substr(1)+'</li>';
-            }
-            else {
-                console.log("Tag without hash prefix!");
-                hashTags += '<li>' + tag +'</li>';
-            }
+            hashTags += '<li><a href="' + queryUrl +
+                encodeURIComponent(tag) + '">' + tag + ' </a></li>';
         });
-    
+
         return hashTags;
-    },
-    updateEntityStats: function(attrs) {
-        console.log('updateEntityStats');
-        $.extend(this.get('summary'), this.getEntityStats(attrs));
     },
     getEntityStats: function(attrs) {
         console.log('GetEntityStats Called');
@@ -275,7 +263,7 @@ App.SummaryCardModel = App.CloverModel.extend({
 
         if (totalVote !== 0) {
             _.each(attrs, function(attr) {
-                var attrScore = attr.upVote / (attr.voteCount || 1); //divide by totalCount unless 0 
+                var attrScore = attr.upVote / (attr.voteCount || 1); //divide by totalCount unless 0
                 if (attr.tone == App.POSITIVE) {
                     posAttr += 1;
                 }
@@ -319,6 +307,7 @@ App.SummaryCardCollection = App.CloverCollection.extend({
     model: App.SummaryCardModel,
     initialize: function(cardType, data) {
         this.cardType = cardType;
+
         if (cardType == App.SPECIFIC_RANKING) {
             this.urlStub = 'ranking/share/' + data;
             this.fetch();
@@ -424,27 +413,27 @@ App.Utility = (function() {
 App.ColManager = (function() {
     //private
     var configCol = function(colRef) {
-        return function() {
-            return {
-                ind: 0,
-                cols: colRef,
-                getNext: function () {
-                    var curInd = this.ind;
-                    this.ind = (this.ind + 1) % colRef.length;
-                    return colRef[curInd];
-                },
-            };
+        var ind = 0,
+            cols = colRef;
+
+        return {
+            all: function() {
+                return cols;
+            },
+            next: function () {
+                var curInd = ind;
+                ind = (ind + 1) % cols.length;
+                return cols[curInd];
+            }
         };
     };
 
-    var cardCols = [$('#col1'), $('#col2'), $('#col3'), $('#col4')],
-        cmtCols = [$('#cmt1'), $('#cmt2'), $('#cmt3')],
-        getCardCol = configCol(cardCols),
-        getCmtCol = configCol(cmtCols);
+    var cardCols = [$('#col1'), $('#col2'), $('#col3')],
+        cmtCols = [$('#cmt1'), $('#cmt2'), $('#cmt3')];
 
     return {
-        getCardCol: getCardCol,
-        getCmtCol: getCmtCol
+        CardCol: configCol(cardCols),
+        CmtCol: configCol(cmtCols)
     };
 })();
 
@@ -463,50 +452,43 @@ App.ShowTrendyLink = function() {
     });
 };
 
-App.ConfigureTagit = function(option, that, editable) {
+App.ConfigureTagit = function($dom, model) {
     var sourceURL = App.AE_H_URL;
-        prefix = "#";
-
-    return {
-        autocomplete: {delay: 0, minLength: 2, source: sourceURL},
-        afterTagAdded: function(event, ui) {
-            var tags = that.entityView.model.get('tags');
-
-            if (ui.tagLabel && tags.indexOf(prefix+ui.tagLabel) < 0) {
-                var label = ui.tagLabel[0] == prefix ? ui.tagLabel : prefix + ui.tagLabel;
-                tags.push(label);
-                console.log("New Tags");
-                console.log(tags);
+        prefix = "#",
+        tagitOptions = {
+            readOnly: true,
+            onTagClicked: function(event, ui) {
+                $('#searchInput').val(ui.tagLabel);
+                $('#searchForm').submit();
             }
-        },
-        afterTagRemoved: function(event, ui) {
-            var tags = that.entityView.model.get('tags');
-            var label = ui.tagLabel[0] == prefix ? ui.tagLabel : prefix + ui.tagLabel;
-            var ind = tags.indexOf(label);
-            tags.splice(ind, 1);
-            console.log(tags);
-        },
-        readOnly: !editable,
-        onTagClicked: function(event, ui) {
-            $('#searchInput').val(ui.tagLabel);
-            $('#searchForm').submit();
-        }
+        };
+
+    if (model) {
+        _.extend(tagitOptions, {
+            autocomplete: {delay: 0, minLength: 2, source: sourceURL},
+            afterTagAdded: function(event, ui) {
+                var tags = model.get('tags');
+
+                if (ui.tagLabel && tags.indexOf(prefix+ui.tagLabel) < 0) {
+                    var label = ui.tagLabel[0] == prefix ? ui.tagLabel : prefix + ui.tagLabel;
+                    tags.push(label);
+                    console.log("New Tags");
+                    console.log(tags);
+                }
+            },
+            afterTagRemoved: function(event, ui) {
+                var tags = model.get('tags');
+                var label = ui.tagLabel[0] == prefix ? ui.tagLabel : prefix + ui.tagLabel;
+                var ind = tags.indexOf(label);
+                tags.splice(ind, 1);
+            },
+            readOnly: false
+        });
     }
-};
 
-App.CreateNewCard = function() {
-    console.log("Creating new card")
-    var newEntityRow = document.getElementById('dr1');
+    $dom.tagit(tagitOptions);
 
-    // intentionally global to keep events
-    newCard = new App.SummaryCardView({
-        model: new App.SummaryCardModel({}),
-        renderMode: "detail"});
-    newEntityRow.appendChild(newCard.render().el);
-
-    // manually activate edit mode
-    newCard.model.set('editable',true);
-    newCard.render(true);
-
-    return newCard;
+    if (!model) {
+        $('.ui-autocomplete-input').hide();
+    }
 };

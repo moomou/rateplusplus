@@ -1,0 +1,112 @@
+<div id="contentModal" class="hide modal fade-in">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <ul class="addContentType tab" id="addContent">
+      <li class="contentType cursor-pointer" data-target='#writing'>
+        <a href="#writing" data-toggle="tab">
+          <i class="fa fa-pencil fa-2x block"></i>
+          <span style='display: block'>Text</span>
+        </a>
+      </li>
+      <li class="contentType cursor-pointer" data-target='#attribute'>
+        <a href="#attribute" data-toggle="tab">
+          <i class="fa fa-star-half-o fa-2x block"></i>
+          <span style='display: block'>Attribute</span>
+        </a>
+      </li>
+      <li class="contentType cursor-pointer" data-target='#pictureframe'>
+        <a href="#pictureframe" data-toggle="tab">
+          <i class="fa fa-picture-o fa-2x block"></i>
+          <span style='display: block'>Picture</span>
+        </a>
+      </li>
+      <li class="contentType cursor-pointer" data-target='#movieTheatre'>
+        <a href="#movieTheatre" data-toggle="tab">
+          <i class="fa fa-youtube-play fa-2x block"></i>
+          <span style='display: block'> Video</span>
+        </a>
+      </li>
+      <li class="contentType cursor-pointer" data-target='#linkChain'>
+        <a href="#linkChain" data-toggle="tab">
+          <i class="fa fa-dot-circle-o fa-2x block"></i>
+          <span style='display: block'> Info</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="upTriangleBorder"></div>
+  <div class="upTriangle"></div>
+  <div class="addContentBox tab-content">
+    <div id="writing" class="tab-pane active">
+      <input class="srcType hidden" type="text" value="text" style="display: none;">
+      <input class="dataType hidden" type="text" value="text" style="display: none;">
+      <div id="writingModal" class="textbox"> 
+        <input style="overflow: auto; width: 75%; border-bottom: 1px solid #eee;" class="title fieldname" placeholder="Title" type="text">
+        <textarea style="min-height: 200px;" data-widearea='enable' placeholder="Start here" class="value"></textarea>
+      </div>
+    </div>
+    <div id="attribute" class="tab-pane">
+      <input class="hidden srcType" type="text" value="text" style="display: none;">
+      <input class="hidden dataType" type="text" value="attribute" style="display: none;">
+      <div class="input-prepend" style="display: block;">
+        <span class="add-on">Attribute Name</i></span>
+        <input style="width: 75%;" class="fieldname" type="text" placeholder="">
+      </div>
+    </div>
+    <div id="pictureframe" class="tab-pane">
+      <input class="hidden srcType" type="text" value="binary" style="display: none;">
+      <input class="hidden dataType" type="text" value="image" style="display: none;">
+      <div class="input-prepend" style="display: block;">
+        <span class="add-on">Picture Caption</i></span>
+        <input style="width: 75%;" class="fieldname" type="text" placeholder="">
+      </div>
+      <div class="input-prepend" style="display: block;">
+        <span class="add-on"> Source URL</i></span>
+        <input style="width: 75%;" class="srcUrl" type="text" placeholder="http://">
+      </div>
+    </div>
+    <div id="movieTheatre" class="tab-pane">
+      <input class="hidden srcType" type="text" value="binary" style="display: none;">
+      <input class="hidden dataType" type="text" value="video" style="display: none;">
+      <div class="input-prepend" style="display: block;">
+        <span class="add-on">Video Title</i></span>
+        <input style="width: 75%;" class="fieldname" type="text">
+      </div>
+      <div class="input-prepend" style="display: block;">
+        <span class="add-on"> Source URL</i></span>
+        <input style="width: 75%;" class="srcUrl" type="text" placeholder="http://">
+      </div>
+    </div>
+    <div id="linkChain" class="tab-pane">
+      <div class="field"> Source Type</div>
+      <select class="srcType">
+        <option>JSON</option>
+        <option>DOM</option>
+        <option>Binary</option>
+      </select>
+      <br>
+      <div class="field"> Data Type</div>
+      <select class="dataType">
+        <option>Text</option>
+        <option>Number</option>
+        <option>Timseries</option>
+      </select>
+      <div class="input-prepend" style="display: block;">
+        <span class="add-on">Field Name</i></span>
+        <input style="width: 75%;" class="fieldname" type="text" placeholder="Ex. Networth, Position">
+      </div>
+      <div class="input-prepend" style="display: block;">
+        <span class="add-on"> Source URL</i></span>
+        <input style="width: 75%;" class="srcUrl" type="text" placeholder="http://">
+      </div>
+      <div class="input-prepend" style="display: block;">
+        <span class="add-on"> CSS Selector</i></span>
+        <input style="width: 75%;" class="selector" type="text" placeholder="Ex. #content>li text()">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a id="saveContentBtn" href="#" class="btn btn-success">Save</a>
+  </div>
+</div>
+

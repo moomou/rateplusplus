@@ -1,6 +1,20 @@
-/*
-    Support Functions
-*/
+/* Support Functions */
+
+function getYoutubeId(url) {
+    var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    if (match&&match[2].length==11){
+        return match[2];
+    } else { //error
+    } 
+}
+
+function textAreaAdjust(e) {
+    var o = e.target;
+    o.style.height = "1px";
+    o.style.height = (25+o.scrollHeight)+"px";
+}
+
 function guidGenerator() {
     var S4 = function() {
        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
@@ -76,13 +90,9 @@ function getQueryVariable(variable) {
     return false;
 }
 
-function sessionStorageGetter() {
-}
-
 //Configuring Ajax to include CSRF
 var csrftoken = getCookie('csrftoken');
 var accesstoken = getCookie('usertoken');
-
 $.ajaxSetup({
     beforeSend: function(xhr, settings) {
         if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {

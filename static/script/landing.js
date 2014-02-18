@@ -1,5 +1,4 @@
 'use strict';
-
 $(function() {
     $('#searchBtn').click(function(e) {
         $('#searchForm').submit()

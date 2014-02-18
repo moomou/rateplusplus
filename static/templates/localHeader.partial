@@ -1,0 +1,28 @@
+<ul id="local-header" class="nav nav-tabs">
+  <li>
+  <span href="#home" class="entityTitle">
+    Content <span id="entityTitle"></span>
+  </span>
+  </li>
+  <li>
+  <form method="GET" id="localSearch" class="navbar-search" action="#/filter">
+    <input type="search" class="span2 searchBar" name='q' id="filterInput" type="text" placeholder="&#xf0b0 Filter Cards">
+  </form>
+  </li>
+  <li class="pull-right">
+  <ul class="entity-actions">
+    <li>
+    <a style="font-size:15px;" id="addNew" href="#" class="btn-like">
+      <i class="fa fa-plus-square fa-lg btn-like"> New Content</i>
+    </a>
+    </li>
+    {% if 1%}
+    <li>
+      <a class="js-startEditor" href="#">
+        <i class="fa fa-list-ul fa-lg btn-like"></i>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+  </li>
+</ul>

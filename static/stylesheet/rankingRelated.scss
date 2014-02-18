@@ -1,0 +1,70 @@
+@import "mixins";
+
+// Houses rankBadge
+.rankContainer {
+  margin-top: 25px;
+}
+
+.rankbar {
+  margin-top: -5px;
+  max-height: 45px;
+  padding-top: 5px;
+
+  #rankingName {
+    float: left !important;
+    margin-right: 25px;
+  }
+  .rankingList li {
+    position: relative;
+    margin: -5px 5px 0 0;
+    width: 35px;
+    float: left;
+  }
+  .rankingListProfile li {
+    position: relative;
+    margin: 0px 5px 0 0;
+    width: 35px;
+    float: left;
+  }
+}
+
+#rankingPrivacy, #rankingFork {
+  float: left;
+  cursor: pointer;
+  margin-right: 0.5em;
+  margin-top: -0.25em;
+}
+
+// Houses multiple rankbadges
+.rankingContainer {
+  display: block;
+  position: relative;
+
+  .rankingNo.shadow {
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.18);
+  }
+  .rankingNo, .rankIcon {
+    font-size: 10px;
+    color: white;
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    margin: auto;   position: absolute;
+    top: -20px; left: 0; bottom: 0; right: 5px;
+  }
+}
+
+// Ranking Table
+.rankingTable tr {
+  @include transition(border-color, 0.2s, linear, 0s);
+}
+.rankingTable tr:hover {
+  border-color: gray;
+}
+.rankingTable tr th {
+  font-size: 21px;
+}
+.ranking {
+  margin: 5px;
+  float: left;
+}

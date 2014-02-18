@@ -1,0 +1,57 @@
+<ul class="view-toolbar hide">
+  <li>
+    <i class="fa fa-heart-o fa-lg"></i>
+    <i class="fa fa-twitter fa-lg"></i>
+    <i class="fa fa-code-fork fa-lg"></i>
+    <i class="fa fa-share-square-o fa-lg"></i>
+  </li>
+</ul>
+<div class="js-scroll-container">
+  <div class="info-card">
+    <div class="header">
+      <div class="profile pull-left js-profile" style="background-image: url('{{profileIconUrl}}');"></div>
+      <ul class="meta pull-left">
+        <li class="name">
+          {{#if editing}}
+          <input class="title-input js-title" placeholder="Title" type="text">
+          {{else}}
+            {{title}}
+          {{/if}}
+        </li>
+        <li class="hash">
+          {{#if editing}}
+          <input class="tag-input js-tag" placeholder="#hashTag" type="text">
+          {{else}}
+            {{hashTag}}
+          {{/if}}
+        </li>
+      </ul>
+      <ul class="action">
+        {{#if editing}}
+        <li><i class="fa fa-minus fa-lg cursor-pointer js-hide-screen"></i></li>
+        <li><i class="fa fa-globe fa-lg cursor-pointer js-full-screen"></i></li>
+        {{else}}
+        <li><i class="fa fa-code-fork fa-lg js-fork"></i></li>
+        <li><i class="fa fa-envelope-o fa-lg js-send"></i></li>
+        {{/if}}
+      </ul>
+    </div>
+    <hr>
+   <div class="content editing editzone js-editzone">
+      <div class="instruction">
+        <div class="inner">
+          <i class="fa fa-arrow-circle-o-down fa-2x"></i>
+          <br>
+          <span class="">Drop Content Here</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="edit-tool pull-left">
+        <button class="btn btn-small btn-success js-save-btn">Save</button>
+      </div>
+      <div class="by pull-right hide">By <a href="{{authorProfileUrl}}" class="">{{authorName}}</a>
+      </div>
+    </div>
+  </div>
+</div>

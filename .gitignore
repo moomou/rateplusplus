@@ -13,3 +13,5 @@ local_settings.py
 settings.py
 venv/
 build/
+static/script/template/*.js
+static/stylesheet/*.css

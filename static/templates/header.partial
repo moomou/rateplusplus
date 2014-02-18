@@ -1,11 +1,11 @@
-  <div class="navbar">
-    <div class="navbar-inner" style="height: 55px;">
+  <div id="top-menu" class="navbar">
+    <div class="navbar-inner" style="height: 40px; margin-top: -5px;">
       <div class="container-narrow">
         <a id="sideMenu" href="{% url 'default.views.PageHandler' %}" class="noSelect muted home-btn pull-left">Cloverite </a>
 
         {% if SEARCH_ENABLED %}
         <form method="GET" id="searchForm" class="navbar-search" action="{% url 'default.views.PageHandler' %}">
-          <input type="search" class="span2 searchBar" name='q' id="searchInput" type="text" placeholder="Search" value="{{QUERY}}">
+          <input type="search" class="span2 searchBar" name='q' id="searchInput" type="text" placeholder="&#xf002 Search" value="{{QUERY}}">
         </form>
         {% endif %}
 
@@ -23,12 +23,15 @@
         {% if NAV_ENABLED %}
         <ul id="navBtns" class="hidden-phone nav pull-right head-nav">
           {% if authenticated %}
-          <li title="Create New Entity"><a href="{% url 'default.views.NewEntityHandler' %}"><i class="icon-plus-sign"> </i></a></li>
-          <li title="Rankings"><a href="{% url 'default.views.ProfileHandler' %}self"><i class="icon-reorder"> </i></a></li>
-          <li title="Sign Out"><a href="{% url 'default.views.SignoutHandler' %}" role="menuitem"><i class="icon-signout"></i></a></li>
+          <li title="Inbox"><a href="#"><i class="fa fa-inbox "> </i></a></li>
+          <li title="Create New Entity"><a href="{% url 'default.views.NewEntityHandler' %}"><i class="fa fa-plus-circle "> </i></a></li>
+          {% if RANKING_ENABLED %}
+          <li title="Rankings"><a href="{% url 'default.views.ProfileHandler' %}self"><i class="fa fa-list-ol"> </i></a></li>
+          {% endif %}
+          <li title="Sign Out"><a href="{% url 'default.views.SignoutHandler' %}" role="menuitem"><i class="fa fa-sign-out "></i></a></li>
 
-          {% else %}
-          <li><a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}"><i class="icon-signin"></i> Sign in</a></li>
+          {% elif not SIGN_IN_DISABLED %}
+          <li><a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}"><i class="fa fa-sign-in"></i> Sign in</a></li>
           {% endif %}
 
           {% if FEEDBACK_ENABLED %}
@@ -38,4 +41,5 @@
         {% endif %}
       </div>
     </div>
+    {% include "rankHeader.partial" %}
   </div>
