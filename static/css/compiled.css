@@ -726,9 +726,10 @@ ul {
   width: 500px; }
   .info-card .minimize {
     display: none; }
+  .info-card .interactive {
+    border-right: 1px solid rgba(0, 0, 0, 0.15); }
   .info-card .header {
     overflow: auto;
-    border-right: 1px solid rgba(0, 0, 0, 0.15);
     padding-right: 25px; }
     .info-card .header .action {
       float: right; }

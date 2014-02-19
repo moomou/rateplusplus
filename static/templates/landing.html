@@ -4,75 +4,23 @@
     {% include "stdHead.partial" %}
     <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/landing.css"/>
   </head>
-  <body>
+  <body> 
     <div class="container-narrow">
       <div class="jumbotron">
-        <a href="{% url 'default.views.SignupHandler' %}" class="btn btn-success" style=" margin-top: 2em; float: right; margin-left: 1em; "> Sign up</a>
-        <span class="muted" style=" float: right; margin-top: 2.25em; margin-left: 0.5em; "> or</span>
-        <a href="{% url 'default.views.SigninHandler' %}" style=" margin-top: 2.25em; float: right; "> Sign In</a> 
-        <h1 class="muted">Cloverite</h1>
-        <p class="lead"> The best place for rating and ranking. </p>
-
-        <form method="GET" id="searchForm" action="{% url 'default.views.PageHandler' %}">
+        <div class="action hide">
+          <a href="{% url 'default.views.SignupHandler' %}" class="btn btn-success" style=" margin-top: 2em; float: right; margin-left: 1em; "> Sign up</a>
+          <span class="muted" style=" float: right; margin-top: 2.25em; margin-left: 0.5em; "> or</span>
+          <a href="{% url 'default.views.SigninHandler' %}" style=" margin-top: 2.25em; float: right; "> Sign In</a> 
+        </div>
+        <h1 class="muted"> Cloverite is API</h1>
+        <h1 class="muted"> Cloverite is Community</h1>
+        <h3 style="color: silver;">Find everything. In one place. </h3>
+        <form method="GET" id="searchForm" action="{% url 'default.views.PageHandler' %}" hidden>
           <div class="input-append">
             <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="{{DEFAULT_QUERY}}">
             <button id="searchBtn" class="btn btn-success" type="button" ><i class="fa fa-search"> <span class="visible-desktop">Search </span></i></button>
           </div>
         </form>
-
-        <div style="display:inline-block">
-          <ul id="sampleRanking">
-            <li>Popular Rankings</li>
-            <li><a href="#"></a></li>
-            <li><a href="#"></a></li>
-            <li><a href="#"></a></li>
-          </ul>
-        </div>
-
-        {% if DISABLED %}
-        <div id="rankingRow" class="row-fluid">
-          <div class="span12" id="top1">
-          </div>
-        </div>
-
-        <h2 id="sample"> </h2>
-        <div class="container-narrow">
-          <div class="row-fluid">
-            <div id="col1" class="span4"></div>
-            <div id="col2" class="span4"></div>
-            <div id="col3" class="span4"></div>
-            <div id="col4" class="span4"></div>
-          </div>
-        </div>
-        {% endif %}
-
-        <hr>
-
-        <div class="featurette">
-          <img class="featurette-image pull-right" src="https://db.tt/0nMt5IIK">
-          <h2 class="featurette-heading"> Freedom of expression. <span class="muted"> The most expressive rating system. </span></h2>
-          <p class="lead">
-          Whether you want to rate on shipping speed, customer services, or just how that checkout button looks, you can do it here.
-          </p>
-        </div>
-
-        <hr>
-
-        <div class="featurette">
-          <img class="featurette-image pull-left" src="https://db.tt/seIoMQTK">
-          <h2 class="featurette-heading"> Share your recommendation via rankings. <span class="muted"> Create customized rankings and share it on Twitter. </span></h2>
-          <p class="lead">
-          Create personal rankings of this season's best TV shows to share with your friends. Or create the best bar ranking in downtown SF
-          for hanging out with friends. Or create a ranking of your favorite celebrity.
-          </p>
-        </div>
-
-        <hr>
-      </div>
-
-
-      <div class="container-footer">
-        {%include "footer.partial"%}
       </div>
 
       <script>
@@ -83,6 +31,5 @@
       {% include "modelScript.partial" %}
 
       <script src="{{STATIC_URL}}script/landing.js"></script>
-
     </body>
   </html>

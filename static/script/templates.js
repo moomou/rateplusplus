@@ -361,7 +361,7 @@ function program14(depth0,data) {
   buffer += "<div class=\"info-card detail\">\n  ";
   stack1 = helpers.unless.call(depth0, (depth0 && depth0.editing), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n  <div class=\"header\">\n    ";
+  buffer += "\n  <div class=\"header interactive\">\n    ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.editing), {hash:{},inverse:self.program(14, program14, data),fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n  </div>\n</div>\n";
@@ -657,7 +657,11 @@ helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partial
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 
-  buffer += "<div class=\"info-card\" style=\"width: auto;\">\n  <div class=\"header\">\n    <a href=\"";
+  buffer += "<div class=\"info-card\" style=\"width: auto;\" data-index=\"";
+  if (helper = helpers.index) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.index); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">\n  <div class=\"header\">\n    <a href=\"";
   if (helper = helpers.srcUrl) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.srcUrl); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

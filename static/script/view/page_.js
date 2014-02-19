@@ -129,6 +129,14 @@ App.SearchPageView = Backbone.View.extend({
     summaryTemplate: Handlebars.templates.sa_card_summary,
     rowTemplate: Handlebars.templates.sa_card_row,
     statTemplate: Handlebars.templates.stat_summary,
+    el: '#search-result',
+    events: {
+        'click .info-card': 'renderQuickSummary',
+    },
+    renderQuickSummary: function(e) {
+        var target = e.currentTarget;
+        this._renderQuickSummary($(target).attr('data-index'));
+    },
     initialize: function(settings) {
         settings = settings || {};
 
@@ -139,18 +147,8 @@ App.SearchPageView = Backbone.View.extend({
         this.collection.on('reset', this.render, this);
 
         this.parentDOM = $('#top');
-        this.quickSummaryCavnas = $('#quick-summary');
-        this.searchResultCanvas = $('#search-result');
-    },
-    _renderToPage: function(parentDOM) {
-        parentDOM.hide();
-        while (arguments > 2) {
-            var _parent = arguments[0],
-                _child = arguments[1],
-                arguments = arguments.splice(2);
-            _parent.addChild(_child);
-        }
-        parentDOM.show();
+        this.quickSummaryCanvas = $('#quick-summary');
+        this.quickSummaryCanvas.scrollToFixed({ marginTop: 25});
     },
     render: function() {
         // Didn't find anything
@@ -161,18 +159,18 @@ App.SearchPageView = Backbone.View.extend({
         } else {
             var that = this,
                 searchResults = [];
-
-            _(this.collection.models).each(function(model) {
-                var row = that.rowTemplate(model.toJSON());
+        
+            _(this.collection.models).each(function(model, ind) {
+                var row = that.rowTemplate(_.extend(model.toJSON(), {index: ind}));
                 searchResults.push(row);
             });
 
-            this.searchResultCanvas.html(searchResults.join("\n"));
-            this.renderQuickSummary();
+            this.$el.html(searchResults.join("\n"));
+            this._renderQuickSummary(0);
         }
     },
-    renderQuickSummary: function() {
-        var quickSummaryModel = _(this.collection.models).first();
+    _renderQuickSummary: function(index) {
+        var quickSummaryModel = this.collection.models[index];
             templateValues = quickSummaryModel.toJSON(),
             that = this;
 
@@ -184,6 +182,6 @@ App.SearchPageView = Backbone.View.extend({
                 return that.statTemplate(stat);
             }).join("\n");
 
-        this.quickSummaryCavnas.html(this.summaryTemplate(templateValues));
+        this.quickSummaryCanvas.html(this.summaryTemplate(templateValues));
     },
 });
