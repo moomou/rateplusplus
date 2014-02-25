@@ -5,25 +5,70 @@
     <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/landing.css"/>
   </head>
   <body> 
+    <video loop poster="" id="bgvid">
+    </video>
     <div class="container-narrow">
       <div class="jumbotron">
-        <div class="action hide">
+        <div style="height: 100px; display: block;">
           <a href="{% url 'default.views.SignupHandler' %}" class="btn btn-success" style=" margin-top: 2em; float: right; margin-left: 1em; "> Sign up</a>
           <span class="muted" style=" float: right; margin-top: 2.25em; margin-left: 0.5em; "> or</span>
           <a href="{% url 'default.views.SigninHandler' %}" style=" margin-top: 2.25em; float: right; "> Sign In</a> 
         </div>
-        <h1 class="muted"> Cloverite is API</h1>
-        <h1 class="muted"> Cloverite is Community</h1>
-        <h3 style="color: silver;">Find everything. In one place. </h3>
-        <form method="GET" id="searchForm" action="{% url 'default.views.PageHandler' %}" hidden>
-          <div class="input-append">
-            <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="{{DEFAULT_QUERY}}">
-            <button id="searchBtn" class="btn btn-success" type="button" ><i class="fa fa-search"> <span class="visible-desktop">Search </span></i></button>
+
+        <div id="myCarousel" class="carousel slide">
+          <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+            <li data-target="#myCarousel" data-slide-to="3"></li>
+          </ol>
+          <!-- Carousel items -->
+          <div class="carousel-inner">
+            <div class="item active">
+              <h1 class="muted"> Find Everything</h1>
+              <h3 style="color: silver;">Cloverite makes finding and understanding information fast and intuitive.</h3>
+              <form method="GET" id="searchForm" action="{% url 'default.views.RedirectHandler' %}">
+                <div class="input-append">
+                  <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="Try #xyz">
+                  <button id="searchBtn" class="btn btn-success" type="button" ><i class="fa fa-search"> <span class="visible-desktop">Search </span></i></button>
+                </div>
+              </form>
+            </div>
+            <div class="item">
+              <h1 class="muted"> Stay up-to-date with Cloverite </h1>
+              <h3 style="color: silver;">Specific information is always just one or two hashtags away. </h3>
+              <form method="GET" id="searchForm" action="{% url 'default.views.RedirectHandler' %}">
+                <div class="input-append">
+                  <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="Try #x#y.">
+                  <button id="searchBtn" class="btn btn-success" type="button" ><i class="fa fa-search"> <span class="visible-desktop">Search </span></i></button>
+                </div>
+              </form>
+            </div>
+            <div class="item">
+              <h1 class="muted"> Collaborate on Content</h1>
+              <h3 style="color: silver;">Cloverite is a community that anyone can contribute.</h3>
+              <form method="GET" id="searchForm" action="{% url 'default.views.RedirectHandler' %}">
+                <div class="input-append">
+                  <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="{{DEFAULT_QUERY}}">
+                  <button id="searchBtn" class="btn btn-success" type="button" ><i class="fa fa-search"> <span class="visible-desktop">Search </span></i></button>
+                </div>
+              </form>
+            </div>
+            <div class="item">
+              <h1 class="muted"> Build with Cloverite API </h1>
+              <h3 style="color: silver;">Get access to always up-to-date information on growing ranges of topics. Setup is easy.</h3>
+              <form method="GET" id="searchForm" action="{% url 'default.views.RedirectHandler' %}">
+                <div class="input-append">
+                  <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="Try #x#y.">
+                  <button id="searchBtn" class="btn btn-success" type="button" ><i class="fa fa-search"> <span class="visible-desktop">Search </span></i></button>
+                </div>
+              </form>
+            </div>
           </div>
-        </form>
+        </div>
       </div>
 
-      <script>
+      <script type="script/javascript">
         DEFAULT_QUERY = "{{DEFAULT_QUERY}}";
       </script>
 

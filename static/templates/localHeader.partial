@@ -16,7 +16,7 @@
       <i class="fa fa-plus-square fa-lg btn-like"> New Content</i>
     </a>
     </li>
-    {% if 1%}
+    {% if SA_ENABLED %}
     <li>
       <a class="js-startEditor" href="#">
         <i class="fa fa-list-ul fa-lg btn-like"></i>

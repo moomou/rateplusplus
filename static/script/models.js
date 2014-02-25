@@ -428,7 +428,7 @@ App.ColManager = (function() {
         };
     };
 
-    var cardCols = [$('#col1'), $('#col2'), $('#col3')],
+    var cardCols = [$('#col1'), $('#col2'), $('#col3'), $('#col4')],
         cmtCols = [$('#cmt1'), $('#cmt2'), $('#cmt3')];
 
     return {

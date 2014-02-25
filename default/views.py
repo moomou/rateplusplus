@@ -228,7 +228,14 @@ def DefaultPage(request):
 
     return HttpResponse(t.render(c))
 
-def PageHandler(request):
+def GenericPageHandler(request, pageName):
+    if request.method == "GET":
+        renderCxt = ContextSetup(request)
+        t = loader.get_template(pageName)
+        c = RequestContext(request, renderCxt)
+        return HttpResponse(t.render(c))
+
+def RedirectHandler(request):
     if request.method == "GET":
         query = request.GET.get('q','')
 

@@ -182,6 +182,6 @@ App.SearchPageView = Backbone.View.extend({
                 return that.statTemplate(stat);
             }).join("\n");
 
-        this.quickSummaryCanvas.html(this.summaryTemplate(templateValues));
+        this.quickSummaryCanvas.find('#block-container').html(this.summaryTemplate(templateValues));
     },
 });
