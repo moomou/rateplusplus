@@ -5,16 +5,20 @@
     <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/landing.css"/>
   </head>
   <body> 
-    <video loop poster="" id="bgvid">
-    </video>
     <div class="container-narrow">
+      <div class="masthead" style="height: 100px; display: block;/* padding: 25px; */">
+        <a id="sideMenu" href="/" class="noSelect muted home-btn pull-left" style="
+          margin-top: 35px;
+          ">Cloverite </a>
+        <ul class="nav nav-pills pull-left" style="margin-top: 2em;">
+          <li class="active"><a href="#feature">Features</a></li>
+          <li><a href="#"></a></li>
+        </ul>
+        <a href="/signup" class="btn btn-success" style=" margin-top: 2em; float: right; margin-left: 1em; "> Sign up</a>
+        <span class="muted" style=" float: right; margin-top: 2.25em; margin-left: 0.5em; "> or</span>
+        <a href="/signin" style=" margin-top: 2.25em; float: right; "> Sign In</a> 
+      </div>
       <div class="jumbotron">
-        <div style="height: 100px; display: block;">
-          <a href="{% url 'default.views.SignupHandler' %}" class="btn btn-success" style=" margin-top: 2em; float: right; margin-left: 1em; "> Sign up</a>
-          <span class="muted" style=" float: right; margin-top: 2.25em; margin-left: 0.5em; "> or</span>
-          <a href="{% url 'default.views.SigninHandler' %}" style=" margin-top: 2.25em; float: right; "> Sign In</a> 
-        </div>
-
         <div id="myCarousel" class="carousel slide">
           <ol class="carousel-indicators">
             <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -68,13 +72,37 @@
         </div>
       </div>
 
+      <div class="jumbotron">
+        <div class="row">
+          <div class="col-lg-4">
+            <h2><i class="icon-magic icon-2x"></i> One Click</h2>
+            <p> No more phoning to schedule a service. Getting the service is as simple as clicking a button. The way it should be. </p>
+
+          </div>
+          <div class="col-lg-4">
+            <h2><i class="icon-thumbs-up icon-2x"></i> Satisfaction </h2>
+            <p> Pokketo makes sure the business live up to their promises and ensure you will never have a bad customer service again by contacting
+            the business on your behalf.
+            </p>
+
+          </div>
+          <div class="col-lg-4">
+            <h2><i class="icon-credit-card icon-2x"></i> One Stop</h2>
+            <p> Find all the services you need in one place. Sign up for as many services and receive only one bill.  </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="jumbotron">
+      </div>
+
       <script type="script/javascript">
         DEFAULT_QUERY = "{{DEFAULT_QUERY}}";
-      </script>
+        </script>
 
-      {% include "stdScript.partial" %}
-      {% include "modelScript.partial" %}
+        {% include "stdScript.partial" %}
+        {% include "modelScript.partial" %}
 
-      <script src="{{STATIC_URL}}script/landing.js"></script>
-    </body>
-  </html>
+        <script src="{{STATIC_URL}}script/landing.js"></script>
+      </body>
+    </html>
