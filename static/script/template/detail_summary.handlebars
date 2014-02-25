@@ -3,12 +3,16 @@
   <div class="pull-right sideBar">
     <ul class="infoBar" style="margin-left: 0;">
       <li data-original-title="Edit"><a href="#edit" class="btn-like"><i class="fa fa-edit fa-lg"></i></a></li>
+      {{#if fork_enabled}}
       <li data-original-title="Fork"><a href="#fork" class="btn-like"><i class="fa fa-code-fork fa-lg"></i></a></li>
+      {{/if}}
+      {{#if embed_enabled}}
       <li data-original-title="Embed"><a href="#embed" class="btn-like"><i class="fa fa-code fa-lg"></i></a></li>
+      {{/if}}
     </ul>
   </div>
   {{/unless}}
-  <div class="header">
+  <div class="header interactive">
     {{#if editing}}
     <div class="edit-btns pull-right">
       <button id="save-btn" class="btn btn-success">

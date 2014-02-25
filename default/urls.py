@@ -18,5 +18,6 @@ urlpatterns = patterns('',
     url(r'^ranking/[.+]?', views.SearchPage, {'query': ''}),
 
     url(r'^test$', views.TestHandler),
-    url(r'^$', views.PageHandler)
+    url(r'^(.+)/?$', views.GenericPageHandler),
+    url(r'^$', views.RedirectHandler)
 )

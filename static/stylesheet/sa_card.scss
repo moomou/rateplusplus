@@ -64,9 +64,11 @@ ul {
   padding: 15px 15px 0 15px;
   width: 500px;
 
+  .interactive {
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+  }
   .header {
     overflow: auto;
-    border-right: 1px solid rgba(0, 0, 0, 0.15);
     padding-right: 25px;
 
     .action {
