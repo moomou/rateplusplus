@@ -584,10 +584,12 @@
     font-size: 18px;
     line-height: 1.5; } }
 /* Main marketing message and sign up button */
-.jumbotron h1 {
-  padding-top: 1em;
-  font-size: 72px;
-  line-height: 1; }
+.jumbotron {
+  padding: 10px; }
+  .jumbotron h1 {
+    padding-top: 1em;
+    font-size: 72px;
+    line-height: 1; }
 
 .jumbotron-btn {
   font-size: 21px;
@@ -619,6 +621,7 @@ video#bgvid {
   background-size: cover; }
 
 #myCarousel .carousel-indicators {
+  display: none;
   top: 120%;
   left: auto;
   position: absolute;
@@ -634,6 +637,43 @@ video#bgvid {
     background: gray; }
   #myCarousel .carousel-indicators li.active {
     background-color: green; }
+
+#feature {
+  margin-top: 100px;
+  margin-bottom: 100px;
+  text-align: center; }
+  #feature .span4 {
+    color: #808080; }
+    #feature .span4 h2 {
+      text-transform: uppercase;
+      font-size: 35px;
+      margin-bottom: 12px; }
+    #feature .span4 p {
+      font-size: 17px;
+      text-align: left;
+      line-height: 24px; }
+
+.header-unit {
+  height: 640px;
+  position: relative;
+  padding: 20px; }
+
+#video-container {
+  position: absolute; }
+
+#video-container {
+  top: 0%;
+  left: 0%;
+  height: 100%;
+  width: 100%;
+  overflow: hidden; }
+
+video {
+  position: absolute;
+  z-index: 0; }
+
+video.fillWidth {
+  width: 100%; }
 
 #main-summary .info-card.detail textarea {
   margin-top: 50px;

@@ -5,19 +5,18 @@
     <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/landing.css"/>
   </head>
   <body> 
-    <div class="container-narrow">
-      <div class="masthead" style="height: 100px; display: block;/* padding: 25px; */">
-        <a id="sideMenu" href="/" class="noSelect muted home-btn pull-left" style="
-          margin-top: 35px;
-          ">Cloverite </a>
+    <div class="container-narrow" style="width: 1100px;">
+      <div class="masthead" style="height: 100px; display: block;">
+        <a id="sideMenu" href="/" class="noSelect muted home-btn pull-left" style="margin-top: 35px;">
+          Cloverite 
+        </a>
         <ul class="nav nav-pills pull-left" style="margin-top: 2em;">
-          <li class="active"><a href="#feature">Features</a></li>
-          <li><a href="#"></a></li>
         </ul>
         <a href="/signup" class="btn btn-success" style=" margin-top: 2em; float: right; margin-left: 1em; "> Sign up</a>
         <span class="muted" style=" float: right; margin-top: 2.25em; margin-left: 0.5em; "> or</span>
         <a href="/signin" style=" margin-top: 2.25em; float: right; "> Sign In</a> 
       </div>
+
       <div class="jumbotron">
         <div id="myCarousel" class="carousel slide">
           <ol class="carousel-indicators">
@@ -71,31 +70,39 @@
           </div>
         </div>
       </div>
+      <hr>
 
-      <div class="jumbotron">
-        <div class="row">
-          <div class="col-lg-4">
-            <h2><i class="icon-magic icon-2x"></i> One Click</h2>
+      <div class="jumbotron" id="feature">
+        <div class="row-fluid">
+          <div class="span4">
+            <h2>One Click</h2>
             <p> No more phoning to schedule a service. Getting the service is as simple as clicking a button. The way it should be. </p>
-
           </div>
-          <div class="col-lg-4">
-            <h2><i class="icon-thumbs-up icon-2x"></i> Satisfaction </h2>
+          <div class="span4">
+            <h2>Satisfaction </h2>
             <p> Pokketo makes sure the business live up to their promises and ensure you will never have a bad customer service again by contacting
             the business on your behalf.
             </p>
-
           </div>
-          <div class="col-lg-4">
-            <h2><i class="icon-credit-card icon-2x"></i> One Stop</h2>
+          <div class="span4">
+            <h2>One Stop</h2>
             <p> Find all the services you need in one place. Sign up for as many services and receive only one bill.  </p>
           </div>
         </div>
       </div>
 
+      <hr>
       <div class="jumbotron">
+        <div style="text-align: center"><h2> See it in action.</h2></div>
+        <div class="header-unit">
+          <div id="video-container">
+            <video controls loop class="fillWidth">
+              <source src="{{STATIC_URL}}video/test.mp4" type="video/webm"/>
+              Your browser does not support the video tag. I suggest you upgrade your browser.
+            </video>
+          </div><!-- end video-container -->
+        </div><!-- end .header-unit -->
       </div>
-
       <script type="script/javascript">
         DEFAULT_QUERY = "{{DEFAULT_QUERY}}";
         </script>
