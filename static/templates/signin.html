@@ -4,10 +4,10 @@
   {% include "stdHead.partial" %}
 </head>
 <body>
-  {% include "header.partial" %}
-
   <div class="container-narrow">
-
+    <a href="{% url 'default.views.RedirectHandler' %}" class="noSelect muted home-btn center" style="text-align: center; margin-top: 100px;">
+      Cloverite
+    </a>
     {% if REDIRECTED %}
     <div class="alert alert-block alert-error fade in">
       <button type="button" class="close" data-dismiss="alert">×</button>
@@ -15,22 +15,20 @@
     </div>
     {% endif %}
 
-    <div class="break"></div>
-
     <form id="signinForm" class="form-signin" method="post" action="{% url 'default.views.SigninHandler' %}">
       {% csrf_token %}
-
       <h2 class="form-signin-heading">Sign In</h2>
       <div class="break break-mini"></div>
-
       <input name="username" type="text" placeholder="Username" class="input-block-level" id="email" required>
       <input name="password" type="password" placeholder="Password" class="input-block-level" id="pwd" required>
-
       <hr>
       <a href="signup" class="pull-left">Create an Account</a>
       <input value="Sign In" type="submit" class="pull-right btn btn-success">
       <div class="break break-mini"></div>
     </form>
+    <div class="login-help">
+      <p>Forgot your password? <a href="index.html">Click here to reset it</a>.</p>
+    </div>
   </div>
 
  {% include "stdScript.partial" %}

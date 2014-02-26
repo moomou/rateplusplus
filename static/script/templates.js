@@ -293,7 +293,7 @@ function program4(depth0,data) {
 function program6(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n    <div class=\"edit-btns pull-right\">\n      <button id=\"save-btn\" class=\"btn btn-success\">\n        <i class=\"fa fa-cloud-upload\"> Save</i>\n      </button>\n      <button id=\"cancel-btn\" class=\"btn btn-white\">\n        <i class=\"fa fa-minus-circle\"> Cancel</i>\n      </button> \n    </div>\n    <div class=\"profile pull-left js-profile\" style=\"background-image: url('";
+  buffer += "\n    <div class=\"edit-btns pull-right\">\n      <label class=\"switch switch-green\">\n        <input type=\"checkbox\" class=\"switch-input\" checked>\n        <span class=\"switch-label\" data-on=\"Public\" data-off=\"Private\"></span>\n        <span class=\"switch-handle\"></span>\n      </label>\n      <button id=\"save-btn\" class=\"btn btn-success\" style=\"margin-bottom: 5px;\">\n        <i class=\"fa fa-cloud-upload\"> Save</i>\n      </button>\n      <button id=\"cancel-btn\" class=\"btn btn-white\">\n        <i class=\"fa fa-minus-circle\"> Cancel</i>\n      </button> \n    </div>\n    <div class=\"profile pull-left js-profile\" style=\"background-image: url('";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.imgURL), {hash:{},inverse:self.program(9, program9, data),fn:self.program(7, program7, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "')\">\n      <button id=\"change-image-btn\" class=\"btn-small btn btn-white\" style=\"margin: 0 auto;display: block; margin-top: 105%;\">Change</button>\n    </div>\n    <ul class=\"meta pull-left\">\n      <li class=\"name\">\n        <input id=\"name\" class=\"title-input js-title\" placeholder=\"Title\" type=\"text\" value=\"";

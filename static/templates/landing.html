@@ -5,19 +5,16 @@
     <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/landing.css"/>
   </head>
   <body> 
-    <div class="container-narrow" style="width: 1100px;">
+    <div class="container-narrow">
       <div class="masthead" style="height: 100px; display: block;">
-        <a id="sideMenu" href="/" class="noSelect muted home-btn pull-left" style="margin-top: 35px;">
-          Cloverite 
-        </a>
+        <a id="sideMenu" href="/" class="noSelect muted home-btn pull-left" style="margin-top: 37px;"> Cloverite </a>
         <ul class="nav nav-pills pull-left" style="margin-top: 2em;">
         </ul>
-        <a href="/signup" class="btn btn-success" style=" margin-top: 2em; float: right; margin-left: 1em; "> Sign up</a>
-        <span class="muted" style=" float: right; margin-top: 2.25em; margin-left: 0.5em; "> or</span>
-        <a href="/signin" style=" margin-top: 2.25em; float: right; "> Sign In</a> 
+        <a href="/signup" class="btn btn-success" style=" margin: 27px 0 0 15px; float: right;"> Sign up</a>
+        <span class="muted" style="float: right; margin: 32px 0 0 15px;"> or</span>
+        <a href="/signin" style="margin: 31.5px 0; float: right; "> Sign In</a> 
       </div>
-
-      <div class="jumbotron">
+      <div class="jumbotron" id="message">
         <div id="myCarousel" class="carousel slide">
           <ol class="carousel-indicators">
             <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -71,45 +68,42 @@
         </div>
       </div>
       <hr>
-
       <div class="jumbotron" id="feature">
         <div class="row-fluid">
           <div class="span4">
-            <h2>One Click</h2>
-            <p> No more phoning to schedule a service. Getting the service is as simple as clicking a button. The way it should be. </p>
+            <h3> Get information with context. Quickly. </h3>
+            <p> Cloverite makes it easy to find information together, providing context and make understanding fast.</p>
           </div>
           <div class="span4">
-            <h2>Satisfaction </h2>
-            <p> Pokketo makes sure the business live up to their promises and ensure you will never have a bad customer service again by contacting
-            the business on your behalf.
+            <h3> Contribute and collaborate on content. Instantly. </h3>
+            <p> Share and collaborate information with anyone. Contents are always stay up-to-date. No more copy and paste. </p>
+          </div>
+          <div class="span4">
+            <h3> It's easy to build with Cloverite. </h3>
+            <p> 
+              Use Cloverite to power your content and always stay up-to-date. Information on Cloverite can be easily embedded anywhere on the web like youtube videos.
             </p>
-          </div>
-          <div class="span4">
-            <h2>One Stop</h2>
-            <p> Find all the services you need in one place. Sign up for as many services and receive only one bill.  </p>
           </div>
         </div>
       </div>
-
       <hr>
-      <div class="jumbotron">
+      <div class="jumbotron" id="video">
         <div style="text-align: center"><h2> See it in action.</h2></div>
         <div class="header-unit">
           <div id="video-container">
-            <video controls loop class="fillWidth">
+            <video width="100%" height="100%" controls loop class="fillWidth">
               <source src="{{STATIC_URL}}video/test.mp4" type="video/webm"/>
               Your browser does not support the video tag. I suggest you upgrade your browser.
             </video>
-          </div><!-- end video-container -->
-        </div><!-- end .header-unit -->
+          </div>
+        </div>
       </div>
-      <script type="script/javascript">
-        DEFAULT_QUERY = "{{DEFAULT_QUERY}}";
-        </script>
-
-        {% include "stdScript.partial" %}
-        {% include "modelScript.partial" %}
-
-        <script src="{{STATIC_URL}}script/landing.js"></script>
-      </body>
-    </html>
+    </div>
+    {% include "stdScript.partial" %}
+    {% include "modelScript.partial" %}
+    <script type="script/javascript">
+      DEFAULT_QUERY = "{{DEFAULT_QUERY}}";
+    </script>
+    <script src="{{STATIC_URL}}script/landing.js"></script>
+  </body>
+</html>

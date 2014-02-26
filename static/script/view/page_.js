@@ -1,4 +1,6 @@
 // Page level views
+//
+
 App.DetailEntityPageView = Backbone.View.extend({
     detailTemplate: Handlebars.templates.detail_summary,
     el: '#main-summary',
@@ -148,7 +150,7 @@ App.SearchPageView = Backbone.View.extend({
 
         this.parentDOM = $('#top');
         this.quickSummaryCanvas = $('#quick-summary');
-        this.quickSummaryCanvas.scrollToFixed({ marginTop: 25});
+        //this.quickSummaryCanvas.scrollToFixed({ marginTop: 25});
     },
     render: function() {
         // Didn't find anything

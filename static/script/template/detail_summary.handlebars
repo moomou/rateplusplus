@@ -15,7 +15,12 @@
   <div class="header interactive">
     {{#if editing}}
     <div class="edit-btns pull-right">
-      <button id="save-btn" class="btn btn-success">
+      <label class="switch switch-green">
+        <input type="checkbox" class="switch-input" checked>
+        <span class="switch-label" data-on="Public" data-off="Private"></span>
+        <span class="switch-handle"></span>
+      </label>
+      <button id="save-btn" class="btn btn-success" style="margin-bottom: 5px;">
         <i class="fa fa-cloud-upload"> Save</i>
       </button>
       <button id="cancel-btn" class="btn btn-white">
