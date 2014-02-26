@@ -1,0 +1,24 @@
+@import 'mixins';
+
+.form-signin {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E5E5;
+  border-radius: 5px 5px 5px 5px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  margin: 50px auto 20px;
+  max-width: 300px;
+  padding: 20px 30px 75px 30px;
+}
+
+.signup-form {
+  @include abs-center-container();
+  @include box-shadow(1px, 1px, 2px, rgba(0, 0, 0, 0.18));
+  max-width: 700px;
+	padding: 1.5em;
+	background: #fff;
+	border: 1px solid rgba(0, 0, 0, 0.150);
+	overflow: hidden;
+}
+.login-help {
+  text-align: center;
+}
