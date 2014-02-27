@@ -698,7 +698,7 @@ helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partial
     + "</span>\n        </a>\n      </li>\n      <li> \n        ";
   stack1 = self.invokePartial(partials.partial_hashtags, 'partial_hashtags', depth0, helpers, partials, data);
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n      </li>\n    </ul>\n  </div>\n  <hr style=\"visibility: hidden;\">\n</div>\n";
+  buffer += "\n      </li>\n    </ul>\n    <div class=\"pull-right btn-like\" style=\"margin-top: 25px;\"><i class=\"fa fa-angle-right fa-2x\"></i></div>\n  </div>\n  <hr style=\"visibility: hidden;\">\n</div>\n";
   return buffer;
   });
 })();

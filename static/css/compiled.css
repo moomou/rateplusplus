@@ -269,7 +269,8 @@
 
 .btn-like {
   text-decoration: none !important;
-  color: black !important; }
+  color: black !important;
+  cursor: pointer; }
 
 .scroll-container {
   overflow: hidden; }
@@ -614,7 +615,8 @@
 
 .btn-like {
   text-decoration: none !important;
-  color: black !important; }
+  color: black !important;
+  cursor: pointer; }
 
 .scroll-container {
   overflow: hidden; }
@@ -911,6 +913,22 @@ ul {
 .edit-btns button:first-child {
   margin-bottom: 5px; }
 
+/*Fix for Chrome slow scroll*/
+.navbar-fixed-top {
+  -webkit-transform: translateZ(0); }
+
+/* Fix scroll event */
+.disable-hover,
+.disable-hover * {
+  pointer-events: none !important; }
+
+@-moz-document url-prefix() {
+  .moz-rankingNo {
+    margin-top: 22px !important; }
+
+  .moz-rankContainer {
+    margin-top: 35% !important; } }
+
 .table {
   display: table;
   /* Allow the centering to work */
@@ -930,7 +948,8 @@ ul {
 
 .btn-like {
   text-decoration: none !important;
-  color: black !important; }
+  color: black !important;
+  cursor: pointer; }
 
 .scroll-container {
   overflow: hidden; }
@@ -985,6 +1004,42 @@ ul {
 
 .subtle:hover {
   opacity: 0.75; }
+
+.btn-success {
+  background: #2ecc71; }
+
+.btn-inverse {
+  background: black; }
+
+.btn-danger {
+  background: #e74c3c; }
+
+.btn-white {
+  background: white; }
+
+.btn-success:hover {
+  background-color: #66EBA0; }
+
+.btn-danger:hover {
+  background-color: #EE796C; }
+
+.btn-inverse:hover {
+  background-color: #636363; }
+
+.btn-white:hover {
+  background-color: #FCFCFC; }
+
+.btn:focus {
+  outline: none !important; }
+
+.goldStar {
+  color: gold; }
+
+.blackStar {
+  color: black; }
+
+.invisible {
+  opacity: 0; }
 
 .sa-editor {
   position: fixed;
@@ -993,6 +1048,22 @@ ul {
   bottom: -5px;
   z-index: 9999; }
 
+/*Fix for Chrome slow scroll*/
+.navbar-fixed-top {
+  -webkit-transform: translateZ(0); }
+
+/* Fix scroll event */
+.disable-hover,
+.disable-hover * {
+  pointer-events: none !important; }
+
+@-moz-document url-prefix() {
+  .moz-rankingNo {
+    margin-top: 22px !important; }
+
+  .moz-rankContainer {
+    margin-top: 35% !important; } }
+
 .table {
   display: table;
   /* Allow the centering to work */
@@ -1012,7 +1083,8 @@ ul {
 
 .btn-like {
   text-decoration: none !important;
-  color: black !important; }
+  color: black !important;
+  cursor: pointer; }
 
 .scroll-container {
   overflow: hidden; }
@@ -1067,6 +1139,42 @@ ul {
 
 .subtle:hover {
   opacity: 0.75; }
+
+.btn-success {
+  background: #2ecc71; }
+
+.btn-inverse {
+  background: black; }
+
+.btn-danger {
+  background: #e74c3c; }
+
+.btn-white {
+  background: white; }
+
+.btn-success:hover {
+  background-color: #66EBA0; }
+
+.btn-danger:hover {
+  background-color: #EE796C; }
+
+.btn-inverse:hover {
+  background-color: #636363; }
+
+.btn-white:hover {
+  background-color: #FCFCFC; }
+
+.btn:focus {
+  outline: none !important; }
+
+.goldStar {
+  color: gold; }
+
+.blackStar {
+  color: black; }
+
+.invisible {
+  opacity: 0; }
 
 /*
   Table CSS

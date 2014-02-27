@@ -1,13 +1,41 @@
 <ul id="local-header" class="nav nav-tabs">
   <li>
-  <span href="#home" class="entityTitle">
-    Content <span id="entityTitle"></span>
-  </span>
+    <span href="#home" class="entityTitle">
+      Content <span id="entityTitle"></span>
+    </span>
+  </li>
+  <li style="margin: -5px 5px -1px 25px;">
+    <div class="btn-group">
+      <a class="btn btn-white dropdown-toggle btn-like" data-toggle="dropdown" href="#">
+        <i class="fa fa-filter"></i>
+        <span class="caret" style="border-top-color: black; border-bottom-color: black;"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+          <a href="#filter/attribute">
+            <i class="fa fa-star-half-o fa-lg"></i>
+            <span class="pull-right visible-desktop"> Attribute</span>
+          </a>
+        </li>
+        <li>
+          <a href="#filter/info">
+            <i class="fa fa-dot-circle-o fa-lg"></i>
+            <span class="pull-right visible-desktop"> Info</span>
+          </a>
+        </li>
+        <li>
+          <a href="#filter/media">
+            <i class="fa fa-video-camera fa-lg"></i>
+            <span class="pull-right visible-desktop"> Media</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   </li>
   <li>
-  <form method="GET" id="localSearch" class="navbar-search" action="#/filter">
-    <input type="search" class="span2 searchBar" name='q' id="filterInput" type="text" placeholder="&#xf0b0 Filter Cards">
-  </form>
+    <form method="GET" id="localSearch" class="navbar-search" action="#/filter">
+      <input type="search" class="span2 searchBar" name='q' id="filterInput" type="text" placeholder="Filter Cards">
+    </form>
   </li>
   <li class="pull-right">
   <ul class="entity-actions">
