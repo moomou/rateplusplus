@@ -82,6 +82,49 @@ App.renderStarRating = function(upVote, downVote) {
     return starDOM;
 };
 
+// Attribute View
+App.AttributeView = Backbone.View.extend({
+    renderStarRating: App.renderStarRating,
+    events: {
+        'click .voteBtn': 'attrVote',
+        'dragstart': 'dragStart',
+        'dragend': 'dragEnd'
+    },
+    initialize: function(settings) {
+        console.log("AttrController init")
+        this.el = settings.el;
+        this.$el = settings.$el;
+        this.model = settings.model;
+        this.$el.attr('draggable', 'true');
+    },
+    // Rendering functions
+    render: function() {
+        this.$('.voteBtn').hide();
+        return this;
+    },
+    // Event Handler
+    attrVote: function(e) {
+        e.preventDefault();
+        console.log('attrVote called:');
+
+        if ($(e.target).hasClass('upVote')) {
+            this.model.enqueuVote(App.POSITIVE, this);
+        }
+        else {
+            this.model.enqueuVote(App.NEGATIVE, this);
+        }
+    },
+    dragStart: function(e) {
+        var dt = e.originalEvent.dataTransfer,
+            transferData = this.model.toJSON();
+
+        transferData.contentType = Constants.contentType.attribute;
+        dt.setData("text/plain", JSON.stringify(transferData));
+    },
+    dragEnd: function(e) {
+        console.log('drag end');
+    }
+});
 
 // Content Data
 App.ContentAttributeView = (function() {
