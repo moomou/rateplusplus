@@ -82,50 +82,6 @@ App.renderStarRating = function(upVote, downVote) {
     return starDOM;
 };
 
-// Attribute View
-App.AttributeView = Backbone.View.extend({
-    renderStarRating: App.renderStarRating,
-    events: {
-        'click .voteBtn': 'attrVote',
-        'dragstart': 'dragStart',
-        'dragend': 'dragEnd'
-    },
-    initialize: function(settings) {
-        console.log("AttrController init")
-        this.el = settings.el;
-        this.$el = settings.$el;
-        this.model = settings.model;
-        this.$el.attr('draggable', 'true');
-    },
-    // Rendering functions
-    render: function() {
-        this.$('.voteBtn').hide();
-        return this;
-    },
-    // Event Handler
-    attrVote: function(e) {
-        e.preventDefault();
-        console.log('attrVote called:');
-
-        if ($(e.target).hasClass('upVote')) {
-            this.model.enqueuVote(App.POSITIVE, this);
-        }
-        else {
-            this.model.enqueuVote(App.NEGATIVE, this);
-        }
-    },
-    dragStart: function(e) {
-        var dt = e.originalEvent.dataTransfer,
-            transferData = this.model.toJSON();
-
-        transferData.contentType = Constants.contentType.attribute;
-        dt.setData("text/plain", JSON.stringify(transferData));
-    },
-    dragEnd: function(e) {
-        console.log('drag end');
-    }
-});
-
 // Content Data
 App.ContentAttributeView = (function() {
     var template = Handlebars.templates.sa_content_rating,
@@ -168,21 +124,37 @@ App.ContentRankingView = (function() {
 
 App.ContentDataView = (function() {
     var templates = {
+        contentTemplate: Handlebars.templates.sa_card_content,
+        // Card template
         numberTemplate: Handlebars.templates.sa_content_field,
         timeseriesTemplate: Handlebars.templates.sa_content_timeseries,
         imageTemplate: Handlebars.templates.sa_content_image,
         videoTemplate: Handlebars.templates.sa_content_video,
-        contentTemplate: Handlebars.templates.sa_card_content,
-        textTemplate: Handlebars.templates.sa_content_textbox
+        textTemplate: Handlebars.templates.sa_content_textbox,
+        // Row template
+        numberRowTemplate: Handlebars.templates.sa_content_field,
+        timeseRowriesTemplate: Handlebars.templates.sa_content_timeseries,
+        imageRowTemplate: Handlebars.templates.sa_content_image,
+        videoRowTemplate: Handlebars.templates.sa_content_video,
+        textRowTemplate: Handlebars.templates.sa_content_textbox
     };
 
     return {
+        _renderRow: function(data, noWrap) {
+            var templateName = data.dataType + "Template";
+            if (data.dataType == "video") {
+                data.youtubeId = getYoutubeId(data.srcUrl);
+            }
+
+
+        },
+        _renderCard: function(data, noWrap) {
+        },
         render: function(data, noWrap) {
             var templateName = data.dataType + "Template";
 
             if (data.dataType == "video") {
                 data.youtubeId = getYoutubeId(data.srcUrl);
-                debugger;
             }
 
             var content = templates[templateName](data);
@@ -304,6 +276,50 @@ App.ContributorView = {
         return result;
     }
 };
+
+App.AttributeView = Backbone.View.extend({
+    renderStarRating: App.renderStarRating,
+    events: {
+        'click .voteBtn': 'attrVote',
+        'dragstart': 'dragStart',
+        'dragend': 'dragEnd'
+    },
+    initialize: function(settings) {
+        console.log("AttrController init")
+        this.el = settings.el;
+        this.$el = settings.$el;
+        this.model = settings.model;
+        this.$el.attr('draggable', 'true');
+    },
+    // Rendering functions
+    render: function() {
+        this.$('.voteBtn').hide();
+        return this;
+    },
+    // Event Handler
+    attrVote: function(e) {
+        e.preventDefault();
+        console.log('attrVote called:');
+
+        if ($(e.target).hasClass('upVote')) {
+            this.model.enqueuVote(App.POSITIVE, this);
+        }
+        else {
+            this.model.enqueuVote(App.NEGATIVE, this);
+        }
+    },
+    dragStart: function(e) {
+        var dt = e.originalEvent.dataTransfer,
+            transferData = this.model.toJSON();
+
+        transferData.contentType = Constants.contentType.attribute;
+        dt.setData("text/plain", JSON.stringify(transferData));
+    },
+    dragEnd: function(e) {
+        console.log('drag end');
+    }
+});
+
 
 // Table Row View
 App.ProfileRowView = Backbone.View.extend({
