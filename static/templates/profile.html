@@ -15,7 +15,7 @@
     {% csrf_token %}
 
     {% if FEEDBACK_ENABLED %} 
-      {% include "feedbackForm.partial" %}
+      {% include "feedbackModal.partial" %}
     {% endif %}
 
     {% if REQUEST_ENABLED %} 
