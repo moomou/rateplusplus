@@ -365,7 +365,7 @@ App.ProfileRowView = Backbone.View.extend({
     }
 });
 
-App.RankingRowView = App.SummaryCardView.extend({
+App.RankingRowView = Backbone.View.extend({
     template: Handlebars.templates.rankingRow,
     tagName: 'tr',
     className: 'row',
