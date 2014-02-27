@@ -1,4 +1,5 @@
 // Content Card
+
 App.StandaloneCardView = Backbone.View.extend({
     saCardTemplate: Handlebars.templates.sa_card,
     standaloneCardTemplateFields: {
