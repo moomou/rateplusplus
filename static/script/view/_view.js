@@ -124,51 +124,53 @@ App.ContentRankingView = (function() {
 
 App.ContentDataView = (function() {
     var templates = {
-        contentTemplate: Handlebars.templates.sa_card_content,
+        contentTemplate       : Handlebars.templates.sa_card_content,
         // Card template
-        numberTemplate: Handlebars.templates.sa_content_field,
-        timeseriesTemplate: Handlebars.templates.sa_content_timeseries,
-        imageTemplate: Handlebars.templates.sa_content_image,
-        videoTemplate: Handlebars.templates.sa_content_video,
-        textTemplate: Handlebars.templates.sa_content_textbox,
-        // Row template
-        numberRowTemplate: Handlebars.templates.sa_content_field,
-        timeseRowriesTemplate: Handlebars.templates.sa_content_timeseries,
-        imageRowTemplate: Handlebars.templates.sa_content_image,
-        videoRowTemplate: Handlebars.templates.sa_content_video,
-        textRowTemplate: Handlebars.templates.sa_content_textbox
+        numberTemplate        : Handlebars.templates.sa_content_field,
+        timeseriesTemplate    : Handlebars.templates.sa_content_timeseries,
+        imageTemplate         : Handlebars.templates.sa_content_image,
+        videoTemplate         : Handlebars.templates.sa_content_video,
+        textTemplate          : Handlebars.templates.sa_content_textbox,
+        // Row templats
+        numberRowTemplate     : Handlebars.templates.sa_content_field,
+        timeseRowriesTemplate : Handlebars.templates.sa_content_timeseries,
+        imageRowTemplate      : Handlebars.templates.sa_content_image,
+        videoRowTemplate      : Handlebars.templates.sa_content_video,
+        textRowTemplate       : Handlebars.templates.sa_content_textbox
+    },
+    renderRow = function(data) {
+        var templateName = data.dataType + "RowTemplate";
+        return templates[templateName](data);
+    },
+    renderCard = function(data) {
+       var templateName = data.dataType + "Template";
+       return templates[templateName](data);
     };
 
     return {
-        _renderRow: function(data, noWrap) {
-            var templateName = data.dataType + "Template";
+        render: function(renderType, data, noWrap) {
+            var func = null;
+
+            if (renderType == "row") {
+                func = renderRow;    
+            } else {
+                func = renderCard;
+            }
+
             if (data.dataType == "video") {
                 data.youtubeId = getYoutubeId(data.srcUrl);
             }
 
-
-        },
-        _renderCard: function(data, noWrap) {
-        },
-        render: function(data, noWrap) {
-            var templateName = data.dataType + "Template";
-
-            if (data.dataType == "video") {
-                data.youtubeId = getYoutubeId(data.srcUrl);
-            }
-
-            var content = templates[templateName](data);
-            renderedContent = templates.contentTemplate({
-                content: content,
-                src: data.srcUrl,
-                contentId: "",
-            });
+            var content = func(data, noWrap);
 
             if (noWrap) {
                 return content;
-            }
-            else {
-                return renderedContent;
+            } else {
+                return templates.contentTemplate({
+                    content: content,
+                    src: data.srcUrl,
+                    contentId: "",
+                });
             }
         }
     }
@@ -222,7 +224,7 @@ App.SimpleCard = Backbone.View.extend({
             this.controller = App.AttributeView;
         }
         else {
-            this.content = App.ContentDataView.render(data, true);
+            this.content = App.ContentDataView.render("card", data, true);
         }
         this.title = data.name;
     },

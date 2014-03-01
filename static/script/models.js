@@ -2,19 +2,21 @@ var App = App || {};
 
 /**
  * Constants for App */
-App.TWITTER_LINK= "https://twitter.com/share?";
-App.API_SERVER = 'http://api.cloverite.com:9000/';
-App.API_VERSION = 'v0/';
+App.DEBUG_MODE          = false;
 
-App.AE_H_URL = App.API_VERSION + 'ae/tag';
-App.AE_C_URL = App.API_VERSION + 'ae/cat';
+App.TWITTER_LINK        = "https://twitter.com/share?";
+App.API_SERVER          = 'http://api.cloverite.com:9000/';
+App.API_VERSION         = 'v0/';
 
-App.POSITIVE = "positive";
-App.NEGATIVE = "negative";
+App.AE_H_URL            = App.API_VERSION + 'ae/tag';
+App.AE_C_URL            = App.API_VERSION + 'ae/cat';
 
-App.SEARCH_ENTITY  = 'entitySearch';
-App.SPECIFIC_ENTITY = 'specificEntity';
-App.SPECIFIC_RANKING = 'specificRanking';
+App.POSITIVE            = "positive";
+App.NEGATIVE            = "negative";
+
+App.SEARCH_ENTITY       = 'entitySearch';
+App.SPECIFIC_ENTITY     = 'specificEntity';
+App.SPECIFIC_RANKING    = 'specificRanking';
 
 App.CloverModel = Backbone.Model.extend({
     initialize: function() {
@@ -46,12 +48,10 @@ App.CloverCollection = Backbone.Collection.extend({
         if ("success" in response) {
             if (response.success) {
                 return response.payload;
-            }
-            else {
+            } else {
                 console.log("server responded with error");
             }
-        }
-        else {
+        } else {
             return response;
         }
     }
@@ -167,8 +167,6 @@ App.EntityAttributeModel = App.CloverModel.extend({
     },
 });
 
-/**
- * Summary Model: EntityModel + Summary Stats + Attr; there is no SummaryModel in the server */
 App.SummaryCardModel = App.CloverModel.extend({
     urlRoot: App.API_SERVER + App.API_VERSION + 'entity/',
 	defaults: {
@@ -311,12 +309,10 @@ App.SummaryCardCollection = App.CloverCollection.extend({
         if (cardType == App.SPECIFIC_RANKING) {
             this.urlStub = 'ranking/share/' + data;
             this.fetch();
-        }
-        else if (cardType == App.SPECIFIC_ENTITY) {
+        } else if (cardType == App.SPECIFIC_ENTITY) {
             this.urlStub = "entity/" + data;
             this.fetch();
-        }
-        else if (cardType == App.SEARCH_ENTITY) {
+        } else if (cardType == App.SEARCH_ENTITY) {
             this.urlStub = 'entity/search/';
             this.fetch({data: $.param({q: data})});
         }
@@ -436,59 +432,3 @@ App.ColManager = (function() {
         CmtCol: configCol(cmtCols)
     };
 })();
-
-App.ShowTrendyLink = function() {
-    $.ajax({
-        'url': App.API_VERSION+'tags/',
-        'type': 'GET'
-    })
-    .done(function(tags) {
-        var aTags = "";
-        for (var ind in tags) {
-            aTags += "<a href='/?q="+encodeURIComponent(tags[ind])+"'>"+tags[ind]+"</a> ";
-        }
-        App.MessageBox.fadeToggle();
-        App.LinkBox.html(aTags);
-    });
-};
-
-App.ConfigureTagit = function($dom, model) {
-    var sourceURL = App.AE_H_URL;
-        prefix = "#",
-        tagitOptions = {
-            readOnly: true,
-            onTagClicked: function(event, ui) {
-                $('#searchInput').val(ui.tagLabel);
-                $('#searchForm').submit();
-            }
-        };
-
-    if (model) {
-        _.extend(tagitOptions, {
-            autocomplete: {delay: 0, minLength: 2, source: sourceURL},
-            afterTagAdded: function(event, ui) {
-                var tags = model.get('tags');
-
-                if (ui.tagLabel && tags.indexOf(prefix+ui.tagLabel) < 0) {
-                    var label = ui.tagLabel[0] == prefix ? ui.tagLabel : prefix + ui.tagLabel;
-                    tags.push(label);
-                    console.log("New Tags");
-                    console.log(tags);
-                }
-            },
-            afterTagRemoved: function(event, ui) {
-                var tags = model.get('tags');
-                var label = ui.tagLabel[0] == prefix ? ui.tagLabel : prefix + ui.tagLabel;
-                var ind = tags.indexOf(label);
-                tags.splice(ind, 1);
-            },
-            readOnly: false
-        });
-    }
-
-    $dom.tagit(tagitOptions);
-
-    if (!model) {
-        $('.ui-autocomplete-input').hide();
-    }
-};

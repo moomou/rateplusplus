@@ -109,7 +109,7 @@ App.StandaloneCardView = Backbone.View.extend({
 
         switch (tfData.contentType) {
             case Constants.contentType.data: {
-                renderedContent = App.ContentDataView.render(tfData);
+                renderedContent = App.ContentDataView.render("card", tfData);
                 break;
             }
             case Constants.contentType.attribute: {

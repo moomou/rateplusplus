@@ -90,7 +90,7 @@ function getQueryVariable(variable) {
     return false;
 }
 
-//Configuring Ajax to include CSRF
+// Configuring Ajax to include CSRF
 var csrftoken = getCookie('csrftoken');
 var accesstoken = getCookie('usertoken');
 $.ajaxSetup({
