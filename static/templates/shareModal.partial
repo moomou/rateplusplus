@@ -3,7 +3,6 @@
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
       <h3> Share Ranking <span id="shareName"></span></h3>
     </div>
-
     <div class="modal-body">
     <h5> Share by copying the url below</h5>
     <div class="input-prepend" style="display: block;">
