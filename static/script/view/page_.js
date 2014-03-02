@@ -228,8 +228,7 @@ App.SearchPageView = Backbone.View.extend({
                     row  = that.rowTemplate(_.extend(model.toJSON(), {index: ind}));
 
                     searchResultLeft.push(row);
-                    searchResultRight = _(searchResultRight)
-                        .union(renderedData);
+                    searchResultRight = _(searchResultRight).union(renderedData);
 
                     if (renderData.length != 0) {
                         _(renderData.length - 1).times(function(e) {
