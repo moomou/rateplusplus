@@ -1,7 +1,9 @@
   <div id="top-menu" class="navbar">
     <div class="navbar-inner" style="height: 40px; margin-top: -5px;">
       <div class="container-narrow">
-        <a href="{% url 'default.views.RedirectHandler' %}" class="noSelect muted home-btn pull-left">Cloverite </a>
+        <a href="{% url 'default.views.RedirectHandler' %}" class="noSelect muted home-btn pull-left" style="padding-right: 1em;">
+          Cloverite
+        </a>
 
         {% if SEARCH_ENABLED %}
         <form method="GET" id="searchForm" class="navbar-search" action="{% url 'default.views.RedirectHandler' %}">

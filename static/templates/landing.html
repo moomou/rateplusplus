@@ -16,50 +16,13 @@
       </div>
       <div class="jumbotron" id="message">
         <div id="myCarousel" class="carousel slide">
-          <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
-            <li data-target="#myCarousel" data-slide-to="3"></li>
-          </ol>
-          <!-- Carousel items -->
           <div class="carousel-inner">
             <div class="item active">
-              <h1 class="muted"> Find Everything</h1>
-              <h3 style="color: silver;">Cloverite makes finding and understanding information fast and intuitive.</h3>
+              <h1 class="muted"> Find Data Together.</h1>
+              <h3 style="color: silver;"> Get all the information you need on one page.</h3>
               <form method="GET" id="searchForm" action="{% url 'default.views.RedirectHandler' %}">
                 <div class="input-append">
-                  <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="Try #xyz">
-                  <button id="searchBtn" class="btn btn-success" type="button" ><i class="fa fa-search"> <span class="visible-desktop">Search </span></i></button>
-                </div>
-              </form>
-            </div>
-            <div class="item">
-              <h1 class="muted"> Stay up-to-date with Cloverite </h1>
-              <h3 style="color: silver;">Specific information is always just one or two hashtags away. </h3>
-              <form method="GET" id="searchForm" action="{% url 'default.views.RedirectHandler' %}">
-                <div class="input-append">
-                  <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="Try #x#y.">
-                  <button id="searchBtn" class="btn btn-success" type="button" ><i class="fa fa-search"> <span class="visible-desktop">Search </span></i></button>
-                </div>
-              </form>
-            </div>
-            <div class="item">
-              <h1 class="muted"> Collaborate on Content</h1>
-              <h3 style="color: silver;">Cloverite is a community that anyone can contribute.</h3>
-              <form method="GET" id="searchForm" action="{% url 'default.views.RedirectHandler' %}">
-                <div class="input-append">
-                  <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="{{DEFAULT_QUERY}}">
-                  <button id="searchBtn" class="btn btn-success" type="button" ><i class="fa fa-search"> <span class="visible-desktop">Search </span></i></button>
-                </div>
-              </form>
-            </div>
-            <div class="item">
-              <h1 class="muted"> Build with Cloverite API </h1>
-              <h3 style="color: silver;">Get access to always up-to-date information on growing ranges of topics. Setup is easy.</h3>
-              <form method="GET" id="searchForm" action="{% url 'default.views.RedirectHandler' %}">
-                <div class="input-append">
-                  <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="Try #x#y.">
+                  <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="Try #ericCartman">
                   <button id="searchBtn" class="btn btn-success" type="button" ><i class="fa fa-search"> <span class="visible-desktop">Search </span></i></button>
                 </div>
               </form>
@@ -67,8 +30,7 @@
           </div>
         </div>
       </div>
-      <hr>
-      <div class="jumbotron" id="feature">
+      <div class="jumbotron hidden" id="feature">
         <div class="row-fluid">
           <div class="span4">
             <h3> Get information with context. Quickly. </h3>
@@ -85,9 +47,9 @@
             </p>
           </div>
         </div>
+        <hr>
       </div>
-      <hr>
-      <div class="jumbotron" id="video">
+      <div class="jumbotron hidden" id="video">
         <div style="text-align: center"><h2> See it in action.</h2></div>
         <div class="header-unit">
           <div id="video-container">

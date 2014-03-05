@@ -1,16 +1,15 @@
 // Router File
 App.AppRouter = Backbone.Router.extend({
     routes: {
-        "profile" : "profilePageInit",
-        "profile/:id" : "profilePageInit",
-        "entity/new" : "newEntityPageInit",
-        "ranking/:shareToken" : "rankingPage",
-        "entity/:id" : "detailPageInit",
-        "" : "defaultPageInit",
+        "profile(/)" : "profilePageInit",
+        "profile/:id(/)" : "profilePageInit",
+        "entity/new(/)" : "newEntityPageInit",
+        "ranking/:shareToken(/)" : "rankingPage",
+        "entity/:id(/)" : "detailPageInit",
+        "(/)" : "defaultPageInit",
     },
     profilePageInit: function(id) {
         console.log("Profile Page Init");
-
         $.ajax({
             type: "GET",
             url: App.API_SERVER + App.API_VERSION + 'user/' + getCookie('userid') + "/ranked"
@@ -61,13 +60,10 @@ App.AppRouter = Backbone.Router.extend({
         });
     },
     newEntityPageInit: function(queryString) {
-        console.log("New Entity");
-
-        var empty = getQueryVariable("empty"),
-            searchTerm = getQueryVariable("searchterm"),
-            $profileImg =
-            imgUrl = '',
-            model = new App.SummaryCardModel();
+        console.log("new Entity");
+        var empty       = getQueryVariable("empty"),
+            searchTerm  = getQueryVariable("searchterm"),
+            imgUrl      = '';
 
         if (empty){
             App.GlobalWidget.searchMessageBox.find('#searchTerm').html(searchTerm);
@@ -76,6 +72,7 @@ App.AppRouter = Backbone.Router.extend({
 
         // empty card view
         new App.DetailEntityPageView();
+
         /*
         $("#main-summary input, textarea").focus(function(e) {
             $("#top-menu").animate({opacity: 0}, 300);
@@ -85,6 +82,7 @@ App.AppRouter = Backbone.Router.extend({
         });*/
     },
     rankingPageInit: function(shareToken) {
+        console.log("ranking");
         var forking = getQueryVariable("forking") == "true",
             rawRankingView = sessionStorage.getItem("rankingView"),
             rankingView = rawRankingView && JSON.parse(rawRankingView);
@@ -97,7 +95,6 @@ App.AppRouter = Backbone.Router.extend({
     },
     detailPageInit: function(id) {
         console.log("detail");
-
         App.RankingController();
         new App.DetailEntityPageView({id: parseInt(id)});
 
@@ -108,20 +105,32 @@ App.AppRouter = Backbone.Router.extend({
         $('#saveContentBtn').click(function(e) {
             var activePanel = $('.addContentBox>div.active'),
                 postData = {},
-                ajaxUrl = App.API_SERVER + App.API_VERSION + 'entity/' + id + '/data';
+                dataUrl = App.API_SERVER + App.API_VERSION + 'entity/' + id + '/data';
 
             postData.dataType = activePanel.find('.dataType').val().toLowerCase();
-            postData.srcType = activePanel.find('.srcType').val().toLowerCase();
-            postData.name = activePanel.find('.fieldname').val();
-            postData.selector =  activePanel.find('.selector').val() || "";
-            postData.srcUrl = activePanel.find('.srcUrl').val();
-            postData.value = activePanel.find('.value').val() || "";
+            postData.srcType  = activePanel.find('.srcType').val().toLowerCase();
+            postData.name     = activePanel.find('.fieldname').val();
+            postData.selector = activePanel.find('.selector').val() || "";
+            postData.srcUrl   = activePanel.find('.srcUrl').val();
+            postData.value    = activePanel.find('.value').val() || "";
 
-            $.post(ajaxUrl, postData)
-                .done(function(res) {
-                    console.log(res);
-                    $('#contentModal').hide();
+            if (postData.dataType == "attribute") {
+                var newAttribute = new App.EntityAttributeModel({
+                    name   : postData.name,
+                    entity : id,
                 });
+                newAttribute.save({}, {
+                    success: function(res) {
+                        $('#contentModal').hide();
+                        location.reload();
+                    },
+                });
+            } else {
+                $.post(ajaxUrl, postData).done(function(res) {
+                    $('#contentModal').hide();
+                    location.reload();
+                });
+            }
         });
 
         $('#writingSubmit').click(function(e) {
@@ -155,6 +164,13 @@ App.AppRouter = Backbone.Router.extend({
                 newPosition = 105 + clickedInd * 82;
             triBorder.css({'margin-left': newPosition + 'px'});
             tri.css({'margin-left': newPosition + 2 + 'px'});
+        });
+
+        $('#filterList li').click(function(e) {
+            var target = e.currentTarget;
+            $('#filterInput')
+                .val(target.getAttribute("data-filteron"))
+                .trigger('input');
         });
 
         $('#filterInput').on('input', function(e) {
@@ -197,5 +213,4 @@ App.AppRouter = Backbone.Router.extend({
 });
 
 var appRouter = new App.AppRouter();
-
 Backbone.history.start({pushState: true});

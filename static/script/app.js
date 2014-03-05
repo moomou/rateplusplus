@@ -47,8 +47,6 @@ $(function() {
 
     $('#navBtns li').tooltip({placement: 'bottom'});
 
-    Handlebars.partials = Handlebars.templates;
-
     $('textarea:not([data-widearea])')
         .keyup(textAreaAdjust)
         .on('input propertychange', textAreaAdjust)

@@ -10,21 +10,21 @@
         <i class="fa fa-filter"></i>
         <span class="caret" style="border-top-color: black; border-bottom-color: black;"></span>
       </a>
-      <ul class="dropdown-menu">
-        <li>
-          <a href="#filter/attribute">
+      <ul id="filterList" class="dropdown-menu">
+        <li data-filterOn="attribute">
+          <a href="#">
             <i class="fa fa-star-half-o fa-lg"></i>
             <span class="pull-right visible-desktop"> Attribute</span>
           </a>
         </li>
-        <li>
-          <a href="#filter/info">
+        <li data-filterOn="info">
+          <a href="#">
             <i class="fa fa-dot-circle-o fa-lg"></i>
             <span class="pull-right visible-desktop"> Info</span>
           </a>
         </li>
-        <li>
-          <a href="#filter/media">
+        <li data-filterOn="media">
+          <a href="#">
             <i class="fa fa-video-camera fa-lg"></i>
             <span class="pull-right visible-desktop"> Media</span>
           </a>

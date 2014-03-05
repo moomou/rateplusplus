@@ -2,22 +2,22 @@
  * Global Objects
  */
 App.GlobalWidget = {
-    measureDOM: $('#measure'),
-    twitterShareBtn: $('#twitterBtn'),
-    searchMessageBox: $('#message-box'),
-    searchInput: $('#searchInput'),
+    measureDOM       : $('#measure'),
+    twitterShareBtn  : $('#twitterBtn'),
+    searchMessageBox : $('#message-box'),
+    searchInput      : $('#searchInput'),
 
-    rankingFork: $('#rankingFork'),
-    rankingPrivacy: $('#rankingPrivacy'),
-    rankingHeader: $('#rankingHeader'),
-    rankingName: $('#rankingName'),
-    rankingList: $('#rankingList'),
-    rankInstruction: $('#rankInstruction'),
-    rankEditButtons: $('#rank-sessionButtons'),
-    rankViewButtons: $('#rank-viewButtons'),
-    shareModal: $('#shareModal'),
+    rankingFork      : $('#rankingFork'),
+    rankingPrivacy   : $('#rankingPrivacy'),
+    rankingHeader    : $('#rankingHeader'),
+    rankingName      : $('#rankingName'),
+    rankingList      : $('#rankingList'),
+    rankInstruction  : $('#rankInstruction'),
+    rankEditButtons  : $('#rank-sessionButtons'),
+    rankViewButtons  : $('#rank-viewButtons'),
+    shareModal       : $('#shareModal'),
 
-    saEditor: $('.sa-editor')
+    saEditor         : $('.sa-editor')
 };
 
 App.DetailPage = {
@@ -56,7 +56,7 @@ App.updateSessionStorageRankingView = function(currentRankingInd) {
 App.renderStarRating = function(upVote, downVote) {
     var starGen = function(stars) {
         var starDOM = function(className) {
-            return "<i class='fa fa-" + className + "'></i>";
+            return "<i class='goldStar fa fa-" + className + "'></i>";
         },
         result = '';
 
@@ -84,7 +84,7 @@ App.renderStarRating = function(upVote, downVote) {
 
 // Content Data
 App.ContentAttributeView = (function() {
-    var template = Handlebars.templates.sa_content_rating,
+    var template        = Handlebars.templates.sa_content_rating,
         contentTemplate = Handlebars.templates.sa_card_content;
 
     return {
@@ -131,20 +131,30 @@ App.ContentDataView = (function() {
         imageTemplate         : Handlebars.templates.sa_content_image,
         videoTemplate         : Handlebars.templates.sa_content_video,
         textTemplate          : Handlebars.templates.sa_content_textbox,
+        attributeTemplate     : Handlebars.templates.sa_content_rating,
         // Row templats
-        numberRowTemplate     : Handlebars.templates.sa_content_field,
-        timeseRowriesTemplate : Handlebars.templates.sa_content_timeseries,
-        imageRowTemplate      : Handlebars.templates.sa_content_image,
-        videoRowTemplate      : Handlebars.templates.sa_content_video,
-        textRowTemplate       : Handlebars.templates.sa_content_textbox
+        numberRowTemplate     : Handlebars.templates.sa_card_row_info,
+        attributeRowTemplate  : Handlebars.templates.sa_card_row_info,
+        textRowTemplate       : Handlebars.templates.sa_card_row_info,
+        imageRowTemplate      : Handlebars.templates.sa_card_row_image,
+        paddingRowTemplate    : Handlebars.templates.sa_card_row_padding,
     },
     renderRow = function(data) {
         var templateName = data.dataType + "RowTemplate";
+
+        // convert data to suitable form
+        if (data.dataType == "attribute") {
+            data.info = App.renderStarRating(data.upVote, data.downVote);
+        }
+
         return templates[templateName](data);
     },
     renderCard = function(data) {
-       var templateName = data.dataType + "Template";
-       return templates[templateName](data);
+        var templateName = data.dataType + "Template";
+        if (data.dataType == "attribute") {
+            data.info = App.renderStarRating(data.upVote, data.downVote);
+        }
+        return templates[templateName](data);
     };
 
     return {
@@ -157,7 +167,9 @@ App.ContentDataView = (function() {
                 func = renderCard;
             }
 
-            if (data.dataType == "video") {
+            if (!data.dataType) {
+                data.dataType = "attribute";
+            } else if (data.dataType == "video") {
                 data.youtubeId = getYoutubeId(data.srcUrl);
             }
 
@@ -197,7 +209,6 @@ App.TableView = Backbone.View.extend({
 App.SimpleCard = Backbone.View.extend({
     className: 'card micro searchable',
     template: Handlebars.templates.simple_card,
-    model: App.SummaryCardModel,
     events: {
         'mouseover': 'toggleToolbar',
         'mouseout': 'toggleToolbar',
@@ -216,30 +227,32 @@ App.SimpleCard = Backbone.View.extend({
         }
     },
     initialize: function(settings) {
-        var data = this.model.get(settings.renderType)[settings.renderIndex];
+        var data = settings.data;
 
-        if (settings.renderType === "attributes") {
-            this.content = App.ContentAttributeView.render(data, true);
-            this.model = new App.EntityAttributeModel(data);
-            this.controller = App.AttributeView;
+        this.data    = data;
+        this.content = App.ContentDataView.render("card", data, true);
+        this.title   = data.name;
+
+        if (!data.dataType || data.dataType == "attribute") {
+            this.data.dataType = "attribute";
+            this.controller    = App.AttributeView;
+            this.model         = new App.EntityAttributeModel(data);
         }
-        else {
-            this.content = App.ContentDataView.render("card", data, true);
-        }
-        this.title = data.name;
     },
     render: function() {
-        var templateValues = this.model.toJSON(),
-            indexTitle = this.title || '',
-            indexValue = this.value || '',
-            dataIndex = indexTitle.toLowerCase() + indexValue.toLowerCase();
-
+        var templateValues = {},
+            indexTitle     = this.title || '',
+            indexValue     = this.value || '',
+            dataIndex      = 
+                indexTitle.toLowerCase() + 
+                indexValue.toLowerCase() +
+                App.TypeIndex[this.data.dataType];
+                
         templateValues.title = this.title;
 
         this.$el.html(this.template(templateValues));
-        this.$('.entityDetail').html(this.content);
-
         this.$el.attr('data-index', dataIndex);
+        this.$('.js-detail').html(this.content);
 
         // initialize controller
         var that = this;

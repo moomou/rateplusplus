@@ -7,19 +7,30 @@
     {% include "header.partial" %}
 
     <div class="container-narrow">
-      <div id="profileRow" class="row-fluid">
+      <div class="row-fluid">
+        <div class="span6 pull-right" id="info-container" style="padding: 25px;">
+        </div>
+        <div class="span6 pull-left" id="user" style="padding: 25px;">
+          <div style="width: 240px;">
+            <div class="profile pull-left js-profile" style="background-image: url('https://secure.gravatar.com/avatar/{{emailHash}}?s=320')"></div>
+            <h2 style="clear: both; text-align: center; padding-top: 50px;"> {{username}} </h2>
+          </div>
+        </div>
+      </div>
+
+      <div id="profileRow" class="row-fluid hidden">
       </div>
       <div id="mediaQuery" class="hidden-desktop" style="position:absolute;left:-1200px;"></div>
     </div>
-      
+
     {% csrf_token %}
 
     {% if FEEDBACK_ENABLED %} 
-      {% include "feedbackModal.partial" %}
+    {% include "feedbackModal.partial" %}
     {% endif %}
 
     {% if REQUEST_ENABLED %} 
-      {% include "requestForm.partial" %}
+    {% include "requestForm.partial" %}
     {% endif %}
 
     {% include "shareModal.partial" %}

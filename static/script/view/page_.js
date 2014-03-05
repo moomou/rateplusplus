@@ -9,10 +9,10 @@ App.DetailEntityPageView = Backbone.View.extend({
     detailTemplate: Handlebars.templates.detail_summary,
     el: '#main-summary',
     events: {
-        'click .infoBar li': 'infoBarClickHandler',
-        'click #change-image-btn': 'changeImage',
-        'click #save-btn': 'saveEdit',
-        'click #cancel-btn': 'cancelEdit',
+        'click .infoBar li'       : 'infoBarClickHandler',
+        'click #change-image-btn' : 'changeImage',
+        'click #save-btn'         : 'saveEdit',
+        'click #cancel-btn'       : 'cancelEdit',
     },
     // event handler
     infoBarClickHandler: function(e) {
@@ -33,7 +33,7 @@ App.DetailEntityPageView = Backbone.View.extend({
         $('#imageURLSaveBtn').click(function() {
             var imgUrl = $('#imageURLInput').val();
             model.set('imgURL', imgUrl);
-            $('#profile-img').attr('style', 'background-image: url("' + imgUrl + '")');
+            $('.js-profile').attr('style', 'background-image: url("' + imgUrl + '")');
         });
     },
     saveEdit: function(e) {
@@ -44,7 +44,7 @@ App.DetailEntityPageView = Backbone.View.extend({
 
         model.set('name', $('#name').val() || '');
         model.set('description', $('#description').val() || '');
-        model.set('private', false);
+        model.set('private', !$('.switch-input')[0].checked);
         model.set('imgURL', $('#imageURLInput').val());
         model.set('tags', tags);
 
@@ -114,20 +114,19 @@ App.DetailEntityPageView = Backbone.View.extend({
         }
 
         var dataContainer = App.ColManager.CardCol;
-            renderSimpleCard = function(renderType, list) {
-                _(list).each(function(__, ind) {
+            renderSimpleCard = function(list) {
+                _(list).each(function(data, ind) {
                     var simpleCard = new App.SimpleCard({
-                        model: item,
-                        renderType: renderType,
-                        renderIndex: ind
+                        data        : data,
+                        renderIndex : ind
                     });
 
                     dataContainer.next().append(simpleCard.render().el);
                 });
             };
 
-        renderSimpleCard('data', item.get('data'));
-        renderSimpleCard('attributes', item.get('attributes'));
+        renderSimpleCard(item.get('data'));
+        renderSimpleCard(item.get('attributes'));
     },
 });
 
@@ -149,7 +148,7 @@ App.SearchPageView = Backbone.View.extend({
         // 2. Aggregate Data
         // 3. Everything
 
-        var queryParts = decodeURI(inputQuery).split('#'),
+        var queryParts = _(decodeURI(inputQuery).split('#')).compact(),
             queryPartsLength = queryParts.length,
             result = {};
 
@@ -160,6 +159,8 @@ App.SearchPageView = Backbone.View.extend({
             result.subject = queryParts[0];
             result.parts   = _.rest(queryParts);
             result.mode    = DATA_MODE;
+        } else {
+            result.mode = SEARCH_MODE;
         }
 
         return result;
@@ -192,8 +193,6 @@ App.SearchPageView = Backbone.View.extend({
 
         this.quickSummaryCanvas.find('#block-container').html(this.summaryTemplate(templateValues));
     },
-    renderData: function(renderedData) {
-    },
     render: function() {
         // Didn't find anything
         if (this.collection.models.length == 0) {
@@ -207,39 +206,61 @@ App.SearchPageView = Backbone.View.extend({
             searchMode        = this.searchMode,
             searchResultLeft  = [],
             searchResultRight = [];
-        
+
         switch (searchMode.mode) {
             case INSTANT_MODE: {
+                _(this.collection.models).each(function(model, ind) {
+                    var row = that.rowTemplate(_.extend(model.toJSON(), {index: ind}));
+                    searchResultLeft.push(row);
+                });
+                this.$el.html(searchResultLeft.join("\n"));
+                this.renderQuickSummary(0);
+                break;
             }
             case DATA_MODE: {
+                console.log('DATA_MODE');
                 var regexMatches = _(searchMode.parts).map(function(part) {
-                    return new RegexEx(part, 'g');
+                    return new RegExp(part, 'gi');
                 });
 
                 _(this.collection.models).each(function(model, ind) {
                     var filteredData = _(model.get('data')).filter(function(data) {
                         return _(regexMatches).find(function(regexMatch) {
-                            return regexMatch.match(data);
+                            return regexMatch.test(data.name || "");
                         });
                     }),
-                    renderedData = _(filteredData).map(function(data) {
-                        return App.ContentDataView.renderRow(data);
+                    filteredAttr = _(model.get('attributes')).filter(function(attr) {
+                        return _(regexMatches).find(function(regexMatch) {
+                            return regexMatch.test(attr.name || "");
+                        });
+                    }),
+                    renderedData = _(filteredData.concat(filteredAttr)).map(function(data) {
+                        return App.ContentDataView.render("row", data, true);
                     }),
                     row  = that.rowTemplate(_.extend(model.toJSON(), {index: ind}));
 
                     searchResultLeft.push(row);
-                    searchResultRight = _(searchResultRight).union(renderedData);
+                    searchResultRight = searchResultRight.concat(renderedData);
 
-                    if (renderData.length != 0) {
-                        _(renderData.length - 1).times(function(e) {
-                            searchResultLeft.push(that.rowTemplate({});
+                    if (regexMatches.length > 1) {
+                        var padding = regexMatches.length - 1;
+                        _(padding).times(function(e) {
+                            searchResultLeft.push(App.ContentDataView.render("row", 
+                                    {"dataType": "padding"}, true));
+                        });
+                    }
+
+                    if (renderedData.length != regexMatches.length) {
+                        var padding = regexMatches.length - renderedData.length;
+                        _(padding).times(function(e) {
+                            searchResultRight.push(App.ContentDataView.render("row", 
+                                    {"dataType": "attribute"}, true));
                         });
                     }
                 });
 
                 this.$el.html(searchResultLeft.join("\n"));
-                this.infoContainer.html(renderedData);
-
+                this.infoContainer.html(searchResultRight.join("\n"));
                 break;
             }
             default: {

@@ -93,6 +93,7 @@ function getQueryVariable(variable) {
 // Configuring Ajax to include CSRF
 var csrftoken = getCookie('csrftoken');
 var accesstoken = getCookie('usertoken');
+
 $.ajaxSetup({
     beforeSend: function(xhr, settings) {
         if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
@@ -101,3 +102,6 @@ $.ajaxSetup({
         xhr.setRequestHeader("x-access-token", accesstoken);
     },
 });
+
+// Setting up handlebars
+Handlebars.partials = Handlebars.templates;

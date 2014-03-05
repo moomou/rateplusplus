@@ -108,20 +108,14 @@ App.StandaloneCardView = Backbone.View.extend({
             renderedContent = null;
 
         switch (tfData.contentType) {
+            case Constants.contentType.attribute:
             case Constants.contentType.data: {
                 renderedContent = App.ContentDataView.render("card", tfData);
-                break;
-            }
-            case Constants.contentType.attribute: {
-                renderedContent = App.ContentAttributeView.render(tfData);
                 break;
             }
             case Constants.contentType.ranking: {
                 renderedContent = App.ContentRankingView.render(tfData);
                 break;
-            }
-            case Constants.contentType.rating: {
-                // not implemented
             }
             default: {
                 // should not accept

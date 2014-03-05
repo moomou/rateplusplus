@@ -571,7 +571,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"info-card\" style=\"width: auto;padding: 0;height: 112px;\" data-index=\"0\">\n  <div class=\"cover\">\n    <a href=\"";
+  buffer += "<div class=\"info-card\" style=\"width: auto;padding: 0;height: 112px; margin-bottom: 20px;\" data-index=\"0\">\n  <div class=\"cover\">\n    <a href=\"";
   if (helper = helpers.srcUrl) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.srcUrl); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -596,7 +596,32 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"info-card\" style=\"width: auto;padding: 0;height: 112px;\" data-index=\"";
+  buffer += "<div class=\"info-card\" style=\"width: auto;padding: 0;height: 112px; margin-bottom: 20px;\" data-index=\"";
+  if (helper = helpers.index) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.index); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">\n  <div class=\"header\" style=\"\n    height: 112px;\n    position: relative;\n    \">\n    <span style=\"\n      font-size: 24px;\n      float: left;\n      display: block;\n      vertical-align: middle;\n      line-height: 112px;\n      margin-left: 25px;\n      text-transform: lowercase;\n      \">";
+  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</span><span class=\"pull-right\" style=\"\n      font-size: 36px;\n      display: table-row;\n      display: inline-block;\n      vertical-align: middle;\n      line-height: 112px;\n      margin-right: 25px;\n      \">\n      ";
+  if (helper = helpers.info) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.info); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</i>\n    </span>    \n  </div>\n</div>\n";
+  return buffer;
+  });
+})();
+
+(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['sa_card_row_padding'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div class=\"info-card\" style=\"width: auto;padding: 0;height: 112px; margin-bottom: 20px; visibility: hidden;\" data-index=\"";
   if (helper = helpers.index) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.index); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -741,8 +766,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "</span>\n  <div class=\"rating goldStar pull-right\">\n    ";
-  if (helper = helpers.stars) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.stars); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  if (helper = helpers.info) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.info); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n  </div>\n</div>\n";
   return buffer;
@@ -842,7 +867,7 @@ function program3(depth0,data) {
     + "\">\n    ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.profileImg), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n  </a>\n</div>\n<div class=\"contentContainer outer\">\n  <div class=\"entityDetail\">\n  </div>\n  <ul class=\"view-toolbar\" style=\"\">\n    <li>\n      <i class=\"fa fa-heart-o fa-lg\"></i>\n      <i class=\"fa fa-twitter fa-lg\"></i>\n      <i class=\"fa fa-code fa-lg\"></i>\n      <i class=\"fa fa-share-square-o fa-lg\"></i>\n    </li>\n    <li>";
+  buffer += "\n  </a>\n</div>\n<div class=\"contentContainer outer\">\n  <div class=\"js-detail\">\n  </div>\n  <ul class=\"view-toolbar\" style=\"\">\n    <li>\n      <i class=\"fa fa-heart-o fa-lg\"></i>\n      <i class=\"fa fa-twitter fa-lg\"></i>\n      <i class=\"fa fa-code fa-lg\"></i>\n      <i class=\"fa fa-share-square-o fa-lg\"></i>\n    </li>\n    <li>";
   if (helper = helpers.uniqueId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.uniqueId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

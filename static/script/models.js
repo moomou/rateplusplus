@@ -2,21 +2,29 @@ var App = App || {};
 
 /**
  * Constants for App */
-App.DEBUG_MODE          = false;
+App.DEBUG_MODE              = false;
 
-App.TWITTER_LINK        = "https://twitter.com/share?";
-App.API_SERVER          = 'http://api.cloverite.com:9000/';
-App.API_VERSION         = 'v0/';
+App.TWITTER_LINK            = "https://twitter.com/share?";
+App.API_SERVER              = 'http://api.cloverite.com:9000/';
+App.API_VERSION             = 'v0/';
 
-App.AE_H_URL            = App.API_VERSION + 'ae/tag';
-App.AE_C_URL            = App.API_VERSION + 'ae/cat';
+App.AE_H_URL                = App.API_VERSION + 'ae/tag';
+App.AE_C_URL                = App.API_VERSION + 'ae/cat';
 
-App.POSITIVE            = "positive";
-App.NEGATIVE            = "negative";
+App.POSITIVE                = "positive";
+App.NEGATIVE                = "negative";
 
-App.SEARCH_ENTITY       = 'entitySearch';
-App.SPECIFIC_ENTITY     = 'specificEntity';
-App.SPECIFIC_RANKING    = 'specificRanking';
+App.SEARCH_ENTITY           = 'entitySearch';
+App.SPECIFIC_ENTITY         = 'specificEntity';
+App.SPECIFIC_RANKING        = 'specificRanking';
+
+App.TypeIndex               = {
+    attribute : "attribute",
+    text      : "info",
+    number    : "info",
+    image     : "media",
+    video     : "media"
+};
 
 App.CloverModel = Backbone.Model.extend({
     initialize: function() {
