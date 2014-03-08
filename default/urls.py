@@ -17,7 +17,6 @@ urlpatterns = patterns('',
     url(r'^privacy$', views.PrivacyHandler),
     url(r'^ranking/[.+]?', views.SearchPage, {'query': ''}),
 
-    url(r'^test$', views.TestHandler),
     url(r'^(.+)/?$', views.GenericPageHandler),
     url(r'^$', views.RedirectHandler)
 )

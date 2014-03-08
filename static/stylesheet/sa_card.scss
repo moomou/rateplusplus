@@ -38,12 +38,13 @@ ul {
 }
 
 .profile {
-  display: inline-block;
+  margin: 0 auto;
   width: 75px;
   height: 75px;
   background-position: center center;
   background-size: cover;
   @include border-radius(100%);
+  @include box-shadow(0, 0, 5px, rgb(235, 235, 235));
 }
 .profile-mini {
   width: 15px;
@@ -193,7 +194,13 @@ ul {
 
 .info-card.presentation {
   @include box-shadow-none();
-  @extend .absCenter;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
   overflow-y: scroll;
   .content.editing {
     display: none;

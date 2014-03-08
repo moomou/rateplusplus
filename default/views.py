@@ -14,6 +14,7 @@ from forms import SignupForm, FeedbackForm, EMAIL_MSG
 import logging
 import json
 import pygeoip 
+import hashlib
 
 import rredis
 
@@ -33,14 +34,21 @@ FEATURE_FLAG = {
 }
 
 def ContextSetup(request):
+    m = hashlib.md5()
     authenticated = request.user.is_authenticated()
+
+    if authenticated:
+        m.update(request.user.email)
 
     logger.info("User Session: " + str(request.session.session_key))
 
+    username = request.user.username if authenticated else 'anonymous'
 
     renderCxt = {
         'authenticated': authenticated,
         'currentPath': request.get_full_path(),
+        'emailHash': m.hexdigest(),
+        'username': username
     }
     renderCxt = dict(FEATURE_FLAG.items() + renderCxt.items())
 
@@ -100,11 +108,12 @@ def SigninHandler(request, redirected = False):
             usertoken = request.session.session_key
             r.set(usertoken, user.clover.neo4jId)
 
-            res = {'redirect': request.session.get('next', '/')}
-            response = HttpResponse(json.dumps(res), mimetype="application/json")
+            response = HttpResponse(json.dumps({"error": None, "redirect": "/profile/self"}), mimetype="application/json")
+
             response.set_cookie("username", user.username)
             response.set_cookie("userid", user.clover.neo4jId)
             response.set_cookie("usertoken", usertoken)
+
             return response
 
         return HttpResponse(json.dumps({'error':'Authentication failed'}), mimetype="application/json")
@@ -138,8 +147,8 @@ def SignupHandler(request):
             if not form.save():
                 return HttpResponseServerError(
                     json.dumps({"error": "Please try again later."}))
-            return SigninHandler(request)
 
+            return SigninHandler(request)
         return HttpResponse(json.dumps(form.errors), mimetype="application/json")
 
 def AdHandler(request):
@@ -187,8 +196,9 @@ def GraphHandler(request):
 def ProfileHandler(request, profileId):
     renderCxt = ContextSetup(request)
 
+
     if not renderCxt['authenticated']:
-        return SigninHandler(request, True) #HttpResponseRedirect(reverse('signin-page'))
+        return SigninHandler(request, True)
 
     if request.method == "GET":
         ''' Renders Profile Page '''

@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.conf import settings
 
 from models import Clover
 
@@ -8,7 +9,7 @@ import requests
 import logging
 
 # Get an instance of a logger
-CLOVERITE_GRAPH_URL = "http://localhost:3000/v0/user"
+CLOVERITE_GRAPH_URL = settings.STAGING_API if settings.DEBUG else settings.LIVE_API
 CLOVERITE_HEADERS   = {'content-type': 'application/json', "x-access-token": "superman"}
 
 logger = logging.getLogger(__name__)

@@ -15,36 +15,31 @@
         <a href="/signin" style="margin: 31.5px 0; float: right; "> Sign In</a> 
       </div>
       <div class="jumbotron" id="message">
-        <div id="myCarousel" class="carousel slide">
-          <div class="carousel-inner">
-            <div class="item active">
-              <h1 class="muted"> Share information like never before.</h1>
-              <h3 style="color: silver;"> A personal API for sharing everything.</h3>
-              <form method="GET" id="searchForm" action="{% url 'default.views.RedirectHandler' %}">
-                <div class="input-append">
-                  <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="Try #ericCartman">
-                  <button id="searchBtn" class="btn btn-success" type="button" ><i class="fa fa-search"> <span class="visible-desktop">Search </span></i></button>
-                </div>
-              </form>
+        <div class="item active">
+          <h1 class="muted"> Share information like never before.</h1>
+          <h3 style="color: silver;"> A personal API for finding and sharing everything.</h3>
+          <p class="lead"><button class="btn btn-large btn-success">Get Started</button></p>
+          <form class="hidden" method="GET" id="searchForm" action="{% url 'default.views.RedirectHandler' %}">
+            <div class="input-append">
+              <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="Try #ericCartman">
+              <button id="searchBtn" class="btn btn-success" type="button" ><i class="fa fa-search"> <span class="visible-desktop">Search </span></i></button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
-      <div class="jumbotron hidden" id="feature">
+      <div class="jumbotron" id="feature">
         <div class="row-fluid">
           <div class="span4">
-            <h3> Get information with context. Quickly. </h3>
+            <h3> Compose information with ease.</h3>
             <p> Cloverite makes it easy to find information together, providing context and make understanding fast.</p>
           </div>
           <div class="span4">
-            <h3> Contribute and collaborate on content. Instantly. </h3>
-            <p> Share and collaborate information with anyone. Contents are always stay up-to-date. No more copy and paste. </p>
+            <h3> Find your data instantly and discover new things.</h3>
+            <p> Find that GIF and that address. Instantly. Subscribe to new content list and discover new things.</p>
           </div>
           <div class="span4">
-            <h3> It's easy to build with Cloverite. </h3>
-            <p> 
-              Use Cloverite to power your content and always stay up-to-date. Information on Cloverite can be easily embedded anywhere on the web like youtube videos.
-            </p>
+            <h3> Share and collaborate on content. </h3>
+            <p> Share your data with the world and build open data together.</p>
           </div>
         </div>
         <hr>

@@ -554,6 +554,13 @@
   margin: 5px;
   float: left; }
 
+@-moz-document url-prefix() {
+  .moz-rankingNo {
+    margin-top: 22px !important; }
+
+  .moz-rankContainer {
+    margin-top: 35% !important; } }
+
 /*Fix for Chrome slow scroll*/
 .navbar-fixed-top {
   -webkit-transform: translateZ(0); }
@@ -562,13 +569,6 @@
 .disable-hover,
 .disable-hover * {
   pointer-events: none !important; }
-
-@-moz-document url-prefix() {
-  .moz-rankingNo {
-    margin-top: 22px !important; }
-
-  .moz-rankContainer {
-    margin-top: 35% !important; } }
 
 .table {
   display: table;
@@ -586,6 +586,12 @@
   display: inline-block;
   max-width: 40em;
   width: 95%; }
+
+.padding {
+  width: 100%;
+  height: 75px;
+  display: block;
+  visibility: hidden; }
 
 .btn-like {
   text-decoration: none !important;
@@ -620,18 +626,6 @@
 .noSelect:focus {
   outline: 0px solid transparent; }
 
-.absCenter, .info-card.presentation {
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0; }
-
-.center {
-  display: block;
-  margin: 0 auto; }
-
 .cursor-pointer {
   cursor: pointer; }
 
@@ -639,6 +633,9 @@
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none; }
+
+.invisible {
+  visibility: hidden; }
 
 .subtle {
   opacity: 0.25; }
@@ -679,9 +676,6 @@
 .blackStar {
   color: black; }
 
-.invisible {
-  opacity: 0; }
-
 body {
   margin: 1em; }
 
@@ -708,7 +702,7 @@ ul {
     color: green; }
 
 .profile {
-  display: inline-block;
+  margin: 0 auto;
   width: 75px;
   height: 75px;
   background-position: center center;
@@ -716,7 +710,10 @@ ul {
   -webkit-border-radius: 100%;
   border-radius: 100%;
   background-clip: padding-box;
-  /* stops bg color from leaking outside the border: */ }
+  /* stops bg color from leaking outside the border: */
+  -webkit-box-shadow: 0 0 5px #ebebeb ;
+  -moz-box-shadow: 0 0 5px #ebebeb ;
+  box-shadow: 0 0 5px #ebebeb ; }
 
 .profile-mini {
   width: 15px;
@@ -834,6 +831,12 @@ ul {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
   overflow-y: scroll; }
   .info-card.presentation .content.editing {
     display: none; }
