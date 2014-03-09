@@ -1,5 +1,5 @@
   <div id="top-menu" class="navbar">
-    <div class="navbar-inner" style="height: 40px; margin-top: -5px;">
+    <div class="navbar-inner" style="height: 40px; margin: -5px 0 30px 0;">
       <div class="container-narrow">
         <a href="{% url 'default.views.RedirectHandler' %}" class="noSelect muted home-btn pull-left" style="padding-right: 1em;">
           Cloverite
@@ -41,5 +41,8 @@
         {% endif %}
       </div>
     </div>
-    {% include "rankHeader.partial" %}
+    {% if CONTEXT_HEADER_ENABLED %}
+      {% include "contextHeader.partial" %}
+      {% include "rankHeader.partial" %}
+    {% endif %}
   </div>

@@ -1,0 +1,10 @@
+<div id="contextHeader" class="navbar-inner">
+  <div class="container-narrow">
+    <div class="pull-left hidden">
+      <div class="muted" style="vertical-align: middle; line-height: 20px; padding: 5px;"><span id="resultCount"></span>result</div>
+    </div>
+    <ul id="navBtns" class="hidden-phone nav pull-right">
+      <li title="" data-original-title="Rank"><a id="addRankingBtn" href="#" style=" padding: 0px;"><i class="fa fa-list-ol fa-lg"> </i></a></li>
+    </ul>
+  </div>
+</div>

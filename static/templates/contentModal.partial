@@ -20,13 +20,13 @@
           <span style='display: block'> Info</span>
         </a>
       </li>
-      <li class="contentType cursor-pointer invisible" data-target='#pictureframe'>
+      <li class="contentType cursor-pointer " data-target='#pictureframe'>
         <a href="#pictureframe" data-toggle="tab">
           <i class="fa fa-picture-o fa-2x block"></i>
           <span style='display: block'> Picture</span>
         </a>
       </li>
-      <li class="contentType cursor-pointer invisible" data-target='#movieTheatre'>
+      <li class="contentType cursor-pointer " data-target='#movieTheatre'>
         <a href="#movieTheatre" data-toggle="tab">
           <i class="fa fa-youtube-play fa-2x block"></i>
           <span style='display: block'> Video</span>

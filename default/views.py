@@ -161,8 +161,10 @@ def AdHandler(request):
 
 def EntityHandler(request, pk):
     renderCxt = ContextSetup(request)
+
     renderCxt['specific_entity'] = True
     renderCxt['not_new'] = True
+
     t = loader.get_template('main.html')
     c = RequestContext(request, renderCxt)
 
@@ -179,6 +181,7 @@ def NewEntityHandler(request):
 def SearchPage(request, query):
     renderCxt = ContextSetup(request)
     renderCxt['QUERY'] = query
+    renderCxt['CONTEXT_HEADER_ENABLED'] = True
     
     t = loader.get_template('main.html')
     c = RequestContext(request, renderCxt)

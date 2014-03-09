@@ -10,11 +10,14 @@
     {% include "header.partial" %}
 
     <div class="container-narrow">
-
       {% include "messageBox.partial" %}
 
       <div class="row-fluid">
+
+        {% if specific_entity %}
         <div id="main-summary" class="span12"></div>
+        {% endif %}
+
         <div id="quick-summary" class="span6 pull-right">
           <div id="block-container"></div>
           <div class="row-fluid" id="info-container">

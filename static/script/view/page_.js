@@ -139,8 +139,9 @@ App.SearchPageView = Backbone.View.extend({
         'click .info-card': 'expandSelected',
     },
     expandSelected: function(e) {
-        var target = e.currentTarget;
-        this.renderQuickSummary($(target).attr('data-index'));
+        var target = e.currentTarget,
+            dataIndex = $(target).attr('data-index');
+        this.renderQuickSummary(dataIndex);
     },
     detectSearchMode: function(inputQuery) {
         // currently 3 modes supported
@@ -179,9 +180,15 @@ App.SearchPageView = Backbone.View.extend({
         //this.quickSummaryCanvas.scrollToFixed({ marginTop: 25});
     },
     renderQuickSummary: function(index) {
+        if (this.collection.models.length == 0 || 
+            index >= this.collection.models.length) {
+            return;
+        }
+
         var quickSummaryModel = this.collection.models[index];
             templateValues = quickSummaryModel.toJSON(),
-            that = this;
+            that = this,
+            newNavigateUrl = "?q="+getQueryVariable("q", true)+"&expand="+index;
 
         templateValues.contributors =
             App.ContributorView.render(quickSummaryModel.get('contributors'));
@@ -192,6 +199,7 @@ App.SearchPageView = Backbone.View.extend({
             }).join("\n");
 
         this.quickSummaryCanvas.find('#block-container').html(this.summaryTemplate(templateValues));
+        // App.router.navigate(newNavigateUrl);
     },
     render: function() {
         // Didn't find anything
@@ -205,15 +213,21 @@ App.SearchPageView = Backbone.View.extend({
         var that              = this,
             searchMode        = this.searchMode,
             searchResultLeft  = [],
-            searchResultRight = [];
+            searchResultRight = [],
+            that = this;
 
         switch (searchMode.mode) {
-            case INSTANT_MODE: {
+            case INSTANT_MODE: { // NOT DONE
                 _(this.collection.models).each(function(model, ind) {
-                    var row = that.rowTemplate(_.extend(model.toJSON(), {index: ind}));
+                    model.set('index', ind) 
+                    var row = new App.SearchResultView({model: model});
                     searchResultLeft.push(row);
                 });
-                this.$el.html(searchResultLeft.join("\n"));
+
+                _(searchResultLeft).each(function(result) {
+                    that.$el.append(result.render().el);
+                });
+
                 this.renderQuickSummary(0);
                 break;
             }
@@ -224,6 +238,8 @@ App.SearchPageView = Backbone.View.extend({
                 });
 
                 _(this.collection.models).each(function(model, ind) {
+                    model.set('index', ind);
+
                     var filteredData = _(model.get('data')).filter(function(data) {
                         return _(regexMatches).find(function(regexMatch) {
                             return regexMatch.test(data.name || "");
@@ -237,7 +253,7 @@ App.SearchPageView = Backbone.View.extend({
                     renderedData = _(filteredData.concat(filteredAttr)).map(function(data) {
                         return App.ContentDataView.render("row", data, true);
                     }),
-                    row  = that.rowTemplate(_.extend(model.toJSON(), {index: ind}));
+                    row = new App.SearchResultView({model: model});
 
                     searchResultLeft.push(row);
                     searchResultRight = searchResultRight.concat(renderedData);
@@ -259,18 +275,26 @@ App.SearchPageView = Backbone.View.extend({
                     }
                 });
 
-                this.$el.html(searchResultLeft.join("\n"));
+                _(searchResultLeft).each(function(result) {
+                    that.$el.append(result.render().el);
+                });
+
                 this.infoContainer.html(searchResultRight.join("\n"));
                 break;
             }
             default: {
                 _(this.collection.models).each(function(model, ind) {
-                    var row = that.rowTemplate(_.extend(model.toJSON(), {index: ind}));
+                    model.set('index', ind);
+                    var row = new App.SearchResultView({model: model});
                     searchResultLeft.push(row);
                 });
-                this.$el.html(searchResultLeft.join("\n"));
+
+                _(searchResultLeft).each(function(result) {
+                    that.$el.append(result.render().el);
+                });
+
                 this.renderQuickSummary(0);
             }
         }
-    },
+    }
 });

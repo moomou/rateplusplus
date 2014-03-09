@@ -38,13 +38,14 @@ ul {
 }
 
 .profile {
+  @include border-radius(100%);
+  @include box-shadow(0, 1px, 1px, rgb(235, 235, 235));
+
   margin: 0 auto;
   width: 75px;
   height: 75px;
   background-position: center center;
   background-size: cover;
-  @include border-radius(100%);
-  @include box-shadow(0, 0, 5px, rgb(235, 235, 235));
 }
 .profile-mini {
   width: 15px;
@@ -161,12 +162,9 @@ ul {
     @include box-shadow(0, 2px, 6px,rgba(0,0,0,0.2),inset);
   }
   .footer {
-    background: #f5f5f5;
-    padding: 10px 5px 5px 5px;
-    height: 25px;
-    width: 520px;
+    padding: 10px 20px 15px 10px;
     margin: 10px -15px;
-
+    height: 25px;
     .edit-tool {
       margin: -3px 2px 0 2px;
     }

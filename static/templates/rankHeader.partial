@@ -1,9 +1,9 @@
-<div id="rankingHeader" style="display:none; margin-top: 20px;" class="navbar">
+<div id="rankingHeader" class="navbar" style="margin-top: 5px; display: none;">
   <div class="navbar-inner rankbar">
     <div class="container-narrow">
       <a href="#"><i data-toggle="tooltip" title="Fork Ranking" id="rankingFork" class="fa fa-code-fork fa-2x btn-like"> </i></a>
       <i data-toggle="tooltip" title="Private Ranking" id="rankingPrivacy" class="fa fa-lock fa-2x"> </i>
-      <span contenteditable="true" id="rankingName"> </span>
+      <input id="rankingName" class="title-input js-title" placeholder="Ranking Name" type="text" value="">
       <span id="rankInstruction" style="float:left;"> Click on rating to assign rank </span>
       <ul id="rankingList" class='rankingList'>
       </ul>
@@ -18,4 +18,3 @@
     </div>
   </div>
 </div>
-

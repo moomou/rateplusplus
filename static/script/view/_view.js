@@ -396,14 +396,10 @@ App.ProfileRowView = Backbone.View.extend({
     }
 });
 
-App.RankingRowView = Backbone.View.extend({
-    template: Handlebars.templates.rankingRow,
-    tagName: 'tr',
-    className: 'row',
+App.SearchResultView = Backbone.View.extend({
+    template: Handlebars.templates.sa_card_row,
     events: {
-        'click .js-ranking': 'assignRanking'
-    },
-    initialize: function() {
+        'click .info-card': 'assignRanking'
     },
     render: function() {
         var that = this;
@@ -444,6 +440,8 @@ App.RankingRowView = Backbone.View.extend({
             otherRankListIcon.find('a').attr('href', rankListIcon.find('a').attr('href'));
             rankListIcon.find('a').attr('href', otherLink);
         });
+
+        this.assignRanking();
 
         return this;
     },
@@ -648,10 +646,6 @@ App.RankListToolbarView = (function() {
         App.GlobalWidget.rankViewButtons.show();
         App.GlobalWidget.rankingPrivacy.hide();
         App.GlobalWidget.rankingFork.tooltip();
-
-        App.GlobalWidget.rankingName
-            .attr('contenteditable', false)
-            .attr('style', '');
         return this;
     },
     interacMode = function() {
@@ -660,10 +654,6 @@ App.RankListToolbarView = (function() {
         App.GlobalWidget.rankInstruction.show();
         App.GlobalWidget.rankEditButtons.show();
         App.GlobalWidget.rankViewButtons.hide();
-        App.GlobalWidget.rankingName
-            .text("Click to add name")
-            .attr('contenteditable', true)
-            .attr('style', 'border-bottom: 1px dashed pink');
         return this;
     },
     setName = function(name) {
@@ -672,7 +662,7 @@ App.RankListToolbarView = (function() {
                     "<a href='" + '#' +"'>" + name + "</a>");
         }
         else {
-            App.GlobalWidget.rankingName.text(name);
+            App.GlobalWidget.rankingName.val(name);
         }
         return this;
     },
@@ -776,15 +766,14 @@ App.RankingController = function(isForking) {
 
             if (forking) {
                 // set the name to the forked hash tag
-                App.GlobalWidget.rankingName.text(existingRankingView.name);
+                App.GlobalWidget.rankingName.val(existingRankingView.name);
             }
         }
     },
     rankingSession = getRankingFromStorage("rankingSession"),
     rankingView = getRankingFromStorage("rankingView");
 
-
-    $('.addNewRanking').click(function(e) {
+    $('#addRankingBtn').click(function(e) {
         startNewRanking(false);
     });
 
@@ -793,12 +782,13 @@ App.RankingController = function(isForking) {
             userid = getCookie('userid') || 'public';
 
         existingRankingSession.name =
-            App.GlobalWidget.rankingName.text();
-        existingRankingSession.private =
-            App.GlobalWidget.rankingPrivacy.hasClass('fa-lock');
+            App.GlobalWidget.rankingName.val();
+        existingRankingSession.private = true;
+            //App.GlobalWidget.rankingPrivacy.hasClass('fa-lock');
 
         if (!existingRankingSession.name || !existingRankingSession.ranks) {
-            alert("Please provide a name");
+            alert("Please provide a ranking name");
+            App.GlobalWidget.rankingName.focus();
             return;
         }
 
@@ -809,7 +799,7 @@ App.RankingController = function(isForking) {
         })
         .done(function(res) {
             if (!res.error) { // clear local session
-                $('#rankingHeader').hide();
+                App.GlobalWidget.rankingHeader.hide();
                 sessionStorage.removeItem('rankingSession');
                 var newRankingShareToken = res.payload.shareToken;
 
@@ -825,18 +815,17 @@ App.RankingController = function(isForking) {
 
     $("#rankingCancelBtn").click(function(e) {
         sessionStorage.removeItem("rankingSession");
-        $("#rankingHeader").hide();
+        App.GlobalWidget.rankingHeader.hide();
     });
 
     $("#rankingViewCancelBtn").click(function(e) {
         sessionStorage.removeItem("rankingView");
-        $("#rankingHeader").hide();
+        App.GlobalWidget.rankingHeader.hide();
     });
 
     if (!_.isEmpty(rankingSession)) {
         initRankingListToolbarView("rankingSession", rankingSession);
-    }
-    else if (!_.isEmpty(rankingView)) {
+    } else if (!_.isEmpty(rankingView)) {
         initRankingListToolbarView("rankingView", rankingView);
     }
 
@@ -846,13 +835,13 @@ App.RankingController = function(isForking) {
                 'url': window.location.origin + '/ranking/' + rankingView.shareToken,
                 'text': rankingView.name
             }));
-    }
-    else if (isForking) {
+    } else if (isForking) {
         startNewRanking(true);
     }
 };
 
 // Composite View Component
+/*
 App.TableCardCollectionView = Backbone.View.extend({
     initialize: function(settings) {
         if (settings.rankingId) { //rankingId is shareToken
@@ -878,12 +867,10 @@ App.TableCardCollectionView = Backbone.View.extend({
 
             this.title = postFixRanking ? displayTitle + " Ranking" : displayTitle;
 
-            /*
             this.title += " by " +
                 "<a href='" + profileUrl + rankingView.createdBy + "'>" +
                 rankingView.createdBy +
                 "</a>";
-            */
         }
         else {
             this.title = "Result for " + this.pageType.value;
@@ -938,7 +925,7 @@ App.TableCardCollectionView = Backbone.View.extend({
         tableView.el.appendChild(rowView.render().el);
         return rowView;
     }
-});
+});*/
 
 App.TableAttributeCollectionView = App.TableView.extend({
     initialize: function(settings) {

@@ -50,6 +50,13 @@
   color: black !important;
   cursor: pointer;
 }
+.auto-highlight {
+  opacity: 0.25;
+
+  &:active, &:focus, &:visited {
+    opacity: 1;
+  }
+}
 
 .scroll-container {
   overflow: hidden;

@@ -98,6 +98,8 @@ App.AppRouter = Backbone.Router.extend({
         App.RankingController();
         new App.DetailEntityPageView({id: parseInt(id)});
 
+        var ajaxUrl = App.API_SERVER + App.API_VERSION + 'entity/' + id + '/data';
+
         $('#addNew').click(function(e) {
             $('#contentModal').modal();
         });
@@ -134,8 +136,7 @@ App.AppRouter = Backbone.Router.extend({
         });
 
         $('#writingSubmit').click(function(e) {
-            var postData = {},
-                ajaxUrl = App.API_SERVER + App.API_VERSION + 'entity/' + id + '/data';
+            var postData = {};
 
             postData.dataType = 'text';
             postData.srcType = '';
@@ -188,10 +189,15 @@ App.AppRouter = Backbone.Router.extend({
     },
     defaultPageInit: function() {
         console.log("Default Route");
-        var query = $('#searchInput').val();
+        var query = $('#searchInput').val(),
+            expandInd = getQueryVariable("expand");
 
-        if (query) {
-            pageView = new App.SearchPageView({query:query});
+        App.RankingController();
+        pageView = new App.SearchPageView({query:query});
+        
+        if (_.isNumber(expandInd)) {
+            debugger;
+            pageView.render(expandInd);
         }
 
         $('#filterBtn').click(function(e) {
@@ -212,5 +218,5 @@ App.AppRouter = Backbone.Router.extend({
     }
 });
 
-var appRouter = new App.AppRouter();
+App.router = new App.AppRouter();
 Backbone.history.start({pushState: true});
