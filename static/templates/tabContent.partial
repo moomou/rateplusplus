@@ -1,0 +1,33 @@
+<!--
+<li class="noSelect active"><a href="#writing" data-toggle="tab"> About </a></li> 
+<li class="noSelect"><a href="#content" data-toggle="tab"> Data</a></li> 
+<li class="noSelect"><a href="#attribute" data-toggle="tab"> Attribute</a></li>
+<li class="noSelect"><a href="#ranking" data-toggle="tab"> Ranking</a></li>
+-->
+
+<div id="myTabContent" class="tab-content" style='overflow: visible;'>
+  <div class="tab-pane active" id="writing">
+    <div id="writingModal" class="textbox hide"> 
+      <input class="title" placeholder="Title" type="text">
+      <textarea placeholder="Start here"></textarea>
+      <button id="writingSubmit" class="btn btn-success noSelect pull-right js-save" data-loading-text="Saving...">Save</button>
+      <hr>
+    </div>
+    <ul class="writing"></ul>
+  </div>
+  <div class="tab-pane" id="attribute">
+  </div>
+  <div class="tab-pane" id="content">
+    {% include "contentModal.partial" %}
+    <div class="row-fluid content">
+      <div class="span6">
+        <ul class="data numData"></ul>
+      </div>
+      <div class="span6">
+        <ul class="mediaData"></ul>
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane" id="ranking">
+  </div>
+</div>

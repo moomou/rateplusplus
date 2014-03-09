@@ -1,0 +1,80 @@
+@import "mixins";
+
+.addContentContainer {
+  border: 1px solid rgba(0, 0, 0, 0.150);
+  @include box-shadow(1px, 1px, 2px, rgba(0, 0, 0, 0.20));
+}
+
+.addContentType {
+  padding-top: 5px;
+  margin-bottom: 0px;
+  text-align: center;
+
+  li {
+    display: inline-block;
+    width: 70px;
+    margin: 5px;
+  }
+
+  .contentType {
+    a {
+      text-decoration: none;
+      color: black;
+    }
+  }
+}
+.addContentBox {
+  padding: 1em;
+  textarea {
+    width: 97%;
+  }
+  .add-on {
+    width: 100px;
+  }
+  .field {
+    float: left;
+    width: 100px;
+    margin-top: 5px;
+  }
+}
+
+.triangle {
+  border-right: 15px solid transparent;
+  border-left: 15px solid transparent;
+  position: absolute;
+  width: 0;
+  height: 0;
+  margin-top: -25px;
+  margin-left: 100px;
+}
+.triangleBorder {
+  position: absolute;
+  margin-top: -25px;
+  margin-left: 98px;
+  border-left: 17px solid transparent;
+  border-right: 17px solid transparent;
+}
+
+.downTriangle {
+  @extend .triangle;
+  border-top: 15px solid white;
+}
+
+.downTriangleBorder {
+  @extend .triangleBorder;
+  border-top: 17px solid hsl(0, 0%, 89%);
+}
+
+.upTriangle {
+  @extend .triangle;
+  margin-top: -15px;
+  margin-left: 107px;
+  border-bottom: 15px solid white;
+}
+
+.upTriangleBorder {
+  @extend .triangleBorder;
+  margin-top: -17px;
+  margin-left: 105px;
+  border-bottom: 17px solid #e3e3e3;
+}

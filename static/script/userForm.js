@@ -1,4 +1,3 @@
-
 $(function() {
     $('#signinForm').submit(function() {
         $(this).ajaxSubmit({

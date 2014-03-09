@@ -1,0 +1,266 @@
+@import "mixins";
+@import "common";
+
+$profileSize: 25px;
+
+body {
+  margin: 1em;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.view-toolbar {
+  margin: 10px auto;
+  border-bottom: 1px solid whitesmoke;
+  text-align: center;
+  width: 100%;
+  li {
+    margin: 5px 50px 10px 50px;
+    i {
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  }
+  .fa-heart-o:hover {
+    color: pink;
+  }
+  .fa-twitter:hover {
+    color: cyan;
+  }
+  .fa-code-fork:hover {
+    color: gray;
+  }
+  .fa-share-square-o:hover {
+    color: green;
+  }
+}
+
+.profile {
+  @include border-radius(100%);
+  @include box-shadow(0, 1px, 1px, rgb(235, 235, 235));
+
+  margin: 0 auto;
+  width: 75px;
+  height: 75px;
+  background-position: center center;
+  background-size: cover;
+}
+.profile-mini {
+  width: 15px;
+  height: 15px;
+}
+
+// For the buttons
+.interaction {
+  margin-top: -15px;
+}
+
+.info-card {
+  .minimize {
+    display: none;
+  }
+
+  @extend .webkit-layer;
+  @include box-shadow(0, 0, 1px, rgba(0, 0, 0, 0.35));
+  position: relative;
+  padding: 15px 15px 0 15px;
+  width: 500px;
+
+  .interactive {
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+  }
+  .header {
+    overflow: auto;
+    padding-right: 25px;
+
+    .action {
+      float: right;
+      li {
+        float: left;
+        margin: 0 5px;
+        opacity: 0.5;
+      }
+      li:hover {
+        opacity: 0.75;
+      }
+    }
+    .meta {
+      .name {
+        font-size: 25px;
+      }
+      .hash {
+        font-size: 12px;
+        color: gray;
+        margin: 0;
+
+        li {
+          float: left;
+          margin-left: 10px;
+          a {
+            color: gray;
+          }
+        }
+        li:first-child {
+          margin-left: 0px;
+        }
+      }
+      input {
+        @include box-shadow-none();
+        width: 120%;
+        max-width: 120%;
+        overflow-x: auto;
+        border: none;
+      }
+      .title-input {
+        font-size: 25px;
+        line-height: 30px;
+        height: 30px;
+        margin-bottom: -5px;
+      }
+      .tag-input {
+        font-size: 15px;
+        line-height: 20px;
+      }
+    }
+  }
+  .content {
+    position: relative;
+    padding: 10px;
+    margin-bottom: 10px;
+    .meta {
+      margin: -15px 5px;
+      float: right;
+      color: gray;
+      font-size: 12px;
+    }
+    .instruction {
+      padding-top: 25px;
+      text-align: center;
+      display: block;
+      margin: 0 auto;
+      font-size: 25px;
+      color: gray;
+    }
+  }
+  .content.editzone{
+    border: 5px dashed whitesmoke;
+    height: 150px;
+  }
+  .content.editing {
+    .close {
+      display: block !important;
+    }
+  }
+  .content {
+    .close {
+      display: none;
+    }
+  }
+  .content-highlight {
+    @include box-shadow(0, 2px, 6px,rgba(0,0,0,0.2),inset);
+  }
+  .footer {
+    padding: 10px 20px 15px 10px;
+    margin: 10px -15px;
+    height: 25px;
+    .edit-tool {
+      margin: -3px 2px 0 2px;
+    }
+  }
+
+  .infoBar {
+    margin-left: 0;
+    li {
+      @include border-radius(0px 5px 5px 0);
+      background: white;
+      border-right: 1px solid rgba(0, 0, 0, 0.15);
+      border-left: 0;
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      padding: 3px;
+    }
+    li:first-child, li:last-child {
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-left: 0;
+    }
+  }
+}
+
+.info-card.presentation {
+  @include box-shadow-none();
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  overflow-y: scroll;
+  .content.editing {
+    display: none;
+  }
+  .footer {
+    display: none;
+  }
+}
+.info-card.detail {
+  border: none;
+  width: auto;
+  margin-bottom: 25px;
+
+  @include box-shadow-none();
+
+  textarea {
+    @include box-shadow-none();
+    width: 95%;
+    font-size: 17px;
+    border: none;
+  }
+  p {
+    clear: both;
+    text-align: justify;
+    margin-top: 10px;
+  }
+}
+
+.contributor {
+  margin-left: 0px;
+  li {
+    margin-left: 10px;
+    .profile {
+      width: $profileSize;
+      height: $profileSize;
+    }
+  }
+}
+
+.stats {
+  display: block;
+  padding: 5px;
+  margin: -15px 10px 10px 10px;
+  max-width: 100px;
+  float: left;
+  .num {
+    float: left;
+    font-size: 20px;
+    margin-right: 10px;
+  }
+  .field {
+    float: right;
+    font-size: 17px;
+  }
+}
+
+.edit-btns {
+  button {
+    width: 90px;
+    display: block;
+  }
+  button:first-child {
+    margin-bottom: 5px;
+  }
+}

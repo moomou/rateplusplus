@@ -10,10 +10,17 @@ Constants = (function() {
         "#f1c40f",
         "#16a085",
         "#c0392b",
-    ];
+    ],
+    contentType = {
+        rating: 'rating',
+        ranking: 'ranking',
+        data: 'data',
+        attribute: 'attribute'
+    };
 
     return {
-        rankColor: rankColor
+        rankColor: rankColor,
+        contentType: contentType
     };
 
 })();

@@ -1,6 +1,20 @@
-/*
-    Support Functions
-*/
+/* Support Functions */
+
+function getYoutubeId(url) {
+    var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    if (match&&match[2].length==11){
+        return match[2];
+    } else { //error
+    } 
+}
+
+function textAreaAdjust(e) {
+    var o = e.target;
+    o.style.height = "1px";
+    o.style.height = (25+o.scrollHeight)+"px";
+}
+
 function guidGenerator() {
     var S4 = function() {
        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
@@ -64,22 +78,22 @@ function capFirstLetter(input) {
     return input.charAt(0).toUpperCase() + input.slice(1);
 }
 
-function getQueryVariable(variable) {
+function getQueryVariable(variable, raw) {
     var query = window.location.search.substring(1);
     var vars = query.split("&");
     for (var i = 0; i < vars.length; i++) {
         var pair = vars[i].split("=");
         if (pair[0] == variable) {
+            if (raw) {
+                return pair[1];
+            }
             return unescape(pair[1]);
         }
     }
     return false;
 }
 
-function sessionStorageGetter() {
-}
-
-//Configuring Ajax to include CSRF
+// Configuring Ajax to include CSRF
 var csrftoken = getCookie('csrftoken');
 var accesstoken = getCookie('usertoken');
 
@@ -91,3 +105,6 @@ $.ajaxSetup({
         xhr.setRequestHeader("x-access-token", accesstoken);
     },
 });
+
+// Setting up handlebars
+Handlebars.partials = Handlebars.templates;

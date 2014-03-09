@@ -6,88 +6,10 @@ textarea {
   resize: none;
 }
 
-/*Searchform*/
-#searchForm {
-  margin: 1em 0 1em 0;
-}
-.searchBar {
-  background: rgb(105, 213, 71);
-}
-.searchBar:hover {
-  opacity: 0.98;
-}
-.searchBar:focus {
-  width: 275px;
-  transition: width 0.25s;
-  -webkit-transition: width 0.25s;
-  transition-property: width;
-  transition-duration: 0.25s;
-  transition-timing-function: linear;
-}
-
-#message-box {
-  margin: 2em 5em 0 5em;
-  }
-  #searchTerm {
-    color: #EE796C;
-    font-weight: bold;
-}
-
-/*signup form*/
-.signup-form {
-  width: 700px;
-	padding: 1.5em;
-	margin: 0 auto;
-	background: #fff;
-	border: 1px solid rgba(0, 0, 0, 0.150);
-	overflow: hidden;
-
-	-webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
-	-moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
-	box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
-}
-.form-signin {
-  background-color: #FFFFFF;
-  border: 1px solid #E5E5E5;
-  border-radius: 5px 5px 5px 5px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  margin: 0 auto 20px;
-  max-width: 300px;
-  padding: 19px 29px 29px;
-}
-
-/* Header */
-.logo {
-  content: ' 2006';
-  position: relative;
-  height: 0.095em;
-  box-shadow: 0.35em 0.35em 0 0.25em rgb(0, 187, 22), 1.05em 0.35em 0 0.25em rgb(173, 255, 0), 0.35em 0.97em 0 0.25em rgb(98, 244, 0), 1.05em 0.97em 0 0.25em rgb(27, 206, 3);
-  border-radius: 1px;
-  display: block;
-  width: 7px;
-  left: 4.5em;
-  top: -10px;
-}
-.subtle {
-  opacity: 0.25;
-}
-.subtle:hover {
-  opacity: 0.75;
-}
-.home-btn {
-  font-size: 32px;
-  margin: 15px 0px 10px 0px;
-  padding-right: 1em;
-}
-.head-nav {
-  margin-top: 8px !important;
-  font-size: 17px;
-}
-
 /* Custom container */
 .container-narrow, .container-footer {
   margin: 0 auto;
-  max-width: 1000px;
+  max-width: 1100px;
   padding: 0 2em 0 2em;
   }
   .container-narrow > hr {
@@ -96,115 +18,11 @@ textarea {
   .container-landing {
     margin: 0 auto;
 }
-.sideMenuContainer {
-  margin: 1em 0 0 1em;
-  display: none;
-  }
-  .sideMenuHomeBtn {
-    padding-top: 0.4em;
-    display: block;
-    color: gray;
-    margin-bottom: 0.5em;
-    font-size: 32px;
-  }
-  .item {
-    color: gray;
-    cursor: pointer;
-  }
-  .item>i {
-    margin-right: 1em;
-}
-
-/* Main marketing message and sign up button */
-.jumbotron {
-    /*margin: 60px 0;*/
-    padding: 0;
-    text-align: center;
-    min-height: 850px;
-  }
-  .jumbotron h1 {
-      padding-top: 1em;
-      font-size: 72px;
-      line-height: 1;
-  }
-  .jumbotron-btn {
-      font-size: 21px;
-      padding: 14px 24px;
-  }
-  .jumbotron-alternate {
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.18);
-    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.18);
-    -moz-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.18);
-    background: white;
-}
-
-/* Supporting marketing content */
-.marketing {
-  margin: 60px 0;
-  }
-  .marketing p + h4 {
-    margin-top: 28px;
-}
-
-/* General */
-.block {
-  display: block;
-}
-
-.entityTitle {
-  font-size: 24px;
-  float: left;
-  width: 14.2em;
-}
 
 ul {
   list-style-type: none;
 }
 
-.noSelect {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.noSelect:focus {
-  outline: 0;
-}
-
-.absCenter {
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-}
-
-.center {
-  display: block;
-  margin: 0 auto;
-}
-.text-h-center {
-  text-align: center !important;
-}
-.text-v-center {
-  vertical-align: middle !important;
-}
-
-.break {
-  visibility: hidden;
-  clear: both;
-  height: 3em;
-}
-.break-mini {
-  height: 1em;
-}
-.break-large {
-  height: 5em;
-}
 .tabpane {
   margin:0 1em 0.5em 1em;
 }
@@ -229,18 +47,6 @@ ul {
 }
 .toolbar:hover {
   left: 92%;
-}
-
-.footer, .footer a {
-  padding: 15px 0 60px;
-  color: #a7a9aa;
-  text-shadow: 0 1px 0 #fff;
-}
-
-.stats {
-  position: absolute;
-  left: 50%;
-  margin-top: 1em;
 }
 
 #commentContainer {
@@ -311,113 +117,9 @@ ul {
   top: 20% !important;
 }
 
-.rankContainer {
-  position: relative;
-  margin-top: 50%;
-}
-.rankbar {
-  margin-top: -19px;
-  max-height: 45px;
-  padding-top: 5px;
-  }
-  #rankingName {
-    float: left !important;
-    margin-right: 25px;
-  }
-  .rankingList li {
-    position: relative;
-    margin: -5px 5px 0 0;
-    width: 35px;
-    float: left;
-  }
-  .rankingListProfile li {
-    position: relative;
-    margin: 0px 5px 0 0;
-    width: 35px;
-    float: left;
-  }
-
-@-moz-document url-prefix() {
-  .moz-rankingNo {
-    margin-top: 22px !important;
-  }
-  .moz-rankContainer {
-    margin-top: 35% !important;
-  }
-}
-
-#rankingPrivacy {
-  float: left;
-  margin-right: 0.5em;
-  margin-top: -0.25em;
-}
-.rankingContainer {
-  display: block;
-  position: relative;
-  }
-  .rankingNo.shadow {
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.18);
-  }
-  .rankingNo, .rankIcon {
-    font-size: 10px;
-    color: white;
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    margin: auto;   position: absolute;
-    top: -20px; left: 0; bottom: 0; right: 5px;
-  }
-
-.navbar-inner {
-  background-color:white;
-  min-height: 40px;
-  background-image:none;
-  border: none;
-}
-.plain-btn {
-  background: none;
-}
-.cursor-pointer {
-  cursor:pointer;
-}
 .progress {
   height: 2px;
   margin: 0;
-}
-
-.btn-success {
-  background:#2ecc71;
-}
-.btn-inverse {
-  background:black;
-}
-.btn-danger {
-  background: #e74c3c;
-}
-.btn-white {
-  background: white;
-}
-.btn-success:hover {
-  background-color: #66EBA0;
-}
-.btn-danger:hover {
-  background-color: #EE796C;
-}
-.btn-inverse:hover {
-  background-color: #636363;
-}
-.btn-white:hover {
-  background-color: #FCFCFC;
-}
-
-.rating {
-  font-size: 36px;
-  }
-  .rating.goldStar {
-    color: gold;
-  }
-  .rating.blackStar {
-    color: black;
 }
 
 /*Random*/
@@ -444,23 +146,4 @@ ul {
     visibility: hidden;
     left: -1000px;
     top: -1000px;
-}
-
-/* Discussion Timeline
- */
-.timeline {
-  vertical-align: middle;
-  height: 110%;
-  position: absolute;
-  margin: auto;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 7px;
-  background: rgba(150, 250, 190, 0.25);
-}
-
-/*Fix for Chrome slow scroll*/
-.navbar-fixed-top {
-  -webkit-transform: translateZ(0);
 }

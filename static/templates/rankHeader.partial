@@ -1,8 +1,9 @@
-<div id="rankingHeader" style="display:none;" class="navbar">
+<div id="rankingHeader" class="navbar" style="margin-top: 5px; display: none;">
   <div class="navbar-inner rankbar">
     <div class="container-narrow">
-      <i data-toggle="tooltip" title="Private Ranking" id="rankingPrivacy" class="icon-lock icon-2x"> </i>
-      <span contenteditable="true" id="rankingName"> </span>
+      <a href="#"><i data-toggle="tooltip" title="Fork Ranking" id="rankingFork" class="fa fa-code-fork fa-2x btn-like"> </i></a>
+      <i data-toggle="tooltip" title="Private Ranking" id="rankingPrivacy" class="fa fa-lock fa-2x"> </i>
+      <input id="rankingName" class="title-input js-title" placeholder="Ranking Name" type="text" value="">
       <span id="rankInstruction" style="float:left;"> Click on rating to assign rank </span>
       <ul id="rankingList" class='rankingList'>
       </ul>
@@ -11,10 +12,9 @@
         <button id="rankingSaveBtn" class="btn btn-success" style=" float: right; margin-top: -7px; margin-right: 5px; "> Save</button>
       </div>
       <div class="cursor-pointer" id="rank-viewButtons">
-        <i id="rankingViewCancelBtn" style="float: right; margin-top: -7px;" class="icon-remove-sign icon-2x"></i>
-        <a target="_blank" id="rankingHeaderShareTwitterBtn" href="#"><i style="float: right; margin: -7px 5px 0 0;" class="icon-twitter-sign icon-2x"></i></a>
+        <i id="rankingViewCancelBtn" style="float: right; margin-top: -7px;" class="fa fa-times-circle fa-2x"></i>
+        <a target="_blank" id="rankingHeaderShareTwitterBtn" href="#"><i style="float: right; margin: -7px 5px 0 0;" class="fa fa-twitter-square fa-2x"></i></a>
       </div>
     </div>
   </div>
 </div>
-

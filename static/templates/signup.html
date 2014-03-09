@@ -4,46 +4,32 @@
   {% include "stdHead.partial" %}
 </head>
 <body>
-  {% include "header.partial" %}
-
   <div class="container-narrow">
-    <div class="break"></div>
-    <div class="signup-form">
-      <h3>Create a new Cloverite Account</h3>
+    <div class="padding"></div>
+    <span class="noSelect muted home-btn center" style="text-align: center; padding: 25px 25px 0 25px;">
+      Cloverite
+    </span>
+    <form id="signup-form" class="form-signin" method="post" action="{% url 'default.views.SignupHandler' %}">
+      {% csrf_token %}
+      <h2 class="form-signin-heading">New Account</h2>
       <hr>
-      <form id="signupForm" enctype="multipart/form-data" class="form-horizontal" method="post" action="{% url 'default.views.SignupHandler' %}">
-        {% csrf_token %}
-
-        <div class="pull-left">
-          <div>Collect ratings, Create Private Entities </div>
-        </div>
-        <div class="pull-right well">
-          <div class="control-group">
-            <input type="text" style="width: 115px;" class="pull-left" name="firstname" placeholder="First Name" required>
-            <input type="text" style="width: 115px;" class="pull-right" name="lastname" placeholder="Last Name" required>
-          </div>
-          <div class="control-group">
-            <input type="text" class="span3" name="username" placeholder="Username" required>
-          </div>
-          <div class="control-group">
-            <input type="email" class="span3" name="email" placeholder="Your Email" required>
-          </div>
-          <div class="control-group">
-            <input name="password" class="span3" type="password" placeholder="New Password" required>
-          </div>
-          <hr>
-          <button class="submitBtn pull-right btn btn-success">Sign up for Cloverite</button>
-        </div>
-      </form>
-    </div>
+      <input name="username" type="text" placeholder="Username" class="input-block-level" id="username" required>
+      <input name="email" type="text" placeholder="Email" class="input-block-level" id="email" required>
+      <input name="password" type="password" placeholder="Password" class="input-block-level" id="pwd" required>
+      <hr>
+      <a href="signin" class="pull-left">Already have account?</a>
+      <input value="Sign Up" type="submit" class="pull-right btn btn-success">
+      <div class="break break-mini"></div>
+    </form>
   </div>
+</div>
 
-  {% if FEEDBACK_ENABLED %} 
-    {% include "feedbackForm.partial" %}
-  {% endif %}
+{% if FEEDBACK_ENABLED %} 
+{% include "feedbackModal.partial" %}
+{% endif %}
 
- {% include "stdScript.partial" %}
- <script src="{{STATIC_URL}}script/userForm.js"></script> 
+{% include "stdScript.partial" %}
+<script src="{{STATIC_URL}}script/userForm.js"></script> 
 
 </body>
 </html>

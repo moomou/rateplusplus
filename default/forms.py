@@ -1,13 +1,18 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.conf import settings
 
 from models import Clover
 
 import json
 import requests
+import logging
 
-CLOVERITE_GRAPH_URL = "http://localhost:3000/v0/user"
-CLOVERITE_HEADERS = {'content-type': 'application/json', "x-access-token": "superman"}
+# Get an instance of a logger
+CLOVERITE_GRAPH_URL = settings.STAGING_API if settings.DEBUG else settings.LIVE_API
+CLOVERITE_HEADERS   = {'content-type': 'application/json', "x-access-token": "superman"}
+
+logger = logging.getLogger(__name__)
 
 EMAIL_MSG = '''
     Hi there,
@@ -36,11 +41,9 @@ class FeedbackForm(forms.Form):
         return message
 
 class SignupForm(forms.Form):
-    firstname = forms.CharField()
-    lastname = forms.CharField()
-    username = forms.CharField()
-    email = forms.EmailField()
-    password = forms.CharField()
+    username  = forms.CharField()
+    email     = forms.EmailField()
+    password  = forms.CharField()
 
     def clean_email(self):
         try:
@@ -58,16 +61,12 @@ class SignupForm(forms.Form):
 
     def save(self):
         newUser = User.objects.create_user(self.cleaned_data['username'],
-                        self.cleaned_data['email'],
-                        self.cleaned_data['password'])
-        newUser.first_name = self.cleaned_data['firstname']
-        newUser.last_name =  self.cleaned_data['lastname']
+                self.cleaned_data['email'],
+                self.cleaned_data['password'])
         
         postData = {
-            "firstname" : newUser.first_name,
-            "lastname" : newUser.last_name,
             "username" : newUser.username,
-            "email" : newUser.email
+            "email"    : newUser.email
         }
 
         res = requests.post(
@@ -76,15 +75,17 @@ class SignupForm(forms.Form):
                 data = json.dumps(postData))
 
         if res.status_code != 201:
-            print("Call to Cloverite Graph Failed")
+            print "Call to Cloverite API Failed"
+            logger.error("Call to Cloverite API failed: %s" % postData)
             return None
 
         newUser.save()
         neo4jData = res.json()
 
-        print(neo4jData)
+        print neo4jData
+        logger.info("Call to Cloverite API succeeded: %s" % postData)
 
-        newClover = Clover(user = newUser, neo4jId = neo4jData['id'])
+        newClover = Clover(user = newUser, neo4jId = neo4jData['payload']['id'])
         newClover.save()
-        
+
         return newClover

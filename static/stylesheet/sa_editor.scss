@@ -1,0 +1,11 @@
+@import "common";
+
+.sa-editor {
+  position: fixed;
+  display: block;
+  right: 15px;
+  bottom: -5px;
+  z-index: 9999;
+  .body {
+  }
+}

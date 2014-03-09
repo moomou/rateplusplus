@@ -1,11 +1,13 @@
-  <div class="navbar">
-    <div class="navbar-inner" style="height: 55px;">
+  <div id="top-menu" class="navbar">
+    <div class="navbar-inner" style="height: 40px; margin: -5px 0 30px 0;">
       <div class="container-narrow">
-        <a id="sideMenu" href="{% url 'default.views.PageHandler' %}" class="noSelect muted home-btn pull-left">Cloverite </a>
+        <a href="{% url 'default.views.RedirectHandler' %}" class="noSelect muted home-btn pull-left" style="padding-right: 1em;">
+          Cloverite
+        </a>
 
         {% if SEARCH_ENABLED %}
-        <form method="GET" id="searchForm" class="navbar-search" action="{% url 'default.views.PageHandler' %}">
-          <input type="search" class="span2 searchBar" name='q' id="searchInput" type="text" placeholder="Search" value="{{QUERY}}">
+        <form method="GET" id="searchForm" class="navbar-search" action="{% url 'default.views.RedirectHandler' %}">
+          <input type="search" class="span2 searchBar" name='q' id="searchInput" type="text" placeholder="&#xf002 Search" value="{{QUERY}}">
         </form>
         {% endif %}
 
@@ -23,14 +25,15 @@
         {% if NAV_ENABLED %}
         <ul id="navBtns" class="hidden-phone nav pull-right head-nav">
           {% if authenticated %}
-          <li title="Create New Entity"><a href="{% url 'default.views.NewEntityHandler' %}"><i class="icon-plus-sign"> </i></a></li>
-          <li title="Rankings"><a href="{% url 'default.views.ProfileHandler' %}self"><i class="icon-reorder"> </i></a></li>
-          <li title="Sign Out"><a href="{% url 'default.views.SignoutHandler' %}" role="menuitem"><i class="icon-signout"></i></a></li>
-
-          {% else %}
-          <li><a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}"><i class="icon-signin"></i> Sign in</a></li>
+          <li title="Profile"><a href="{% url 'default.views.RedirectHandler' %}"><i class="fa fa-user"> </i></a></li>
+          <li title="Create New Entity"><a href="{% url 'default.views.NewEntityHandler' %}"><i class="fa fa-plus-circle "> </i></a></li>
+          {% if RANKING_ENABLED %}
+          <li title="Rankings"><a href="{% url 'default.views.ProfileHandler' %}self"><i class="fa fa-list-ol"> </i></a></li>
           {% endif %}
-
+          <li title="Sign Out"><a href="{% url 'default.views.SignoutHandler' %}" role="menuitem"><i class="fa fa-sign-out "></i></a></li>
+          {% elif not SIGN_IN_DISABLED %}
+          <li><a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}"><i class="fa fa-sign-in"></i> Sign in</a></li>
+          {% endif %}
           {% if FEEDBACK_ENABLED %}
           <a style='margin-top: 5px;' class="hidden-phone btn btn-success pull-right" data-toggle="modal" role="button" id="feedbackBtn" href="#feedbackModal"> Feedback</a>
           {% endif %}
@@ -38,4 +41,8 @@
         {% endif %}
       </div>
     </div>
+    {% if CONTEXT_HEADER_ENABLED %}
+      {% include "contextHeader.partial" %}
+      {% include "rankHeader.partial" %}
+    {% endif %}
   </div>

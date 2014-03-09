@@ -1,0 +1,56 @@
+<ul id="local-header" class="nav nav-tabs">
+  <li>
+    <span href="#home" class="entityTitle">
+      Content <span id="entityTitle"></span>
+    </span>
+  </li>
+  <li style="margin: -5px 5px -1px 25px;">
+    <div class="btn-group">
+      <a class="btn btn-white dropdown-toggle btn-like" data-toggle="dropdown" href="#">
+        <i class="fa fa-filter"></i>
+        <span class="caret" style="border-top-color: black; border-bottom-color: black;"></span>
+      </a>
+      <ul id="filterList" class="dropdown-menu">
+        <li data-filterOn="attribute">
+          <a href="#">
+            <i class="fa fa-star-half-o fa-lg"></i>
+            <span class="pull-right visible-desktop"> Attribute</span>
+          </a>
+        </li>
+        <li data-filterOn="info">
+          <a href="#">
+            <i class="fa fa-dot-circle-o fa-lg"></i>
+            <span class="pull-right visible-desktop"> Info</span>
+          </a>
+        </li>
+        <li data-filterOn="media">
+          <a href="#">
+            <i class="fa fa-video-camera fa-lg"></i>
+            <span class="pull-right visible-desktop"> Media</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </li>
+  <li>
+    <form method="GET" id="localSearch" class="navbar-search" action="#/filter">
+      <input type="search" class="span2 searchBar" name='q' id="filterInput" type="text" placeholder="Filter Cards">
+    </form>
+  </li>
+  <li class="pull-right">
+  <ul class="entity-actions">
+    <li>
+    <a style="font-size:15px;" id="addNew" href="#" class="btn-like">
+      <i class="fa fa-plus-square fa-lg btn-like"> New Content</i>
+    </a>
+    </li>
+    {% if SA_ENABLED %}
+    <li>
+      <a class="js-startEditor" href="#">
+        <i class="fa fa-list-ul fa-lg btn-like"></i>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+  </li>
+</ul>

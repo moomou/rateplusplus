@@ -6,7 +6,6 @@
 <body>
 
   {% include "header.partial" %}
-  {% include "sideMenu.partial" %}
 
   <div class="container-narrow">
     <hr>
@@ -48,7 +47,7 @@
   {% include "imageChangeModal.partial" %}
 
   {% if FEEDBACK_ENABLED %} 
-    {% include "feedbackForm.partial" %}
+    {% include "feedbackModal.partial" %}
   {% endif %}
 
   {% include "stdScript.partial" %}

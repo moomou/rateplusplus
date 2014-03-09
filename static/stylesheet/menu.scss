@@ -1,0 +1,10 @@
+@import "mixins";
+
+// Overriding bootstrap style
+.navbar-inner {
+  @include box-shadow-none();
+  background-color:white;
+  min-height: 40px;
+  background-image:none;
+  border: none;
+}

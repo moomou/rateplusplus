@@ -1,88 +1,66 @@
 <!DOCTYPE html>
-<!-- saved from url=(0066)http://twitter.github.com/bootstrap/examples/marketing-narrow.html -->
 <html lang="en">
-<head>
-  {% include "stdHead.partial" %}
-  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/landing.css"/>
-</head>
-<body>
-
-  <div class="container-narrow">
-    <div class="jumbotron">
-      <a class="home-btn muted" style="padding:0;" href="/"><h1>Cloverite</h1></a>
-        <p class="lead"> The best place for rating and ranking. </p>
-
-      <form method="GET" id="searchForm" action="{% url 'default.views.PageHandler' %}">
-        <div class="input-append">
-          <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="{{DEFAULT_QUERY}}">
-          <button id="searchBtn" class="btn btn-success" type="button" ><i class="icon-search"> Search </i></button>
-        </div>
-      </form>
-
-      <div style="display:inline-block">
-        <ul id="sampleRanking">
-          <li>Popular Rankings</li>
-          <li><a href="#"></a></li>
-          <li><a href="#"></a></li>
-          <li><a href="#"></a></li>
+  <head>
+    {% include "stdHead.partial" %}
+    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/landing.css"/>
+  </head>
+  <body> 
+    <div class="container-narrow">
+      <div class="masthead" style="height: 100px; display: block;">
+        <a id="sideMenu" href="/" class="noSelect muted home-btn pull-left" style="margin-top: 37px;"> Cloverite </a>
+        <ul class="nav nav-pills pull-left" style="margin-top: 2em;">
         </ul>
+        <a href="/signup" class="btn btn-success" style=" margin: 27px 0 0 15px; float: right;"> Sign up</a>
+        <span class="muted" style="float: right; margin: 32px 0 0 15px;"> or</span>
+        <a href="/signin" style="margin: 31.5px 0; float: right; "> Sign In</a> 
       </div>
-
-      {% if DISABLED %}
-    <a href="{% url 'default.views.SigninHandler'%}?next={{currentPath|urlencode}}" class="pull-right btn btn-success">Sign in</a>
-      <div id="rankingRow" class="row-fluid">
-        <div class="span12" id="top1">
+      <div class="jumbotron" id="message">
+        <div class="item active">
+          <h1 class="muted"> Share information like never before.</h1>
+          <h3 style="color: silver;"> A personal API for finding and sharing everything.</h3>
+          <p class="lead"><button class="btn btn-large btn-success">Get Started</button></p>
+          <form class="hidden" method="GET" id="searchForm" action="{% url 'default.views.RedirectHandler' %}">
+            <div class="input-append">
+              <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="Try #ericCartman">
+              <button id="searchBtn" class="btn btn-success" type="button" ><i class="fa fa-search"> <span class="visible-desktop">Search </span></i></button>
+            </div>
+          </form>
         </div>
       </div>
-
-      <h2 id="sample"> </h2>
-      <div class="container-narrow">
+      <div class="jumbotron" id="feature">
         <div class="row-fluid">
-          <div id="col1" class="span4"></div>
-          <div id="col2" class="span4"></div>
-          <div id="col3" class="span4"></div>
-          <div id="col4" class="span4"></div>
+          <div class="span4">
+            <h3> Compose information with ease.</h3>
+            <p> Cloverite makes it easy to find information together, providing context and make understanding fast.</p>
+          </div>
+          <div class="span4">
+            <h3> Find your data instantly and discover new things.</h3>
+            <p> Find that GIF and that address. Instantly. Subscribe to new content list and discover new things.</p>
+          </div>
+          <div class="span4">
+            <h3> Share and collaborate on content. </h3>
+            <p> Share your data with the world and build open data together.</p>
+          </div>
+        </div>
+        <hr>
+      </div>
+      <div class="jumbotron hidden" id="video">
+        <div style="text-align: center"><h2> See it in action.</h2></div>
+        <div class="header-unit">
+          <div id="video-container">
+            <video width="100%" height="100%" controls loop class="fillWidth">
+              <source src="{{STATIC_URL}}video/test.mp4" type="video/webm"/>
+              Your browser does not support the video tag. I suggest you upgrade your browser.
+            </video>
+          </div>
         </div>
       </div>
-      {% endif %}
-
-      <hr>
-
-      <div class="featurette">
-        <img class="featurette-image pull-right" src="https://db.tt/0nMt5IIK">
-        <h2 class="featurette-heading"> Freedom of expression. <span class="muted"> The most expressive rating system. </span></h2>
-        <p class="lead">
-          Whether you want to rate on shipping speed, customer services, or just how that checkout button looks, you can do it here.
-        </p>
-      </div>
-
-      <hr>
-
-      <div class="featurette">
-        <img class="featurette-image pull-left" src="https://db.tt/seIoMQTK">
-        <h2 class="featurette-heading"> Share your recommendation via rankings. <span class="muted"> Create customized rankings and share it on Twitter. </span></h2>
-        <p class="lead">
-        Create personal rankings of this season's best TV shows to share with your friends. Or create the best bar ranking in downtown SF
-        for hanging out with friends. Or create a ranking of your favorite celebrity.
-        </p>
-      </div>
-
-      <hr>
-  </div>
-
-
-  <div class="container-footer">
-    {%include "footer.partial"%}
-  </div>
-
-  <script>
-    DEFAULT_QUERY = "{{DEFAULT_QUERY}}";
-  </script>
-
-  {% include "stdScript.partial" %}
-  {% include "modelScript.partial" %}
-
-  <script src="{{STATIC_URL}}script/landing.js"></script>
-
-</body>
+    </div>
+    {% include "stdScript.partial" %}
+    {% include "modelScript.partial" %}
+    <script type="script/javascript">
+      DEFAULT_QUERY = "{{DEFAULT_QUERY}}";
+    </script>
+    <script src="{{STATIC_URL}}script/landing.js"></script>
+  </body>
 </html>

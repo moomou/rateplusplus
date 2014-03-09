@@ -1,0 +1,56 @@
+@import "mixins";
+
+#searchForm {
+  margin: 1em 0 1em 0;
+  .searchBar {
+    @include box-shadow-none();
+    @include border-radius(0px);
+    @include transition(width, 0.20s, linear, 0s);
+    border: none;
+    border-bottom: 1px solid rgb(219, 219, 219);
+    font-family: FontAwesome;
+    opacity: 0.5;
+  }
+  .searchBar:hover {
+    opacity: 1;
+  }
+  .searchBar:focus {
+    opacity: 1;
+    width: 275px;
+  }
+}
+
+#local-header {
+  border: none;
+  #localSearch {
+    @extend #searchForm;
+    margin: -7px 0 0 25px;
+    input {
+      width: 120px;
+    }
+  }
+  .entityTitle {
+    font-size: 24px;
+    float: left;
+  }
+}
+
+
+#message-box {
+  margin: 2em 5em 0 5em;
+  #searchTerm {
+    color: #EE796C;
+    font-weight: bold;
+  }
+}
+
+.home-btn {
+  font-size: 32px;
+  margin: 18px 0px 10px 0px;
+  display: block;
+}
+
+.head-nav {
+  margin-top: 8px !important;
+  font-size: 17px;
+}
