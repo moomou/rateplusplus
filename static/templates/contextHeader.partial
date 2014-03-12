@@ -4,7 +4,7 @@
       <div class="muted" style="vertical-align: middle; line-height: 20px; padding: 5px;"><span id="resultCount"></span>result</div>
     </div>
     <ul id="navBtns" class="hidden-phone nav pull-right">
-      <li title="" data-original-title="Rank"><a id="addRankingBtn" href="#" style=" padding: 0px;"><i class="fa fa-list-ol fa-lg"> </i></a></li>
+      <li title="" data-original-title="Create Ranking"><a id="addRankingBtn" href="#" style=" padding: 0px;"><i class="fa fa-list-ol fa-lg"> </i></a></li>
     </ul>
   </div>
 </div>

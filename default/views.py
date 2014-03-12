@@ -106,7 +106,7 @@ def SigninHandler(request, redirected = False):
 
             logger.info("Graph Id: " + str(user.clover.neo4jId))
             usertoken = request.session.session_key
-            r.set(usertoken, user.clover.neo4jId)
+            r.hset(usertoken, "id", user.clover.neo4jId)
 
             response = HttpResponse(json.dumps({"error": None, "redirect": "/profile/self"}), mimetype="application/json")
 
@@ -162,6 +162,7 @@ def AdHandler(request):
 def EntityHandler(request, pk):
     renderCxt = ContextSetup(request)
 
+    renderCxt['RANKING_HEADER_ENABLED'] = True
     renderCxt['specific_entity'] = True
     renderCxt['not_new'] = True
 

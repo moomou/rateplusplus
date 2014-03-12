@@ -12,6 +12,16 @@ App.AppRouter = Backbone.Router.extend({
         console.log("Profile Page Init");
         $.ajax({
             type: "GET",
+            url: App.API_SERVER + App.API_VERSION + 'user/' + getCookie('userid') + "/created"
+        })
+        .done(function(res) {
+            debugger;
+        })
+        .fail(function(msg) {
+        });
+
+        $.ajax({
+            type: "GET",
             url: App.API_SERVER + App.API_VERSION + 'user/' + getCookie('userid') + "/ranked"
         })
         .done(function(res) {
@@ -19,6 +29,7 @@ App.AppRouter = Backbone.Router.extend({
                 // notify user
                 return;
             }
+            debugger;
 
             var allRankings = res.payload,
                 rowViews = [],
@@ -95,6 +106,7 @@ App.AppRouter = Backbone.Router.extend({
     },
     detailPageInit: function(id) {
         console.log("detail");
+
         App.RankingController();
         new App.DetailEntityPageView({id: parseInt(id)});
 

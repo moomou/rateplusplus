@@ -41,8 +41,13 @@
         {% endif %}
       </div>
     </div>
+
     {% if CONTEXT_HEADER_ENABLED %}
       {% include "contextHeader.partial" %}
+    {% endif %}
+
+    {% if CONTEXT_HEADER_ENABLED or RANKING_HEADER_ENABLED %}
       {% include "rankHeader.partial" %}
     {% endif %}
+
   </div>
