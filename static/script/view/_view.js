@@ -2,10 +2,8 @@
  * Global Objects
  */
 App.GlobalWidget = {
-    measureDOM       : $('#measure'),
-    twitterShareBtn  : $('#twitterBtn'),
-    searchMessageBox : $('#message-box'),
-    searchInput      : $('#searchInput'),
+    twitterShareBtn : $('#twitterBtn'),
+    searchInput     : $('#searchInput'),
 
     rankingFork      : $('#rankingFork'),
     rankingPrivacy   : $('#rankingPrivacy'),
@@ -28,13 +26,6 @@ App.DetailPage = {
 
 App.ProfilePage = {
 };
-
-App.CommentContainer = $('#commentContainer');
-App.GlobalWidget.rankingPrivacy.tooltip();
-
-/**
- * Common Utility Function
- */
 
 // Used completely for its side effect
 App.updateSessionStorageRankingView = function(currentRankingInd) {
@@ -162,7 +153,7 @@ App.ContentDataView = (function() {
             var func = null;
 
             if (renderType == "row") {
-                func = renderRow;    
+                func = renderRow;
             } else {
                 func = renderCard;
             }
@@ -243,11 +234,11 @@ App.SimpleCard = Backbone.View.extend({
         var templateValues = {},
             indexTitle     = this.title || '',
             indexValue     = this.value || '',
-            dataIndex      = 
-                indexTitle.toLowerCase() + 
+            dataIndex      =
+                indexTitle.toLowerCase() +
                 indexValue.toLowerCase() +
                 App.TypeIndex[this.data.dataType];
-                
+
         templateValues.title = this.title;
 
         this.$el.html(this.template(templateValues));
@@ -272,15 +263,16 @@ App.SimpleCard = Backbone.View.extend({
 App.ContributorView = {
     template: Handlebars.templates.contributor_icon,
     render: function(contributors) {
-        contributors = contributors || []; 
+        contributors = contributors || [];
 
         var anonymous = this.template(),
             result = '',
             that = this;
-        
+
         _(contributors).each(function(contributor) {
             if (contributor) {
-                result += that.template(contributor);
+                var iconUrl = 'https://secure.gravatar.com/avatar/'+contributor+'?s=240';
+                result += that.template({iconUrl: iconUrl});
             }
         });
 
@@ -334,7 +326,6 @@ App.AttributeView = Backbone.View.extend({
         console.log('drag end');
     }
 });
-
 
 // Table Row View
 App.ProfileRowView = Backbone.View.extend({
@@ -517,7 +508,6 @@ App.TitleRowView = Backbone.View.extend({
         return this;
     }
 });
-
 
 // Ranking Related Views
 App.RankingView =  Backbone.View.extend({
@@ -840,175 +830,29 @@ App.RankingController = function(isForking) {
     }
 };
 
-// Composite View Component
-/*
-App.TableCardCollectionView = Backbone.View.extend({
-    initialize: function(settings) {
-        if (settings.rankingId) { //rankingId is shareToken
-            this.collection =
-                new App.SummaryCardCollection(App.SPECIFIC_RANKING,  settings.rankingId);
-            this.pageType = {'type': "ranking", 'value': settings.rankingId};
-        }
-        else if (settings.query){ // query
-            this.collection =
-                new App.SummaryCardCollection(App.SEARCH_ENTITY, settings.query)
-            this.pageType = {'type': "search", 'value': settings.query};
-        }
-
-        this.isForking = settings.forking || false;
-        this.collection.on('reset', this.render, this);
-    },
-    render: function() {
-        if (this.pageType.type == "ranking") {
-            var rankingView = JSON.parse(sessionStorage.getItem("rankingView")),
-                profileUrl = window.location.origin + "/profile/",
-                displayTitle = "Top " + rankingView.ranks.length + " " + rankingView.name,
-                postFixRanking = displayTitle.toLowerCase().indexOf('ranking') < 0;
-
-            this.title = postFixRanking ? displayTitle + " Ranking" : displayTitle;
-
-            this.title += " by " +
-                "<a href='" + profileUrl + rankingView.createdBy + "'>" +
-                rankingView.createdBy +
-                "</a>";
-        }
-        else {
-            this.title = "Result for " + this.pageType.value;
-        }
-
-        if (this.collection.models.length == 0) {
-            // Didn't find anything
-            document.location.href = window.location.origin +
-                "/entity/new?empty=true&searchterm=" +
-                encodeURIComponent(App.GlobalWidget.searchInput.val());
-            return;
-        }
-
-        var that = this,
-            rowViews = [],
-            tableView = new App.TableView(),
-            titleRow = new App.TitleRowView({
-                'hide': ['.addNew']
-            });
-
-        tableView.el.appendChild(titleRow.render(this.title, rankingView).el);
-
-        _.each(this.collection.models, function(row) {
-            rowViews.push(that.renderRow(row, tableView));
-        });
-
-        document.getElementById('top1').appendChild(tableView.el);
-
-        var rawRankingSession = sessionStorage.getItem('rankingSession'),
-            rankingSession = rawRankingSession && JSON.parse(rawRankingSession),
-            rawRankingView = sessionStorage.getItem('rankingView'),
-            rankingView = rawRankingView && JSON.parse(rawRankingView),
-            referenceRanking = rankingSession || rankingView;
-
-        _.each(rowViews, function(rowView) {
-            if (that.isForking || !referenceRanking ||
-                referenceRanking.ranks.indexOf(rowView.model.id.toString()) < 0) {
-                rowView.renderKonb();
+// Message Box
+App.MessageBox = (function() {
+    var messageBox = $('#message-box'),
+        appliedClass = null;
+        _showMessage = function(msg, type) {
+            if (appliedClass) {
+                messageBox.removeClass(appliedClass);
             }
-            else {
-                rowView.assignRanking(rankingView);
+            appliedClass = type;
+            messageBox.addClass(type);
+            messageBox.find('.message').html(message);
+        };
+
+    return {
+        showMessage: function(msg, type) {
+            _showMessage(msg, type);
+        },
+        showNetworkErrorMsg: function(msg) {
+            if (msg) {
+                _showMessage(msg, "alert-danger");
+            } else {
+                _showMessage("Network error. Please try again", "alert-danger");
             }
-        });
-
-        App.RankingController(that.isForking);
-    },
-    renderRow: function(mRow, tableView) {
-        var that = this;
-        var rowView = new App.RankingRowView({
-            model: mRow
-        });
-        tableView.el.appendChild(rowView.render().el);
-        return rowView;
-    }
-});*/
-
-App.TableAttributeCollectionView = App.TableView.extend({
-    initialize: function(settings) {
-        console.log('Attr Collection View');
-
-        if (settings.collection) {
-            this.collection = settings.collection;
-        }
-        else {
-            this.collection = new App.AttributeCollection();
-        }
-
-        this.preSaveAttrs = [];
-        this.entityId = settings.entityId
-        this.renderMode = this["render" + capFirstLetter(settings.renderMode || 'default')];
-        this.colManager = settings.colManager || App.ColManager;
-    },
-    // render functions
-    render: function(attrContainer) {
-        this.attrContainer = attrContainer;
-        this.renderMode();
-    },
-    renderAttribute: function(item) {
-        var attrView = new App.AttributeView({
-            model: item
-        });
-        return attrView.render();
-    },
-    renderDefault: function() {
-        var that = this;
-        _.each(this.collection.models, function(item) {
-            that.attrContainer.append(that.renderAttribute(item).el);}, this);
-    },
-    renderSearch: function() {
-    },
-    renderGraph: function() {
-    },
-    renderDetail: function() {
-        // create table
-        this.$el.html(this.template({}));
-
-        // add title
-        this.el.appendChild(
-            new App.TitleRowView({hide: ['.addNewRanking']}).render("Attribute").el);
-
-        // add each attribute
-        var that = this;
-        _.each(this.collection.models, function(attr) {
-            that.el.appendChild(that.renderAttribute(attr));
-        });
-
-        if (document.getElementById('attribute'))
-            document.getElementById('attribute').appendChild(this.el);
-    },
-    // event handler
-    addNew: function(e) {
-        var newAttr = this.getNewAttrModel();
-        this.$el.find('th').parent().after(this.renderAttribute(newAttr));
-        this.preSaveAttrs.push(newAttr);
-        return newAttr;
-    },
-    // Custom Func
-    renderAttribute: function(newAttr) {
-        var rowView = new App.AttributeView({
-            model: newAttr
-        });
-        return rowView.render().el;
-    },
-    getNewAttrModel: function(tone) {
-        tone = tone ? tone : App.POSITIVE; //default to pos
-        var entityId = this.entityId,
-            attrModel = new App.EntityAttributeModel({
-                entity:entityId,
-                editable:true,
-                tone:tone});
-
-        this.collection.add(attrModel);
-        return attrModel;
-    },
-    saveAll: function() {
-        _.each(this.preSaveAttrs, function(attr) {
-            attr.save();
-        });
-        this.preSaveAttrs = [];
-    },
-});
+        },
+    };
+})();

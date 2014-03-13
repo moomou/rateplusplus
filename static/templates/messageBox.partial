@@ -1,8 +1,5 @@
-    <div id="message-box" class="hide alert alert-info">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      <h4> Help Cloverite </h4>
-      <br>
-      Oops. We didn't find anything on <span id="searchTerm"></span>. Please help Cloverite expand by adding it!
-    </div>
-
-
+<div id="message-box" class="alert hide">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <br>
+  <p class="message"></p>
+</div>

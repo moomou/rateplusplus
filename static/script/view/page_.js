@@ -66,7 +66,6 @@ App.DetailEntityPageView = Backbone.View.extend({
             this.render();
         } else {
             this.model = new App.SummaryCardModel({id: settings.id});
-            //new App.SummaryCardCollection(App.SPECIFIC_ENTITY, settings.id);
             this.model.on('change', this.render, this);
             this.model.fetch();
         }
@@ -170,7 +169,7 @@ App.SearchPageView = Backbone.View.extend({
         settings = settings || {};
 
         this.collection =
-            new App.SummaryCardCollection(App.SEARCH_ENTITY, settings.query)
+            new App.SummaryCardCollection(App.SEARCH_ENTITY, settings);
 
         this.searchMode = this.detectSearchMode(settings.query);
         this.collection.on('reset', this.render, this);

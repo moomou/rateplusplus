@@ -200,7 +200,6 @@ def GraphHandler(request):
 def ProfileHandler(request, profileId):
     renderCxt = ContextSetup(request)
 
-
     if not renderCxt['authenticated']:
         return SigninHandler(request, True)
 

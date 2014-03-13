@@ -3,27 +3,36 @@
   <head>
     {% include "stdHead.partial" %}
   </head>
+
   <body>
     {% include "header.partial" %}
 
     <div class="container-narrow">
+
+      {% include "messageBox.partial" %}
+
       <div class="row-fluid">
-        <div class="span6 pull-right" id="info-container" style="padding: 25px;">
+        <div class="span9 pull-right" id="info-container" style="padding: 25px;">
+          <div id="private-content" class="row-fluid">
+          </div>
+          <div id="public-content" class="row-fluid">
+          </div>
         </div>
-        <div class="span6 pull-left" id="user" style="padding: 25px;">
+        <div class="span3 pull-left" id="user" style="padding: 25px;">
           <div class="pull-left">
             <div class="profile js-profile" style="
               background-image: url('https://secure.gravatar.com/avatar/{{emailHash}}?s=240'); 
-              width: 240px; 
-              height: 240px;">
+              width: 120px; 
+              height: 120px;">
             </div>
             <h2 style="clear: both; text-align: center; padding-top: 50px;"> {{username}} </h2>
           </div>
         </div>
       </div>
 
-      <div id="profileRow" class="row-fluid hidden">
+      <div id="rankings" class="row-fluid">
       </div>
+
       <div id="mediaQuery" class="hidden-desktop" style="position:absolute;left:-1200px;"></div>
     </div>
 

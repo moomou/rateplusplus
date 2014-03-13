@@ -2,21 +2,21 @@ var App = App || {};
 
 /**
  * Constants for App */
-App.DEBUG_MODE              = false;
+App.DEBUG_MODE       = false;
 
-App.TWITTER_LINK            = "https://twitter.com/share?";
-App.API_SERVER              = 'http://api.cloverite.com:9000/';
-App.API_VERSION             = 'v0/';
+App.TWITTER_LINK     = "https://twitter.com/share?";
+App.API_SERVER       = 'http://api.cloverite.com:9000/';
+App.API_VERSION      = 'v0/';
 
-App.AE_H_URL                = App.API_VERSION + 'ae/tag';
-App.AE_C_URL                = App.API_VERSION + 'ae/cat';
+App.AE_H_URL         = App.API_VERSION + 'ae/tag';
+App.AE_C_URL         = App.API_VERSION + 'ae/cat';
 
-App.POSITIVE                = "positive";
-App.NEGATIVE                = "negative";
+App.POSITIVE         = "positive";
+App.NEGATIVE         = "negative";
 
-App.SEARCH_ENTITY           = 'entitySearch';
-App.SPECIFIC_ENTITY         = 'specificEntity';
-App.SPECIFIC_RANKING        = 'specificRanking';
+App.SEARCH_ENTITY    = '_entitySearch';
+App.CREATED          = '_careated';
+App.SPECIFIC_RANKING = '_specificRanking';
 
 App.TypeIndex               = {
     attribute : "attribute",
@@ -52,16 +52,13 @@ App.CloverCollection = Backbone.Collection.extend({
     },
     parse: function(response) {
         console.log("CloverModel parse");
-
-        if ("success" in response) {
-            if (response.success) {
-                return response.payload;
-            } else {
-                console.log("server responded with error");
-            }
+        if (response.success) {
+            return response.payload;
         } else {
-            return response;
+            console.log("server responded with error");
+            App.MessageBox.showNetworkErrorMsg();
         }
+        return null;
     }
 });
 
@@ -311,18 +308,18 @@ App.SummaryCardCollection = App.CloverCollection.extend({
         return App.API_SERVER + App.API_VERSION + this.urlStub;
     },
     model: App.SummaryCardModel,
-    initialize: function(cardType, data) {
+    initialize: function(cardType, settings) {
         this.cardType = cardType;
 
         if (cardType == App.SPECIFIC_RANKING) {
-            this.urlStub = 'ranking/share/' + data;
-            this.fetch();
-        } else if (cardType == App.SPECIFIC_ENTITY) {
-            this.urlStub = "entity/" + data;
+            this.urlStub = 'ranking/share/' + settings.data;
             this.fetch();
         } else if (cardType == App.SEARCH_ENTITY) {
             this.urlStub = 'entity/search/';
-            this.fetch({data: $.param({q: data})});
+            this.fetch({data: $.param({q: settings.query})});
+        } else if (cardType == App.CREATED) {
+            this.urlStub = settings.url;
+            this.fetch();
         }
     },
     parse: function(response) {
