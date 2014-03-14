@@ -286,6 +286,12 @@
 .scroll-container {
   overflow: hidden; }
 
+.border-radius-none {
+  -webkit-border-radius: none;
+  border-radius: none;
+  background-clip: padding-box;
+  /* stops bg color from leaking outside the border: */ }
+
 .noOutline {
   outline: 0px solid transparent; }
 
@@ -623,6 +629,12 @@
 .scroll-container {
   overflow: hidden; }
 
+.border-radius-none {
+  -webkit-border-radius: none;
+  border-radius: none;
+  background-clip: padding-box;
+  /* stops bg color from leaking outside the border: */ }
+
 .noOutline {
   outline: 0px solid transparent; }
 
@@ -724,10 +736,6 @@ ul {
     color: green; }
 
 .profile {
-  -webkit-border-radius: 100%;
-  border-radius: 100%;
-  background-clip: padding-box;
-  /* stops bg color from leaking outside the border: */
   -webkit-box-shadow: 0 1px 1px #ebebeb ;
   -moz-box-shadow: 0 1px 1px #ebebeb ;
   box-shadow: 0 1px 1px #ebebeb ;
@@ -736,6 +744,12 @@ ul {
   height: 75px;
   background-position: center center;
   background-size: cover; }
+
+.profile-rounded {
+  -webkit-border-radius: 100%;
+  border-radius: 100%;
+  background-clip: padding-box;
+  /* stops bg color from leaking outside the border: */ }
 
 .profile-mini {
   width: 15px;
@@ -851,7 +865,7 @@ ul {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
-  margin: auto;
+  margin: 50px auto;
   position: absolute;
   top: 0;
   left: 0;

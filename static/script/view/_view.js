@@ -123,12 +123,14 @@ App.ContentDataView = (function() {
         videoTemplate         : Handlebars.templates.sa_content_video,
         textTemplate          : Handlebars.templates.sa_content_textbox,
         attributeTemplate     : Handlebars.templates.sa_content_rating,
+
         // Row templats
         numberRowTemplate     : Handlebars.templates.sa_card_row_info,
         attributeRowTemplate  : Handlebars.templates.sa_card_row_info,
         textRowTemplate       : Handlebars.templates.sa_card_row_info,
         imageRowTemplate      : Handlebars.templates.sa_card_row_image,
         paddingRowTemplate    : Handlebars.templates.sa_card_row_padding,
+        videoRowTemplate      : Handlebars.templates.sa_card_row_padding,
     },
     renderRow = function(data) {
         var templateName = data.dataType + "RowTemplate";
@@ -328,8 +330,8 @@ App.AttributeView = Backbone.View.extend({
 });
 
 // Table Row View
-App.ProfileRowView = Backbone.View.extend({
-    template: Handlebars.templates.profileRow,
+App.ProfileRankingView = Backbone.View.extend({
+    template: Handlebars.templates.profile_ranking_row,
     tagName: 'tr',
     className: 'row',
     events: {
@@ -345,7 +347,7 @@ App.ProfileRowView = Backbone.View.extend({
         this.disableName = settings.disableName;
     },
     render: function() {
-        console.log('proilfeRowView Render');
+        console.log('profile ranking row render');
         this.$el.html(this.template(this.model));
         if (this.disableShare) this.$el.find('.btn').addClass('hidden');
         if (this.disableName) this.$el.find('.noSelect').addClass('hidden');
@@ -385,6 +387,20 @@ App.ProfileRowView = Backbone.View.extend({
         sessionStorage.removeItem('rankingSession');
         document.location.href = this.model.rankingShareUrl;
     }
+});
+
+App.ProfileEntityView = Backbone.View.extend({
+    template: Handlebars.templates.profile_card_row,
+    events: {
+    },
+    initialize: function(settings) {
+        settings = settings || {};
+    },
+    render: function() {
+        console.log('proilfe entityRow render');
+        this.$el.html(this.template(this.model.toJSON()));
+        return this;
+    },
 });
 
 App.SearchResultView = Backbone.View.extend({

@@ -25,7 +25,7 @@ App.AppRouter = Backbone.Router.extend({
 
             _(res.models).each(function(model, ind) {
                 model.set('index', ind)
-                var row = new App.SearchResultView({model: model});
+                var row = new App.ProfileEntityView({model: model});
                 if (model.get('private')) {
                     privateContent.append(row.render().el);
                 } else {
@@ -56,7 +56,7 @@ App.AppRouter = Backbone.Router.extend({
 
             _(allRankings).each(function(ranking) {
                 var rankListIcons = [],
-                    rankingRow = new App.ProfileRowView({
+                    rankingRow = new App.ProfileRankingView({
                         model: ranking,
                         sessionStorageInd: sessionStorageInd
                     }).render(),

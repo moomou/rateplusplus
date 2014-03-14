@@ -38,15 +38,18 @@ ul {
 }
 
 .profile {
-  @include border-radius(100%);
   @include box-shadow(0, 1px, 1px, rgb(235, 235, 235));
-
   margin: 0 auto;
   width: 75px;
   height: 75px;
   background-position: center center;
   background-size: cover;
 }
+
+.profile-rounded {
+  @include border-radius(100%);
+}
+
 .profile-mini {
   width: 15px;
   height: 15px;
@@ -192,7 +195,7 @@ ul {
 
 .info-card.presentation {
   @include box-shadow-none();
-  margin: auto;
+  margin: 50px auto;
   position: absolute;
   top: 0;
   left: 0;

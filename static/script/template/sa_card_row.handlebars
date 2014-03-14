@@ -1,24 +1,11 @@
 <div class="info-card" style="width: auto;" data-index="{{index}}" id="{{domiId}}">
   <div class="header">
-    <a href="{{srcUrl}}">
-      <div class="profile pull-left js-profile" style="background-image: url('{{imgURL}}')"></div>
-    </a>
-    <ul class="meta pull-left">
-      <li class="name">
-        <a class="muted" href="{{srcUrl}}">
-          <span class="title-input js-title">{{name}}</span>
-        </a>
-      </li>
-      <li> 
-        {{> partial_hashtags}}
-      </li>
-    </ul>
+    {{> partial_card_profile}}
     <a href="#" class="pull-right btn-like auto-highlight" style="margin-top: 25px;">
       <i class="fa fa-angle-right fa-2x"></i>
     </a>
-    <div class="js-ranking" style="position: absolute;
-      right: 25px;
-      top: -5px;"></div>
+    <div class="js-ranking" style="position: absolute; right: 25px; top: -5px;">
+    </div>
   </div>
   <hr style="visibility: hidden;">
 </div>

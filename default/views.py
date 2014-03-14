@@ -9,11 +9,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 
 #App Stuff
-from forms import SignupForm, FeedbackForm, EMAIL_MSG 
+from forms import SignupForm, FeedbackForm, EMAIL_MSG
 
 import logging
 import json
-import pygeoip 
+import pygeoip
 import hashlib
 
 import rredis
@@ -31,6 +31,7 @@ FEATURE_FLAG = {
     'FEEDBACK_ENABLED': True,
     'REQUEST_ENABLED': True,
     'NAV_ENABLED': True,
+    'SA_ENABLED': True,
 }
 
 def ContextSetup(request):
@@ -56,7 +57,14 @@ def ContextSetup(request):
 
 def PrivacyHandler(request):
     pass
-    
+
+def EmbedHandler(request):
+    renderCxt = ContextSetup(request)
+    t = loader.get_template('embed.js')
+    c = RequestContext(request, renderCxt)
+
+    return HttpResponse(t.render(c), mimetype="text/javascript")
+
 def FeedbackHandler(request):
     if request.method == "POST":
         form = FeedbackForm(request.POST)
@@ -64,7 +72,7 @@ def FeedbackHandler(request):
         if form.is_valid():
             cd = form.cleaned_data
 
-            #send email to me 
+            #send email to me
             send_mail('Feedback for Cloverite', cd['feedback'], cd['userEmail'], ['ppymou@gmail.com'], fail_silently=True)
 
             #send email to user
@@ -88,7 +96,7 @@ def SigninHandler(request, redirected = False):
         renderCxt['FEEDBACK_ENABLED'] = False
 
         t = loader.get_template('signin.html')
-        c = RequestContext(request, renderCxt) 
+        c = RequestContext(request, renderCxt)
 
         if "next" in request.GET:
             request.session['next'] = request.GET['next']
@@ -136,7 +144,7 @@ def SignupHandler(request):
         renderCxt['SEARCH_ENABLED'] = False
 
         t = loader.get_template('signup.html')
-        c = RequestContext(request, renderCxt) 
+        c = RequestContext(request, renderCxt)
 
         return HttpResponse(t.render(c))
 
@@ -153,9 +161,9 @@ def SignupHandler(request):
 
 def AdHandler(request):
     renderCxt = ContextSetup(request)
-    
+
     t = loader.get_template('ad.html')
-    c = RequestContext(request, renderCxt) 
+    c = RequestContext(request, renderCxt)
 
     return HttpResponse(t.render(c))
 
@@ -178,12 +186,12 @@ def NewEntityHandler(request):
     c = RequestContext(request, renderCxt)
 
     return HttpResponse(t.render(c))
- 
+
 def SearchPage(request, query):
     renderCxt = ContextSetup(request)
     renderCxt['QUERY'] = query
     renderCxt['CONTEXT_HEADER_ENABLED'] = True
-    
+
     t = loader.get_template('main.html')
     c = RequestContext(request, renderCxt)
 
@@ -191,9 +199,9 @@ def SearchPage(request, query):
 
 def GraphHandler(request):
     renderCxt = ContextSetup(request)
-    
+
     t = loader.get_template('relationshipeditor.html')
-    c = RequestContext(request, renderCxt) 
+    c = RequestContext(request, renderCxt)
 
     return HttpResponse(t.render(c))
 
@@ -206,7 +214,7 @@ def ProfileHandler(request, profileId):
     if request.method == "GET":
         ''' Renders Profile Page '''
         t = loader.get_template('profile.html')
-        c = RequestContext(request, renderCxt) 
+        c = RequestContext(request, renderCxt)
 
         return HttpResponse(t.render(c))
 
@@ -227,7 +235,7 @@ def DefaultPage(request):
     renderCxt['DEFAULT_QUERY'] = '' #defaultQuery
     renderCxt['SEARCH_ENABLED'] = False
     renderCxt['FEEDBACK_ENABLED'] = False
-    
+
     t = loader.get_template('landing.html')
     c = RequestContext(request, renderCxt)
 

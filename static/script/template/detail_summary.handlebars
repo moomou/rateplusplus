@@ -3,12 +3,8 @@
   <div class="pull-right sideBar">
     <ul class="infoBar" style="margin-left: 0;">
       <li data-original-title="Edit"><a href="#edit" class="btn-like"><i class="fa fa-edit fa-lg"></i></a></li>
-      {{#if fork_enabled}}
       <li data-original-title="Fork"><a href="#fork" class="btn-like"><i class="fa fa-code-fork fa-lg"></i></a></li>
-      {{/if}}
-      {{#if embed_enabled}}
       <li data-original-title="Embed"><a href="#embed" class="btn-like"><i class="fa fa-code fa-lg"></i></a></li>
-      {{/if}}
     </ul>
   </div>
   {{/unless}}
@@ -27,7 +23,7 @@
         <i class="fa fa-minus-circle"> Cancel</i>
       </button> 
     </div>
-    <div class="profile pull-left js-profile" style="background-image: url('{{#if imgURL}} {{imgURL}} {{else}} //cloverite.com/static/img/blank.png {{/if}}')">
+    <div class="profile profile-rounded pull-left js-profile" style="background-image: url('{{#if imgURL}} {{imgURL}} {{else}} //cloverite.com/static/img/blank.png {{/if}}')">
       <button id="change-image-btn" class="btn-small btn btn-white" style="margin: 0 auto;display: block; margin-top: 105%;">Change</button>
     </div>
     <ul class="meta pull-left">
@@ -42,7 +38,7 @@
       <textarea id="description" placeholder="Enter description here.">{{#if description}}{{description}}{{/if}}</textarea>
     </div>
     {{else}}
-    <div class="profile pull-left js-profile" style="background-image: url('{{imgURL}}')"></div>
+    <div class="profile profile-rounded pull-left js-profile" style="background-image: url('{{imgURL}}')"></div>
     <ul class="meta pull-left">
       <li class="name">
         <span class="title-input js-title">{{name}}</span>

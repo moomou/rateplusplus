@@ -62,6 +62,10 @@
   overflow: hidden;
 }
 
+.border-radius-none {
+  @include border-radius(none);
+}
+
 .noOutline {
   outline: 0px solid transparent;
 }
