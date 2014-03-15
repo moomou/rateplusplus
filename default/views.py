@@ -63,6 +63,21 @@ def EmbedHandler(request):
     t = loader.get_template('embed.js')
     c = RequestContext(request, renderCxt)
 
+    style = request.GET.get('style', 1)
+    entityIds = request.GET.get('entity', '').split(',')
+    dataIds = request.GET.get('data', '').split(',')
+    attrIds = request.GET.get('rating', '').split(',')
+
+    entityBlobs = []
+    for entityId in entityIds:
+        entityBlob.append(CloverAPI.getEntity(entityId))
+    dataBlobs = []
+    for dataId in dataIds:
+        dataBlobs.append(CloverAPI.getEntity(dataId))
+    attrBlobs = []
+    for attrId in attrIds:
+        attrBlobs.append(CloverAPI.getEntity(attrId))
+
     return HttpResponse(t.render(c), mimetype="text/javascript")
 
 def FeedbackHandler(request):
@@ -116,7 +131,10 @@ def SigninHandler(request, redirected = False):
             usertoken = request.session.session_key
             r.hset(usertoken, "id", user.clover.neo4jId)
 
-            response = HttpResponse(json.dumps({"error": None, "redirect": "/profile/self"}), mimetype="application/json")
+            response = HttpResponse(json.dumps({
+                "success": True,
+                "redirect": "/profile/self"
+            }), mimetype="application/json")
 
             response.set_cookie("username", user.username)
             response.set_cookie("userid", user.clover.neo4jId)
@@ -124,7 +142,7 @@ def SigninHandler(request, redirected = False):
 
             return response
 
-        return HttpResponse(json.dumps({'error':'Authentication failed'}), mimetype="application/json")
+        return HttpResponse(json.dumps({'errorMessage':'Authentication failed'}), mimetype="application/json")
 
 def SignoutHandler(request, nextPage):
     if request.method == "GET":
@@ -155,9 +173,11 @@ def SignupHandler(request):
             if not form.save():
                 return HttpResponseServerError(
                     json.dumps({"error": "Please try again later."}))
-
             return SigninHandler(request)
-        return HttpResponse(json.dumps(form.errors), mimetype="application/json")
+
+        errorMessage = "\n".join(map(lambda item: str(item[1]), form.errors.items()))
+        errors = {"success": False, "errorMessage": errorMessage}
+        return HttpResponse(json.dumps(errors), mimetype="application/json")
 
 def AdHandler(request):
     renderCxt = ContextSetup(request)

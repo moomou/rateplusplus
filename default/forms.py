@@ -2,16 +2,12 @@ from django import forms
 from django.contrib.auth.models import User
 from django.conf import settings
 
-from models import Clover
-
-import json
-import requests
 import logging
 
-# Get an instance of a logger
-CLOVERITE_GRAPH_URL = settings.STAGING_API if settings.DEBUG else settings.LIVE_API
-CLOVERITE_HEADERS   = {'content-type': 'application/json', "x-access-token": "superman"}
+from models import Clover
+from api.api import CloverAPI
 
+# Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 EMAIL_MSG = '''
@@ -64,28 +60,12 @@ class SignupForm(forms.Form):
                 self.cleaned_data['email'],
                 self.cleaned_data['password'])
         
-        postData = {
-            "username" : newUser.username,
-            "email"    : newUser.email
-        }
+        apiData = CloverAPI.createNewUser(newUser.username, newUser.email)
 
-        res = requests.post(
-                CLOVERITE_GRAPH_URL, 
-                headers = CLOVERITE_HEADERS,
-                data = json.dumps(postData))
+        if apiData:
+            newUser.save()
 
-        if res.status_code != 201:
-            print "Call to Cloverite API Failed"
-            logger.error("Call to Cloverite API failed: %s" % postData)
-            return None
-
-        newUser.save()
-        neo4jData = res.json()
-
-        print neo4jData
-        logger.info("Call to Cloverite API succeeded: %s" % postData)
-
-        newClover = Clover(user = newUser, neo4jId = neo4jData['payload']['id'])
+        newClover = Clover(user = newUser, neo4jId = apiData['payload']['id'])
         newClover.save()
 
         return newClover
