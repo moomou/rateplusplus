@@ -800,15 +800,11 @@ function program3(depth0,data) {
     + "\">\n    ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.profileImg), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n  </a>\n</div>\n<div class=\"contentContainer outer\">\n  <div class=\"js-detail\">\n  </div>\n  <ul class=\"view-toolbar\" style=\"\">\n    <li>\n      <i class=\"fa fa-heart-o fa-lg\"></i>\n      <i class=\"fa fa-twitter fa-lg\"></i>\n      <i class=\"fa fa-code fa-lg\"></i>\n      <i class=\"fa fa-share-square-o fa-lg\"></i>\n    </li>\n    <li>";
+  buffer += "\n  </a>\n</div>\n<div class=\"contentContainer outer\">\n  <div class=\"js-detail\">\n  </div>\n  <ul class=\"view-toolbar\" style=\"\">\n    <li>\n      <i class=\"fa fa-code fa-lg\"></i>\n    </li>\n    <li>";
   if (helper = helpers.uniqueId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.uniqueId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</li>\n  </ul>\n  <ul class=\"tags tagit\">\n    ";
-  if (helper = helpers.tag) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.tag); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\n  </ul>\n</div>\n";
+    + "</li>\n  </ul>\n</div>\n";
   return buffer;
   });
 })();

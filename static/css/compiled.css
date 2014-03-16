@@ -132,7 +132,7 @@
   .card img {
     width: 100%; }
   .card .contentContainer {
-    min-height: 10em;
+    min-height: 5em;
     min-width: 100%; }
   .card .header-btn {
     cursor: pointer;
@@ -717,8 +717,7 @@ ul {
   list-style-type: none; }
 
 .view-toolbar {
-  margin: 10px auto;
-  border-bottom: 1px solid whitesmoke;
+  margin: 10px auto 0 auto;
   text-align: center;
   width: 100%; }
   .view-toolbar li {

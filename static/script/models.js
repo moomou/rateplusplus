@@ -26,6 +26,26 @@ App.TypeIndex               = {
     video     : "media"
 };
 
+App.GenerateEmbedScriptTag = function(entityIds, attrIds, dataIds) {
+    var entity = entityIds.join(","),
+        attr = attrIds.join(","),
+        data = dataIds.join(","),
+        container = document.createElement('div'),
+        scriptTag = document.createElement('script');
+
+    scriptTag.id = "cloverite-"+Math.floor(Math.random()*10000000).toString(16);
+
+    scriptTag.src = App.API_SERVER + App.API_VERSION +
+        "embed/?scriptId=" + scriptTag.id +
+        "&entity=" + entity +
+        "&rating=" + attr +
+        "&data=" + data;
+        
+    scriptTag.async = 'true';
+    container.appendChild(scriptTag);
+    return container.innerHTML.replace(/&amp;/g, "&");
+}
+
 App.CloverModel = Backbone.Model.extend({
     initialize: function() {
         console.log("this is clovermodel");

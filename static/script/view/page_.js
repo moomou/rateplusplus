@@ -112,10 +112,11 @@ App.DetailEntityPageView = Backbone.View.extend({
             return;
         }
 
-        var dataContainer = App.ColManager.CardCol;
+        var dataContainer = App.ColManager.CardCol,
             renderSimpleCard = function(list) {
                 _(list).each(function(data, ind) {
                     var simpleCard = new App.SimpleCard({
+                        entityId    : item.get('id'),
                         data        : data,
                         renderIndex : ind
                     });

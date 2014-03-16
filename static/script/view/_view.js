@@ -1,21 +1,24 @@
 /**
  * Global Objects
  */
+
 App.GlobalWidget = {
     twitterShareBtn : $('#twitterBtn'),
     searchInput     : $('#searchInput'),
 
-    rankingFork      : $('#rankingFork'),
-    rankingPrivacy   : $('#rankingPrivacy'),
-    rankingHeader    : $('#rankingHeader'),
-    rankingName      : $('#rankingName'),
-    rankingList      : $('#rankingList'),
-    rankInstruction  : $('#rankInstruction'),
-    rankEditButtons  : $('#rank-sessionButtons'),
-    rankViewButtons  : $('#rank-viewButtons'),
-    shareModal       : $('#shareModal'),
+    rankingFork     : $('#rankingFork'),
+    rankingPrivacy  : $('#rankingPrivacy'),
+    rankingHeader   : $('#rankingHeader'),
+    rankingName     : $('#rankingName'),
+    rankingList     : $('#rankingList'),
+    rankInstruction : $('#rankInstruction'),
+    rankEditButtons : $('#rank-sessionButtons'),
+    rankViewButtons : $('#rank-viewButtons'),
 
-    saEditor         : $('.sa-editor')
+    embedModal      : $('#embedModal'),
+    shareModal      : $('#shareModal'),
+
+    saEditor        : $('.sa-editor')
 };
 
 App.DetailPage = {
@@ -205,6 +208,7 @@ App.SimpleCard = Backbone.View.extend({
     events: {
         'mouseover': 'toggleToolbar',
         'mouseout': 'toggleToolbar',
+        'click .view-toolbar': 'toolbarAction'
 	},
     toggleToolbar: function(e) {
         return;
@@ -219,6 +223,20 @@ App.SimpleCard = Backbone.View.extend({
             $toolbar.css('visibility', 'hidden');
         }
     },
+    toolbarAction: function(e) {
+        var target = $(e.originalEvent.srcElement);
+        if (target.hasClass('fa-code')) {
+            var embedScripTag = App.GenerateEmbedScriptTag(
+                this.entityId,
+                this.attrId,
+                this.dataId
+            );
+            $('#scriptTag')
+                .val(embedScripTag)
+                .attr('disabled', true);
+            App.GlobalWidget.embedModal.modal('show');
+        }
+    },
     initialize: function(settings) {
         var data = settings.data;
 
@@ -226,10 +244,16 @@ App.SimpleCard = Backbone.View.extend({
         this.content = App.ContentDataView.render("card", data, true);
         this.title   = data.name;
 
+        this.entityId = [settings.entityId];
         if (!data.dataType || data.dataType == "attribute") {
             this.data.dataType = "attribute";
             this.controller    = App.AttributeView;
             this.model         = new App.EntityAttributeModel(data);
+            this.attrId = [this.data.id];
+            this.dataId = [];
+        } else {
+            this.attrId = [];
+            this.dataId = [this.data.id];
         }
     },
     render: function() {
@@ -858,7 +882,6 @@ App.MessageBox = (function() {
             messageBox.addClass(type);
             messageBox.find('.message').html(message);
         };
-
     return {
         showMessage: function(msg, type) {
             _showMessage(msg, type);
