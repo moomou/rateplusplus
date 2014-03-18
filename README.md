@@ -1,7 +1,7 @@
-Simply Works
-============
+Cloverite Web App
+===
 
-* Notes 
-1) Create a card. 
-    with info
-    with rating
+This is the main repo for Cloverite and contains the following:
+
+1) Django Server
+2) Front end web app
