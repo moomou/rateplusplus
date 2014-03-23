@@ -48,7 +48,7 @@ App.AppRouter = Backbone.Router.extend({
                 titleRow = new App.TitleRowView({hide: ['.addNew', '.addNewRanking']}),
                 sessionStorageInd = 0;
 
-            tableView.el.appendChild(titleRow.render('My Rankings').el);
+            tableView.el.appendChild(titleRow.render('My Recommendation').el);
             document.getElementById('rankings').appendChild(tableView.el);
 
             sessionStorage.setItem("allRankings", JSON.stringify(allRankings));

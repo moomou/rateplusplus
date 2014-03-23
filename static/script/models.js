@@ -40,7 +40,7 @@ App.GenerateEmbedScriptTag = function(entityIds, attrIds, dataIds) {
         "&entity=" + entity +
         "&rating=" + attr +
         "&data=" + data;
-        
+
     scriptTag.async = 'true';
     container.appendChild(scriptTag);
     return container.innerHTML.replace(/&amp;/g, "&");
@@ -222,10 +222,6 @@ App.SummaryCardModel = App.CloverModel.extend({
     parse: function(response) {
         console.log("SummaryCardModel Parse");
         response = App.CloverModel.prototype.parse.apply(this, arguments);
-
-        response.uniqueId = response.uniqueId ||
-            "#"+Math.floor(Math.random()*999999999).toString(16);
-
         response.hashTags = this.generateTags(response.tags);
         response.summary = this.summarize(response);
         response.srcUrl = window.location.origin + '/entity/' + response.id;
@@ -259,10 +255,6 @@ App.SummaryCardModel = App.CloverModel.extend({
             queryUrl = window.location.origin + '?q=';
 
         _.each(tags, function(tag) {
-            if (tag.indexOf("__global__") >= 0) {
-                return;
-            }
-
             hashTags += '<li><a href="' + queryUrl +
                 encodeURIComponent(tag) + '">' + tag + ' </a></li>';
         });

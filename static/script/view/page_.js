@@ -38,8 +38,8 @@ App.DetailEntityPageView = Backbone.View.extend({
     },
     saveEdit: function(e) {
         var model = this.model,
-            tags = _($('#tag').val().split('#')).map(function(tag) {
-                return tag.replace(',', '').trim();
+            tags = _($('#tag').val().split(',')).map(function(tag) {
+                return tag.replace(',', '').replace('#', '').trim();
             });
 
         model.set('name', $('#name').val() || '');
@@ -50,7 +50,6 @@ App.DetailEntityPageView = Backbone.View.extend({
 
         this.editing = false;
         this.model.on('change', this.render, this);
-
         model.save();
     },
     cancelEdit: function(e) {
@@ -180,7 +179,7 @@ App.SearchPageView = Backbone.View.extend({
         //this.quickSummaryCanvas.scrollToFixed({ marginTop: 25});
     },
     renderQuickSummary: function(index) {
-        if (this.collection.models.length == 0 || 
+        if (this.collection.models.length == 0 ||
             index >= this.collection.models.length) {
             return;
         }
@@ -219,7 +218,7 @@ App.SearchPageView = Backbone.View.extend({
         switch (searchMode.mode) {
             case INSTANT_MODE: { // NOT DONE
                 _(this.collection.models).each(function(model, ind) {
-                    model.set('index', ind) 
+                    model.set('index', ind)
                     var row = new App.SearchResultView({model: model});
                     searchResultLeft.push(row);
                 });
@@ -261,7 +260,7 @@ App.SearchPageView = Backbone.View.extend({
                     if (regexMatches.length > 1) {
                         var padding = regexMatches.length - 1;
                         _(padding).times(function(e) {
-                            searchResultLeft.push(App.ContentDataView.render("row", 
+                            searchResultLeft.push(App.ContentDataView.render("row",
                                     {"dataType": "padding"}, true));
                         });
                     }
@@ -269,7 +268,7 @@ App.SearchPageView = Backbone.View.extend({
                     if (renderedData.length != regexMatches.length) {
                         var padding = regexMatches.length - renderedData.length;
                         _(padding).times(function(e) {
-                            searchResultRight.push(App.ContentDataView.render("row", 
+                            searchResultRight.push(App.ContentDataView.render("row",
                                     {"dataType": "attribute"}, true));
                         });
                     }

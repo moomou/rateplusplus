@@ -69,8 +69,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 function program1(depth0,data) {
   
-  
-  return "\n  <div class=\"pull-right sideBar\">\n    <ul class=\"infoBar\" style=\"margin-left: 0;\">\n      <li data-original-title=\"Edit\"><a href=\"#edit\" class=\"btn-like\"><i class=\"fa fa-edit fa-lg\"></i></a></li>\n      <li data-original-title=\"Fork\"><a href=\"#fork\" class=\"btn-like\"><i class=\"fa fa-code-fork fa-lg\"></i></a></li>\n      <li data-original-title=\"Embed\"><a href=\"#embed\" class=\"btn-like\"><i class=\"fa fa-code fa-lg\"></i></a></li>\n    </ul>\n  </div>\n  ";
+  var buffer = "";
+  buffer += "\n  <div class=\"pull-right sideBar\">\n    <ul class=\"infoBar\" style=\"margin-left: 0;\">\n      <li data-original-title=\"Edit\"><a href=\"#edit\" class=\"btn-like\"><i class=\"fa fa-edit fa-lg\"></i></a></li>\n      <li data-original-title=\"Fork\"><a href=\"#fork\" class=\"btn-like\"><i class=\"fa fa-code-fork fa-lg\"></i></a></li>\n      \n    </ul>\n  </div>\n  ";
+  return buffer;
   }
 
 function program3(depth0,data) {
@@ -238,15 +239,7 @@ helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partial
     + "\">\n  <div class=\"header\">\n    ";
   stack1 = self.invokePartial(partials.partial_card_profile, 'partial_card_profile', depth0, helpers, partials, data);
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    <ul class=\"pull-right\">\n      <li><i class=\"fa fa-lg fa-eye\" data-original-title=\"View\"></i> ";
-  if (helper = helpers.viewCount) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.viewCount); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + " </li>\n      <li><i class=\"fa fa-lg fa-code-fork\" data-original-title=\"Forked\"> ";
-  if (helper = helpers.forkCount) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.forkCount); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + " </i></li>\n    </ul>\n  </div>\n  <hr style=\"visibility: hidden;\">\n</div>\n";
+  buffer += "\n    <ul class=\"pull-right\">\n      \n    </ul>\n  </div>\n  <hr style=\"visibility: hidden;\">\n</div>\n";
   return buffer;
   });
 })();
