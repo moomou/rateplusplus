@@ -86,6 +86,7 @@
       </div>
     </div>
     <div id="linkChain" class="tab-pane">
+      {% comment %}
       <div class="field"> Source Type</div>
       <select class="srcType">
         <option>JSON</option>
@@ -99,18 +100,25 @@
         <option>Number</option>
         <option>Timseries</option>
       </select>
+      {% endcomment %}
       <div class="input-prepend" style="display: block;">
         <span class="add-on">Field Name</i></span>
         <input style="width: 75%;" class="fieldname" type="text" placeholder="Ex. Networth, Position">
       </div>
       <div class="input-prepend" style="display: block;">
+        <span class="add-on"> Value</i></span>
+        <input style="width: 75%;" class="value" type="text" placeholder="Ex. #content>li text()">
+      </div>
+      <div class="input-prepend" style="display: block;">
         <span class="add-on"> Source URL</i></span>
         <input style="width: 75%;" class="srcUrl" type="text" placeholder="http://">
       </div>
+      {% comment %}
       <div class="input-prepend" style="display: block;">
         <span class="add-on"> CSS Selector</i></span>
         <input style="width: 75%;" class="selector" type="text" placeholder="Ex. #content>li text()">
       </div>
+      {% endcomment %}
     </div>
   </div>
   <div class="modal-footer">

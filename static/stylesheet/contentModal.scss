@@ -94,11 +94,12 @@
     content: "\f006";
     padding-right: 5px;
     color: gold;
+    cursor: pointer;
   }
 }
 .rating span:hover:before,
-.rating span:hover ~ span:before, .rating span.hovered {
-  cursor: pointer;
+.rating span:hover ~ span:before,
+.rating span.hovered:before,
+.rating span.hovered ~ span:before {
   content: "\f005";
-  color: gold;
 }
