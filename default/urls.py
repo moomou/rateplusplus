@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib.auth.views import logout
 
-from default import views 
+from default import views
 
 urlpatterns = patterns('',
     url(r'^feedback$', views.FeedbackHandler),
@@ -11,10 +11,10 @@ urlpatterns = patterns('',
     url(r'^graph$', views.GraphHandler),
     url(r'^profile/(.+)?/?$', views.ProfileHandler, name="profile-page"),
 
-    url(r'^signup', views.SignupHandler, name="signout-page"),
-    url(r'^signin$', views.SigninHandler, {'redirected': False}, name="signin-page"),
-    url(r'^signout$', views.SignoutHandler, {'nextPage': '/signin'}),
-    url(r'^privacy$', views.PrivacyHandler),
+    url(r'^signup/?$', views.SignupHandler, name="signout-page"),
+    url(r'^signin/?$', views.SigninHandler, {'redirected': False}, name="signin-page"),
+    url(r'^signout/?$', views.SignoutHandler, {'nextPage': '/signin'}),
+    url(r'^privacy/?$', views.PrivacyHandler),
     url(r'^ranking/[.+]?', views.SearchPage, {'query': ''}),
 
     url(r'^embed/[.+]?', views.EmbedHandler, name="signout-page"),

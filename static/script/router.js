@@ -6,6 +6,8 @@ App.AppRouter = Backbone.Router.extend({
         "entity/new(/)" : "newEntityPageInit",
         "ranking/:shareToken(/)" : "rankingPage",
         "entity/:id(/)" : "detailPageInit",
+        "signin(/)": "signinPage",
+        "signup(/)": "signupPage",
         "(/)" : "defaultPageInit",
     },
     profilePageInit: function(id) {
@@ -126,9 +128,16 @@ App.AppRouter = Backbone.Router.extend({
             $('#contentModal').modal();
         });
 
+        $('#rating-vote-box').click(function(e) {
+            $(e.currentTarget).find('.star').removeClass('hovered');
+            $(e.target).addClass('hovered');
+        });
+
         $('#saveContentBtn').click(function(e) {
             var activePanel = $('.addContentBox>div.active'),
                 postData = {},
+                upVote = 10 * (5 - $('#rating-vote-box .hovered').index())/5,
+                downVote = 10 - upVote,
                 dataUrl = App.API_SERVER + App.API_VERSION + 'entity/' + id + '/data';
 
             postData.dataType = activePanel.find('.dataType').val().toLowerCase();
@@ -208,6 +217,42 @@ App.AppRouter = Backbone.Router.extend({
 
         // activate jquery plugin
         wideArea();
+    },
+    signinPage: function() {
+        $('#signin-form').submit(function(e) {
+            e.preventDefault();
+            $(this).ajaxSubmit({
+                dataType:'json',
+                success: function(res) {
+                    if (res.success) {
+                        window.location.href = res.redirect;
+                    } else {
+                        //error, update HTML
+                        App.MessageBox.showMessage(res.errorMessage, "alert-danger");
+                    }
+                    return false;
+                },
+            });
+        });
+    },
+    signupPage: function() {
+        $('#signup-form').submit(function() {
+            $(this).ajaxSubmit({
+                dataType:'json',
+                beforeSubmit: function(formData, jqFOrm, options) {
+                },
+                success: function(res) {
+                    console.log(res);
+                    if (res.success) {
+                        window.location.href = res.redirect;
+                    } else {
+                        App.MessageBox(res.errorMessage, "alert-danger");
+                        //error, update HTML
+                    }
+                },
+            });
+            return false;
+        });
     },
     defaultPageInit: function() {
         console.log("Default Route");

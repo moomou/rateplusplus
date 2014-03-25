@@ -13,7 +13,9 @@
     </div>
     {% endif %}
 
-    <form id="signinForm" class="form-signin" method="post" action="{% url 'default.views.SigninHandler' %}">
+    {% include "messageBox.partial" %}
+
+    <form id="signin-form" class="form-signin" method="post" action="{% url 'default.views.SigninHandler' %}">
       {% csrf_token %}
       <a href="{% url 'default.views.RedirectHandler' %}" class="noSelect muted home-btn center" style="text-align: center; padding: 25px;">
         Cloverite
@@ -34,7 +36,7 @@
   </div>
 
  {% include "stdScript.partial" %}
- <script src="{{STATIC_URL}}script/userForm.js"></script> 
+ {% include "modelScript.partial" %}
 
 </body>
 </html>

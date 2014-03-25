@@ -40,7 +40,7 @@
     <div id="writing" class="tab-pane active">
       <input class="srcType hidden" type="text" value="text" style="display: none;">
       <input class="dataType hidden" type="text" value="text" style="display: none;">
-      <div id="writingModal" class="textbox"> 
+      <div id="writingModal" class="textbox">
         <input style="overflow: auto; width: 75%; border-bottom: 1px solid #eee;" class="title fieldname" placeholder="Title" type="text">
         <textarea style="min-height: 200px;" data-widearea='enable' placeholder="Start here" class="value"></textarea>
       </div>
@@ -51,6 +51,14 @@
       <div class="input-prepend" style="display: block;">
         <span class="add-on">Rating Name</i></span>
         <input style="width: 75%;" class="fieldname" type="text" placeholder="">
+      </div>
+      <p style="text-align: center; margin: 5px;">Specify Rating</i></p>
+      <div id="rating-vote-box" class="rating">
+        <span class="star"></span>
+        <span class="star"></span>
+        <span class="star"></span>
+        <span class="star"></span>
+        <span class="star"></span>
       </div>
     </div>
     <div id="pictureframe" class="tab-pane">

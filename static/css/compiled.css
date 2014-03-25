@@ -428,6 +428,27 @@
   margin-left: 105px;
   border-bottom: 17px solid #e3e3e3; }
 
+.rating {
+  text-align: center;
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  font-size: 30px; }
+  .rating span.star {
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block; }
+  .rating span:before {
+    content: "\f006";
+    padding-right: 5px;
+    color: gold; }
+
+.rating span:hover:before,
+.rating span:hover ~ span:before, .rating span.hovered {
+  cursor: pointer;
+  content: "\f005";
+  color: gold; }
+
 .form-signin {
   background-color: #FFFFFF;
   border: 1px solid #E5E5E5;

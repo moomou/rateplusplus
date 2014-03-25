@@ -1,7 +1,6 @@
 /**
  * Global Objects
  */
-
 App.GlobalWidget = {
     twitterShareBtn : $('#twitterBtn'),
     searchInput     : $('#searchInput'),
@@ -873,15 +872,21 @@ App.RankingController = function(isForking) {
 // Message Box
 App.MessageBox = (function() {
     var messageBox = $('#message-box'),
-        appliedClass = null;
+        closeBtn = $('#message-box .close'),
+        appliedClass = null,
         _showMessage = function(msg, type) {
             if (appliedClass) {
                 messageBox.removeClass(appliedClass);
             }
             appliedClass = type;
             messageBox.addClass(type);
-            messageBox.find('.message').html(message);
+            messageBox.find('.message').html(msg);
+            messageBox.removeClass('hide');
         };
+
+        closeBtn.click(function(e) {
+            messageBox.toggleClass('hide');
+        });
     return {
         showMessage: function(msg, type) {
             _showMessage(msg, type);
