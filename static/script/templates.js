@@ -77,7 +77,7 @@ function program1(depth0,data) {
 function program3(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n    <div class=\"edit-btns pull-right\">\n      <label class=\"switch switch-green\">\n        <input type=\"checkbox\" class=\"switch-input\" checked>\n        <span class=\"switch-label\" data-on=\"Public\" data-off=\"Private\"></span>\n        <span class=\"switch-handle\"></span>\n      </label>\n      <button id=\"save-btn\" class=\"btn btn-success\" style=\"margin-bottom: 5px;\">\n        <i class=\"fa fa-cloud-upload\"> Save</i>\n      </button>\n      <button id=\"cancel-btn\" class=\"btn btn-white\">\n        <i class=\"fa fa-minus-circle\"> Cancel</i>\n      </button> \n    </div>\n    <div class=\"profile profile-rounded pull-left js-profile\" style=\"background-image: url('";
+  buffer += "\n    <div class=\"edit-btns pull-right\">\n      <label class=\"switch switch-green\">\n        <input type=\"checkbox\" class=\"switch-input\" checked>\n        <span class=\"switch-label\" data-on=\"Public\" data-off=\"Private\"></span>\n        <span class=\"switch-handle\"></span>\n      </label>\n      <button id=\"save-btn\" class=\"btn btn-success\" style=\"margin-bottom: 5px;\">\n        <i class=\"fa fa-cloud-upload\"> Save</i>\n      </button>\n      <button id=\"cancel-btn\" class=\"btn btn-white\">\n        <i class=\"fa fa-minus-circle\"> Cancel</i>\n      </button>\n    </div>\n    <div class=\"profile profile-rounded pull-left js-profile\" style=\"background-image: url('";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.imgURL), {hash:{},inverse:self.program(6, program6, data),fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "')\">\n      <button id=\"change-image-btn\" class=\"btn-small btn btn-white\" style=\"margin: 0 auto;display: block; margin-top: 105%;\">Change</button>\n    </div>\n    <ul class=\"meta pull-left\">\n      <li class=\"name\">\n        <input id=\"name\" class=\"title-input js-title\" placeholder=\"Title\" type=\"text\" value=\"";
@@ -252,11 +252,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<td class='tdDivider text-v-center noSelect' style='width: 30%;'> \n  <a href='#'><span class='viewRanking cursor-pointer'> ";
-  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += "<div class=\"info-box ranking-summary\">\n  <div>\n    <a href=\"#\"><span class=\"viewRanking cursor-pointer\"> #favCake</span></a>\n    <i class=\"btn pull-right fa fa-share\"></i>\n    <p>";
+  if (helper = helpers.description) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.description); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span></a> \n  <i class='btn pull-right fa fa-share'></i> \n</td> \n<td class='head'> \n  <ul class='rankingList'> \n  </ul> \n</td>\n";
+    + "</p>\n  </div>\n  <div class=\"head\">\n    <ul class='rankingList'> </ul>\n  </div>\n</div>\n";
   return buffer;
   });
 })();
@@ -497,7 +497,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"info-card\" style=\"width: auto;padding: 0;height: 112px; margin-bottom: 20px;\" data-index=\"0\">\n  <div class=\"cover\">\n    <a href=\"";
+  buffer += "<div class=\"info\" style=\"width: auto;padding: 0;height: 112px; margin-bottom: 20px;\" data-index=\"0\">\n  <div class=\"cover\">\n    <a href=\"";
   if (helper = helpers.srcUrl) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.srcUrl); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -530,11 +530,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span><span class=\"pull-right\" style=\"\n      font-size: 36px;\n      display: table-row;\n      display: inline-block;\n      vertical-align: middle;\n      line-height: 112px;\n      margin-right: 25px;\n      \">\n      ";
+    + "</span>\n    <span class=\"pull-right\" style=\"\n      font-size: 36px;\n      display: table-row;\n      display: inline-block;\n      vertical-align: middle;\n      line-height: 112px;\n      margin-right: 25px;\n      \">\n      ";
   if (helper = helpers.info) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.info); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</i>\n    </span>    \n  </div>\n</div>\n";
+  buffer += "</i>\n    </span>\n  </div>\n</div>\n";
   return buffer;
   });
 })();
@@ -547,7 +547,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"info-card\" style=\"width: auto;padding: 0;height: 112px; margin-bottom: 20px; visibility: hidden;\" data-index=\"";
+  buffer += "<div class=\"info\" style=\"width: auto;padding: 0;height: 112px; margin-bottom: 20px; visibility: hidden;\" data-index=\"";
   if (helper = helpers.index) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.index); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -560,6 +560,31 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   else { helper = (depth0 && depth0.info); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</i>\n    </span>    \n  </div>\n</div>\n";
+  return buffer;
+  });
+})();
+
+(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['sa_card_row_text'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div class=\"info-card\" style=\"width: auto;padding: 0;height: 112px; margin-bottom: 20px;\" data-index=\"";
+  if (helper = helpers.index) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.index); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">\n  <div class=\"header\" style=\"\n    display: flex;\n    height: 112px;\n    position: relative;\n    \">\n    <span style=\"\n      font-size: 24px;\n      float: left;\n      display: block;\n      vertical-align: middle;\n      line-height: 112px;\n      margin-left: 25px;\n      text-transform: lowercase;\n      \">";
+  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n    <span class=\"pull-right\" style=\"\n      overflow: hidden;\n      padding: 5px;\n      margin: auto;\n      font-size: 14px;\n      width: 235px;\">\n      ";
+  if (helper = helpers.value) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.value); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</i>\n    </span>\n  </div>\n</div>\n";
   return buffer;
   });
 })();
@@ -679,15 +704,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class='interaction'>\n  <a href='#' class='btn btn-success voteBtn upVote ";
-  if (helper = helpers.upVoteBtnType) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.upVoteBtnType); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>Yes <i class='upVote fa fa-thumbs-up'></i></a>\n  <a href='#' class='btn btn-danger voteBtn downVote ";
-  if (helper = helpers.downVoteBtnType) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.downVoteBtnType); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>No <i class='downVote fa fa-thumbs-down'></i></a>\n</div>\n<div class=\"info\">\n  <span class=\"fieldName\">";
+  buffer += "\n<div class=\"info\">\n  <span class=\"fieldName\">";
   if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

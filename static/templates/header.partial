@@ -26,7 +26,7 @@
         <ul id="navBtns" class="hidden-phone nav pull-right head-nav">
           {% if authenticated %}
           <li title="Profile"><a href="{% url 'default.views.RedirectHandler' %}"><i class="fa fa-user"> </i></a></li>
-          <li title="Create New Entity"><a href="{% url 'default.views.NewEntityHandler' %}"><i class="fa fa-plus-circle "> </i></a></li>
+          <li title="Create New Content"><a href="{% url 'default.views.NewEntityHandler' %}"><i class="fa fa-plus-circle "> </i></a></li>
           {% if RANKING_ENABLED %}
           <li title="Rankings"><a href="{% url 'default.views.ProfileHandler' %}self"><i class="fa fa-list-ol"> </i></a></li>
           {% endif %}

@@ -82,8 +82,9 @@
 .rating {
   text-align: center;
   unicode-bidi: bidi-override;
-  direction: rtl;
   font-size: 30px;
+
+
   span.star {
     font-family: FontAwesome;
     font-weight: normal;
@@ -96,6 +97,9 @@
     color: gold;
     cursor: pointer;
   }
+}
+.rating.rtl {
+  direction: rtl;
 }
 .rating span:hover:before,
 .rating span:hover ~ span:before,

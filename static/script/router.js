@@ -19,26 +19,19 @@ App.AppRouter = Backbone.Router.extend({
         .on('reset', function(res) {
             // This is being triggered twice. TODO: Fix.
 
-            var privateContent = $('#private-content'),
-                publicContent  = $('#public-content');
-
-            privateContent.empty();
-            publicContent.empty();
+            var created = $('#created');
+            created.empty();
 
             _(res.models).each(function(model, ind) {
                 model.set('index', ind)
                 var row = new App.ProfileEntityView({model: model});
-                if (model.get('private')) {
-                    privateContent.append(row.render().el);
-                } else {
-                    publicContent.append(row.render().el);
-                }
+                created.append(row.render().el);
             });
         }).fetch();
 
         $.ajax({
             type: "GET",
-            url: App.API_SERVER + App.API_VERSION + 'user/' + getCookie('userid') + "/ranked"
+            url: App.API_SERVER + App.API_VERSION + 'user/' + getCookie('userid') + "/collection"
         })
         .done(function(res) {
             if (!res.success) {
@@ -46,12 +39,8 @@ App.AppRouter = Backbone.Router.extend({
             }
             var allRankings = res.payload,
                 rowViews = [],
-                tableView = new App.TableView(),
-                titleRow = new App.TitleRowView({hide: ['.addNew', '.addNewRanking']}),
-                sessionStorageInd = 0;
-
-            tableView.el.appendChild(titleRow.render('My Recommendation').el);
-            document.getElementById('rankings').appendChild(tableView.el);
+                sessionStorageInd = 0,
+                table = document.getElementById('ranked');
 
             sessionStorage.setItem("allRankings", JSON.stringify(allRankings));
             sessionStorage.setItem("currentRankingInd", "");
@@ -74,7 +63,7 @@ App.AppRouter = Backbone.Router.extend({
                     rankingRow.$('.rankingList').append(rankListIcons.render().el);
                 });
 
-                tableView.el.appendChild(rankingRow.el);
+                table.appendChild(rankingRow.el);
                 sessionStorageInd += 1;
             });
         })
@@ -89,8 +78,7 @@ App.AppRouter = Backbone.Router.extend({
             imgUrl      = '';
 
         if (empty){
-            App.GlobalWidget.searchMessageBox.find('#searchTerm').html(searchTerm);
-            App.GlobalWidget.searchMessageBox.show();
+            App.MessageBox.showNotFoundMessage(searchTerm);
         }
 
         // empty card view
@@ -149,8 +137,10 @@ App.AppRouter = Backbone.Router.extend({
 
             if (postData.dataType == "attribute") {
                 var newAttribute = new App.EntityAttributeModel({
-                    name   : postData.name,
-                    entity : id,
+                    name     : postData.name,
+                    entity   : id,
+                    downVote : downVote,
+                    upVote   : upVote
                 });
                 newAttribute.save({}, {
                     success: function(res) {

@@ -117,28 +117,29 @@ App.ContentRankingView = (function() {
 
 App.ContentDataView = (function() {
     var templates = {
-        contentTemplate       : Handlebars.templates.sa_card_content,
+        contentTemplate      : Handlebars.templates.sa_card_content,
         // Card template
-        numberTemplate        : Handlebars.templates.sa_content_field,
-        timeseriesTemplate    : Handlebars.templates.sa_content_timeseries,
-        imageTemplate         : Handlebars.templates.sa_content_image,
-        videoTemplate         : Handlebars.templates.sa_content_video,
-        textTemplate          : Handlebars.templates.sa_content_textbox,
-        attributeTemplate     : Handlebars.templates.sa_content_rating,
+        numberTemplate       : Handlebars.templates.sa_content_field,
+        fieldTemplate        : Handlebars.templates.sa_content_field,
+        timeseriesTemplate   : Handlebars.templates.sa_content_timeseries,
+        imageTemplate        : Handlebars.templates.sa_content_image,
+        videoTemplate        : Handlebars.templates.sa_content_video,
+        textTemplate         : Handlebars.templates.sa_content_textbox,
+        attributeTemplate    : Handlebars.templates.sa_content_rating,
 
         // Row templats
-        numberRowTemplate     : Handlebars.templates.sa_card_row_info,
-        attributeRowTemplate  : Handlebars.templates.sa_card_row_info,
-        textRowTemplate       : Handlebars.templates.sa_card_row_info,
-        imageRowTemplate      : Handlebars.templates.sa_card_row_image,
-        paddingRowTemplate    : Handlebars.templates.sa_card_row_padding,
-        videoRowTemplate      : Handlebars.templates.sa_card_row_padding,
+        numberRowTemplate    : Handlebars.templates.sa_card_row_info,
+        attributeRowTemplate : Handlebars.templates.sa_card_row_info,
+        textRowTemplate      : Handlebars.templates.sa_card_row_text,
+        imageRowTemplate     : Handlebars.templates.sa_card_row_image,
+        paddingRowTemplate   : Handlebars.templates.sa_card_row_padding,
+        videoRowTemplate     : Handlebars.templates.sa_card_row_padding,
     },
     renderRow = function(data) {
         var templateName = data.dataType + "RowTemplate";
 
         // convert data to suitable form
-        if (data.dataType == "attribute") {
+        if (data.dataType === "attribute") {
             data.info = App.renderStarRating(data.upVote, data.downVote);
         }
 
@@ -352,11 +353,8 @@ App.AttributeView = Backbone.View.extend({
     }
 });
 
-// Table Row View
 App.ProfileRankingView = Backbone.View.extend({
     template: Handlebars.templates.profile_ranking_row,
-    tagName: 'tr',
-    className: 'row',
     events: {
         'click .fa-share': 'shareRanking',
         'click .viewRanking': 'viewRanking'
@@ -890,6 +888,10 @@ App.MessageBox = (function() {
     return {
         showMessage: function(msg, type) {
             _showMessage(msg, type);
+        },
+        showNotFoundMessage: function(searchTerm) {
+            var msg = "Oops. Didn't find " + searchTerm;
+            _showMessage(msg, "alert-info");
         },
         showNetworkErrorMsg: function(msg) {
             if (msg) {

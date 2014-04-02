@@ -26,12 +26,14 @@
           <span style='display: block'> Picture</span>
         </a>
       </li>
+      {% comment %}
       <li class="contentType cursor-pointer " data-target='#movieTheatre'>
         <a href="#movieTheatre" data-toggle="tab">
           <i class="fa fa-youtube-play fa-2x block"></i>
           <span style='display: block'> Video</span>
         </a>
       </li>
+      {% endcomment %}
     </ul>
   </div>
   <div class="upTriangleBorder"></div>
@@ -53,7 +55,7 @@
         <input style="width: 75%;" class="fieldname" type="text" placeholder="">
       </div>
       <p style="text-align: center; margin: 5px;">Specify Rating</i></p>
-      <div id="rating-vote-box" class="rating">
+      <div id="rating-vote-box" class="rating rtl">
         <span class="star"></span>
         <span class="star"></span>
         <span class="star"></span>

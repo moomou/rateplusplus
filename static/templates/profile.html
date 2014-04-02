@@ -8,41 +8,55 @@
     {% include "header.partial" %}
 
     <div class="container-narrow">
-
       {% include "messageBox.partial" %}
 
       <div class="row-fluid">
-        <div class="span9 pull-right" id="info-container" style="padding: 25px;">
-          <div id="private-content" class="row-fluid">
+        <div id="user" class="span3 pull-left">
+          <div class="profile" style="
+            background-image: url('https://secure.gravatar.com/avatar/{{emailHash}}?s=240');
+            width: 120px;
+            height: 120px;">
           </div>
-          <div id="public-content" class="row-fluid">
-          </div>
+          <h2 style="clear: both; text-align: center; padding-top: 50px;"> {{username}} </h2>
         </div>
-        <div class="span3 pull-left" id="user" style="padding: 25px;">
-          <div class="pull-left">
-            <div class="profile js-profile" style="
-              background-image: url('https://secure.gravatar.com/avatar/{{emailHash}}?s=240'); 
-              width: 120px; 
-              height: 120px;">
-            </div>
-            <h2 style="clear: both; text-align: center; padding-top: 50px;"> {{username}} </h2>
+        <div id="contentContainer" class="span9 pull-right">
+          <div class="row-fluid">
+            <ul class="nav nav-tabs">
+              {% comment %}
+              <li class='cursor-pointer' data-target='#list'>
+                <a href="#list" data-toggle="tab">List</a>
+              </li>
+              {% endcomment %}
+              <li class='cursor-pointer active' data-target='#created'>
+                <a href="#created" data-toggle="tab">Created</a>
+              </li>
+              <li class='cursor-pointer' data-target='#ranked'>
+                <a href="#ranked" data-toggle="tab">Collection</a>
+              </li>
+            </ul>
+          </div>
+          <div class="tab-content">
+            <div id="list" class="tab-pane"></div>
+            <div id="created" class="tab-pane active"></div>
+            <div id="ranked" class="tab-pane"></div>
+          </div>
           </div>
         </div>
       </div>
 
-      <div id="rankings" class="row-fluid">
+      <div id="mediaQuery" class="hidden-desktop" style="
+        position:absolute;left:-1200px;">
       </div>
 
-      <div id="mediaQuery" class="hidden-desktop" style="position:absolute;left:-1200px;"></div>
     </div>
 
     {% csrf_token %}
 
-    {% if FEEDBACK_ENABLED %} 
+    {% if FEEDBACK_ENABLED %}
     {% include "feedbackModal.partial" %}
     {% endif %}
 
-    {% if REQUEST_ENABLED %} 
+    {% if REQUEST_ENABLED %}
     {% include "requestForm.partial" %}
     {% endif %}
 
@@ -51,7 +65,7 @@
     {% include "stdScript.partial" %}
     {% include "modelScript.partial" %}
 
-    <script src="{{STATIC_URL}}script/app.js"></script> 
+    <script src="{{STATIC_URL}}script/app.js"></script>
   </body>
 
 </html>

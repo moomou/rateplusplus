@@ -50,7 +50,12 @@ App.DetailEntityPageView = Backbone.View.extend({
 
         this.editing = false;
         this.model.on('change', this.render, this);
-        model.save();
+
+        model.save({}, {
+            success: function(res) {
+                App.router.navigate('entity/'+model.get('id'), false);
+            }
+        });
     },
     cancelEdit: function(e) {
         this.editing = false;
