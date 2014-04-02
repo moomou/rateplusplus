@@ -1,0 +1,15 @@
+@import "flex";
+@import "common";
+
+#user {
+  @flexbox;
+  padding-top: 25px;
+  * {
+    margin: auto;
+  }
+}
+#contentContainer {
+  .tab-pane {
+    padding: 25px;
+  }
+}
