@@ -16,9 +16,9 @@
       </div>
       <div class="jumbotron" id="message">
         <div class="item active">
-          <h1 class="muted"> Share information like never before.</h1>
-          <h3 style="color: silver;"> A personal API for finding and sharing everything.</h3>
-          <p class="lead"><button class="btn btn-large btn-success">Get Started</button></p>
+          <h1 class="muted">Manipulate information like never before.</h1>
+          <h3 style="color: silver;">The personal API for organizing and sharing information.</h3>
+          <p class="lead"><button class="btn btn-large btn-success">See How It Works</button></p>
           <form class="hidden" method="GET" id="searchForm" action="{% url 'default.views.RedirectHandler' %}">
             <div class="input-append">
               <input autofocus id="searchInput" name="q" class="span5" type="text" placeholder="Try #ericCartman">
@@ -30,30 +30,19 @@
       <div class="jumbotron" id="feature">
         <div class="row-fluid">
           <div class="span4">
-            <h3> Compose information with ease.</h3>
-            <p> Cloverite makes it easy to find information together, providing context and make understanding fast.</p>
+            <h3> Organize and build information the way you need.</h3>
+            <p> Cloverite makes it easy to aggregate disparate information from different sources together, providing context and make understanding fast.</p>
           </div>
           <div class="span4">
             <h3> Find your data instantly and discover new things.</h3>
-            <p> Find that GIF and that address. Instantly. Subscribe to new content list and discover new things.</p>
+            <p> All of your data one or two hashtags anyway. Subscribe to new content source from your friends to discover and share new things.</p>
           </div>
           <div class="span4">
-            <h3> Share and collaborate on content. </h3>
-            <p> Share your data with the world and build open data together.</p>
+            <h3> Create and collaborate on content. </h3>
+            <p> Share your data with the world and build open information block together.</p>
           </div>
         </div>
         <hr>
-      </div>
-      <div class="jumbotron hidden" id="video">
-        <div style="text-align: center"><h2> See it in action.</h2></div>
-        <div class="header-unit">
-          <div id="video-container">
-            <video width="100%" height="100%" controls loop class="fillWidth">
-              <source src="{{STATIC_URL}}video/test.mp4" type="video/webm"/>
-              Your browser does not support the video tag. I suggest you upgrade your browser.
-            </video>
-          </div>
-        </div>
       </div>
     </div>
     {% include "stdScript.partial" %}
