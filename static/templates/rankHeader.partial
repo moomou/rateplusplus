@@ -3,12 +3,12 @@
     <div class="container-narrow">
       <a href="#"><i data-toggle="tooltip" title="Fork Ranking" id="rankingFork" class="fa fa-code-fork fa-2x btn-like"> </i></a>
       <i data-toggle="tooltip" title="Private Ranking" id="rankingPrivacy" class="fa fa-lock fa-2x"> </i>
-      <input id="rankingName" class="title-input js-title" placeholder="Ranking Name" type="text" value="">
-      <span id="rankInstruction" style="float:left;"> Click on rating to assign rank </span>
+      <input id="rankingName" class="title-input js-title" placeholder="New List" type="text" value="">
+      <span id="rankInstruction" style="float:left;"> Click on contents to rank them.</span>
       <ul id="rankingList" class='rankingList'>
       </ul>
       <div id="rank-sessionButtons">
-        <button id="rankingCancelBtn" class="btn" style="float: right; margin-top: -7px;"> Cancel</button>
+        <button id="rankingCancelBtn" class="btn" style="float: right; margin-top: -7px;"> Discard</button>
         <button id="rankingSaveBtn" class="btn btn-success" style=" float: right; margin-top: -7px; margin-right: 5px; "> Save</button>
       </div>
       <div class="cursor-pointer" id="rank-viewButtons">

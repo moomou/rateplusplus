@@ -78,3 +78,32 @@
   margin-left: 105px;
   border-bottom: 17px solid #e3e3e3;
 }
+
+.rating {
+  text-align: center;
+  unicode-bidi: bidi-override;
+  font-size: 30px;
+
+
+  span.star {
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+  }
+  span:before {
+    content: "\f006";
+    padding-right: 5px;
+    color: gold;
+    cursor: pointer;
+  }
+}
+.rating.rtl {
+  direction: rtl;
+}
+.rating span:hover:before,
+.rating span:hover ~ span:before,
+.rating span.hovered:before,
+.rating span.hovered ~ span:before {
+  content: "\f005";
+}

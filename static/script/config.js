@@ -22,5 +22,4 @@ Constants = (function() {
         rankColor: rankColor,
         contentType: contentType
     };
-
 })();

@@ -31,7 +31,7 @@ FEATURE_FLAG = {
     'FEEDBACK_ENABLED': True,
     'REQUEST_ENABLED': True,
     'NAV_ENABLED': True,
-    'SA_ENABLED': True,
+    'SA_ENABLED': False,
 }
 
 def ContextSetup(request):

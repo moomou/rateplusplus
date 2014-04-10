@@ -5,17 +5,19 @@ App.GlobalWidget = {
     twitterShareBtn : $('#twitterBtn'),
     searchInput     : $('#searchInput'),
 
-    rankingFork      : $('#rankingFork'),
-    rankingPrivacy   : $('#rankingPrivacy'),
-    rankingHeader    : $('#rankingHeader'),
-    rankingName      : $('#rankingName'),
-    rankingList      : $('#rankingList'),
-    rankInstruction  : $('#rankInstruction'),
-    rankEditButtons  : $('#rank-sessionButtons'),
-    rankViewButtons  : $('#rank-viewButtons'),
-    shareModal       : $('#shareModal'),
+    rankingFork     : $('#rankingFork'),
+    rankingPrivacy  : $('#rankingPrivacy'),
+    rankingHeader   : $('#rankingHeader'),
+    rankingName     : $('#rankingName'),
+    rankingList     : $('#rankingList'),
+    rankInstruction : $('#rankInstruction'),
+    rankEditButtons : $('#rank-sessionButtons'),
+    rankViewButtons : $('#rank-viewButtons'),
 
-    saEditor         : $('.sa-editor')
+    embedModal      : $('#embedModal'),
+    shareModal      : $('#shareModal'),
+
+    saEditor        : $('.sa-editor')
 };
 
 App.DetailPage = {
@@ -115,28 +117,29 @@ App.ContentRankingView = (function() {
 
 App.ContentDataView = (function() {
     var templates = {
-        contentTemplate       : Handlebars.templates.sa_card_content,
+        contentTemplate      : Handlebars.templates.sa_card_content,
         // Card template
-        numberTemplate        : Handlebars.templates.sa_content_field,
-        timeseriesTemplate    : Handlebars.templates.sa_content_timeseries,
-        imageTemplate         : Handlebars.templates.sa_content_image,
-        videoTemplate         : Handlebars.templates.sa_content_video,
-        textTemplate          : Handlebars.templates.sa_content_textbox,
-        attributeTemplate     : Handlebars.templates.sa_content_rating,
+        numberTemplate       : Handlebars.templates.sa_content_field,
+        fieldTemplate        : Handlebars.templates.sa_content_field,
+        timeseriesTemplate   : Handlebars.templates.sa_content_timeseries,
+        imageTemplate        : Handlebars.templates.sa_content_image,
+        videoTemplate        : Handlebars.templates.sa_content_video,
+        textTemplate         : Handlebars.templates.sa_content_textbox,
+        attributeTemplate    : Handlebars.templates.sa_content_rating,
 
         // Row templats
-        numberRowTemplate     : Handlebars.templates.sa_card_row_info,
-        attributeRowTemplate  : Handlebars.templates.sa_card_row_info,
-        textRowTemplate       : Handlebars.templates.sa_card_row_info,
-        imageRowTemplate      : Handlebars.templates.sa_card_row_image,
-        paddingRowTemplate    : Handlebars.templates.sa_card_row_padding,
-        videoRowTemplate      : Handlebars.templates.sa_card_row_padding,
+        numberRowTemplate    : Handlebars.templates.sa_card_row_info,
+        attributeRowTemplate : Handlebars.templates.sa_card_row_info,
+        textRowTemplate      : Handlebars.templates.sa_card_row_text,
+        imageRowTemplate     : Handlebars.templates.sa_card_row_image,
+        paddingRowTemplate   : Handlebars.templates.sa_card_row_padding,
+        videoRowTemplate     : Handlebars.templates.sa_card_row_padding,
     },
     renderRow = function(data) {
         var templateName = data.dataType + "RowTemplate";
 
         // convert data to suitable form
-        if (data.dataType == "attribute") {
+        if (data.dataType === "attribute") {
             data.info = App.renderStarRating(data.upVote, data.downVote);
         }
 
@@ -205,6 +208,7 @@ App.SimpleCard = Backbone.View.extend({
     events: {
         'mouseover': 'toggleToolbar',
         'mouseout': 'toggleToolbar',
+        'click .view-toolbar': 'toolbarAction'
 	},
     toggleToolbar: function(e) {
         return;
@@ -219,6 +223,20 @@ App.SimpleCard = Backbone.View.extend({
             $toolbar.css('visibility', 'hidden');
         }
     },
+    toolbarAction: function(e) {
+        var target = $(e.originalEvent.srcElement);
+        if (target.hasClass('fa-code')) {
+            var embedScripTag = App.GenerateEmbedScriptTag(
+                this.entityId,
+                this.attrId,
+                this.dataId
+            );
+            $('#scriptTag')
+                .val(embedScripTag)
+                .attr('disabled', true);
+            App.GlobalWidget.embedModal.modal('show');
+        }
+    },
     initialize: function(settings) {
         var data = settings.data;
 
@@ -226,10 +244,16 @@ App.SimpleCard = Backbone.View.extend({
         this.content = App.ContentDataView.render("card", data, true);
         this.title   = data.name;
 
+        this.entityId = [settings.entityId];
         if (!data.dataType || data.dataType == "attribute") {
             this.data.dataType = "attribute";
             this.controller    = App.AttributeView;
             this.model         = new App.EntityAttributeModel(data);
+            this.attrId = [this.data.id];
+            this.dataId = [];
+        } else {
+            this.attrId = [];
+            this.dataId = [this.data.id];
         }
     },
     render: function() {
@@ -329,11 +353,8 @@ App.AttributeView = Backbone.View.extend({
     }
 });
 
-// Table Row View
 App.ProfileRankingView = Backbone.View.extend({
     template: Handlebars.templates.profile_ranking_row,
-    tagName: 'tr',
-    className: 'row',
     events: {
         'click .fa-share': 'shareRanking',
         'click .viewRanking': 'viewRanking'
@@ -849,19 +870,28 @@ App.RankingController = function(isForking) {
 // Message Box
 App.MessageBox = (function() {
     var messageBox = $('#message-box'),
-        appliedClass = null;
+        closeBtn = $('#message-box .close'),
+        appliedClass = null,
         _showMessage = function(msg, type) {
             if (appliedClass) {
                 messageBox.removeClass(appliedClass);
             }
             appliedClass = type;
             messageBox.addClass(type);
-            messageBox.find('.message').html(message);
+            messageBox.find('.message').html(msg);
+            messageBox.removeClass('hide');
         };
 
+        closeBtn.click(function(e) {
+            messageBox.toggleClass('hide');
+        });
     return {
         showMessage: function(msg, type) {
             _showMessage(msg, type);
+        },
+        showNotFoundMessage: function(searchTerm) {
+            var msg = "Oops. Didn't find " + searchTerm;
+            _showMessage(msg, "alert-info");
         },
         showNetworkErrorMsg: function(msg) {
             if (msg) {

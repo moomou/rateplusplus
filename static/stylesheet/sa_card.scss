@@ -12,8 +12,7 @@ ul {
 }
 
 .view-toolbar {
-  margin: 10px auto;
-  border-bottom: 1px solid whitesmoke;
+  margin: 10px auto 0 auto;
   text-align: center;
   width: 100%;
   li {
@@ -60,17 +59,21 @@ ul {
   margin-top: -15px;
 }
 
-.info-card {
-  .minimize {
-    display: none;
-  }
-
+.info-box {
   @extend .webkit-layer;
   @include box-shadow(0, 0, 1px, rgba(0, 0, 0, 0.35));
   position: relative;
+  padding: 15px;
+}
+
+.info-card {
+  @extend .info-box;
   padding: 15px 15px 0 15px;
   width: 500px;
 
+  .minimize {
+    display: none;
+  }
   .interactive {
     border-right: 1px solid rgba(0, 0, 0, 0.15);
   }
